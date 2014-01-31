@@ -1,0 +1,4 @@
+LOGIN = 'login'
+PASSWORD = 'passowrd'
+INSTANCE = 'instance'
+HOST = 'api.gethydra.com'
