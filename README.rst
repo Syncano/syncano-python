@@ -21,7 +21,7 @@ Installation
 
 ::
 
-  pip install syncano
+  pip install syncano==0.5.beta
 
 Examples
 ========
