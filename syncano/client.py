@@ -5,7 +5,8 @@ import time
 import json
 import logging
 
-from syncano.exceptions import AuthException, ApiException, ConnectionLost
+from syncano.exceptions import AuthException, ConnectionLost
+from syncano.callbacks import JsonCallback, ObjectCallback, ProjectObject
 
 
 HOST = 'api.syncano.com'
@@ -14,55 +15,10 @@ PORT = 8200
 logger = logging.getLogger('syncano.client')
 
 
-class MessageHandler(object):
-
-    def __init__(self, owner, **kwargs):
-        for k in kwargs:
-            setattr(self, k, kwargs[k])
-        self.owner = owner
-
-    def process_message(self, received):
-        ignored = getattr(self, 'ignored_types', [])
-        message_type = received.get('type', 'error')
-        if not self.owner.authorized and message_type == 'error':
-            message_type='auth'
-        if message_type in ('new', 'change', 'delete', 'message') :
-            res = self.process_notification(received)
-        else:
-            res = getattr(self, 'process_' + message_type)(received)
-        if message_type in ignored:
-            return
-        return res
-
-    def process_ping(self, received):
-        self.owner.last_ping = received['timestamp']
-        return received
-
-    def process_auth(self, received):
-        result = received['result']
-        self.owner.authorized = result == 'OK'
-        if self.owner.authorized:
-            self.owner.uuid = received['uuid']
-        return received
-
-    def process_callresponse(self, received):
-        if received['result'] == 'OK':
-            return received
-        return self.process_error(received['data'])
-
-    @staticmethod
-    def process_error(received):
-        raise ApiException(received['error'])
-
-    @staticmethod
-    def process_notification(received):
-        return received
-
-
 class SyncanoClient(asyncore.dispatcher):
 
     def __init__(self, instance, api_key=None, login=None,
-                 password=None, host=None, port=None, callback_handler=MessageHandler,
+                 password=None, host=None, port=None, callback_handler=JsonCallback,
                  *args, **kwargs):
 
         asyncore.dispatcher.__init__(self)
@@ -113,7 +69,7 @@ class SyncanoClient(asyncore.dispatcher):
         logger.info(u'received from server %s', received)
         if self.callback:
             res = self.callback.process_message(received)
-            if res:
+            if res is not None:
                 self.results.append(res)
         else:
             self.results.append(received)
@@ -146,11 +102,6 @@ class BaseMixin(object):
     def update_params(self, attrs, name, value):
         if value:
             attrs['params'][name] = value
-
-    def method_has_result(self, name):
-        if name.find('_delete') != -1:
-            return False
-        return True
 
 
 class ClientMixin(BaseMixin):
@@ -289,7 +240,7 @@ class CollectionMixin(BaseMixin):
         attrs['params']['key'] = key
         self.api_call(**attrs)
 
-    def collection_get(self,project_id, status='all', with_tags=None, message_id=None):
+    def collection_get(self, project_id, status='all', with_tags=None, message_id=None):
         attrs = self.get_standard_params('collection.get', message_id)
         attrs['params']['project_id'] = project_id
         self.update_params(attrs, 'status', status)
@@ -710,7 +661,7 @@ class SyncanoAsyncApi(ClientMixin, ProjectMixin, CollectionMixin, FolderMixin,
     def __init__(self, instance, api_key=None, login=None, password=None,
                  host=None, port=None, timeout=1, **kwargs):
         self.cli = SyncanoClient(instance, api_key=api_key, login=login,
-                                 password=password, host=host, port=port, **kwargs)
+                                 password=password, host=host, port=port, syncano=self, **kwargs)
         self.timeout = timeout
         self.cached_prefix = ''
         while self.cli.authorized is None:
@@ -721,7 +672,7 @@ class SyncanoAsyncApi(ClientMixin, ProjectMixin, CollectionMixin, FolderMixin,
 
     def get_message(self, blocking=True, message_id=None):
         if message_id:
-            for i,r in enumerate(self.cli.results):
+            for i, r in enumerate(self.cli.results):
                 if r.get('message_id', None) == message_id:
                     return self.cli.results.pop(i)
         else:
@@ -771,19 +722,44 @@ class SyncanoAsyncApi(ClientMixin, ProjectMixin, CollectionMixin, FolderMixin,
         self.send_message(data)
 
 
+def format_result(f, instance, message_id, args, kwargs):
+    r = instance.get_message(blocking=True, message_id=message_id)
+    if isinstance(instance.cli.callback, ObjectCallback):
+
+        fname = f.__name__
+        if fname == 'project_new':
+            r = ProjectObject(r.conn, dict(name=args[0], id=r.id, id_str=r.id_str), message_id=message_id)
+        if fname.startswith('collection_'):
+            r.project_id = args[0]
+        if fname.startswith('folder_') or fname.startswith('data_'):
+            params_offset = 0
+            if fname in ['folder_new', 'folder_update', 'folder_get_one',
+                         'data_remove_parent', 'data_add_parent', 'data_copy']:
+                params_offset = 1
+            r.project_id = args[0]
+            if 'collection_id' in kwargs:
+                r.collection_id = kwargs['collection_id']
+            else:
+                try:
+                    r.collection_id = int(args[1 + params_offset])
+                except (TypeError, IndexError):
+                    r.collection_id = None
+                    params_offset -= 1
+            if 'collection_key' in kwargs:
+                r.collection_key = kwargs['collection_key']
+            elif len(args) > 2 + params_offset:
+                r.collection_key = args[2 + params_offset]
+            else:
+                r.collection_key = None
+    return r
+
+
 def api_result_decorator(f, instance):
     def wrapper(*args, **kwargs):
         message_id = kwargs.pop('message_id', int(time.time()*10**4))
         kwargs['message_id'] = message_id
         f(*args, **kwargs)
-        if instance.method_has_result(f.__name__):
-            return instance.get_message(blocking=True, message_id=message_id)
-        else:
-            for i in range(5):
-                m = instance.get_message(blocking=False, message_id=message_id)
-                if m:
-                    break
-            return True
+        return format_result(f, instance, message_id, args, kwargs)
     return wrapper
 
 

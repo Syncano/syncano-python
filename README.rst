@@ -21,7 +21,7 @@ Installation
 
 ::
 
-  pip install syncano==0.4.beta
+  pip install syncano
 
 Examples
 ========
@@ -86,6 +86,17 @@ Creating message callback, that is printing all messages from server
 
 
 
+
+Using ObjectCallback to get "object like" response with methods
+---------------------------------------------------------------
+
+::
+
+    with SyncanoApi(instance_name, login='login', password='password',
+                    callback_handler=callbacks.ObjectCallback) as syncano:
+        project = syncano.project.new(name)
+        project.update(new_name)
+        project.delete()
 
 
 
