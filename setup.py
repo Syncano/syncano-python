@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 setup(name='syncano',
-      version='0.5.beta',
+      version='0.6.1.beta',
       description='Python Library for syncano.com api',
       author=u'Piotr Czesław Kalmus',
       author_email='piotr.kalmus@syncano.com',

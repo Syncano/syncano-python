@@ -1,4 +1,4 @@
-LOGIN = 'login'
-PASSWORD = 'passowrd'
+
 INSTANCE = 'instance'
-HOST = 'api.gethydra.com'
+APIKEY = 'apikey'
+HOST = 'api.syncano.com'

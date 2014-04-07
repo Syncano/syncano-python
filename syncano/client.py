@@ -6,7 +6,7 @@ import json
 import logging
 
 from syncano.exceptions import AuthException, ConnectionLost
-from syncano.callbacks import JsonCallback, ObjectCallback, ProjectObject
+from syncano.callbacks import JsonCallback, ObjectCallback
 
 
 HOST = 'api.syncano.com'
@@ -17,16 +17,14 @@ logger = logging.getLogger('syncano.client')
 
 class SyncanoClient(asyncore.dispatcher):
 
-    def __init__(self, instance, api_key=None, login=None,
-                 password=None, host=None, port=None, callback_handler=JsonCallback,
-                 *args, **kwargs):
+    def __init__(self, instance, api_key, host=None, port=None, callback_handler=JsonCallback,
+                 name="SYNCANO_CLIENT", *args, **kwargs):
 
         asyncore.dispatcher.__init__(self)
         self.callback = callback_handler(self, *args, **kwargs) if callback_handler else None
         self.instance = instance
-        self.login = login
-        self.password = password
         self.api_key = api_key
+        self.name = name
         self.buffer = ''.encode('utf-8')
         self.results = []
         self.prepare_auth()
@@ -42,11 +40,7 @@ class SyncanoClient(asyncore.dispatcher):
         self.buffer = self.buffer[offset:]
 
     def prepare_auth(self):
-        auth = dict(instance=self.instance)
-        if self.api_key:
-            auth['api_key'] = self.api_key
-        else:
-            auth.update(dict(login=self.login, password=self.password))
+        auth = dict(instance=self.instance, api_key=self.api_key)
         self.write_to_buffer(auth)
 
     def handle_connect(self):
@@ -66,7 +60,7 @@ class SyncanoClient(asyncore.dispatcher):
         received = self.recv(32768)
         received = received.decode('utf-8')
         received = json.loads(received)
-        logger.info(u'received from server %s', received)
+        logger.info(u'%s - received from server %s', self.name, received)
         if self.callback:
             res = self.callback.process_message(received)
             if res is not None:
@@ -81,9 +75,12 @@ class SyncanoClient(asyncore.dispatcher):
         return True
 
     def handle_write(self):
-        logger.info(u'sent to server %s', self.buffer)
+        logger.info(u'%s - sent to server %s', self.name, self.buffer)
         sent = self.send(self.buffer)
         self.clean_buffer(sent)
+
+    def handle_error(self):
+        raise
 
 
 class BaseMixin(object):
@@ -104,103 +101,93 @@ class BaseMixin(object):
             attrs['params'][name] = value
 
 
-class ClientMixin(BaseMixin):
+class AdminMixin(BaseMixin):
 
-    def client_heartbeat(self, message_id=None):
-        params = dict(uuid=self.cli.uuid)
-        atrs = dict(method='client.heartbeat', params=params)
-        if message_id:
-            atrs['message_id'] = message_id
-        self.api_call(**atrs)
-
-    def client_new(self, login, password, group_id=1,
-                   first_name='', last_name='', email='', message_id=None):
-        params = dict(client_login=login, client_password=password, group_id=group_id)
-        if email:
-            params['email'] = email
-        if first_name:
-            params['first_name'] = first_name
-        if last_name:
-            params['last_name'] = last_name
-        atrs = dict(method='client.new', params=params)
-        if message_id:
-            atrs['message_id'] = message_id
-        self.api_call(**atrs)
-
-    def client_get(self, message_id=None):
-        self.standard_method('client.get', message_id)
-
-    def client_get_one(self, client_id=None, client_login=None, message_id=None):
-        assert client_id or client_login, "client_id or client_login is required"
-        attrs = self.get_standard_params('client.get_one', message_id)
-        params = {}
-        if client_id:
-            params['client_id'] = client_id
-        else:
-            params['client_login'] = client_login
-        attrs['params'] = params
+    def admin_new(self, admin_email, role_id, message, message_id=None):
+        attrs = self.get_standard_params('admin.new', message_id)
+        attrs['params']['admin_email'] = admin_email
+        attrs['params']['role_id'] = role_id
+        attrs['params']['message'] = message
         self.api_call(**attrs)
 
-    def client_get_identities(self, client_id=None, client_login=None, name=None,
-                              since_id=None, limit=100, message_id=None):
-        attrs = self.get_standard_params('client.get_identities', message_id)
-        params = dict(limit=limit)
-        if client_id:
-            params['client_id'] = client_id
-        if client_login:
-            params['client_login'] = client_login
-        if name:
-            params['name'] = name
-        if since_id:
-            params['since_id'] = since_id
-        attrs['params'] = params
+    def admin_get(self, message_id=None):
+        self.standard_method('admin.get', message_id)
+
+    def admin_get_one(self, admin_id=None, admin_email=None, message_id=None):
+        assert admin_id or admin_email, u"admin_id or admin_email_required"
+        attrs = self.get_standard_params('admin.get_one', message_id)
+        self.update_params(attrs, 'admin_id', admin_id)
+        self.update_params(attrs, 'admin_email', admin_email)
         self.api_call(**attrs)
 
-    def client_get_groups(self, message_id=None):
-        self.standard_method('client.get_groups', message_id)
-
-    def client_update(self, client_id=None, client_login=None, new_login=None,
-                      first_name=None, last_name=None, email=None, message_id=None):
-        assert client_id or client_login, "client_id or client_login is required"
-        attrs = self.get_standard_params('client.update', message_id)
-        self.update_params(attrs, 'client_id', client_id)
-        self.update_params(attrs, 'client_login', client_login)
-        self.update_params(attrs, 'new_login', new_login)
-        self.update_params(attrs, 'first_name', first_name)
-        self.update_params(attrs, 'last_name', last_name)
-        self.update_params(attrs, 'email', email)
+    def admin_update(self, admin_id=None, admin_email=None, role_id=None, message_id=None):
+        assert admin_id or admin_email, u"admin_id or admin_email_required"
+        assert role_id, u"admin_role required"
+        attrs = self.get_standard_params('admin.update', message_id)
+        self.update_params(attrs, 'admin_id', admin_id)
+        self.update_params(attrs, 'admin_email', admin_email)
+        self.update_params(attrs, 'role_id', role_id)
         self.api_call(**attrs)
 
-    def client_update_password(self, new_password, client_id=None, client_login=None,
-                               current_password=None, message_id=None):
-        assert client_id or client_login, "client_id or client_login is required"
-        attrs = self.get_standard_params('client.update_password', message_id)
-        attrs['params']['new_password'] = new_password
-        self.update_params(attrs, 'client_id', client_id)
-        self.update_params(attrs, 'client_login', client_login)
-        self.update_params(attrs, 'current_password', current_password)
+    def admin_delete(self, admin_id=None, admin_email=None, message_id=None):
+        assert admin_id or admin_email, u"admin_id or admin_email_required"
+        attrs = self.get_standard_params('admin.delete', message_id)
+        self.update_params(attrs, 'admin_id', admin_id)
+        self.update_params(attrs, 'admin_email', admin_email)
         self.api_call(**attrs)
 
-    def client_update_state(self, state, client_id=None, client_login=None, uuid=None, message_id=None):
-        attrs = self.get_standard_params('client.update_state', message_id)
-        attrs['params']['state'] = state
-        self.update_params(attrs, 'client_id', client_id)
-        self.update_params(attrs, 'client_login', client_login)
-        self.update_params(attrs, 'uuid', uuid)
+
+class ApikeyMixin(BaseMixin):
+
+    def apikey_new(self, role_id, description, message_id=None):
+        attrs = self.get_standard_params('apikey.new', message_id)
+        attrs['params']['role_id'] = role_id
+        attrs['params']['description'] = description
         self.api_call(**attrs)
 
-    def client_recreate_apikey(self, client_id=None, client_login=None, message_id=None):
-        assert client_id or client_login, "client_id or client_login is required"
-        attrs = self.get_standard_params('client.recreate_apikey', message_id)
-        self.update_params(attrs, 'client_id', client_id)
-        self.update_params(attrs, 'client_login', client_login)
+    def apikey_get(self, message_id=None):
+        self.standard_method('apikey.get', message_id)
+
+    def apikey_get_one(self, api_client_id=None, message_id=None):
+        attrs = self.get_standard_params('apikey.get_one', message_id)
+        self.update_params(attrs, 'api_client_id', api_client_id)
         self.api_call(**attrs)
 
-    def client_delete(self, client_id=None, client_login=None, message_id=None):
-        assert client_id or client_login, "client_id or client_login is required"
-        attrs = self.get_standard_params('client.delete', message_id)
-        self.update_params(attrs, 'client_id', client_id)
-        self.update_params(attrs, 'client_login', client_login)
+    def apikey_update_description(self, api_client_id=None, description=None, message_id=None):
+        assert description is not None, "decription is required"
+        attrs = self.get_standard_params('apikey.update_description', message_id)
+        attrs['params']['description'] = description
+        attrs['params']['api_client_id'] = api_client_id
+        self.api_call(**attrs)
+
+    def apikey_delete(self, api_client_id, message_id=None):
+        attrs = self.get_standard_params('apikey.delete', message_id)
+        attrs['params']['api_client_id'] = api_client_id
+        self.api_call(**attrs)
+
+
+class RoleMixin(BaseMixin):
+
+    def role_get(self, message_id):
+        self.standard_method('role.get', message_id)
+
+
+class ConnectionMixin(BaseMixin):
+
+    def connection_get(self, api_client_id=None, name=None, since_id=None, limit=None, message_id=None):
+        attrs = self.get_standard_params('connection.get', message_id)
+        self.update_params(attrs, 'api_client_id', api_client_id)
+        self.update_params(attrs, 'name', name)
+        self.update_params(attrs, 'since_id', since_id)
+        self.update_params(attrs, 'limit', limit)
+        self.api_call(**attrs)
+
+    def connection_update(self, uuid, state=None, name=None, api_client_id=None, message_id=None):
+        attrs = self.get_standard_params('connection.update', message_id)
+        attrs['params']['uuid'] = uuid
+        self.update_params(attrs, 'state', state)
+        self.update_params(attrs, 'name', name)
+        self.update_params(attrs, 'api_client_id', api_client_id)
         self.api_call(**attrs)
 
 
@@ -365,7 +352,7 @@ class DataObjectMixin(BaseMixin):
     def data_new(self, project_id, collection_id=None, collection_key=None,
                  user_name=None, source_url=None, title=None, text=None, link=None, image=None,
                  image_url=None, folder=None, state='Pending', data_key=None,
-                 parent_id=None, message_id=None):
+                 parent_id=None, message_id=None, **kwargs):
         assert collection_id or collection_key, "collection_id or collection_key required"
         attrs = self.get_standard_params('data.new', message_id)
         attrs['params']['project_id'] = project_id
@@ -382,12 +369,13 @@ class DataObjectMixin(BaseMixin):
         self.update_params(attrs, 'state', state)
         self.update_params(attrs, 'parent_id', parent_id)
         self.update_params(attrs, 'data_key', data_key)
+        attrs['params'].update(kwargs)
         self.api_call(**attrs)
 
     def data_update(self, project_id, collection_id=None, collection_key=None, data_id=None, data_key=None,
                     update_method='replace', user_name=None, source_url=None, title=None, text=None,
                     link=None, image=None, image_url=None, folder=None, state=None, parent_id=None,
-                    message_id=None):
+                    message_id=None, **kwargs):
         assert collection_id or collection_key, "collection_id or collection_key required"
         assert data_id or data_key, "data_id or data_key required"
         attrs = self.get_standard_params('data.update', message_id)
@@ -407,6 +395,7 @@ class DataObjectMixin(BaseMixin):
         self.update_params(attrs, 'folder', folder)
         self.update_params(attrs, 'state', state)
         self.update_params(attrs, 'parent_id', parent_id)
+        attrs['params'].update(kwargs)
         self.api_call(**attrs)
 
     def data_get(self, project_id, collection_id=None, collection_key=None, state='All', folders=[], since_id=None,
@@ -491,6 +480,29 @@ class DataObjectMixin(BaseMixin):
         self.update_params(attrs, 'collection_id', collection_id)
         self.update_params(attrs, 'collection_key', collection_key)
         self.update_params(attrs, 'parent_id', parent_id)
+        self.api_call(**attrs)
+
+    def data_add_child(self, project_id, data_id, collection_id=None, collection_key=None,
+                       child_id=None, remove_other=False, message_id=None):
+        assert collection_id or collection_key, "collection_id or collection_key required"
+        attrs = self.get_standard_params('data.add_child', message_id)
+        attrs['params']['project_id'] = project_id
+        attrs['params']['data_id'] = data_id
+        self.update_params(attrs, 'collection_id', collection_id)
+        self.update_params(attrs, 'collection_key', collection_key)
+        self.update_params(attrs, 'child_id', child_id)
+        self.update_params(attrs, 'remove_other', remove_other)
+        self.api_call(**attrs)
+
+    def data_remove_child(self, project_id, data_id, collection_id=None, collection_key=None,
+                          child_id=None, message_id=None):
+        assert collection_id or collection_key, "collection_id or collection_key required"
+        attrs = self.get_standard_params('data.remove_child', message_id)
+        attrs['params']['project_id'] = project_id
+        attrs['params']['data_id'] = data_id
+        self.update_params(attrs, 'collection_id', collection_id)
+        self.update_params(attrs, 'collection_key', collection_key)
+        self.update_params(attrs, 'child_id', child_id)
         self.api_call(**attrs)
 
     def data_delete(self, project_id, collection_id=None, collection_key=None, data_ids=[],
@@ -586,37 +598,22 @@ class UserMixin(BaseMixin):
 
 class NotificationMixin(BaseMixin):
 
-    def notification_send(self, client_id=None, client_login=None, uuid=None, message_id=None, **kwargs):
-        assert client_id or client_login, "client_id or client_login required"
+    def notification_send(self, uuid=None, api_client_id=None, message_id=None, **kwargs):
         attrs = self.get_standard_params('notification.send', message_id)
-        self.update_params(attrs, 'client_id', client_id)
-        self.update_params(attrs, 'client_login', client_login)
         self.update_params(attrs, 'uuid', uuid)
+        self.update_params(attrs, 'api_client_id', api_client_id)
         attrs['params'].update(kwargs)
         self.api_call(**attrs)
 
-    def notification_get_history(self, client_id=None, client_login=None, since_id=None,
+    def notification_get_history(self, api_client_id=None, client_login=None, since_id=None,
                                  since_time=None, limit=100, order=None, message_id=None):
         attrs = self.get_standard_params('notification.get_history', message_id)
-        self.update_params(attrs, 'client_id', client_id)
+        self.update_params(attrs, 'api_client_id', api_client_id)
         self.update_params(attrs, 'client_login', client_login)
         self.update_params(attrs, 'since_id', since_id)
         self.update_params(attrs, 'since_time', since_time)
         self.update_params(attrs, 'limit', limit)
         self.update_params(attrs, 'order', order)
-        self.api_call(**attrs)
-
-    def notification_get_collection_history(self, project_id, collection_id=None, collection_key=None,
-                                            since_id=None, since_time=None, limit=100, order=None, message_id=None):
-        assert collection_id or collection_key, "collection_id or collection_key required"
-        attrs = self.get_standard_params('notification.get_collection_history', message_id)
-        attrs['params']['project_id'] = project_id
-        self.update_params(attrs, 'since_id', since_id)
-        self.update_params(attrs, 'since_time', since_time)
-        self.update_params(attrs, 'limit', limit)
-        self.update_params(attrs, 'order', order)
-        self.update_params(attrs, 'collection_id', collection_id)
-        self.update_params(attrs, 'collection_key', collection_key)
         self.api_call(**attrs)
 
 
@@ -648,20 +645,18 @@ class SubscriptionMixin(BaseMixin):
         self.update_params(attrs, 'collection_key', collection_key)
         self.api_call(**attrs)
 
-    def subscription_get(self, client_id=None, client_login=None, message_id=None):
+    def subscription_get(self, api_client_id=None, client_login=None, message_id=None):
         attrs = self.get_standard_params('subscription.get', message_id)
-        self.update_params(self, 'client_id', client_id)
+        self.update_params(self, 'api_client_id', api_client_id)
         self.update_params(self, 'client_login', client_login)
         self.api_call(**attrs)
 
 
-class SyncanoAsyncApi(ClientMixin, ProjectMixin, CollectionMixin, FolderMixin,
-                      UserMixin, DataObjectMixin, NotificationMixin, SubscriptionMixin):
+class SyncanoAsyncApi(AdminMixin, ApikeyMixin, RoleMixin, ProjectMixin, CollectionMixin, FolderMixin,
+                      UserMixin, DataObjectMixin, NotificationMixin, SubscriptionMixin, ConnectionMixin):
 
-    def __init__(self, instance, api_key=None, login=None, password=None,
-                 host=None, port=None, timeout=1, **kwargs):
-        self.cli = SyncanoClient(instance, api_key=api_key, login=login,
-                                 password=password, host=host, port=port, syncano=self, **kwargs)
+    def __init__(self, instance, api_key, host=None, port=None, timeout=1, **kwargs):
+        self.cli = SyncanoClient(instance, api_key, host=host, port=port, syncano=self, **kwargs)
         self.timeout = timeout
         self.cached_prefix = ''
         while self.cli.authorized is None:
@@ -704,8 +699,8 @@ class SyncanoAsyncApi(ClientMixin, ProjectMixin, CollectionMixin, FolderMixin,
         self.close()
 
     def __getattribute__(self, item):
-        for prefix in ['client_', 'folder_', 'project_', 'collection_',
-                       'data_', 'notification_', 'subscription_', 'user_']:
+        for prefix in ['admin_', 'apikey_', 'role_', 'folder_', 'project_', 'collection_',
+                       'data_', 'notification_', 'subscription_', 'user_', 'connection_']:
             if not item.startswith(prefix) and item.startswith(prefix[:-1]):
                 self.cached_prefix = prefix
                 return self
@@ -727,14 +722,12 @@ def format_result(f, instance, message_id, args, kwargs):
     if isinstance(instance.cli.callback, ObjectCallback):
 
         fname = f.__name__
-        if fname == 'project_new':
-            r = ProjectObject(r.conn, dict(name=args[0], id=r.id, id_str=r.id_str), message_id=message_id)
         if fname.startswith('collection_'):
             r.project_id = args[0]
         if fname.startswith('folder_') or fname.startswith('data_'):
             params_offset = 0
-            if fname in ['folder_new', 'folder_update', 'folder_get_one',
-                         'data_remove_parent', 'data_add_parent', 'data_copy']:
+            if fname in ['folder_new', 'folder_update', 'folder_get_one', 'data_remove_child',
+                         'data_remove_parent', 'data_add_child', 'data_add_parent', 'data_copy']:
                 params_offset = 1
             r.project_id = args[0]
             if 'collection_id' in kwargs:
@@ -756,7 +749,7 @@ def format_result(f, instance, message_id, args, kwargs):
 
 def api_result_decorator(f, instance):
     def wrapper(*args, **kwargs):
-        message_id = kwargs.pop('message_id', int(time.time()*10**4))
+        message_id = kwargs.pop('message_id', str(int(time.time()*10**4)))
         kwargs['message_id'] = message_id
         f(*args, **kwargs)
         return format_result(f, instance, message_id, args, kwargs)
@@ -766,7 +759,7 @@ def api_result_decorator(f, instance):
 class SyncanoApi(SyncanoAsyncApi):
 
     def __getattribute__(self, item):
-        for prefix in ['client_', 'folder_', 'project_', 'collection_',
+        for prefix in ['admin_', 'apikey_', 'role_', 'connection_', 'folder_', 'project_', 'collection_',
                        'data_', 'notification_', 'subscription_', 'user_']:
             if item.startswith(prefix):
                 return api_result_decorator(super(SyncanoApi, self).__getattribute__(item), self)

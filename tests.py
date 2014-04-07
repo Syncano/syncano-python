@@ -6,7 +6,7 @@ import logging
 from syncano.client import SyncanoApi, SyncanoAsyncApi
 import syncano.exceptions
 from syncano.callbacks import ObjectCallback
-import testconfig #variables LOGIN, PASSWORD, INSTANCE, HOST
+import testconfig #variables INSTANCE, APIKEY, HOST
 
 logging.basicConfig(filename="tests.log", level=logging.INFO)
 
@@ -15,118 +15,20 @@ def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
 
+def email_generator(size=6):
+    return id_generator(size) + '@' + id_generator(size) + '.' + id_generator(2, 'pldefrtgswaxdsa')
+
+
 class SyncanoTest(object):
 
     def setUp(self):
-        self.syncano = SyncanoApi(testconfig.INSTANCE, login=testconfig.LOGIN,
-                                  password=testconfig.PASSWORD, host=testconfig.HOST)
-        self.syncano_object = SyncanoApi(testconfig.INSTANCE, login=testconfig.LOGIN,
-                                         password=testconfig.PASSWORD, host=testconfig.HOST,
+        self.syncano = SyncanoApi(testconfig.INSTANCE, testconfig.APIKEY, host=testconfig.HOST)
+        self.syncano_object = SyncanoApi(testconfig.INSTANCE, testconfig.APIKEY, host=testconfig.HOST,
                                          callback_handler=ObjectCallback)
 
     def tearDown(self):
         self.syncano.close()
         self.syncano_object.close()
-
-
-class TestInstanceClients(SyncanoTest, unittest.TestCase):
-
-    def setUp(self):
-        super(TestInstanceClients, self).setUp()
-        self.login = id_generator(10)
-
-    def test_01_create_get_one_get_delete(self):
-        client = self.syncano.client_new(self.login, self.login)
-        self.client_id = client['data']['client']['id']
-        client_2 = self.syncano.client_get_one(self.client_id)
-        self.client_2_id = client_2['data']['client']['id']
-        assert self.client_id == self.client_2_id, "Client ids don`t match"
-        self.syncano.client_delete(client_login=self.login)
-        clients = self.syncano.client_get()
-        for c in clients['data']['client']:
-            assert self.client_id != c['id'], 'Client delete fails'
-
-    def test_02_heartbeat(self):
-        self.syncano.client_heartbeat()
-
-    def test_03_get_identities(self):
-        identities = self.syncano.client_get_identities()
-        assert identities, "No identities response"
-
-    def test_04_get_groups(self):
-        groups = self.syncano.client_get_groups()
-        assert groups['data']['groups'], 'Any groups'
-
-    def test_05_add_update_delete(self):
-        client = self.syncano.client_new(self.login, self.login)
-        client_id = client['data']['client']['id']
-        client2 = self.syncano.client_update(client_id, first_name=id_generator(6))
-        assert client['data']['client']['first_name'] != client2['data']['client']['first_name'], 'Client not updated'
-        assert client['data']['client']['id'] == client2['data']['client']['id'], 'Client id changed on update'
-        self.syncano.client_delete(client_login=self.login)
-
-    def test_06_login_on_created_client(self):
-        self.syncano.client_new(self.login, self.login)
-        try:
-            syncanoc = SyncanoApi(testconfig.INSTANCE, login=self.login, password=self.login, host=testconfig.HOST)
-            syncanoc.close()
-        except syncano.exceptions.AuthException:
-            assert 1, "Can`t login on a new client account"
-        self.syncano.client_delete(client_login=self.login)
-
-    def test_07_update_password(self):
-        client = self.syncano.client_new(self.login, self.login)
-        new_password = id_generator()
-        self.syncano.client_update_password(new_password, client['data']['client']['id'])
-        try:
-            syncanoc = SyncanoApi(testconfig.INSTANCE, login=self.login, password=self.login, host=testconfig.HOST)
-            syncanoc.close()
-            assert 1, "Old password works after update password"
-        except syncano.exceptions.AuthException:
-            pass
-        try:
-            syncanoc = SyncanoApi(testconfig.INSTANCE, login=self.login, password=new_password, host=testconfig.HOST)
-            syncanoc.close()
-        except syncano.exceptions.AuthException:
-            assert 1, "Can`t login using new password"
-        self.syncano.client_delete(client_login=self.login)
-
-    def test_08_update_state(self):
-        self.syncano.client_new(self.login, self.login)
-        state = id_generator(4)
-        self.syncano.client_update_state(state, client_login=self.login)
-        client2 = self.syncano.client_get_one(client_login=self.login)
-        assert client2['data']['client']['state'] == state, "State doesnt change"
-        self.syncano.client_delete(client_login=self.login)
-
-    def test_09_recreate_apikey(self):
-        self.syncano.client_new(self.login, self.login)
-        api_key = self.syncano.client_recreate_apikey(client_login=self.login)['data']['api_key']
-        try:
-            syncano = SyncanoApi(testconfig.INSTANCE, api_key, host=testconfig.HOST)
-            syncano.close()
-        except syncano.exceptions.AuthException:
-            assert 1, "Cant sign in using api_key"
-        self.syncano.client_delete(client_login=self.login)
-
-    def test_10_messageobject(self):
-        l = id_generator(8)
-        first_name = id_generator(8)
-        client = self.syncano_object.client.new(l, l)
-        client.update(first_name=first_name, last_name=first_name)
-        assert client.first_name == first_name, 'First name distnt change in message object'
-        client2 = self.syncano_object.client_get_one(client_id=client.id)
-        assert client2.last_name == client.last_name, 'object not synchronized with server'
-        new_apikey = client2.recreate_apikey()
-        client2.update_password('newpassword')
-        with SyncanoApi(testconfig.INSTANCE, api_key=new_apikey, host=testconfig.HOST) as t_syncano:
-            assert t_syncano.cli.authorized, 'Authorization failure by new apikey'
-        with SyncanoApi(testconfig.INSTANCE, login=l, password='newpassword', host=testconfig.HOST) as t_syncano:
-            assert t_syncano.cli.authorized, 'Authorization failure by new password'
-        client2.update_state('newstate')
-        assert client2.state == 'newstate', 'State didnt change'
-        client2.delete()
-
 
 
 class TestProjects(SyncanoTest, unittest.TestCase):
@@ -137,20 +39,20 @@ class TestProjects(SyncanoTest, unittest.TestCase):
 
     def test_01_create__delete_get_one_get(self):
         project = self.syncano.project_new(self.project)
-        project_id = project['data']['id']
+        project_id = project['data']['project']['id']
         project2 = self.syncano.project_get_one(project_id)
         project2_id = project2['data']['project']['id']
         assert project_id == project2_id, "Project ids don`t match %s %s" % (project_id, project2_id)
         self.syncano.project_delete(project_id)
-        projects = self.syncano.project.get(message_id=1)
+        projects = self.syncano.project.get(message_id='1')
         for p in projects['data']['project']:
             assert p['id'] != project_id, "Project delete failed"
 
     def test_02_project_new_update_get_one(self):
         project = self.syncano.project_new(self.project)
-        project_id = project['data']['id']
+        project_id = project['data']['project']['id']
         new_project_name = id_generator(8)
-        new_project = self.syncano.project_update(project_id, new_project_name, message_id=1)
+        new_project = self.syncano.project_update(project_id, new_project_name, message_id='1')
         assert new_project['data']['project']['id'] == project_id, 'ID changed after update'
         project2 = self.syncano.project_get_one(project_id)
         assert project2['data']['project']['name'] == new_project_name, 'Project name didn`t change'
@@ -171,18 +73,18 @@ class TestCollections(SyncanoTest, unittest.TestCase):
         super(TestCollections, self).setUp()
         self.project_name = id_generator()
         self.project = self.syncano.project_new(self.project_name)
-        self.project_id = self.project['data']['id']
+        self.project_id = self.project['data']['project']['id']
         self.collection_name = id_generator()
         self.collection_key = id_generator()
 
     def test_01_create_delete_get_one_get(self):
-        collection = self.syncano.collection_new(self.project['data']['id'], self.collection_name, self.collection_key)
-        self.syncano.collection_activate(self.project['data']['id'], collection_id=collection['data']['collection']['id'])
-        collection2 = self.syncano.collection_get_one(self.project['data']['id'],
+        collection = self.syncano.collection_new(self.project['data']['project']['id'], self.collection_name, self.collection_key)
+        self.syncano.collection_activate(self.project['data']['project']['id'], collection_id=collection['data']['collection']['id'])
+        collection2 = self.syncano.collection_get_one(self.project['data']['project']['id'],
                                                     collection_id=collection['data']['collection']['id'])
         assert collection['data']['collection']['id'] == collection2['data']['collection']['id'], "Collection not created"
-        self.syncano.collection_delete(self.project['data']['id'], collection_key=self.collection_key)
-        collections = self.syncano.collection_get(self.project['data']['id'], message_id=6)
+        self.syncano.collection_delete(self.project['data']['project']['id'], collection_key=self.collection_key)
+        collections = self.syncano.collection_get(self.project['data']['project']['id'], message_id='6')
         for c in collections['data']['collection']:
             assert c['id'] != collection['data']['collection']['id']
 
@@ -234,10 +136,12 @@ class TestCollections(SyncanoTest, unittest.TestCase):
         self.syncano.collection_activate(self.project_id, cid)
         tag = id_generator(10)
         self.syncano.collection_add_tag(self.project_id, cid, tags=tag, weight=1)
-        collection = self.syncano.collection_get_one(self.project_id, collection_key=self.collection_key, message_id=132)
+        collection = self.syncano.collection_get_one(self.project_id, collection_key=self.collection_key,
+                                                     message_id='132')
         assert tag in collection['data']['collection']['tags'], 'Tags didnt add'
         self.syncano.collection_delete_tag(self.project_id, cid, tags=[tag])
-        collection = self.syncano.collection_get_one(self.project_id, collection_key=self.collection_key, message_id=1392)
+        collection = self.syncano.collection_get_one(self.project_id, collection_key=self.collection_key,
+                                                     message_id='1392')
         assert not tag in collection['data']['collection']['tags'], 'Tags didnt delete'
         self.syncano.collection_delete(self.project_id, cid)
 
@@ -260,7 +164,7 @@ class TestCollections(SyncanoTest, unittest.TestCase):
             assert c.id != collection2.id, 'Collection didnt delete properly'
 
     def tearDown(self):
-        self.syncano.project_delete(self.project['data']['id'])
+        self.syncano.project_delete(self.project['data']['project']['id'])
         super(TestCollections, self).tearDown()
 
 
@@ -270,25 +174,26 @@ class TestFolders(SyncanoTest, unittest.TestCase):
         super(TestFolders, self).setUp()
         self.project_name = id_generator()
         self.project = self.syncano.project_new(self.project_name)
-        self.project_id = self.project['data']['id']
+        self.project_id = self.project['data']['project']['id']
         self.collection_name = id_generator()
         self.collection_key = id_generator()
-        self.collection = self.syncano.collection_new(self.project['data']['id'],
+        self.collection = self.syncano.collection_new(self.project['data']['project']['id'],
                                                     self.collection_name, self.collection_key)
         self.collection_id = self.collection['data']['collection']['id']
-        self.syncano.collection_activate(self.project['data']['id'],
+        self.syncano.collection_activate(self.project['data']['project']['id'],
                                        collection_id=self.collection['data']['collection']['id'])
         self.folder_name = id_generator()
 
     def test_01_create_get_one_get_delete(self):
-        folder = self.syncano.folder_new(self.project['data']['id'], self.folder_name,
+        folder = self.syncano.folder_new(self.project['data']['project']['id'], self.folder_name,
                                        collection_id=self.collection_id)
-        folder2 = self.syncano.folder_get_one(self.project['data']['id'],
+        folder2 = self.syncano.folder_get_one(self.project['data']['project']['id'],
                                             self.folder_name, collection_key=self.collection_key)
         assert folder['data']['folder']['id'] == folder2['data']['folder']['id'], 'Folder not created'
-        self.syncano.folder_delete(self.project['data']['id'], self.folder_name,
+        self.syncano.folder_delete(self.project['data']['project']['id'], self.folder_name,
                                  collection_id=self.collection_id, collection_key=self.collection_key)
-        folders = self.syncano.folder_get(self.project['data']['id'], collection_key=self.collection_key, message_id=6)
+        folders = self.syncano.folder_get(self.project['data']['project']['id'], collection_key=self.collection_key,
+                                          message_id='6')
         for f in folders['data']['folder']:
             assert f['id'] != folder['data']['folder']['id']
 
@@ -312,8 +217,8 @@ class TestFolders(SyncanoTest, unittest.TestCase):
 
 
     def tearDown(self):
-        self.syncano.collection_delete(self.project['data']['id'], collection_key=self.collection_key)
-        self.syncano.project_delete(self.project['data']['id'])
+        self.syncano.collection_delete(self.project['data']['project']['id'], collection_key=self.collection_key)
+        self.syncano.project_delete(self.project['data']['project']['id'])
 
         super(TestFolders, self).tearDown()
 
@@ -324,13 +229,13 @@ class TestDataObjects(SyncanoTest, unittest.TestCase):
         super(TestDataObjects, self).setUp()
         self.project_name = id_generator()
         self.project = self.syncano.project_new(self.project_name)
-        self.project_id = self.project['data']['id']
+        self.project_id = self.project['data']['project']['id']
         self.collection_name = id_generator()
         self.collection_key = id_generator()
-        self.collection = self.syncano.collection_new(self.project['data']['id'],
+        self.collection = self.syncano.collection_new(self.project['data']['project']['id'],
                                                     self.collection_name, self.collection_key)
         self.collection_id = self.collection['data']['collection']['id']
-        self.syncano.collection_activate(self.project['data']['id'],
+        self.syncano.collection_activate(self.project['data']['project']['id'],
                                        collection_id=self.collection['data']['collection']['id'])
         self.folder1_name = id_generator()
         self.folder2_name = id_generator()
@@ -350,14 +255,18 @@ class TestDataObjects(SyncanoTest, unittest.TestCase):
         count = self.syncano.data_count(self.project_id, self.collection_id, folders=[self.folder1_name])
         assert count['data']['count'] == 0, 'Count doesnt work'
 
-    def test_02_add_parent_remove_parent(self):
+    def test_02_add_parent_child_remove_parent_child(self):
         data_id = self.syncano.data_new(self.project_id, self.collection_id,
                                         folder=self.folder1_name)['data']['data']['id']
         data_id2 = self.syncano.data_new(self.project_id, self.collection_id,
                                          folder=self.folder1_name)['data']['data']['id']
+        data_id3 = self.syncano.data_new(self.project_id, self.collection_id,
+                                         folder=self.folder1_name)['data']['data']['id']
         self.syncano.data_add_parent(self.project_id, data_id, self.collection_id, parent_id=data_id2)
         self.syncano.data_remove_parent(self.project_id, data_id, self.collection_id, parent_id=data_id2)
-        self.syncano.data_delete(self.project_id, self.collection_id, data_ids=[data_id, data_id2])
+        self.syncano.data_add_child(self.project_id, data_id, self.collection_id, child_id=data_id3)
+        self.syncano.data_remove_child(self.project_id, data_id, self.collection_id, child_id=data_id3)
+        self.syncano.data_delete(self.project_id, self.collection_id, data_ids=[data_id, data_id2, data_id3])
 
     def test_03_move(self):
         data_id= self.syncano.data_new(self.project_id, self.collection_id,
@@ -405,13 +314,25 @@ class TestDataObjects(SyncanoTest, unittest.TestCase):
         assert not any([c.id == data2.id for c in getattr(data, 'children', [])]), 'Parent didnt delete'
         data2.delete()
 
+    def test_06_additional(self):
+        custom = id_generator()
+        custom2 = id_generator()
+        data = self.syncano_object.data_new(self.project_id, self.collection_id,
+                                            folder=self.folder1_name, title=id_generator(), custom=custom)
+        assert data.additional.custom == custom, 'additional error'
+        data = self.syncano_object.data_update(self.project_id, self.collection_id, data_id=data.id,
+                                               folder=self.folder1_name, custom=custom2)
+        assert data.additional.custom == custom2, 'additional error'
+
+
+
     def tearDown(self):
         self.syncano.folder_delete(self.project_id, self.folder1_name, collection_id=self.collection_id,
                                    collection_key=self.collection_key)
         self.syncano.folder_delete(self.project_id, self.folder2_name, collection_id=self.collection_id,
                                    collection_key=self.collection_key)
-        self.syncano.collection_delete(self.project['data']['id'], collection_key=self.collection_key)
-        self.syncano.project_delete(self.project['data']['id'])
+        self.syncano.collection_delete(self.project['data']['project']['id'], collection_key=self.collection_key)
+        self.syncano.project_delete(self.project['data']['project']['id'])
         super(TestDataObjects, self).tearDown()
 
 
@@ -447,17 +368,17 @@ class TestUsers(SyncanoTest, unittest.TestCase):
         assert count['data']['count'] == count_start, "count do not decrement after delete"
 
     def test_04_get(self):
-        name = id_generator()
+        name = id_generator(8)
         user = self.syncano.user_new(name)
         self.project_name = id_generator()
         self.project = self.syncano.project_new(self.project_name)
-        self.project_id = self.project['data']['id']
+        self.project_id = self.project['data']['project']['id']
         self.collection_name = id_generator()
         self.collection_key = id_generator()
-        self.collection = self.syncano.collection_new(self.project['data']['id'],
+        self.collection = self.syncano.collection_new(self.project['data']['project']['id'],
                                                     self.collection_name, self.collection_key)
         self.collection_id = self.collection['data']['collection']['id']
-        self.syncano.collection_activate(self.project['data']['id'],
+        self.syncano.collection_activate(self.project['data']['project']['id'],
                                        collection_id=self.collection['data']['collection']['id'])
         self.folder1_name = id_generator()
         self.folder1 = self.syncano.folder_new(self.project_id, self.folder1_name, collection_key=self.collection_key)
@@ -488,35 +409,43 @@ class TestNotifications(SyncanoTest, unittest.TestCase):
 
     def setUp(self):
         super(TestNotifications, self).setUp()
-        client_name = id_generator(15)
-        self.client = self.syncano.client_new(client_name, client_name)
+        self.client = self.syncano_object.apikey_new(2, id_generator(3))
         self.project_name = id_generator()
         self.project = self.syncano.project_new(self.project_name)
-        self.project_id = self.project['data']['id']
+        self.project_id = self.project['data']['project']['id']
 
     def test_01_notification_send(self):
         message = id_generator()
-        with SyncanoAsyncApi(testconfig.INSTANCE, login=self.client['data']['client']['login'],
-                             password=self.client['data']['client']['login'], host=testconfig.HOST) as syncano2:
-            self.syncano.notification_send(self.client['data']['client']['id'], uuid=syncano2.cli.uuid, custom_message=message)
+        with SyncanoAsyncApi(testconfig.INSTANCE, self.client.api_key, host=testconfig.HOST, name="NOTIFICATION_GETTER") as syncano2:
+            import time
+            time.sleep(2)
+            self.syncano.notification_send(syncano2.cli.uuid, self.client.id, custom_message=message)
             for i in range(10):
                 msg = syncano2.get_message(blocking=False)
-                if 'data' in msg and 'custom_message' in  msg['data']:
+                if msg and 'data' in msg and 'custom_message' in msg['data']:
                     assert message == msg['data']['custom_message'], 'Custom message is not the same'
                     break
             else:
-                assert 1, 'Couldnt get the message in reasonable time'
+                assert 0, 'Couldnt get the message in reasonable time'
 
-    def test_02_notification_history_get_collection_history(self):
+            self.syncano.notification_send(api_client_id=self.client.id, message_id='without_params', custom_message2=message)
+            for i in range(10):
+                msg = syncano2.get_message(blocking=False)
+                if msg and 'data' in msg and 'custom_message2' in msg['data']:
+                    assert message == msg['data']['custom_message2'], 'Custom message is not the same'
+                    break
+            else:
+                assert 0, 'Couldnt get the message in reasonable time'
+
+    def _test_02_notification_history_get_collection_history(self):
         collection_name = id_generator()
         collection_key = id_generator()
         collection = self.syncano.collection_new(self.project_id, collection_name, collection_key)
-        self.syncano.notification_get_collection_history(self.project_id, collection['data']['collection']['id'])
         self.syncano.notification_get_history()
         self.syncano.collection_delete(self.project_id, collection['data']['collection']['id'])
 
     def tearDown(self):
-        self.syncano.client_delete(self.client['data']['client']['id'])
+        self.syncano.apikey_delete(self.client.id)
         self.syncano.project_delete(self.project_id)
         super(TestNotifications, self).tearDown()
 
@@ -527,13 +456,13 @@ class TestSubscriptions(SyncanoTest, unittest.TestCase):
         super(TestSubscriptions, self).setUp()
         self.project_name = id_generator()
         self.project = self.syncano.project_new(self.project_name)
-        self.project_id = self.project['data']['id']
+        self.project_id = self.project['data']['project']['id']
         self.collection_name = id_generator()
         self.collection_key = id_generator()
-        self.collection = self.syncano.collection_new(self.project['data']['id'],
+        self.collection = self.syncano.collection_new(self.project['data']['project']['id'],
                                                     self.collection_name, self.collection_key)
         self.collection_id = self.collection['data']['collection']['id']
-        self.syncano.collection_activate(self.project['data']['id'],
+        self.syncano.collection_activate(self.project['data']['project']['id'],
                                          collection_id=self.collection['data']['collection']['id'])
 
     def test_01_subscribe_unsubscribe_projectget(self):
@@ -557,8 +486,14 @@ class TestSubscriptions(SyncanoTest, unittest.TestCase):
                         for x in subs['data']['subscription']]), "sub not deleted"
 
     def test_03_objectcallback(self):
-        self.syncano_object.subscription.subscribe_collection(self.project_id, self.collection_id)
         self.syncano_object.subscription.subscribe_project(self.project_id)
+        subscriptions = self.syncano_object.subscription_get()
+        for s in subscriptions:
+            if s.type == 'Project':
+                s.unsubscribe_project()
+            else:
+                s.unsubscribe_collection(self.project_id)
+        self.syncano_object.subscription.subscribe_collection(self.project_id, self.collection_id)
         subscriptions = self.syncano_object.subscription_get()
         for s in subscriptions:
             if s.type == 'Project':
@@ -574,10 +509,63 @@ class TestSubscriptions(SyncanoTest, unittest.TestCase):
         super(TestSubscriptions, self).tearDown()
 
 
+class TestAdmin(SyncanoTest, unittest.TestCase):
+
+    def test_01_admin_new(self):
+        email = self.syncano.admin_new(email_generator(), '3', id_generator())
+
+    def test_02_get_get_one(self):
+        admins = self.syncano_object.admin.get()
+        admin = admins[0]
+        #admin.update(role_id=admin.role.id)
+        admin = self.syncano_object.admin_get_one(admin.id)
+
+
+class TestRole(SyncanoTest, unittest.TestCase):
+
+    def test_01_get(self):
+        roles = self.syncano_object.role_get()
+        assert all([hasattr(r, 'id') for r in roles]), 'Group has no id'
+
+
+class TestIdentity(SyncanoTest, unittest.TestCase):
+
+    def test_01_get_update(self):
+        identities = self.syncano.connection_get()
+        assert identities, "empty identities list"
+        identities2 = self.syncano_object.connection_get()
+        assert identities2, "empty identities list"
+        i = identities2[0]
+        name = ''#i.name
+        name2 = name + 'x'
+        i.update(name=name2)
+        identities2 = self.syncano_object.connection_get(limit=10)
+        i = identities2[0]
+        name = i.name
+        assert name == name2, 'not updated name'
+
+
+class TestApikey(SyncanoTest, unittest.TestCase):
+
+    def test_01_new_get_get_one_update_descripton_delete(self):
+        desc = id_generator()
+        desc2 = id_generator()
+        key = self.syncano_object.apikey.new(2, desc)
+        keys = self.syncano.apikey_get()
+        assert any([key.id == k['id'] for k in keys['data']['apikey']]), "Created apikey not in list"
+        key.update_description(desc2)
+        key = self.syncano_object.apikey_get_one(key.id)
+        assert key.description == desc2, "description didnt change"
+        self.syncano.apikey_delete(key.id)
+        keys = self.syncano_object.apikey_get()
+        assert not any([key.id == k.id for k in keys]), "deleted apikey in list"
+
+
+
 if __name__ == '__main__':
     suite = unittest.TestSuite()
-    for t in (TestInstanceClients, TestDataObjects, TestProjects, TestFolders, TestNotifications,
-              TestUsers, TestSubscriptions, TestCollections):
+    for t in (TestIdentity, TestAdmin, TestApikey, TestRole, TestDataObjects, TestProjects,
+              TestUsers, TestFolders, TestNotifications, TestSubscriptions, TestCollections):
         suite.addTest(unittest.TestLoader().loadTestsFromTestCase(t))
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     exit(len(result.errors) or len(result.failures))

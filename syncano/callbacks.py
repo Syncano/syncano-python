@@ -110,29 +110,32 @@ def check_attributes_decorator(*fields_list):
     return decorator
 
 
-class InstanceClientObject(BaseResultObject):
+class AdminObject(BaseResultObject):
 
-    TAG = 'client'
+    TAG = 'admin'
 
     def delete(self):
-        self.conn.client.delete(client_id=self.id)
+        self.conn.admin.delete(admin_id=self.id)
 
-    def recreate_apikey(self):
-        return self.conn.client.recreate_apikey(client_id=self.id).api_key
+    def update(self, role_id):
+        self.conn.admin.update(admin_id=self.id, role_id=role_id)
+        self.update_attrs(role_id=role_id)
 
-    def update_state(self, state):
-        self.conn.client.update_state(state, client_id=self.id)
-        self.state = state
 
-    def update_password(self, new_password, current_password=None):
-        self.conn.client.update_password(new_password, client_id=self.id, current_password=current_password)
+class ApikeyObject(BaseResultObject):
 
-    def update(self, new_login=None, first_name=None, last_name=None, email=None):
-        self.conn.client.update(client_id=self.id, new_login=new_login, first_name=first_name,
-                                last_name=last_name, email=email)
-        self.update_attrs(new_login=new_login, first_name=first_name,
-                          last_name=last_name, email=email)
+    TAG = 'apikey'
 
+    def delete(self):
+        self.conn.apikey.delete(self.id)
+
+    def update_description(self, description):
+        self.conn.apikey.update_description(self.id, description=description)
+        self.desription = description
+
+class RoleObject(BaseResultObject):
+
+    TAG = 'role'
 
 class ProjectObject(BaseResultObject):
 
@@ -144,6 +147,15 @@ class ProjectObject(BaseResultObject):
     def update(self, name):
         self.conn.project.update(self.id, name)
         self.name = name
+
+
+class ConnectionObject(BaseResultObject):
+
+    TAG = 'connection'
+
+    def update(self, state=None, name=None):
+        self.conn.connection.update(self.uuid, api_client_id=self.api_client_id, state=state, name=name)
+        self.update_attrs(state=state, name=name)
 
 
 class CollectionObject(BaseResultObject):
@@ -289,13 +301,16 @@ class ObjectIterResult(object):
     def __len__(self):
         return len(self.items)
 
+    def __getitem__(self, index):
+        return self.items[index]
+
 
 class ObjectCallback(JsonCallback):
 
     @staticmethod
     def match_result_to_class(result):
-        for clss in [InstanceClientObject, ProjectObject, CollectionObject, FolderObject,
-                     DataObject, UserObject, SubscriptionObject]:
+        for clss in [AdminObject, ProjectObject, CollectionObject, FolderObject, ApikeyObject,
+                     DataObject, UserObject, SubscriptionObject, RoleObject, ConnectionObject]:
             if clss.TAG in result['data']:
                 return clss
         else:
@@ -314,6 +329,6 @@ class ObjectCallback(JsonCallback):
             else:
                 return cls(self.syncano, received['data'], message_id)
         else:
-            super(ObjectCallback, self).process_callresponse(received)
+            return super(ObjectCallback, self).process_callresponse(received)
 
 
