@@ -14,7 +14,7 @@ Library for syncano.com api
 Dependencies
 ============
 
-None
+gevent==1.0.1
 
 Installation
 ============

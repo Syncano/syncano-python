@@ -1,5 +1,6 @@
 import asyncore
 import socket
+import gevent.ssl
 import ssl
 import time
 import json
@@ -31,6 +32,7 @@ class SyncanoClient(asyncore.dispatcher):
         self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connect((host or HOST, port or PORT))
         self.authorized = None
+        self.temp_received = ''
 
     def write_to_buffer(self, data):
         data = json.dumps(data) + '\n'
@@ -44,7 +46,7 @@ class SyncanoClient(asyncore.dispatcher):
         self.write_to_buffer(auth)
 
     def handle_connect(self):
-        self.socket = ssl.wrap_socket(self.socket, do_handshake_on_connect=False)
+        self.socket = gevent.ssl.wrap_socket(self.socket, do_handshake_on_connect=False)
         while True:
             try:
                 self.socket.do_handshake()
@@ -57,9 +59,19 @@ class SyncanoClient(asyncore.dispatcher):
         self.close()
 
     def handle_read(self):
-        received = self.recv(32768)
+        last_received = self.recv(4048)
+        received = '' + last_received
+        while len(last_received) == 4048:
+            last_received = self.recv(4048)
+            received = received + last_received
         received = received.decode('utf-8')
-        received = json.loads(received)
+        try:
+            self.temp_received = self.temp_received + received
+            received = json.loads(self.temp_received)
+            self.temp_received = ''
+        except ValueError:
+            return
+
         logger.info(u'%s - received from server %s', self.name, received)
         if self.callback:
             res = self.callback.process_message(received)
