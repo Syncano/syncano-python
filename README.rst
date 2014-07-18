@@ -27,7 +27,7 @@ Examples
 ========
 
 
-Creating, Modifing, Listing, Deleting Projects
+Creating, Modifying, Listing, Deleting Projects
 ----------------------------------------------
 
 ::
@@ -55,7 +55,7 @@ or
 
 
 
-Subscribe and listen to notifications, and pings
+Subscribe and listen to notifications and pings
 ------------------------------------------------
 
 ::
@@ -68,7 +68,7 @@ Subscribe and listen to notifications, and pings
               print ('message', message)
 
 
-Creating message callback, that is printing all messages from server
+Creating message callback that is printing all messages from server
 --------------------------------------------------------------------
 
 ::
