@@ -11,11 +11,11 @@ from syncano.resultset import ResultSet
 
 
 class Connection(object):
-    AUTH_SUFFIX = '/account/auth/'
+    AUTH_SUFFIX = 'account/auth/'
     CONTENT_TYPE = 'application/json'
     RESULT_SET_CLASS = ResultSet
 
-    def __init__(self, host, email=None, password=None, api_key=None, **kwargs):
+    def __init__(self, host=None, email=None, password=None, api_key=None, **kwargs):
         self.host = host or syncano.API_ROOT
         self.email = email
         self.password = password
@@ -40,11 +40,46 @@ class Connection(object):
 
         return params
 
-    def make_request(self, method_name, url, **kwargs):
-        if not self.api_key:
+    def build_url(self, path):
+        if not isinstance(path, (str, unicode)):
+            raise SyncanoValueError('"path" should be a string')
+
+        if path.startswith(self.host):
+            return path
+
+        if not path.endswith('/'):
+            path += '/'
+
+        if path.startswith('/'):
+            path = path[1:]
+
+        return urljoin(self.host, path)
+
+    def request(self, method_name, path, **kwargs):
+        '''Simple wrapper around make_request which
+        will ensure that request is authenticated and serialized.'''
+
+        if not self.is_authenticated():
             self.authenticate()
 
-        self.logger.debug('Request: %s', url)
+        ResultClass = kwargs.pop('result_class', None)
+        content = self.make_request(method_name, path, **kwargs)
+
+        # really dummy check
+        if 'objects' in content and 'next' in content and 'prev' in content:
+            return self.RESULT_SET_CLASS(
+                self,
+                content,
+                result_class=ResultClass,
+                request_method=method_name,
+                request_path=path,
+                request_params=kwargs,
+            )
+
+        return ResultClass(**content) if ResultClass else content
+
+    def make_request(self, method_name, path, **kwargs):
+        self.logger.debug('Request: %s', path)
 
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)
@@ -52,6 +87,7 @@ class Connection(object):
         if method is None:
             raise SyncanoValueError('Invalid request method: {0}'.format(method_name))
 
+        url = self.build_url(path)
         response = method(url, **params)
         has_json = response.headers.get('content-type') == 'application/json'
         content = response.json() if has_json else response.text
@@ -65,8 +101,11 @@ class Connection(object):
 
         return content
 
+    def is_authenticated(self):
+        return self.api_key is not None
+
     def authenticate(self, email=None, password=None):
-        if self.api_key:
+        if self.is_authenticated():
             self.logger.debug('Connection already authenticated: %s', self.api_key)
             return self.api_key
 
@@ -81,11 +120,10 @@ class Connection(object):
 
         self.logger.debug('Authenticating: %s', email)
 
-        url = urljoin(self.host, self.AUTH_SUFFIX)
         data = {'email': email, 'password': password}
-        response = self.make_request('POST', url, data=data)
+        response = self.make_request('POST', self.AUTH_SUFFIX, data=data)
         account_key = response.get('account_key')
         self.api_key = account_key
 
-        self.logger.debug('Authenticated: %s', email)
+        self.logger.debug('Authentication successful: %s', account_key)
         return account_key

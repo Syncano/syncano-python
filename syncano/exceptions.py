@@ -8,10 +8,10 @@ class SyncanoException(Exception):
         self.reason = reason
 
     def __repr__(self):
-        return '%s: %s' % (self.__class__.__name__, self.reason)
+        return self.reason
 
     def __str__(self):
-        return '%s: %s' % (self.__class__.__name__, self.reason)
+        return self.reason
 
 
 class SyncanoValueError(SyncanoException):
@@ -25,15 +25,7 @@ class SyncanoRequestError(SyncanoException):
         super(SyncanoRequestError, self).__init__(*args)
 
     def __repr__(self):
-        return '%s: %d %s' % (
-            self.__class__.__name__,
-            self.status_code,
-            self.reason
-        )
+        return '{0} {1}'.format(self.status_code, self.reason)
 
     def __str__(self):
-        return '%s: %d %s' % (
-            self.__class__.__name__,
-            self.status_code,
-            self.reason
-        )
+        return '{0} {1}'.format(self.status_code, self.reason)
