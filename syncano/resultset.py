@@ -28,4 +28,8 @@ class ResultSet(object):
             if not objects or not next_url:
                 break
 
-            self.data = self.connection.make_request(self.request_method, next_url, **self.request_params)
+            self.data = self.connection.make_request(
+                self.request_method,
+                next_url,
+                **self.request_params
+            )
