@@ -42,7 +42,7 @@ class Connection(object):
 
     def build_url(self, path):
         if not isinstance(path, (str, unicode)):
-            raise SyncanoValueError('"path" should be a string')
+            raise SyncanoValueError('"path" should be a string.')
 
         if path.startswith(self.host):
             return path
@@ -85,7 +85,7 @@ class Connection(object):
         method = getattr(self.session, method_name.lower(), None)
 
         if method is None:
-            raise SyncanoValueError('Invalid request method: {0}'.format(method_name))
+            raise SyncanoValueError('Invalid request method: {0}.'.format(method_name))
 
         url = self.build_url(path)
         response = method(url, **params)
@@ -113,10 +113,10 @@ class Connection(object):
         password = password or self.password
 
         if not email:
-            raise SyncanoValueError('"email" is required')
+            raise SyncanoValueError('"email" is required.')
 
         if not password:
-            raise SyncanoValueError('"password" is required')
+            raise SyncanoValueError('"password" is required.')
 
         self.logger.debug('Authenticating: %s', email)
 

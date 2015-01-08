@@ -134,10 +134,10 @@ class ConnectionTestCase(unittest.TestCase):
         self.assertIsNone(self.connection.api_key)
         self.assertFalse(make_request_mock.called)
 
-        self.connection.api_key = 'Ala has cat'
+        self.connection.api_key = 'Ala has a cat'
         out = self.connection.authenticate()
 
-        self.assertEqual(out, 'Ala has cat')
+        self.assertEqual(out, 'Ala has a cat')
         self.assertFalse(make_request_mock.called)
 
     @mock.patch('syncano.connection.Connection.make_request')
