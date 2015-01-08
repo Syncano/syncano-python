@@ -16,6 +16,7 @@ setup(
     url='http://syncano.com',
     packages=find_packages(),
     test_suite='tests',
+    zip_safe=False,
     classifiers=[
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
