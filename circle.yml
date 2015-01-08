@@ -4,9 +4,9 @@ machine:
 
 test:
   post:
-    - "pip install coverage>=3.7.1"
-    - "coverage html"
+    - pip install coverage>=3.7.1
+    - coverage html
 
 general:
   artifacts:
-    - "coverage"
+    - coverage
