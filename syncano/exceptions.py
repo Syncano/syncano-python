@@ -2,7 +2,16 @@ class SyncanoException(Exception):
     """
     General Syncano client exception
     """
-    pass
+
+    def __init__(self, reason, *args):
+        super(SyncanoException, self).__init__(reason, *args)
+        self.reason = reason
+
+    def __repr__(self):
+        return self.reason
+
+    def __str__(self):
+        return self.reason
 
 
 class SyncanoValueError(SyncanoException):
