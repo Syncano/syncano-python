@@ -34,10 +34,100 @@ class ConnectionTestCase(unittest.TestCase):
         pass
 
     def test_build_params(self):
-        pass
+        self.connection.api_key = 'test'
+        empty = {'data': {'a': 1}}
+        params = self.connection.build_params(empty)
+        self.assertNotEqual(params, empty)
 
-    def test_make_request(self):
-        pass
+        self.assertTrue('timeout' in params)
+        self.assertEqual(params['timeout'], self.connection.timeout)
+
+        self.assertTrue('headers' in params)
+
+        self.assertTrue('Authorization' in params['headers'])
+        self.assertEqual(params['headers']['Authorization'], 'ApiKey {0}'.format(self.connection.api_key))
+
+        self.assertTrue('content-type' in params['headers'])
+        self.assertEqual(params['headers']['content-type'], self.connection.CONTENT_TYPE)
+
+        self.assertEqual(params['data'], '{"a": 1}')
+
+    def test_build_url(self):
+        result = urljoin(self.connection.host, 'test/')
+        self.assertEqual(self.connection.build_url('test'), result)
+        self.assertEqual(self.connection.build_url('/test'), result)
+        self.assertEqual(self.connection.build_url('/test/'), result)
+        self.assertEqual(self.connection.build_url(result), result)
+
+        with self.assertRaises(SyncanoValueError):
+            self.connection.build_url(True)
+
+    @mock.patch('syncano.connection.Connection.authenticate')
+    @mock.patch('syncano.connection.Connection.make_request')
+    def test_request_authentication(self, make_request_mock, authenticate_mock):
+        self.assertFalse(make_request_mock.called)
+        self.assertFalse(authenticate_mock.called)
+        self.connection.request('POST', 'test')
+        self.assertTrue(make_request_mock.called)
+        self.assertTrue(authenticate_mock.called)
+
+    @mock.patch('syncano.connection.Connection.authenticate')
+    @mock.patch('syncano.connection.Connection.make_request')
+    def test_request_serialization(self, make_request_mock, authenticate_mock):
+        self.assertFalse(make_request_mock.called)
+        self.assertFalse(authenticate_mock.called)
+
+        make_request_mock.return_value = {'a': 1}
+        content = self.connection.request('POST', 'test')
+
+        self.assertTrue(make_request_mock.called)
+        self.assertTrue(authenticate_mock.called)
+        self.assertEqual(content, make_request_mock.return_value)
+
+        content = self.connection.request('POST', 'test', result_class=mock.MagicMock)
+        self.assertIsInstance(content, mock.MagicMock)
+
+        make_request_mock.return_value = {
+            'objects': [],
+            'next': None,
+            'prev': None,
+        }
+        content = self.connection.request('POST', 'test')
+        self.assertIsInstance(content, self.connection.RESULT_SET_CLASS)
+
+    @mock.patch('requests.Session.post')
+    def test_make_request(self, post_mock):
+        response_mock = mock.MagicMock(
+            status_code=200,
+            headers={
+                'content-type': 'application/json'
+            },
+        )
+        response_mock.json.return_value = {'ok': 'ok'}
+        post_mock.return_value = response_mock
+
+        out = self.connection.make_request('POST', 'test')
+        self.assertTrue(post_mock.called)
+        self.assertEqual(out, response_mock.json.return_value)
+
+    def test_invalid_method_name(self):
+        with self.assertRaises(SyncanoValueError):
+            self.connection.make_request('INVALID', 'test')
+
+    @mock.patch('requests.Session.post')
+    def test_request_error(self, post_mock):
+        post_mock.return_value = mock.MagicMock(status_code=404, text='Invalid request')
+        self.assertFalse(post_mock.called)
+
+        with self.assertRaises(SyncanoRequestError):
+            self.connection.make_request('POST', 'test')
+
+        self.assertTrue(post_mock.called)
+
+    def test_is_authenticated(self):
+        self.assertFalse(self.connection.is_authenticated())
+        self.connection.api_key = 'xxxx'
+        self.assertTrue(self.connection.is_authenticated())
 
     @mock.patch('syncano.connection.Connection.make_request')
     def test_already_authenticated(self, make_request_mock):
@@ -86,5 +176,14 @@ class ConnectionTestCase(unittest.TestCase):
             timeout=30
         )
 
-    def test_successful_authentication(self):
-        pass
+    @mock.patch('syncano.connection.Connection.make_request')
+    def test_successful_authentication(self, make_request):
+        make_request.return_value = {'account_key': 'test'}
+        self.assertFalse(make_request.called)
+        self.assertIsNone(self.connection.api_key)
+
+        api_key = self.connection.authenticate(email='dummy', password='dummy')
+
+        self.assertTrue(make_request.called)
+        self.assertIsNotNone(self.connection.api_key)
+        self.assertEqual(self.connection.api_key, api_key)
