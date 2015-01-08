@@ -14,7 +14,7 @@ env_loglevel = os.getenv('SYNCANO_LOGLEVEL', 'INFO')
 loglevel = getattr(logging, env_loglevel.upper(), None)
 
 if not isinstance(loglevel, int):
-    raise ValueError('Invalid log level: {0}'.format(loglevel))
+    raise ValueError('Invalid log level: {0}.'.format(loglevel))
 
 console_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 console_handler = logging.StreamHandler()
