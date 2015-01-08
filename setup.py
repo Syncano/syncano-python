@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from syncano import __version__
 
 
@@ -14,9 +14,8 @@ setup(
     author='Daniel Kopka',
     author_email='daniel.kopka@syncano.com',
     url='http://syncano.com',
-    packages=[
-        'syncano',
-    ],
+    packages=find_packages(),
+    test_suite='tests',
     classifiers=[
         'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
@@ -26,5 +25,8 @@ setup(
     ],
     install_requires=[
         'requests==2.5.1',
-    ]
+    ],
+    tests_require=[
+        'mock==1.0.1',
+    ],
 )
