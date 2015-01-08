@@ -1,0 +1,10 @@
+[run]
+branch = False
+source = syncano
+omit = */tests/*
+
+[report]
+ignore_errors = True
+
+[html]
+directory = coverage
