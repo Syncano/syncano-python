@@ -27,6 +27,7 @@ setup(
         'requests==2.5.1',
     ],
     tests_require=[
-        'mock==1.0.1',
+        'mock>=1.0.1',
+        'coverage>=3.7.1',
     ],
 )
