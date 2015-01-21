@@ -29,3 +29,7 @@ class SyncanoRequestError(SyncanoException):
 
     def __str__(self):
         return '{0} {1}'.format(self.status_code, self.reason)
+
+
+class SyncanoValidationError(SyncanoValueError):
+    pass

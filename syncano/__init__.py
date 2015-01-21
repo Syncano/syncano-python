@@ -8,7 +8,7 @@ __license__ = 'MIT'
 __copyright__ = 'Copyright 2015 Syncano'
 
 VERSION = __version__
-API_ROOT = 'http://127.0.0.1:8000/api/'
+API_ROOT = os.getenv('SYNCANO_API_ROOT', 'https://api.syncano.com/')
 
 env_loglevel = os.getenv('SYNCANO_LOGLEVEL', 'INFO')
 loglevel = getattr(logging, env_loglevel.upper(), None)

@@ -6,12 +6,15 @@ from copy import deepcopy
 import syncano
 from syncano.exceptions import (
     SyncanoValueError, SyncanoRequestError,
+    SyncanoValidationError
 )
 from syncano.resultset import ResultSet
+from syncano.models import Registry
 
 
 class Connection(object):
-    AUTH_SUFFIX = 'account/auth/'
+    AUTH_SUFFIX = 'v1/account/auth'
+    SCHEMA_SUFFIX = 'v1/schema'
     CONTENT_TYPE = 'application/json'
     RESULT_SET_CLASS = ResultSet
 
@@ -23,6 +26,7 @@ class Connection(object):
         self.logger = kwargs.get('logger') or syncano.logger
         self.timeout = kwargs.get('timeout') or 30
         self.session = requests.Session()
+        self.models = Registry(self).register_schema(self.schema)
 
     def build_params(self, kwargs):
         params = deepcopy(kwargs)
@@ -79,7 +83,7 @@ class Connection(object):
         return ResultClass(**content) if ResultClass else content
 
     def make_request(self, method_name, path, **kwargs):
-        self.logger.debug('Request: %s', path)
+        self.logger.debug('Request: %s %s', method_name, path)
 
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)
@@ -92,6 +96,11 @@ class Connection(object):
         has_json = response.headers.get('content-type') == 'application/json'
         content = response.json() if has_json else response.text
 
+        if response.status_code == 400:
+            for name, errors in content.iteritems():
+                errors = ', '.join(errors)
+                raise SyncanoValidationError('"{0}": {1}.'.format(name, errors))
+
         if response.status_code not in [200, 201]:
             content = content['detail'] if has_json else content
             self.logger.debug('Request Error: %s', url)
@@ -100,6 +109,13 @@ class Connection(object):
             raise SyncanoRequestError(response.status_code, content)
 
         return content
+
+    @property
+    def schema(self):
+        if not hasattr(self, '_schema'):
+            response = self.make_request('GET', self.SCHEMA_SUFFIX)
+            self._schema = response
+        return self._schema
 
     def is_authenticated(self):
         return self.api_key is not None

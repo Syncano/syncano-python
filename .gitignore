@@ -6,3 +6,4 @@ dist
 *.pyo
 .coverage
 coverage
+run_it.py
