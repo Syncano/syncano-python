@@ -28,8 +28,8 @@ class Connection(object):
         self.session = requests.Session()
         self.models = Registry(self).register_schema(self.schema)
 
-    def build_params(self, kwargs):
-        params = deepcopy(kwargs)
+    def build_params(self, params):
+        params = deepcopy(params)
         params['timeout'] = params.get('timeout') or self.timeout
         params['headers'] = params.get('headers') or {}
 
@@ -39,8 +39,9 @@ class Connection(object):
         if self.api_key and 'Authorization' not in params['headers']:
             params['headers']['Authorization'] = 'ApiKey %s' % self.api_key
 
-        if 'data' in params and not isinstance(params['data'], (str, unicode)):
-            params['data'] = json.dumps(params['data'])
+        # We don't need to check SSL cert in DEBUG mode
+        if syncano.DEBUG:
+            params['verify'] = False
 
         return params
 
@@ -83,24 +84,38 @@ class Connection(object):
         return ResultClass(**content) if ResultClass else content
 
     def make_request(self, method_name, path, **kwargs):
-        self.logger.debug('Request: %s %s', method_name, path)
-
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)
 
+        # JSON dump can be expensive
+        if syncano.DEBUG:
+            formatted_params = json.dumps(
+                params,
+                sort_keys=True,
+                indent=2,
+                separators=(',', ': ')
+            )
+            self.logger.debug('Request: %s %s\n%s', method_name, path, formatted_params)
+
         if method is None:
             raise SyncanoValueError('Invalid request method: {0}.'.format(method_name))
+
+        # Encode request payload
+        if 'data' in params and not isinstance(params['data'], (str, unicode)):
+            params['data'] = json.dumps(params['data'])
 
         url = self.build_url(path)
         response = method(url, **params)
         has_json = response.headers.get('content-type') == 'application/json'
         content = response.json() if has_json else response.text
 
+        # Validation error
         if response.status_code == 400:
             for name, errors in content.iteritems():
                 errors = ', '.join(errors)
                 raise SyncanoValidationError('"{0}": {1}.'.format(name, errors))
 
+        # Other errors
         if response.status_code not in [200, 201]:
             content = content['detail'] if has_json else content
             self.logger.debug('Request Error: %s', url)

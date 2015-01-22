@@ -16,6 +16,8 @@ loglevel = getattr(logging, env_loglevel.upper(), None)
 if not isinstance(loglevel, int):
     raise ValueError('Invalid log level: {0}.'.format(loglevel))
 
+DEBUG = env_loglevel.lower() == 'debug'
+
 console_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 console_handler = logging.StreamHandler()
 console_handler.setFormatter(console_formatter)

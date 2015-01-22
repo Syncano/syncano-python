@@ -1,16 +1,19 @@
 from __future__ import unicode_literals
 
+import re
+
 from syncano import logger
 from syncano.exceptions import SyncanoValueError, SyncanoValidationError
 from .options import Options
-from .fields import Field, ModelField, ObjectField, MAPPING
+from .fields import Field, ModelField, HyperlinkeField, MAPPING
 
 
 class Registry(object):
 
     def __init__(self, connection, models=None):
         self.connection = connection
-        self.models = models or []
+        self.models = models or {}
+        self.patterns = []
 
     def __str__(self):
         return 'Registry: {0}'.format(', '.join(self.models))
@@ -18,10 +21,38 @@ class Registry(object):
     def __unicode__(self):
         return unicode(str(self))
 
+    def __iter__(self):
+        for name, model in self.models.iteritems():
+            yield model
+
+    def get_model_patterns(self, cls):
+        patterns = []
+        for k, v in cls._meta.endpoints.iteritems():
+            pattern = '^{0}$'.format(v['path'])
+            for name, value in v.get('properties', {}).iteritems():
+                pattern = pattern.replace('{{{0}}}'.format(name), '([^/.]+)')
+            patterns.append((re.compile(pattern), cls))
+        return patterns
+
+    def get_model_by_path(self, path):
+        for pattern, cls in self.patterns:
+            if pattern.match(path):
+                return cls
+
+    def get_model_by_name(self, path):
+        raise NotImplementedError
+
+    def get_model_by_id(self, path):
+        raise NotImplementedError
+
     def register_model(self, name, cls):
         if name not in self.models:
             logger.debug('Registry: %s', name)
-            self.models.append(name)
+
+            self.models[name] = cls
+            patterns = self.get_model_patterns(cls)
+            self.patterns.extend(patterns)
+
             setattr(self, str(name), cls)
         return self
 
@@ -35,7 +66,7 @@ class Registry(object):
 
         attrs = {
             'Meta': Meta,
-            'links': ObjectField(read_only=True, required=False)
+            'links': HyperlinkeField(read_only=True, required=False)
         }
         for name, options in definition.get('properties', {}).iteritems():
             field_type = options.pop('type')
@@ -150,6 +181,7 @@ class Model(object):
             if field.name in kwargs:
                 value = kwargs[field.name]
                 setattr(self, field.name, value)
+                field.attach_to_instance(self)
 
     def to_native(self):
         data = {}
@@ -158,3 +190,9 @@ class Model(object):
                 value = getattr(self, field.name)
                 data[field.name] = field.to_native(value)
         return data
+
+    def _get_LINK(self, field, name):
+        value = getattr(self, field.name)
+        path = value[name]
+        result_class = self._meta.connection.models.get_model_by_path(path)
+        return self._meta.connection.request('GET', path, **{'result_class': result_class})

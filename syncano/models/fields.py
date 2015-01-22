@@ -1,6 +1,8 @@
 import re
 import six
 
+from functools import partial
+
 from syncano.exceptions import SyncanoValidationError
 
 
@@ -11,7 +13,7 @@ class Field(object):
         self.description = kwargs.pop('description', None)
         self.format = kwargs.pop('format', None)
         self.required = kwargs.pop('required', True)
-        self.read_only = kwargs.pop('readOnly', False)
+        self.read_only = kwargs.pop('readOnly', False) or kwargs.pop('read_only', False)
         self.default = kwargs.pop('defaultValue', None) or kwargs.pop('default', None)
         self.schema = kwargs
 
@@ -35,6 +37,9 @@ class Field(object):
 
     def to_native(self, value):
         return value
+
+    def attach_to_instance(self, instance):
+        pass
 
 
 class StringField(Field):
@@ -125,6 +130,25 @@ class ModelField(ObjectField):
     def __init__(self, model_id, *args, **kwargs):
         self.model_id = model_id
         super(ModelField, self).__init__(*args, **kwargs)
+
+
+class HyperlinkeField(ObjectField):
+    METHOD_NAME = '_get_LINK'
+    METHOD_PATTERN = 'get_{name}'
+    IGNORED_LINKS = ('self', )
+
+    def attach_to_instance(self, instance):
+        super(HyperlinkeField, self).attach_to_instance(instance)
+        links = getattr(instance, self.name)
+        method = getattr(instance, self.METHOD_NAME)
+
+        for name, path in links.iteritems():
+            if name in self.IGNORED_LINKS:
+                continue
+
+            method_name = self.METHOD_PATTERN.format(name=name)
+            partial_method = partial(method, field=self, name=name)
+            setattr(instance, method_name, partial_method)
 
 
 MAPPING = {
