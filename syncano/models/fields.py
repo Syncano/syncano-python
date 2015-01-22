@@ -91,7 +91,7 @@ class SlugField(StringField):
     regex = re.compile(r'^[-a-zA-Z0-9_]+$')
 
     def validate(self, value):
-        value = super(SlugField, self).validate(value)
+        super(SlugField, self).validate(value)
         if not bool(self.regex.search(value)):
             raise SyncanoValidationError('Invalid value.')
         return value
@@ -101,7 +101,7 @@ class EmailField(StringField):
     regex = re.compile(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
 
     def validate(self, value):
-        value = super(EmailField, self).validate(value)
+        super(EmailField, self).validate(value)
 
         if not value or '@' not in value:
             raise SyncanoValidationError('Invalid value.')
@@ -117,7 +117,7 @@ class ChoiceField(Field):
         super(ChoiceField, self).__init__(*args, **kwargs)
 
     def validate(self, value):
-        value = super(ChoiceField, self).validate(value)
+        super(ChoiceField, self).validate(value)
         if self.choices and value not in self.choices:
             raise SyncanoValidationError('Invalid value.')
 
