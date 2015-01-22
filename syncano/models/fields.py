@@ -111,7 +111,15 @@ class EmailField(StringField):
 
 
 class ChoiceField(Field):
-    pass
+
+    def __init__(self, *args, **kwargs):
+        self.choices = kwargs.pop('enum', None) or kwargs.pop('choices', None)
+        super(ChoiceField, self).__init__(*args, **kwargs)
+
+    def validate(self, value):
+        value = super(ChoiceField, self).validate(value)
+        if self.choices and value not in self.choices:
+            raise SyncanoValidationError('Invalid value.')
 
 
 class DateField(Field):
