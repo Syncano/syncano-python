@@ -4,7 +4,6 @@ from syncano.exceptions import SyncanoValueError
 class Options(object):
 
     def __init__(self, meta=None):
-        self.id = None
         self.name = None
         self.endpoints = {}
         self.fields = []
@@ -38,7 +37,7 @@ class Options(object):
     def resolve_endpoint(self, name, properties):
         endpoint = self.get_endpoint(name)
 
-        for name, schema in endpoint['properties'].iteritems():
+        for name in endpoint['properties']:
             if name not in properties:
                 raise SyncanoValueError('Request property "{0}" is required.'.format(name))
 

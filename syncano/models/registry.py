@@ -6,7 +6,7 @@ from syncano import logger
 from syncano.exceptions import SyncanoValueError
 
 from .base import Model
-from .fields import ModelField, HyperlinkeField, MAPPING
+from .fields import MAPPING
 from .options import Options
 
 
@@ -31,7 +31,7 @@ class Registry(object):
         patterns = []
         for k, v in cls._meta.endpoints.iteritems():
             pattern = '^{0}$'.format(v['path'])
-            for name, value in v.get('properties', {}).iteritems():
+            for name in v.get('properties', []):
                 pattern = pattern.replace('{{{0}}}'.format(name), '([^/.]+)')
             patterns.append((re.compile(pattern), cls))
         return patterns
@@ -58,29 +58,21 @@ class Registry(object):
             setattr(self, str(name), cls)
         return self
 
-    def register_definition(self, definition, model_ids=None):
+    def register_definition(self, definition):
         Meta = type(str('Meta'), (Options, ), {
             'connection': self.connection,
             'endpoints': definition['endpoints'],
             'name': definition['name'],
-            'id': definition['id'],
         })
 
-        attrs = {
-            'Meta': Meta,
-            'links': HyperlinkeField(read_only=True, required=False)
-        }
+        attrs = {'Meta': Meta}
         for name, options in definition.get('properties', {}).iteritems():
-            field_type = options.pop('type')
+            field_type = options.pop('type', 'field')  # TODO: Nested objects
 
-            if field_type in model_ids:
-                field_attr = ModelField(field_type, **options)
-            elif field_type in MAPPING:
-                field_attr = MAPPING[field_type](**options)
-            else:
+            if field_type not in MAPPING:
                 raise SyncanoValueError('Invalid field type "{0}".'.format(field_type))
 
-            attrs[name] = field_attr
+            attrs[name] = MAPPING[field_type](**options)
 
         cls = type(str(definition['name']), (Model, ), attrs)
         self.register_model(definition['name'], cls)
@@ -88,9 +80,6 @@ class Registry(object):
         return self
 
     def register_schema(self, schema):
-        model_ids = [definition['id'] for definition in schema]
-
         for definition in schema:
-            self.register_definition(definition, model_ids)
-
+            self.register_definition(definition)
         return self

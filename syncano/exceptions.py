@@ -33,3 +33,16 @@ class SyncanoRequestError(SyncanoException):
 
 class SyncanoValidationError(SyncanoValueError):
     pass
+
+
+class SyncanoFieldError(SyncanoValidationError):
+
+    def __init__(self, field_name, *args):
+        self.field_name = field_name
+        super(SyncanoFieldError, self).__init__(*args)
+
+    def __repr__(self):
+        return '{0}: {1}'.format(self.field_name, self.reason)
+
+    def __str__(self):
+        return '{0}: {1}'.format(self.field_name, self.reason)

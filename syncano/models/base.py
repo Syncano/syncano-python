@@ -1,8 +1,9 @@
 from __future__ import unicode_literals
 
+import inspect
+
 from syncano.exceptions import SyncanoValidationError
 from .options import Options
-from .fields import Field
 
 
 class ModelMetaclass(type):
@@ -21,17 +22,16 @@ class ModelMetaclass(type):
         meta = Options(meta)
         new_class.add_to_class('_meta', meta)
 
-        # Find all descriptors, auto-set their names
         for n, v in attrs.iteritems():
-            if isinstance(v, Field):
-                v.name = n
-                new_class.add_to_class(n, v)
-                meta.add_field(v)
+            new_class.add_to_class(n, v)
 
         return new_class
 
     def add_to_class(cls, name, value):
-        setattr(cls, name, value)
+        if not inspect.isclass(value) and hasattr(value, 'contribute_to_class'):
+            value.contribute_to_class(cls, name)
+        else:
+            setattr(cls, name, value)
 
 
 class Model(object):
@@ -78,7 +78,7 @@ class Model(object):
         for field in self._meta.fields:
             if not field.read_only:
                 value = getattr(self, field.name)
-                field.validate(value)
+                field.validate(value, self)
 
     def is_valid(self):
         try:
@@ -92,7 +92,6 @@ class Model(object):
             if field.name in kwargs:
                 value = kwargs[field.name]
                 setattr(self, field.name, value)
-                field.attach_to_instance(self)
 
     def to_native(self):
         data = {}
@@ -102,8 +101,8 @@ class Model(object):
                 data[field.name] = field.to_native(value)
         return data
 
-    def _get_LINK(self, field, name):
-        value = getattr(self, field.name)
-        path = value[name]
-        result_class = self._meta.connection.models.get_model_by_path(path)
-        return self._meta.connection.request('GET', path, **{'result_class': result_class})
+    # def _LINK(self, field, name):
+    #     value = getattr(self, field.name)
+    #     path = value[name]
+    #     result_class = self._meta.connection.models.get_model_by_path(path)
+    #     return result_class.list()

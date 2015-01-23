@@ -3,34 +3,42 @@ import six
 
 from functools import partial
 
-from syncano.exceptions import SyncanoValidationError
+from syncano.exceptions import SyncanoFieldError
 
 
 class Field(object):
 
     def __init__(self, name=None, **kwargs):
         self.name = name
-        self.description = kwargs.pop('description', None)
-        self.format = kwargs.pop('format', None)
+        self.model = None
+        self.label = kwargs.pop('label', None)
+
         self.required = kwargs.pop('required', True)
-        self.read_only = kwargs.pop('readOnly', False) or kwargs.pop('read_only', False)
-        self.default = kwargs.pop('defaultValue', None) or kwargs.pop('default', None)
+        self.read_only = kwargs.pop('read_only', False)
+        self.default = kwargs.pop('default', None)
+
+        self.max_length = kwargs.pop('max_length', None)
+        self.min_length = kwargs.pop('min_length', None)
+
         self.schema = kwargs
 
     def __get__(self, instance, owner):
         return instance._raw_data.get(self.name, self.default)
 
     def __set__(self, instance, value):
-        self.validate(value)
+        self.validate(value, instance)
         instance._raw_data[self.name] = self.to_python(value)
 
     def __delete__(self, instance):
         if self.name in instance._raw_data:
             del instance._raw_data[self.name]
 
-    def validate(self, value):
+    def validate(self, value, model_instance):
         if self.required and not value:
-            raise SyncanoValidationError('Field is required.')
+            raise SyncanoFieldError(self.name, 'Field is required.')
+
+        if self.read_only and getattr(model_instance, self.name):
+            raise SyncanoFieldError(self.name, 'Field is read only.')
 
     def to_python(self, value):
         return value
@@ -38,8 +46,14 @@ class Field(object):
     def to_native(self, value):
         return value
 
-    def attach_to_instance(self, instance):
-        pass
+    def contribute_to_class(self, cls, name):
+        self.model = cls
+        cls._meta.add_field(self)
+
+        if not self.name:
+            self.name = name
+
+        setattr(cls, name, self)
 
 
 class StringField(Field):
@@ -58,7 +72,7 @@ class IntegerField(Field):
         try:
             return int(value)
         except (TypeError, ValueError):
-            raise SyncanoValidationError('Invalid value.')
+            raise SyncanoFieldError(self.name, 'Invalid value.')
 
 
 class FloatField(Field):
@@ -69,7 +83,7 @@ class FloatField(Field):
         try:
             return float(value)
         except (TypeError, ValueError):
-            raise SyncanoValidationError('Invalid value.')
+            raise SyncanoFieldError(self.name, 'Invalid value.')
 
 
 class BooleanField(Field):
@@ -84,42 +98,43 @@ class BooleanField(Field):
         if value in ('f', 'False', '0'):
             return False
 
-        raise SyncanoValidationError('Invalid value.')
+        raise SyncanoFieldError(self.name, 'Invalid value.')
 
 
 class SlugField(StringField):
     regex = re.compile(r'^[-a-zA-Z0-9_]+$')
 
-    def validate(self, value):
-        super(SlugField, self).validate(value)
+    def validate(self, value, model_instance):
+        super(SlugField, self).validate(value, model_instance)
         if not bool(self.regex.search(value)):
-            raise SyncanoValidationError('Invalid value.')
+            raise SyncanoFieldError(self.name, 'Invalid value.')
         return value
 
 
 class EmailField(StringField):
     regex = re.compile(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)')
 
-    def validate(self, value):
-        super(EmailField, self).validate(value)
+    def validate(self, value, model_instance):
+        super(EmailField, self).validate(value, model_instance)
 
         if not value or '@' not in value:
-            raise SyncanoValidationError('Invalid value.')
+            raise SyncanoFieldError(self.name, 'Invalid value.')
 
         if not bool(self.regex.match(value)):
-            raise SyncanoValidationError('Invalid value.')
+            raise SyncanoFieldError(self.name, 'Invalid value.')
 
 
 class ChoiceField(Field):
 
     def __init__(self, *args, **kwargs):
-        self.choices = kwargs.pop('enum', None) or kwargs.pop('choices', None)
+        self.choices = kwargs.pop('choices', [])
+        self.allowed_values = [choice['value'] for choice in self.choices]
         super(ChoiceField, self).__init__(*args, **kwargs)
 
-    def validate(self, value):
-        super(ChoiceField, self).validate(value)
-        if self.choices and value not in self.choices:
-            raise SyncanoValidationError('Invalid value.')
+    def validate(self, value, model_instance):
+        super(ChoiceField, self).validate(value, model_instance)
+        if self.choices and value not in self.allowed_values:
+            raise SyncanoFieldError(self.name, 'Invalid choice.')
 
 
 class DateField(Field):
@@ -134,29 +149,26 @@ class ObjectField(Field):
     pass
 
 
-class ModelField(ObjectField):
-    def __init__(self, model_id, *args, **kwargs):
-        self.model_id = model_id
-        super(ModelField, self).__init__(*args, **kwargs)
-
-
-class HyperlinkeField(ObjectField):
-    METHOD_NAME = '_get_LINK'
+class HyperlinkedField(ObjectField):
+    METHOD_NAME = '_LINK'
     METHOD_PATTERN = 'get_{name}'
     IGNORED_LINKS = ('self', )
 
-    def attach_to_instance(self, instance):
-        super(HyperlinkeField, self).attach_to_instance(instance)
-        links = getattr(instance, self.name)
-        method = getattr(instance, self.METHOD_NAME)
+    def __init__(self, *args, **kwargs):
+        self.links = kwargs.pop('links', [])
+        super(HyperlinkedField, self).__init__(*args, **kwargs)
 
-        for name, path in links.iteritems():
-            if name in self.IGNORED_LINKS:
-                continue
+    # def contribute_to_class(self, cls, name):
+    #     super(HyperlinkedField, self).contribute_to_class(cls, name)
+    #     method = getattr(cls, self.METHOD_NAME)
 
-            method_name = self.METHOD_PATTERN.format(name=name)
-            partial_method = partial(method, field=self, name=name)
-            setattr(instance, method_name, partial_method)
+    #     for link in self.links:
+    #         if link['name'] in self.IGNORED_LINKS:
+    #             continue
+
+    #         method_name = self.METHOD_PATTERN.format(**link)
+    #         partial_method = partial(method, field=self, name=link['name'])
+    #         setattr(cls, method_name, partial_method)
 
 
 MAPPING = {
@@ -169,5 +181,6 @@ MAPPING = {
     'choice': ChoiceField,
     'date': DateField,
     'datetime': DateTimeField,
-    'field': ObjectField,
+    'field': Field,
+    'links': HyperlinkedField,
 }
