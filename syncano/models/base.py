@@ -100,9 +100,3 @@ class Model(object):
                 value = getattr(self, field.name)
                 data[field.name] = field.to_native(value)
         return data
-
-    # def _LINK(self, field, name):
-    #     value = getattr(self, field.name)
-    #     path = value[name]
-    #     result_class = self._meta.connection.models.get_model_by_path(path)
-    #     return result_class.list()

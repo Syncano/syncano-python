@@ -224,18 +224,6 @@ class HyperlinkedField(ObjectField):
         self.links = kwargs.pop('links', [])
         super(HyperlinkedField, self).__init__(*args, **kwargs)
 
-    # def contribute_to_class(self, cls, name):
-    #     super(HyperlinkedField, self).contribute_to_class(cls, name)
-    #     method = getattr(cls, self.METHOD_NAME)
-
-    #     for link in self.links:
-    #         if link['name'] in self.IGNORED_LINKS:
-    #             continue
-
-    #         method_name = self.METHOD_PATTERN.format(**link)
-    #         partial_method = partial(method, field=self, name=link['name'])
-    #         setattr(cls, method_name, partial_method)
-
 
 MAPPING = {
     'string': StringField,
