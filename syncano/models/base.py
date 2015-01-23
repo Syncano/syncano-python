@@ -4,6 +4,7 @@ import inspect
 
 from syncano.exceptions import SyncanoValidationError
 from .options import Options
+from .manager import Manager
 
 
 class ModelMetaclass(type):
@@ -21,6 +22,9 @@ class ModelMetaclass(type):
         meta = attrs.pop('Meta', None) or getattr(new_class, 'Meta', None)
         meta = Options(meta)
         new_class.add_to_class('_meta', meta)
+
+        manager = attrs.pop('please', Manager())
+        new_class.add_to_class('please', manager)
 
         for n, v in attrs.iteritems():
             new_class.add_to_class(n, v)

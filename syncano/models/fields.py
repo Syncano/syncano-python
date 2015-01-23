@@ -1,7 +1,6 @@
 import re
 import six
 from datetime import date, datetime
-from functools import partial
 
 from syncano.exceptions import SyncanoFieldError
 
@@ -35,10 +34,17 @@ class Field(object):
 
     def validate(self, value, model_instance):
         if self.required and not value:
-            raise SyncanoFieldError(self.name, 'Field is required.')
+            raise SyncanoFieldError(self.name, 'This field is required.')
 
         if self.read_only and getattr(model_instance, self.name):
             raise SyncanoFieldError(self.name, 'Field is read only.')
+
+        if isinstance(value, six.string_types):
+            if self.max_length and len(value) > self.max_length:
+                raise SyncanoFieldError(self.name, 'Max length reached')
+
+            if self.min_length and len(value) < self.min_length:
+                raise SyncanoFieldError(self.name, 'Max length reached')
 
     def to_python(self, value):
         return value
@@ -118,10 +124,10 @@ class EmailField(StringField):
         super(EmailField, self).validate(value, model_instance)
 
         if not value or '@' not in value:
-            raise SyncanoFieldError(self.name, 'Invalid value.')
+            raise SyncanoFieldError(self.name, 'Enter a valid email address.')
 
         if not bool(self.regex.match(value)):
-            raise SyncanoFieldError(self.name, 'Invalid value.')
+            raise SyncanoFieldError(self.name, 'Enter a valid email address.')
 
 
 class ChoiceField(Field):
