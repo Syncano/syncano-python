@@ -1,6 +1,6 @@
 import re
 import six
-
+from datetime import date, datetime
 from functools import partial
 
 from syncano.exceptions import SyncanoFieldError
@@ -138,11 +138,77 @@ class ChoiceField(Field):
 
 
 class DateField(Field):
-    pass
+    date_regex = re = re.compile(
+        r'(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2})$'
+    )
+
+    def to_python(self, value):
+        if value is None:
+            return value
+
+        if isinstance(value, datetime):
+            return value.date()
+
+        if isinstance(value, date):
+            return value
+
+        try:
+            parsed = self.parse_date(value)
+            if parsed is not None:
+                return parsed
+        except ValueError:
+            pass
+
+        raise SyncanoFieldError(self.name, 'Invalid date.')
+
+    def parse_date(self, value):
+        match = self.date_regex.match(value)
+        if match:
+            kw = {k: int(v) for k, v in six.iteritems(match.groupdict())}
+            return date(**kw)
+
+    def to_native(self, value):
+        if isinstance(value, datetime.datetime):
+            value = value.date()
+        return value.isoformat()
 
 
 class DateTimeField(DateField):
-    pass
+    FORMAT = '%Y-%m-%dT%H:%M:%S.%f'
+
+    def to_python(self, value):
+        if value is None:
+            return value
+
+        if isinstance(value, datetime):
+            return value
+
+        if isinstance(value, date):
+            value = datetime(value.year, value.month, value.day)
+
+        value = value.split('Z')[0]
+
+        try:
+            return datetime.strptime(value, self.FORMAT)
+        except ValueError:
+            pass
+
+        try:
+            parsed = self.parse_date(value)
+            if parsed is not None:
+                return datetime(parsed.year, parsed.month, parsed.day)
+        except ValueError:
+            pass
+
+        raise SyncanoFieldError(self.name, 'Invalid value.')
+
+    def to_native(self, value):
+        if value is None:
+            return value
+        ret = value.isoformat()
+        if ret.endswith('+00:00'):
+            ret = ret[:-6] + 'Z'
+        return ret
 
 
 class ObjectField(Field):
