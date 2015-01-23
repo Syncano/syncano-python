@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import six
 import inspect
 
 from syncano.exceptions import SyncanoValidationError
@@ -26,7 +27,7 @@ class ModelMetaclass(type):
         manager = attrs.pop('please', Manager())
         new_class.add_to_class('please', manager)
 
-        for n, v in attrs.iteritems():
+        for n, v in six.iteritems(attrs):
             new_class.add_to_class(n, v)
 
         return new_class
@@ -38,8 +39,8 @@ class ModelMetaclass(type):
             setattr(cls, name, value)
 
 
+@six.add_metaclass(ModelMetaclass)
 class Model(object):
-    __metaclass__ = ModelMetaclass
 
     def __init__(self, **kwargs):
         self._raw_data = {}
