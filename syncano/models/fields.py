@@ -12,7 +12,7 @@ class Field(object):
         self.model = None
         self.label = kwargs.pop('label', None)
 
-        self.required = kwargs.pop('required', True)
+        self.required = kwargs.pop('required', False)
         self.read_only = kwargs.pop('read_only', False)
         self.default = kwargs.pop('default', None)
 

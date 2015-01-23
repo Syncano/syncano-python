@@ -62,26 +62,12 @@ class Connection(object):
 
     def request(self, method_name, path, **kwargs):
         '''Simple wrapper around make_request which
-        will ensure that request is authenticated and serialized.'''
+        will ensure that request is authenticated.'''
 
         if not self.is_authenticated():
             self.authenticate()
 
-        ResultClass = kwargs.pop('result_class', None)
-        content = self.make_request(method_name, path, **kwargs)
-
-        # really dummy check
-        if 'objects' in content and 'next' in content and 'prev' in content:
-            return self.RESULT_SET_CLASS(
-                self,
-                content,
-                result_class=ResultClass,
-                request_method=method_name,
-                request_path=path,
-                request_params=kwargs,
-            )
-
-        return ResultClass(**content) if ResultClass else content
+        return self.make_request(method_name, path, **kwargs)
 
     def make_request(self, method_name, path, **kwargs):
         params = self.build_params(kwargs)
@@ -114,6 +100,10 @@ class Connection(object):
             for name, errors in content.iteritems():
                 errors = ', '.join(errors)
                 raise SyncanoValidationError('"{0}": {1}.'.format(name, errors))
+
+        # Big bummm error
+        if response.status_code == 500:
+            raise SyncanoRequestError(response.status_code, 'Server error.')
 
         # Other errors
         if response.status_code not in [200, 201]:

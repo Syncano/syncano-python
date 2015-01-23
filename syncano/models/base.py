@@ -45,25 +45,6 @@ class Model(object):
         self._raw_data = {}
         self.to_python(kwargs)
 
-    @classmethod
-    def make_request(cls, name, kwargs):
-        path = cls._meta.resolve_endpoint(name, kwargs)
-        params = cls._meta.get_endpoint_query_params(name, kwargs)
-        request = {'result_class': cls, 'params': params}
-        return cls._meta.connection.request('GET', path, **request)
-
-    @classmethod
-    def list(cls, **kwargs):
-        return cls.make_request('list', kwargs)
-
-    @classmethod
-    def detail(cls, **kwargs):
-        return cls.make_request('detail', kwargs)
-
-    @classmethod
-    def get(cls, **kwargs):
-        return cls.detail(**kwargs)
-
     def save(self):
         self.validate()
         data = self.to_native()
@@ -77,6 +58,13 @@ class Model(object):
         response = self._meta.connection.request('POST', endpoint, **request)
         self.to_python(response)
         return self
+
+    def delete(self):
+        data = self.to_native()
+        endpoint = self.links['self']
+        request = {'data': data}
+        self._meta.connection.request('DELETE', endpoint, **request)
+        self._raw_data = {}
 
     def validate(self):
         for field in self._meta.fields:
