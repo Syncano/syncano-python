@@ -26,10 +26,32 @@ class Manager(object):
         self.endpoint = None
         self.endpoint_params = {}
 
+        self.max_results = None
         self.method = None
         self.query_params = {}
         self.data = {}
         self.serialize = True
+
+    def __repr__(self):
+        return self.request()
+
+    def __str__(self):
+        return '<Manager: {0}>'.format(self.model.__name__)
+
+    def __unicode__(self):
+        return six.u(str(self))
+
+    def __len__(self):
+        return self.request()
+
+    def __iter__(self):
+        return iter(self.request())
+
+    def __bool__(self):
+        return bool(self.request())
+
+    def __nonzero__(self):      # Python 2 compatibility
+        return type(self).__bool__(self)
 
     # Object actions
 
@@ -38,7 +60,13 @@ class Manager(object):
         instance.save()
         return instance
 
+    def bulk_create(self):
+        pass
+
     def get(self):
+        pass
+
+    def get_or_create(self):
         pass
 
     def detail(self):
@@ -50,6 +78,9 @@ class Manager(object):
     def update(self):
         pass
 
+    def update_or_create(self):
+        pass
+
     # List actions
 
     def all(self):
@@ -58,11 +89,18 @@ class Manager(object):
     def list(self):
         return self._clone()
 
+    def page_size(self, value):
+        if not value or not isinstance(value, six.integer_types):
+            raise SyncanoValueError('page_size value needs to be an int.')
+
+        self.query_params['page_size'] = value
+        return self._clone()
+
     def limit(self, value):
         if not value or not isinstance(value, six.integer_types):
             raise SyncanoValueError('Limit value needs to be an int.')
 
-        self.query_params['limit'] = value
+        self.max_results = value
         return self._clone()
 
     def order_by(self, field):
@@ -98,6 +136,7 @@ class Manager(object):
         manager.connection = self.connection
         manager.endpoint = self.endpoint
         manager.endpoint_params = deepcopy(self.endpoint_params)
+        manager.max_results = self.max_results
         manager.method = self.method
         manager.query_params = deepcopy(self.query_params)
         manager.data = deepcopy(self.data)
