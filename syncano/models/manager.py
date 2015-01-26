@@ -29,10 +29,14 @@ class RelatedManagerDescriptor(object):
 
         links = getattr(instance, self.field.name)
         path = links[self.name]
+
         Model = instance._meta.connection.models.get_model_by_path(path)
+        method = getattr(Model.please, self.endpoint, Model.please.all)
+
         properties = instance._meta.get_endpoint_properties('detail')
         properties = [getattr(instance, prop) for prop in properties]
-        return Model.please.all(*properties)
+
+        return method(*properties)
 
 
 class Manager(object):
