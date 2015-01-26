@@ -2,7 +2,7 @@ from copy import deepcopy
 
 import six
 
-from syncano.exceptions import SyncanoValueError
+from syncano.exceptions import SyncanoValueError, SyncanoRequestError
 
 
 class ManagerDescriptor(object):
@@ -84,8 +84,8 @@ class Manager(object):
         instance.save()
         return instance
 
-    def bulk_create(self):
-        pass
+    def bulk_create(self, objects):
+        return [self.create(**o) for o in objects]
 
     def get(self, *args, **kwargs):
         self.method = 'GET'
@@ -96,8 +96,15 @@ class Manager(object):
     def detail(self, *args, **kwargs):
         return self.get(*args, **kwargs)
 
-    def get_or_create(self):
-        pass
+    def get_or_create(self, *args, **kwargs):
+        defaults = kwargs.pop('defaults', {})
+        try:
+            instance = self.get(*args, **kwargs)
+        except SyncanoRequestError as e:
+            if e.status_code != 404:
+                raise
+            instance = self.create(**defaults)
+        return instance
 
     def delete(self, *args, **kwargs):
         self.method = 'DELETE'
@@ -113,8 +120,15 @@ class Manager(object):
         self._filter(*args, **kwargs)
         return self.request()
 
-    def update_or_create(self):
-        pass
+    def update_or_create(self, *args, **kwargs):
+        data = kwargs.get('data', {})
+        try:
+            instance = self.update(*args, **kwargs)
+        except SyncanoRequestError as e:
+            if e.status_code != 404:
+                raise
+            instance = self.create(**data)
+        return instance
 
     # List actions
 

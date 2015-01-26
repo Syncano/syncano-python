@@ -111,7 +111,7 @@ class Connection(object):
 
         # Validation error
         if is_client_error(response.status_code):
-            raise SyncanoValidationError(content)
+            raise SyncanoRequestError(response.status_code, content)
 
         # Other errors
         if not is_success(response.status_code):
