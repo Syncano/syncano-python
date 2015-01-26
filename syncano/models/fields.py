@@ -1,7 +1,6 @@
 import re
 import six
 from datetime import date, datetime
-from functools import partial
 
 from syncano.exceptions import SyncanoFieldError
 from .manager import RelatedManagerDescriptor
