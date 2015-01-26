@@ -222,13 +222,19 @@ class ObjectField(Field):
 
 
 class HyperlinkedField(ObjectField):
-    METHOD_NAME = '_LINK'
-    METHOD_PATTERN = 'get_{name}'
     IGNORED_LINKS = ('self', )
 
     def __init__(self, *args, **kwargs):
         self.links = kwargs.pop('links', [])
         super(HyperlinkedField, self).__init__(*args, **kwargs)
+
+    def contribute_to_class(self, cls, name):
+        super(HyperlinkedField, self).contribute_to_class(cls, name)
+
+        for name, path in six.iteritems(self.links):
+            if name in self.IGNORED_LINKS:
+                continue
+            setattr(cls, name, cls._LINK_MANAGER())
 
 
 MAPPING = {
