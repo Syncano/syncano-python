@@ -101,12 +101,11 @@ class Connection(object):
                 errors = ', '.join(errors)
                 raise SyncanoValidationError('"{0}": {1}.'.format(name, errors))
 
-        # Big bummm error
         if response.status_code == 500:
             raise SyncanoRequestError(response.status_code, 'Server error.')
 
         # Other errors
-        if response.status_code not in [200, 201]:
+        if response.status_code not in [200, 201, 204]:
             content = content['detail'] if has_json else content
             self.logger.debug('Request Error: %s', url)
             self.logger.debug('Status code: %d', response.status_code)
