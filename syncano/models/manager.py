@@ -166,6 +166,8 @@ class Manager(object):
         return manager
 
     def serialize(self, data):
+        if not isinstance(data, dict):
+            return
         return self.model(**data) if self._serialize else data
 
     def request(self, method=None, path=None, **request):

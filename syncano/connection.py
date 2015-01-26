@@ -12,6 +12,18 @@ from syncano.resultset import ResultSet
 from syncano.models import Registry
 
 
+def is_success(code):
+    return code >= 200 and code <= 299
+
+
+def is_client_error(code):
+    return code >= 400 and code <= 499
+
+
+def is_server_error(code):
+    return code >= 500 and code <= 599
+
+
 class Connection(object):
     AUTH_SUFFIX = 'v1/account/auth'
     SCHEMA_SUFFIX = 'v1/schema'
@@ -95,17 +107,17 @@ class Connection(object):
         has_json = response.headers.get('content-type') == 'application/json'
         content = response.json() if has_json else response.text
 
+        if is_server_error(response.status_code):
+            raise SyncanoRequestError(response.status_code, 'Server error.')
+
         # Validation error
-        if response.status_code == 400:
+        if is_client_error(response.status_code):
             for name, errors in content.iteritems():
                 errors = ', '.join(errors)
                 raise SyncanoValidationError('"{0}": {1}.'.format(name, errors))
 
-        if response.status_code == 500:
-            raise SyncanoRequestError(response.status_code, 'Server error.')
-
         # Other errors
-        if response.status_code not in [200, 201, 204]:
+        if not is_success(response.status_code):
             content = content['detail'] if has_json else content
             self.logger.debug('Request Error: %s', url)
             self.logger.debug('Status code: %d', response.status_code)
