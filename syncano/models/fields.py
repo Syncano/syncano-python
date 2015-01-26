@@ -7,14 +7,15 @@ from .manager import RelatedManagerDescriptor
 
 
 class Field(object):
+    required = False
+    read_only = True
+    default = None
 
     def __init__(self, name=None, **kwargs):
         self.name = name
         self.model = None
         self.label = kwargs.pop('label', None)
 
-        self.required = kwargs.pop('required', False)
-        self.read_only = kwargs.pop('read_only', False)
         self.default = kwargs.pop('default', None)
 
         self.max_length = kwargs.pop('max_length', None)
@@ -63,7 +64,17 @@ class Field(object):
         setattr(cls, name, self)
 
 
-class StringField(Field):
+class WritableField(Field):
+    required = True
+    read_only = False
+
+    def __init__(self, *args, **kwargs):
+        super(WritableField, self).__init__(*args, **kwargs)
+        self.required = kwargs.pop('required', True)
+        self.read_only = kwargs.pop('read_only', False)
+
+
+class StringField(WritableField):
 
     def to_python(self, value):
         if isinstance(value, six.string_types) or value is None:
@@ -71,7 +82,7 @@ class StringField(Field):
         return six.u(value)
 
 
-class IntegerField(Field):
+class IntegerField(WritableField):
 
     def to_python(self, value):
         if value is None:
@@ -82,7 +93,7 @@ class IntegerField(Field):
             raise SyncanoFieldError(self.name, 'Invalid value.')
 
 
-class FloatField(Field):
+class FloatField(WritableField):
 
     def to_python(self, value):
         if value is None:
@@ -93,7 +104,7 @@ class FloatField(Field):
             raise SyncanoFieldError(self.name, 'Invalid value.')
 
 
-class BooleanField(Field):
+class BooleanField(WritableField):
 
     def to_python(self, value):
         if value in (True, False):
@@ -131,7 +142,7 @@ class EmailField(StringField):
             raise SyncanoFieldError(self.name, 'Enter a valid email address.')
 
 
-class ChoiceField(Field):
+class ChoiceField(WritableField):
 
     def __init__(self, *args, **kwargs):
         self.choices = kwargs.pop('choices', [])
@@ -144,7 +155,7 @@ class ChoiceField(Field):
             raise SyncanoFieldError(self.name, 'Invalid choice.')
 
 
-class DateField(Field):
+class DateField(WritableField):
     date_regex = re = re.compile(
         r'(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<day>\d{1,2})$'
     )
@@ -218,11 +229,7 @@ class DateTimeField(DateField):
         return ret
 
 
-class ObjectField(Field):
-    pass
-
-
-class HyperlinkedField(ObjectField):
+class HyperlinkedField(Field):
     IGNORED_LINKS = ('self', )
 
     def __init__(self, *args, **kwargs):

@@ -111,12 +111,7 @@ class Connection(object):
 
         # Validation error
         if is_client_error(response.status_code):
-            if response.status_code == 404:
-                raise SyncanoRequestError(response.status_code, content['detail'])
-
-            for name, errors in content.iteritems():
-                errors = ', '.join(errors)
-                raise SyncanoValidationError('"{0}": {1}.'.format(name, errors))
+            raise SyncanoValidationError(content)
 
         # Other errors
         if not is_success(response.status_code):
