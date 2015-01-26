@@ -91,6 +91,3 @@ class Model(object):
                 value = getattr(self, field.name)
                 data[field.name] = field.to_native(value)
         return data
-
-    def _LINK_MANAGER(self):
-        return True

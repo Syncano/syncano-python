@@ -16,6 +16,25 @@ class ManagerDescriptor(object):
         return self.manager
 
 
+class RelatedManagerDescriptor(object):
+
+    def __init__(self, field, name, endpoint):
+        self.field = field
+        self.name = name
+        self.endpoint = endpoint
+
+    def __get__(self, instance, type=None):
+        if instance is None:
+            raise AttributeError("Manager is accessible only via {0} instances.".format(type.__name__))
+
+        links = getattr(instance, self.field.name)
+        path = links[self.name]
+        Model = instance._meta.connection.models.get_model_by_path(path)
+        properties = instance._meta.get_endpoint_properties('detail')
+        properties = [getattr(instance, prop) for prop in properties]
+        return Model.please.all(*properties)
+
+
 class Manager(object):
 
     def __init__(self):
@@ -95,9 +114,9 @@ class Manager(object):
 
     # List actions
 
-    def all(self, **properties):
+    def all(self, *args, **kwargs):
         self._limit = None
-        return self.list(**properties)
+        return self.list(*args, **kwargs)
 
     def list(self, *args, **kwargs):
         self.method = 'GET'

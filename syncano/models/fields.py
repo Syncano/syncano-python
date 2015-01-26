@@ -1,8 +1,10 @@
 import re
 import six
 from datetime import date, datetime
+from functools import partial
 
 from syncano.exceptions import SyncanoFieldError
+from .manager import RelatedManagerDescriptor
 
 
 class Field(object):
@@ -231,10 +233,17 @@ class HyperlinkedField(ObjectField):
     def contribute_to_class(self, cls, name):
         super(HyperlinkedField, self).contribute_to_class(cls, name)
 
-        for name, path in six.iteritems(self.links):
+        def fuck(self, *args, **kwargs):
+            return self._LINK_MANAGER(*args, **kwargs)
+
+        for link in self.links:
+            name = link['name']
+            endpoint = link['type']
+
             if name in self.IGNORED_LINKS:
                 continue
-            setattr(cls, name, cls._LINK_MANAGER())
+
+            setattr(cls, name, RelatedManagerDescriptor(self, name, endpoint))
 
 
 MAPPING = {
