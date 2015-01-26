@@ -61,10 +61,8 @@ class Model(object):
         return self
 
     def delete(self):
-        data = self.to_native()
         endpoint = self.links['self']
-        request = {'data': data}
-        self._meta.connection.request('DELETE', endpoint, **request)
+        self._meta.connection.request('DELETE', endpoint)
         self._raw_data = {}
 
     def validate(self):

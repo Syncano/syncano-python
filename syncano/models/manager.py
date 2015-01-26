@@ -21,15 +21,16 @@ class Manager(object):
     def __init__(self):
         self.name = None
         self.model = None
-
         self.connection = None
+
         self.endpoint = None
-        self.endpoint_params = {}
+        self.properties = {}
+
+        self.method = None
+        self.query = {}
+        self.data = {}
 
         self._limit = None
-        self.method = None
-        self.query_params = {}
-        self.data = {}
         self._serialize = True
 
     def __repr__(self):
@@ -63,30 +64,30 @@ class Manager(object):
     def bulk_create(self):
         pass
 
-    def get(self, **endpoint_params):
+    def get(self, *args, **kwargs):
         self.method = 'GET'
         self.endpoint = 'detail'
-        self.endpoint_params.update(endpoint_params)
+        self._filter(*args, **kwargs)
         return self.request()
 
-    def detail(self, **endpoint_params):
-        return self.get(**endpoint_params)
+    def detail(self, *args, **kwargs):
+        return self.get(*args, **kwargs)
 
     def get_or_create(self):
         pass
 
-    def delete(self, **endpoint_params):
+    def delete(self, *args, **kwargs):
         self.method = 'DELETE'
         self.endpoint = 'detail'
-        self.endpoint_params.update(endpoint_params)
+        self._filter(*args, **kwargs)
         return self.request()
 
-    def update(self, **endpoint_params):
+    def update(self, *args, **kwargs):
         # TODO
         self.method = 'POST'
         self.endpoint = 'detail'
-        self.data = endpoint_params.pop('data')
-        self.endpoint_params.update(endpoint_params)
+        self.data = kwargs.pop('data')
+        self._filter(*args, **kwargs)
         return self.request()
 
     def update_or_create(self):
@@ -94,25 +95,21 @@ class Manager(object):
 
     # List actions
 
-    def all(self, **endpoint_params):
+    def all(self, **properties):
         self._limit = None
-        return self.list(**endpoint_params)
+        return self.list(**properties)
 
-    def list(self, **endpoint_params):
+    def list(self, *args, **kwargs):
         self.method = 'GET'
         self.endpoint = 'list'
-        self.endpoint_params.update(endpoint_params)
-        return self._clone()
-
-    def filter(self, **endpoint_params):
-        self.endpoint_params.update(endpoint_params)
+        self._filter(*args, **kwargs)
         return self._clone()
 
     def page_size(self, value):
         if not value or not isinstance(value, six.integer_types):
             raise SyncanoValueError('page_size value needs to be an int.')
 
-        self.query_params['page_size'] = value
+        self.query['page_size'] = value
         return self._clone()
 
     def limit(self, value):
@@ -126,11 +123,11 @@ class Manager(object):
         if not field or not isinstance(field, six.string_types):
             raise SyncanoValueError('Order by field needs to be a string.')
 
-        self.query_params['order_by'] = field
+        self.query['order_by'] = field
         return self._clone()
 
-    def raw(self, value=False):
-        self._serialize = value
+    def raw(self):
+        self._serialize = False
         return self._clone()
 
     # Other stuff
@@ -145,6 +142,13 @@ class Manager(object):
         if not self.name:
             self.name = name
 
+    def _filter(self, *args, **kwargs):
+        if args and self.endpoint:
+            properties = self.model._meta.get_endpoint_properties(self.endpoint)
+            mapped_args = {k: v for k, v in zip(properties, args)}
+            self.properties.update(mapped_args)
+        self.properties.update(kwargs)
+
     def _clone(self, klass=None, **kwargs):
         if klass is None:
             klass = self.__class__
@@ -155,10 +159,10 @@ class Manager(object):
         manager.model = self.model
         manager.connection = self.connection
         manager.endpoint = self.endpoint
-        manager.endpoint_params = deepcopy(self.endpoint_params)
+        manager.properties = deepcopy(self.properties)
         manager._limit = self._limit
         manager.method = self.method
-        manager.query_params = deepcopy(self.query_params)
+        manager.query = deepcopy(self.query)
         manager.data = deepcopy(self.data)
         manager._serialize = self._serialize
         manager.__dict__.update(kwargs)
@@ -173,10 +177,10 @@ class Manager(object):
     def request(self, method=None, path=None, **request):
         meta = self.model._meta
         method = method or self.method
-        path = path or meta.resolve_endpoint(self.endpoint, self.endpoint_params)
+        path = path or meta.resolve_endpoint(self.endpoint, self.properties)
 
-        if 'params' not in request and self.query_params:
-            request['params'] = self.query_params
+        if 'params' not in request and self.query:
+            request['params'] = self.query
 
         if 'data' not in request and self.data:
             request['data'] = self.data

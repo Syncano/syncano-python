@@ -104,21 +104,22 @@ class Connection(object):
 
         url = self.build_url(path)
         response = method(url, **params)
-        has_json = response.headers.get('content-type') == 'application/json'
-        content = response.json() if has_json else response.text
+        content = response.json()
 
         if is_server_error(response.status_code):
             raise SyncanoRequestError(response.status_code, 'Server error.')
 
         # Validation error
         if is_client_error(response.status_code):
+            if response.status_code == 404:
+                raise SyncanoRequestError(response.status_code, content['detail'])
+
             for name, errors in content.iteritems():
                 errors = ', '.join(errors)
                 raise SyncanoValidationError('"{0}": {1}.'.format(name, errors))
 
         # Other errors
         if not is_success(response.status_code):
-            content = content['detail'] if has_json else content
             self.logger.debug('Request Error: %s', url)
             self.logger.debug('Status code: %d', response.status_code)
             self.logger.debug('Response: %s', content)
