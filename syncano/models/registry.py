@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import six
 import re
 
 from syncano import logger
@@ -29,7 +30,7 @@ class Registry(object):
 
     def get_model_patterns(self, cls):
         patterns = []
-        for k, v in cls._meta.endpoints.iteritems():
+        for k, v in six.iteritems(cls._meta.endpoints):
             pattern = '^{0}$'.format(v['path'])
             for name in v.get('properties', []):
                 pattern = pattern.replace('{{{0}}}'.format(name), '([^/.]+)')
@@ -66,7 +67,7 @@ class Registry(object):
         })
 
         attrs = {'Meta': Meta}
-        for name, options in definition.get('properties', {}).iteritems():
+        for name, options in six.iteritems(definition.get('properties', {})):
             field_type = options.pop('type', 'field')  # TODO: Nested objects
 
             if field_type not in MAPPING:
