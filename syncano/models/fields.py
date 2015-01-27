@@ -41,10 +41,10 @@ class Field(object):
 
         if isinstance(value, six.string_types):
             if self.max_length and len(value) > self.max_length:
-                raise self.VaidationError('Max length reached')
+                raise self.VaidationError('Max length reached.')
 
             if self.min_length and len(value) < self.min_length:
-                raise self.VaidationError('Max length reached')
+                raise self.VaidationError('Min length reached.')
 
     def to_python(self, value):
         return value
@@ -96,7 +96,7 @@ class IntegerField(WritableField):
         try:
             return int(value)
         except (TypeError, ValueError):
-            raise self.VaidationError('Invalid value.')
+            raise self.VaidationError('Invalid value. Value should be an integer.')
 
 
 class FloatField(WritableField):
@@ -107,7 +107,7 @@ class FloatField(WritableField):
         try:
             return float(value)
         except (TypeError, ValueError):
-            raise self.VaidationError('Invalid value.')
+            raise self.VaidationError('Invalid value. Value should be a float.')
 
 
 class BooleanField(WritableField):
@@ -122,7 +122,7 @@ class BooleanField(WritableField):
         if value in ('f', 'False', '0'):
             return False
 
-        raise self.VaidationError('Invalid value.')
+        raise self.VaidationError('Invalid value. Value should be a boolean.')
 
 
 class SlugField(StringField):
@@ -158,7 +158,7 @@ class ChoiceField(WritableField):
     def validate(self, value, model_instance):
         super(ChoiceField, self).validate(value, model_instance)
         if self.choices and value not in self.allowed_values:
-            raise self.VaidationError('Invalid choice.')
+            raise self.VaidationError("Value '{0}' is not a valid choice.".format(value))
 
 
 class DateField(WritableField):
@@ -183,7 +183,8 @@ class DateField(WritableField):
         except ValueError:
             pass
 
-        raise self.VaidationError('Invalid date.')
+        raise self.VaidationError("'{0}' value has an invalid date format. It must be "
+                                  "in YYYY-MM-DD format.".format(value))
 
     def parse_date(self, value):
         match = self.date_regex.match(value)
@@ -224,7 +225,8 @@ class DateTimeField(DateField):
         except ValueError:
             pass
 
-        raise self.VaidationError('Invalid value.')
+        raise self.VaidationError("'{0}' value has an invalid format. It must be in "
+                                  "YYYY-MM-DD HH:MM[:ss[.uuuuuu]] format.".format(value))
 
     def to_native(self, value):
         if value is None:

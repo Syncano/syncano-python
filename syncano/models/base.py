@@ -62,11 +62,13 @@ class Model(object):
 
         if self.links:
             endpoint = self.links['self']
+            method = 'PUT'
         else:
             endpoint = self._meta.resolve_endpoint('list', data)
+            method = 'POST'
 
         request = {'data': data}
-        response = self._meta.connection.request('POST', endpoint, **request)
+        response = self._meta.connection.request(method, endpoint, **request)
         self.to_python(response)
         return self
 

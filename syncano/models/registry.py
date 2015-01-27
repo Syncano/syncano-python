@@ -67,13 +67,13 @@ class Registry(object):
         })
 
         attrs = {'Meta': Meta}
-        for name, options in six.iteritems(definition.get('properties', {})):
-            field_type = options.pop('type', 'field')  # TODO: Nested objects
+        for name, _property in six.iteritems(definition.get('properties', {})):
+            field_type = _property.pop('type', 'field')  # TODO: Nested objects
 
             if field_type not in MAPPING:
                 raise SyncanoValueError('Invalid field type "{0}".'.format(field_type))
 
-            attrs[name] = MAPPING[field_type](**options)
+            attrs[name] = MAPPING[field_type](**_property)
 
         cls = type(str(definition['name']), (Model, ), attrs)
         self.register_model(definition['name'], cls)

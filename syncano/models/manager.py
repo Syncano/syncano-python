@@ -113,7 +113,7 @@ class Manager(object):
         return self.request()
 
     def update(self, *args, **kwargs):
-        self.method = 'POST'
+        self.method = 'PUT'
         self.endpoint = 'detail'
         self.data = kwargs.pop('data')
         self._filter(*args, **kwargs)
