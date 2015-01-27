@@ -10,9 +10,9 @@ class ManagerDescriptor(object):
     def __init__(self, manager):
         self.manager = manager
 
-    def __get__(self, instance, type=None):
+    def __get__(self, instance, owner=None):
         if instance is not None:
-            raise AttributeError("Manager isn't accessible via {0} instances.".format(type.__name__))
+            raise AttributeError("Manager isn't accessible via {0} instances.".format(owner.__name__))
         return self.manager
 
 
@@ -23,9 +23,9 @@ class RelatedManagerDescriptor(object):
         self.name = name
         self.endpoint = endpoint
 
-    def __get__(self, instance, type=None):
+    def __get__(self, instance, owner=None):
         if instance is None:
-            raise AttributeError("Manager is accessible only via {0} instances.".format(type.__name__))
+            raise AttributeError("Manager is accessible only via {0} instances.".format(owner.__name__))
 
         links = getattr(instance, self.field.name)
         path = links[self.name]
@@ -100,9 +100,7 @@ class Manager(object):
         defaults = kwargs.pop('defaults', {})
         try:
             instance = self.get(*args, **kwargs)
-        except SyncanoRequestError as e:
-            if e.status_code != 404:
-                raise
+        except self.model.DoesNotExist:
             instance = self.create(**defaults)
         return instance
 
@@ -113,7 +111,6 @@ class Manager(object):
         return self.request()
 
     def update(self, *args, **kwargs):
-        # TODO
         self.method = 'POST'
         self.endpoint = 'detail'
         self.data = kwargs.pop('data')
@@ -124,9 +121,7 @@ class Manager(object):
         data = kwargs.get('data', {})
         try:
             instance = self.update(*args, **kwargs)
-        except SyncanoRequestError as e:
-            if e.status_code != 404:
-                raise
+        except self.model.DoesNotExist:
             instance = self.create(**data)
         return instance
 
@@ -186,12 +181,10 @@ class Manager(object):
             self.properties.update(mapped_args)
         self.properties.update(kwargs)
 
-    def _clone(self, klass=None, **kwargs):
-        if klass is None:
-            klass = self.__class__
+    def _clone(self):
 
         # Maybe deepcopy ?
-        manager = klass()
+        manager = self.__class__()
         manager.name = self.name
         manager.model = self.model
         manager.connection = self.connection
@@ -202,7 +195,6 @@ class Manager(object):
         manager.query = deepcopy(self.query)
         manager.data = deepcopy(self.data)
         manager._serialize = self._serialize
-        manager.__dict__.update(kwargs)
 
         return manager
 
@@ -222,7 +214,12 @@ class Manager(object):
         if 'data' not in request and self.data:
             request['data'] = self.data
 
-        response = self.connection.request(method, path, **request)
+        try:
+            response = self.connection.request(method, path, **request)
+        except SyncanoRequestError as e:
+            if e.status_code == 404:
+                raise self.model.DoesNotExist
+            raise
 
         if 'next' not in response:
             return self.serialize(response)

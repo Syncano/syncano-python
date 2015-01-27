@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import six
 import inspect
 
-from syncano.exceptions import SyncanoValidationError
+from syncano.exceptions import SyncanoValidationError, SyncanoDoesNotExist
 from .options import Options
 from .manager import Manager
 
@@ -27,6 +27,9 @@ class ModelMetaclass(type):
         manager = attrs.pop('please', Manager())
         new_class.add_to_class('please', manager)
 
+        error_class = new_class.create_error_class()
+        new_class.add_to_class('DoesNotExist', error_class)
+
         for n, v in six.iteritems(attrs):
             new_class.add_to_class(n, v)
 
@@ -37,6 +40,13 @@ class ModelMetaclass(type):
             value.contribute_to_class(cls, name)
         else:
             setattr(cls, name, value)
+
+    def create_error_class(cls):
+        return type(
+            str('{0}DoesNotExist'.format(cls.__name__)),
+            (SyncanoDoesNotExist, ),
+            {}
+        )
 
 
 @six.add_metaclass(ModelMetaclass)

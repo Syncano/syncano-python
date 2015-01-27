@@ -15,9 +15,7 @@ class Field(object):
         self.name = name
         self.model = None
         self.label = kwargs.pop('label', None)
-
         self.default = kwargs.pop('default', None)
-
         self.max_length = kwargs.pop('max_length', None)
         self.min_length = kwargs.pop('min_length', None)
 
@@ -36,17 +34,17 @@ class Field(object):
 
     def validate(self, value, model_instance):
         if self.required and not value:
-            raise SyncanoFieldError(self.name, 'This field is required.')
+            raise self.VaidationError('This field is required.')
 
         if self.read_only and getattr(model_instance, self.name):
-            raise SyncanoFieldError(self.name, 'Field is read only.')
+            raise self.VaidationError('Field is read only.')
 
         if isinstance(value, six.string_types):
             if self.max_length and len(value) > self.max_length:
-                raise SyncanoFieldError(self.name, 'Max length reached')
+                raise self.VaidationError('Max length reached')
 
             if self.min_length and len(value) < self.min_length:
-                raise SyncanoFieldError(self.name, 'Max length reached')
+                raise self.VaidationError('Max length reached')
 
     def to_python(self, value):
         return value
@@ -62,6 +60,14 @@ class Field(object):
             self.name = name
 
         setattr(cls, name, self)
+
+        ErrorClass = type(
+            '{0}VaidationError'.format(self.__class__.__name__),
+            (SyncanoFieldError, ),
+            {'field_name': name}
+        )
+
+        setattr(self, 'VaidationError', ErrorClass)
 
 
 class WritableField(Field):
@@ -90,7 +96,7 @@ class IntegerField(WritableField):
         try:
             return int(value)
         except (TypeError, ValueError):
-            raise SyncanoFieldError(self.name, 'Invalid value.')
+            raise self.VaidationError('Invalid value.')
 
 
 class FloatField(WritableField):
@@ -101,7 +107,7 @@ class FloatField(WritableField):
         try:
             return float(value)
         except (TypeError, ValueError):
-            raise SyncanoFieldError(self.name, 'Invalid value.')
+            raise self.VaidationError('Invalid value.')
 
 
 class BooleanField(WritableField):
@@ -116,7 +122,7 @@ class BooleanField(WritableField):
         if value in ('f', 'False', '0'):
             return False
 
-        raise SyncanoFieldError(self.name, 'Invalid value.')
+        raise self.VaidationError('Invalid value.')
 
 
 class SlugField(StringField):
@@ -125,7 +131,7 @@ class SlugField(StringField):
     def validate(self, value, model_instance):
         super(SlugField, self).validate(value, model_instance)
         if not bool(self.regex.search(value)):
-            raise SyncanoFieldError(self.name, 'Invalid value.')
+            raise self.VaidationError('Invalid value.')
         return value
 
 
@@ -136,10 +142,10 @@ class EmailField(StringField):
         super(EmailField, self).validate(value, model_instance)
 
         if not value or '@' not in value:
-            raise SyncanoFieldError(self.name, 'Enter a valid email address.')
+            raise self.VaidationError('Enter a valid email address.')
 
         if not bool(self.regex.match(value)):
-            raise SyncanoFieldError(self.name, 'Enter a valid email address.')
+            raise self.VaidationError('Enter a valid email address.')
 
 
 class ChoiceField(WritableField):
@@ -152,7 +158,7 @@ class ChoiceField(WritableField):
     def validate(self, value, model_instance):
         super(ChoiceField, self).validate(value, model_instance)
         if self.choices and value not in self.allowed_values:
-            raise SyncanoFieldError(self.name, 'Invalid choice.')
+            raise self.VaidationError('Invalid choice.')
 
 
 class DateField(WritableField):
@@ -177,7 +183,7 @@ class DateField(WritableField):
         except ValueError:
             pass
 
-        raise SyncanoFieldError(self.name, 'Invalid date.')
+        raise self.VaidationError('Invalid date.')
 
     def parse_date(self, value):
         match = self.date_regex.match(value)
@@ -218,7 +224,7 @@ class DateTimeField(DateField):
         except ValueError:
             pass
 
-        raise SyncanoFieldError(self.name, 'Invalid value.')
+        raise self.VaidationError('Invalid value.')
 
     def to_native(self, value):
         if value is None:
