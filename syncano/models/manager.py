@@ -101,7 +101,6 @@ class Manager(object):
         try:
             instance = self.get(*args, **kwargs)
         except self.model.DoesNotExist:
-            self._filter(*args, **kwargs)
             defaults.update(self.properties)
             defaults.update(kwargs)
             instance = self.create(**defaults)
