@@ -1,19 +1,30 @@
 import json
 import requests
+import six
 from urlparse import urljoin
 from copy import deepcopy
 
 import syncano
-from syncano.exceptions import (
-    SyncanoValueError, SyncanoRequestError,
-)
-from syncano.resultset import ResultSet
+from syncano.exceptions import SyncanoValueError, SyncanoRequestError
+from syncano.models import Registry
+
+
+def is_success(code):
+    return code >= 200 and code <= 299
+
+
+def is_client_error(code):
+    return code >= 400 and code <= 499
+
+
+def is_server_error(code):
+    return code >= 500 and code <= 599
 
 
 class Connection(object):
-    AUTH_SUFFIX = 'account/auth/'
+    AUTH_SUFFIX = 'v1/account/auth'
+    SCHEMA_SUFFIX = 'v1/schema'
     CONTENT_TYPE = 'application/json'
-    RESULT_SET_CLASS = ResultSet
 
     def __init__(self, host=None, email=None, password=None, api_key=None, **kwargs):
         self.host = host or syncano.API_ROOT
@@ -23,9 +34,10 @@ class Connection(object):
         self.logger = kwargs.get('logger') or syncano.logger
         self.timeout = kwargs.get('timeout') or 30
         self.session = requests.Session()
+        self.models = Registry(self).register_schema(self.schema)
 
-    def build_params(self, kwargs):
-        params = deepcopy(kwargs)
+    def build_params(self, params):
+        params = deepcopy(params)
         params['timeout'] = params.get('timeout') or self.timeout
         params['headers'] = params.get('headers') or {}
 
@@ -35,13 +47,14 @@ class Connection(object):
         if self.api_key and 'Authorization' not in params['headers']:
             params['headers']['Authorization'] = 'ApiKey %s' % self.api_key
 
-        if 'data' in params and not isinstance(params['data'], (str, unicode)):
-            params['data'] = json.dumps(params['data'])
+        # We don't need to check SSL cert in DEBUG mode
+        if syncano.DEBUG:
+            params['verify'] = False
 
         return params
 
     def build_url(self, path):
-        if not isinstance(path, (str, unicode)):
+        if not isinstance(path, six.string_types):
             raise SyncanoValueError('"path" should be a string.')
 
         if path.startswith(self.host):
@@ -57,49 +70,60 @@ class Connection(object):
 
     def request(self, method_name, path, **kwargs):
         '''Simple wrapper around make_request which
-        will ensure that request is authenticated and serialized.'''
+        will ensure that request is authenticated.'''
 
         if not self.is_authenticated():
             self.authenticate()
 
-        ResultClass = kwargs.pop('result_class', None)
-        content = self.make_request(method_name, path, **kwargs)
-
-        # really dummy check
-        if 'objects' in content and 'next' in content and 'prev' in content:
-            return self.RESULT_SET_CLASS(
-                self,
-                content,
-                result_class=ResultClass,
-                request_method=method_name,
-                request_path=path,
-                request_params=kwargs,
-            )
-
-        return ResultClass(**content) if ResultClass else content
+        return self.make_request(method_name, path, **kwargs)
 
     def make_request(self, method_name, path, **kwargs):
-        self.logger.debug('Request: %s', path)
-
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)
+
+        # JSON dump can be expensive
+        if syncano.DEBUG:
+            formatted_params = json.dumps(
+                params,
+                sort_keys=True,
+                indent=2,
+                separators=(',', ': ')
+            )
+            self.logger.debug('Request: %s %s\n%s', method_name, path, formatted_params)
 
         if method is None:
             raise SyncanoValueError('Invalid request method: {0}.'.format(method_name))
 
+        # Encode request payload
+        if 'data' in params and not isinstance(params['data'], six.string_types):
+            params['data'] = json.dumps(params['data'])
+
         url = self.build_url(path)
         response = method(url, **params)
-        has_json = response.headers.get('content-type') == 'application/json'
-        content = response.json() if has_json else response.text
+        content = response.json()
 
-        if response.status_code not in [200, 201]:
-            content = content['detail'] if has_json else content
+        if is_server_error(response.status_code):
+            raise SyncanoRequestError(response.status_code, 'Server error.')
+
+        # Validation error
+        if is_client_error(response.status_code):
+            raise SyncanoRequestError(response.status_code, content)
+
+        # Other errors
+        if not is_success(response.status_code):
             self.logger.debug('Request Error: %s', url)
             self.logger.debug('Status code: %d', response.status_code)
             self.logger.debug('Response: %s', content)
             raise SyncanoRequestError(response.status_code, content)
 
         return content
+
+    @property
+    def schema(self):
+        if not hasattr(self, '_schema'):
+            response = self.make_request('GET', self.SCHEMA_SUFFIX)
+            self._schema = response
+        return self._schema
 
     def is_authenticated(self):
         return self.api_key is not None

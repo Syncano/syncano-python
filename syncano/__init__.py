@@ -8,13 +8,15 @@ __license__ = 'MIT'
 __copyright__ = 'Copyright 2015 Syncano'
 
 VERSION = __version__
-API_ROOT = 'http://127.0.0.1:8000/api/'
+API_ROOT = os.getenv('SYNCANO_API_ROOT', 'https://v4.hydraengine.com/')
 
 env_loglevel = os.getenv('SYNCANO_LOGLEVEL', 'INFO')
 loglevel = getattr(logging, env_loglevel.upper(), None)
 
 if not isinstance(loglevel, int):
     raise ValueError('Invalid log level: {0}.'.format(loglevel))
+
+DEBUG = env_loglevel.lower() == 'debug'
 
 console_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 console_handler = logging.StreamHandler()
