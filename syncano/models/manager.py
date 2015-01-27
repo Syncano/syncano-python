@@ -120,10 +120,12 @@ class Manager(object):
         return self.request()
 
     def update_or_create(self, *args, **kwargs):
-        data = kwargs.get('data', {})
+        data = deepcopy(kwargs.get('data', {}))
         try:
             instance = self.update(*args, **kwargs)
         except self.model.DoesNotExist:
+            data.update(self.properties)
+            data.update(kwargs)
             instance = self.create(**data)
         return instance
 

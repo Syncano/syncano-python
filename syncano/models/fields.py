@@ -245,9 +245,6 @@ class HyperlinkedField(Field):
     def contribute_to_class(self, cls, name):
         super(HyperlinkedField, self).contribute_to_class(cls, name)
 
-        def fuck(self, *args, **kwargs):
-            return self._LINK_MANAGER(*args, **kwargs)
-
         for link in self.links:
             name = link['name']
             endpoint = link['type']

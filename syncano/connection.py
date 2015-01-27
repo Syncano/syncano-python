@@ -54,7 +54,7 @@ class Connection(object):
         return params
 
     def build_url(self, path):
-        if not isinstance(path, (str, unicode)):
+        if not isinstance(path, six.string_types):
             raise SyncanoValueError('"path" should be a string.')
 
         if path.startswith(self.host):
