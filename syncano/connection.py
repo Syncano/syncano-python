@@ -1,14 +1,11 @@
 import json
 import requests
+import six
 from urlparse import urljoin
 from copy import deepcopy
 
 import syncano
-from syncano.exceptions import (
-    SyncanoValueError, SyncanoRequestError,
-    SyncanoValidationError
-)
-from syncano.resultset import ResultSet
+from syncano.exceptions import SyncanoValueError, SyncanoRequestError
 from syncano.models import Registry
 
 
@@ -28,7 +25,6 @@ class Connection(object):
     AUTH_SUFFIX = 'v1/account/auth'
     SCHEMA_SUFFIX = 'v1/schema'
     CONTENT_TYPE = 'application/json'
-    RESULT_SET_CLASS = ResultSet
 
     def __init__(self, host=None, email=None, password=None, api_key=None, **kwargs):
         self.host = host or syncano.API_ROOT
@@ -99,7 +95,7 @@ class Connection(object):
             raise SyncanoValueError('Invalid request method: {0}.'.format(method_name))
 
         # Encode request payload
-        if 'data' in params and not isinstance(params['data'], (str, unicode)):
+        if 'data' in params and not isinstance(params['data'], six.string_types):
             params['data'] = json.dumps(params['data'])
 
         url = self.build_url(path)

@@ -97,10 +97,13 @@ class Manager(object):
         return self.get(*args, **kwargs)
 
     def get_or_create(self, *args, **kwargs):
-        defaults = kwargs.pop('defaults', {})
+        defaults = deepcopy(kwargs.pop('defaults', {}))
         try:
             instance = self.get(*args, **kwargs)
         except self.model.DoesNotExist:
+            self._filter(*args, **kwargs)
+            defaults.update(self.properties)
+            defaults.update(kwargs)
             instance = self.create(**defaults)
         return instance
 
@@ -182,7 +185,6 @@ class Manager(object):
         self.properties.update(kwargs)
 
     def _clone(self):
-
         # Maybe deepcopy ?
         manager = self.__class__()
         manager.name = self.name
