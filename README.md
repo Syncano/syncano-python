@@ -6,15 +6,20 @@
 
 ```python
 import syncano
+
+# via email & password
 connection = syncano.connect(email='', password='')
+
+# via API key
+connection = syncano.connect(api_key='')
 ```
 
 
-### Accessing models
+### Accessing models / endpoints
 Each model is generated based on API schema and is available **after** connection initialization.
 
 ```python
-Instance = connection.models.Instance
+Instance = connection.Instance
 ```
 
 
@@ -44,6 +49,21 @@ Instance.please.delete('syncano')
 # Create instance named test
 Instance.please.create(name='test', description='test')
 ```
+
+The same queries can be done via connection:
+
+```python
+# Get all instances
+connection.instances.list()
+connection.instances.all()
+
+# Get only two instances
+connection.instances.limit(2).list()
+
+# Get raw JSON
+connection.instances.raw().list()
+```
+
 
 
 ### Model instance methods

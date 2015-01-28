@@ -25,7 +25,7 @@ class Registry(object):
         return unicode(str(self))
 
     def __iter__(self):
-        for name, model in self.models.iteritems():
+        for name, model in six.iteritems(self.models):
             yield model
 
     def get_model_patterns(self, cls):
@@ -42,11 +42,8 @@ class Registry(object):
             if pattern.match(path):
                 return cls
 
-    def get_model_by_name(self, path):
-        raise NotImplementedError
-
-    def get_model_by_id(self, path):
-        raise NotImplementedError
+    def get_model_by_name(self, name):
+        return self.models.get(name)
 
     def register_model(self, name, cls):
         if name not in self.models:
@@ -57,6 +54,7 @@ class Registry(object):
             self.patterns.extend(patterns)
 
             setattr(self, str(name), cls)
+            setattr(self, str('{0}s'.format(name.lower())), cls.please)
         return self
 
     def register_definition(self, definition):

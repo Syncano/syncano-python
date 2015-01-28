@@ -32,4 +32,9 @@ def connect(*args, **kwargs):
     Connect to Syncano API.
     """
     from syncano.connection import Connection
-    return Connection(*args, **kwargs)
+    from syncano.models import Registry
+
+    connection = Connection(*args, **kwargs)
+    models = Registry(connection)
+    models.register_schema(connection.schema)
+    return models

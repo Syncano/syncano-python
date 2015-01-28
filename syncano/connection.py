@@ -6,7 +6,6 @@ from copy import deepcopy
 
 import syncano
 from syncano.exceptions import SyncanoValueError, SyncanoRequestError
-from syncano.models import Registry
 
 
 def is_success(code):
@@ -34,7 +33,6 @@ class Connection(object):
         self.logger = kwargs.get('logger') or syncano.logger
         self.timeout = kwargs.get('timeout') or 30
         self.session = requests.Session()
-        self.models = Registry(self).register_schema(self.schema)
 
     def build_params(self, params):
         params = deepcopy(params)
