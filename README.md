@@ -97,3 +97,15 @@ instance.admins.raw()
 instance.admins.create()
 instance.admins.delete(4)
 ```
+
+### Relations (Work in progress)
+
+`CodeBoxExecutionTrace` is related to `instance`, `codebox` and `codebox_schedule` how we should tackle this:
+
+```python
+codebox = CodeBoxExecutionTrace()
+codebox.instance_name = 'syncano'
+codebox.lookup_codebox_schedule__codebox_id = 1
+codebox.lookup_codebox_schedule_id = 2
+codebox.save()
+```
