@@ -48,14 +48,15 @@ class Registry(object):
     def register_model(self, name, cls):
 
         if name not in self.models:
-            logger.debug('Registry: %s', name)
-
             self.models[name] = cls
+            plural_name = self._get_plural_name(name)
             patterns = self.get_model_patterns(cls)
             self.patterns.extend(patterns)
 
             setattr(self, str(name), cls)
-            setattr(self, str(self._get_plural_name(name)), cls.please)
+            setattr(self, str(plural_name), cls.please)
+
+            logger.debug('New model: %s, %s', name, plural_name)
         return self
 
     def register_definition(self, definition):

@@ -204,7 +204,11 @@ class Manager(object):
     def serialize(self, data):
         if not isinstance(data, dict):
             return
-        return self.model(**data) if self._serialize else data
+
+        properties = deepcopy(self.properties)
+        properties.update(data)
+
+        return self.model(**properties) if self._serialize else data
 
     def request(self, method=None, path=None, **request):
         meta = self.model._meta
