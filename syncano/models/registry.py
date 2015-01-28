@@ -46,6 +46,7 @@ class Registry(object):
         return self.models.get(name)
 
     def register_model(self, name, cls):
+
         if name not in self.models:
             logger.debug('Registry: %s', name)
 
@@ -54,7 +55,7 @@ class Registry(object):
             self.patterns.extend(patterns)
 
             setattr(self, str(name), cls)
-            setattr(self, str('{0}s'.format(name.lower())), cls.please)
+            setattr(self, str(self._get_plural_name(name)), cls.please)
         return self
 
     def register_definition(self, definition):
@@ -82,3 +83,10 @@ class Registry(object):
         for definition in schema:
             self.register_definition(definition)
         return self
+
+    def _camelcase_to_underscore(self, str):
+        return re.sub('(((?<=[a-z])[A-Z])|([A-Z](?![A-Z]|$)))', '_\\1', str).lower().strip('_')
+
+    def _get_plural_name(self, name):
+        name = self._camelcase_to_underscore(name)
+        return '{0}s'.format(name.lower())
