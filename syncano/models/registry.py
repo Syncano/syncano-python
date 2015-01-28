@@ -66,14 +66,24 @@ class Registry(object):
             'models': self,
         })
 
+        endpoint_properties = []
+        for name, endpoint in six.iteritems(definition['endpoints']):
+            endpoint_properties.extend(endpoint.get('properties', []))
+        endpoint_properties = list(set(endpoint_properties))
+
         attrs = {'Meta': Meta}
         for name, _property in six.iteritems(definition.get('properties', {})):
             field_type = _property.pop('type', 'field')  # TODO: Nested objects
+            _property['contain_property'] = name in endpoint_properties
 
             if field_type not in MAPPING:
                 raise SyncanoValueError('Invalid field type "{0}".'.format(field_type))
 
             attrs[name] = MAPPING[field_type](**_property)
+
+        for name in endpoint_properties:
+            if name not in attrs:
+                attrs[name] = MAPPING['endpoint']()
 
         cls = type(str(definition['name']), (Model, ), attrs)
         self.register_model(definition['name'], cls)

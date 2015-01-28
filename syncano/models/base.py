@@ -53,11 +53,10 @@ class ModelMetaclass(type):
 class Model(object):
 
     def __init__(self, **kwargs):
-        self._reset()
+        self._raw_data = {}
         self.to_python(kwargs)
-        self.build_properties(kwargs)
 
-    def save(self, **kwargs):
+    def save(self):
         self.validate()
         data = self.to_native()
 
@@ -65,16 +64,14 @@ class Model(object):
             endpoint = self.links['self']
             method = 'PUT'
         else:
-            self.build_properties(kwargs)
-            endpoint = self._meta.resolve_endpoint('list', self._properties)
+            properties = self.get_properties()
+            endpoint = self._meta.resolve_endpoint('list', properties)
             method = 'POST'
 
         request = {'data': data}
         response = self._meta.connection.request(method, endpoint, **request)
 
         self.to_python(response)
-        self.build_properties(response)
-
         return self
 
     def delete(self):
@@ -83,7 +80,7 @@ class Model(object):
 
         endpoint = self.links['self']
         self._meta.connection.request('DELETE', endpoint)
-        self._reset()
+        self._raw_data = {}
 
     def validate(self):
         for field in self._meta.fields:
@@ -107,20 +104,14 @@ class Model(object):
     def to_native(self):
         data = {}
         for field in self._meta.fields:
-            if not field.read_only:
+            if not field.read_only and field.contain_data:
                 value = getattr(self, field.name)
                 data[field.name] = field.to_native(value)
         return data
 
-    def build_properties(self, data):
-        properties = self._meta.get_endpoint_properties('detail')
-        field_names = [field.name for field in self._meta.fields]
-        for prop_name in properties:
-            if prop_name in field_names:
-                self._properties[prop_name] = getattr(self, prop_name)
-            elif prop_name in data:
-                self._properties[prop_name] = data[prop_name]
-
-    def _reset(self):
-        self._raw_data = {}
-        self._properties = {}
+    def get_properties(self):
+        properties = {}
+        for field in self._meta.fields:
+            if field.contain_property:
+                properties[field.name] = getattr(self, field.name)
+        return properties

@@ -11,6 +11,9 @@ class Field(object):
     read_only = True
     default = None
 
+    contain_data = True
+    contain_property = False
+
     def __init__(self, name=None, **kwargs):
         self.name = name
         self.model = None
@@ -20,8 +23,8 @@ class Field(object):
         self.label = kwargs.pop('label', None)
         self.max_length = kwargs.pop('max_length', None)
         self.min_length = kwargs.pop('min_length', None)
-
-        self.schema = kwargs
+        self.contain_data = kwargs.pop('contain_data', self.contain_data)
+        self.contain_property = kwargs.pop('contain_property', self.contain_property)
 
     def __get__(self, instance, owner):
         return instance._raw_data.get(self.name, self.default)
@@ -75,6 +78,11 @@ class Field(object):
 class WritableField(Field):
     required = True
     read_only = False
+
+
+class EndpointField(WritableField):
+    contain_data = False
+    contain_property = True
 
 
 class StringField(WritableField):
@@ -265,5 +273,7 @@ MAPPING = {
     'date': DateField,
     'datetime': DateTimeField,
     'field': Field,
+    'writable': WritableField,
+    'endpoint': EndpointField,
     'links': HyperlinkedField,
 }
