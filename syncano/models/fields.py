@@ -14,8 +14,10 @@ class Field(object):
     def __init__(self, name=None, **kwargs):
         self.name = name
         self.model = None
+        self.default = kwargs.pop('default', self.default)
+        self.required = kwargs.pop('required', self.required)
+        self.read_only = kwargs.pop('read_only', self.read_only)
         self.label = kwargs.pop('label', None)
-        self.default = kwargs.pop('default', None)
         self.max_length = kwargs.pop('max_length', None)
         self.min_length = kwargs.pop('min_length', None)
 
@@ -73,11 +75,6 @@ class Field(object):
 class WritableField(Field):
     required = True
     read_only = False
-
-    def __init__(self, *args, **kwargs):
-        super(WritableField, self).__init__(*args, **kwargs)
-        self.required = kwargs.pop('required', True)
-        self.read_only = kwargs.pop('read_only', False)
 
 
 class StringField(WritableField):

@@ -53,10 +53,11 @@ class ModelMetaclass(type):
 class Model(object):
 
     def __init__(self, **kwargs):
-        self._raw_data = {}
+        self._reset()
         self.to_python(kwargs)
+        self.build_properties(kwargs)
 
-    def save(self):
+    def save(self, **kwargs):
         self.validate()
         data = self.to_native()
 
@@ -64,18 +65,25 @@ class Model(object):
             endpoint = self.links['self']
             method = 'PUT'
         else:
-            endpoint = self._meta.resolve_endpoint('list', data)
+            self.build_properties(kwargs)
+            endpoint = self._meta.resolve_endpoint('list', self._properties)
             method = 'POST'
 
         request = {'data': data}
         response = self._meta.connection.request(method, endpoint, **request)
+
         self.to_python(response)
+        self.build_properties(response)
+
         return self
 
     def delete(self):
+        if not self.links:
+            raise SyncanoValidationError('Method allowed only on existing model.')
+
         endpoint = self.links['self']
         self._meta.connection.request('DELETE', endpoint)
-        self._raw_data = {}
+        self._reset()
 
     def validate(self):
         for field in self._meta.fields:
@@ -90,10 +98,10 @@ class Model(object):
         except SyncanoValidationError:
             return False
 
-    def to_python(self, kwargs):
+    def to_python(self, data):
         for field in self._meta.fields:
-            if field.name in kwargs:
-                value = kwargs[field.name]
+            if field.name in data:
+                value = data[field.name]
                 setattr(self, field.name, value)
 
     def to_native(self):
@@ -103,3 +111,16 @@ class Model(object):
                 value = getattr(self, field.name)
                 data[field.name] = field.to_native(value)
         return data
+
+    def build_properties(self, data):
+        properties = self._meta.get_endpoint_properties('detail')
+        field_names = [field.name for field in self._meta.fields]
+        for prop_name in properties:
+            if prop_name in field_names:
+                self._properties[prop_name] = getattr(self, prop_name)
+            elif prop_name in data:
+                self._properties[prop_name] = data[prop_name]
+
+    def _reset(self):
+        self._raw_data = {}
+        self._properties = {}

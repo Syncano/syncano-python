@@ -8,6 +8,7 @@ class Options(object):
         self.endpoints = {}
         self.fields = []
         self.connection = None
+        self.models = None
 
         if meta:
             meta_attrs = meta.__dict__.copy()

@@ -63,6 +63,7 @@ class Registry(object):
             'connection': self.connection,
             'endpoints': definition['endpoints'],
             'name': definition['name'],
+            'models': self,
         })
 
         attrs = {'Meta': Meta}
