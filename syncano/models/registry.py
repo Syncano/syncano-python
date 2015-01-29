@@ -102,3 +102,17 @@ class Registry(object):
     def _get_plural_name(self, name):
         name = self._camelcase_to_underscore(name)
         return '{0}s'.format(name.lower())
+
+    def set_default_property(self, name, value):
+        for model in self:
+            if name in model.__dict__:
+
+                if name not in model.please.properties:
+                    model.please.properties[name] = value
+
+                for field in model._meta.fields:
+                    if field.name == name:
+                        field.default = value
+
+    def set_default_instance(self, value):
+        self.set_default_property('instance_name', value)
