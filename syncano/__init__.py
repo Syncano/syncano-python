@@ -38,3 +38,8 @@ def connect(*args, **kwargs):
     models = Registry(connection)
     models.register_schema(connection.schema)
     return models
+
+
+def connect_instance(name, *args, **kwargs):
+    connection = connect(*args, **kwargs)
+    return connection.Instance.please.get(name)
