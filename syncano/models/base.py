@@ -7,6 +7,7 @@ from syncano.exceptions import SyncanoValidationError, SyncanoDoesNotExist
 from . import fields
 from .options import Options
 from .manager import Manager
+from .registry import registry
 
 
 class ModelMetaclass(type):
@@ -34,6 +35,17 @@ class ModelMetaclass(type):
         for n, v in six.iteritems(attrs):
             new_class.add_to_class(n, v)
 
+        if not meta._pk:
+            pk_field = fields.IntegerField(primary_key=True, read_only=True,
+                                           required=False)
+            new_class.add_to_class('id', pk_field)
+
+        for field_name in meta.endpoint_fields:
+            if field_name not in meta.field_names:
+                endpoint_field = fields.EndpointField()
+                new_class.add_to_class(field_name, endpoint_field)
+
+        registry.add(name, new_class)
         return new_class
 
     def add_to_class(cls, name, value):
@@ -50,46 +62,49 @@ class ModelMetaclass(type):
         )
 
 
-class ModelState(object):
-    """
-    A class for storing instance state
-    """
-    def __init__(self):
-        self.new = True
-
-
-@six.add_metaclass(ModelMetaclass)
-class Model(object):
+class Model(six.with_metaclass(ModelMetaclass)):
 
     def __init__(self, **kwargs):
         self._raw_data = {}
-        self._state = ModelState()
         self.to_python(kwargs)
 
-    def save(self):
+    def __repr__(self):
+        return '<{0}: {1}>'.format(
+            self.__class__.__name__,
+            self.pk
+        )
+
+    @property
+    def connection(self, **kwargs):
+        connection = kwargs.pop('connection', None)
+        return connection or self._meta.connection
+
+    def save(self, **kwargs):
         self.validate()
         data = self.to_native()
+        connection = self._get_connection(**kwargs)
 
         if self.links:
             endpoint = self.links['self']
             method = 'PUT'
         else:
-            properties = self.get_properties()
+            properties = self.get_endpoint_data()
             endpoint = self._meta.resolve_endpoint('list', properties)
             method = 'POST'
 
         request = {'data': data}
-        response = self._meta.connection.request(method, endpoint, **request)
+        response = connection.request(method, endpoint, **request)
 
         self.to_python(response)
         return self
 
-    def delete(self):
+    def delete(self, **kwargs):
         if not self.links:
             raise SyncanoValidationError('Method allowed only on existing model.')
 
         endpoint = self.links['self']
-        self._meta.connection.request('DELETE', endpoint)
+        connection = self._get_connection(**kwargs)
+        connection.request('DELETE', endpoint)
         self._raw_data = {}
 
     def validate(self):
@@ -114,15 +129,15 @@ class Model(object):
     def to_native(self):
         data = {}
         for field in self._meta.fields:
-            if not field.read_only and field.contain_data:
+            if not field.read_only and field.has_data:
                 value = getattr(self, field.name)
                 data[field.name] = field.to_native(value)
         return data
 
-    def get_properties(self):
+    def get_endpoint_data(self):
         properties = {}
         for field in self._meta.fields:
-            if field.contain_property:
+            if field.has_endpoint_data:
                 properties[field.name] = getattr(self, field.name)
         return properties
 
@@ -132,7 +147,6 @@ class ApiKey(Model):
         {'type': 'detail', 'name': 'self'},
     ]
 
-    id = fields.IntegerField()
     api_key = fields.Field()
     links = fields.HyperlinkedField(links=LINKS)
 
@@ -166,7 +180,7 @@ class Class(Model):
         {'type': 'list', 'name': 'objects'},
     ]
 
-    name = fields.StringField(max_length=64)
+    name = fields.StringField(max_length=64, primary_key=True)
     color = fields.StringField(read_only=False, min_length=7, required=False, max_length=7)
     description = fields.StringField(read_only=False, required=False)
     objects_count = fields.Field(read_only=True, required=False)
@@ -197,7 +211,6 @@ class CodeBoxSchedule(Model):
         {'type': 'list', 'name': 'traces'},
     ]
 
-    id = fields.IntegerField(read_only=True, required=False)
     links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
     scheduled_next = fields.DateTimeField(read_only=True, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
@@ -228,7 +241,6 @@ class CodeBoxTrace(Model):
         {'type': 'detail', 'name': 'self'},
     )
 
-    id = fields.IntegerField(read_only=True, required=False)
     status = fields.ChoiceField(read_only=False, choices=STATUS_CHOICES, required=True)
     links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
     executed_at = fields.DateTimeField(read_only=False, required=True)
@@ -260,7 +272,6 @@ class CodeBox(Model):
         {'display_name': 'ruby', 'value': 'ruby'},
     )
 
-    id = fields.IntegerField(read_only=True, required=False)
     description = fields.StringField(required=False)
     links = fields.HyperlinkedField(links=LINKS)
     source = fields.StringField()
@@ -292,7 +303,7 @@ class Coupon(Model):
         {'display_name': 'USD', 'value': 'usd'},
     )
 
-    name = fields.StringField(max_length=32)
+    name = fields.StringField(max_length=32, primary_key=True)
     percent_off = fields.IntegerField(required=False)
     redeem_by = fields.DateField()
     links = fields.HyperlinkedField(links=LINKS)
@@ -323,7 +334,6 @@ class Discount(Model):
     start = fields.DateField(read_only=True, required=False, label='start')
     coupon = fields.Field()
     instance = fields.Field()
-    id = fields.IntegerField(read_only=True, required=False, label='ID')
 
     class Meta:
         endpoints = {
@@ -364,7 +374,6 @@ class InstanceAdmin(Model):
     links = fields.HyperlinkedField(links=LINKS)
     email = fields.Field(read_only=True, required=False)
     role = fields.ChoiceField(choices=ROLE_CHOICES)
-    id = fields.Field(read_only=True, required=False)
 
     class Meta:
         endpoints = {
@@ -392,13 +401,13 @@ class Instance(Model):
         {'type': 'list', 'name': 'webhooks'},
     )
 
-    name = fields.StringField(read_only=False, max_length=64, required=True, label='name')
+    name = fields.StringField(read_only=False, max_length=64, required=True, primary_key=True)
     links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
-    created_at = fields.DateTimeField(read_only=True, required=False, label='created at')
-    updated_at = fields.DateTimeField(read_only=True, required=False, label='updated at')
+    created_at = fields.DateTimeField(read_only=True, required=False)
+    updated_at = fields.DateTimeField(read_only=True, required=False)
     role = fields.Field(read_only=True, required=False)
     owner = fields.Field()
-    description = fields.StringField(read_only=False, required=False, label='description')
+    description = fields.StringField(read_only=False, required=False)
 
     class Meta:
         endpoints = {
@@ -423,7 +432,6 @@ class Invitation(Model):
     email = fields.EmailField(read_only=False, max_length=254, required=True, label='email')
     role = fields.Field(read_only=True, required=False)
     key = fields.StringField(read_only=False, max_length=40, required=True, label='key')
-    id = fields.IntegerField(read_only=True, required=False, label='ID')
 
     class Meta:
         endpoints = {
@@ -456,7 +464,6 @@ class Invoice(Model):
 class Object(Model):
     created_at = fields.DateTimeField(read_only=True, required=False, label='created at')
     revision = fields.IntegerField(read_only=True, required=True, label='revision')
-    id = fields.IntegerField(read_only=True, required=False, label='ID')
     updated_at = fields.DateTimeField(read_only=True, required=False, label='updated at')
 
     class Meta:
@@ -497,7 +504,6 @@ class Trigger(Model):
     links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
     created_at = fields.DateTimeField(read_only=True, required=False, label='created at')
     updated_at = fields.DateTimeField(read_only=True, required=False, label='updated at')
-    id = fields.IntegerField(read_only=True, required=False, label='ID')
     klass = fields.Field(read_only=False, required=True, label='class')
     signal = fields.ChoiceField(read_only=False, choices=SIGNAL_CHOICES, required=True, label='signal')
 

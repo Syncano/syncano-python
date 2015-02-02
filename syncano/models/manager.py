@@ -2,7 +2,9 @@ from copy import deepcopy
 
 import six
 
+from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoValueError, SyncanoRequestError
+from .registry import registry
 
 
 class ManagerDescriptor(object):
@@ -30,7 +32,7 @@ class RelatedManagerDescriptor(object):
         links = getattr(instance, self.field.name)
         path = links[self.name]
 
-        Model = instance._meta.models.get_model_by_path(path)
+        Model = registry.get_model_by_path(path)
         method = getattr(Model.please, self.endpoint, Model.please.all)
 
         properties = instance._meta.get_endpoint_properties('detail')
@@ -39,12 +41,11 @@ class RelatedManagerDescriptor(object):
         return method(*properties)
 
 
-class Manager(object):
+class Manager(ConnectionMixin):
 
     def __init__(self):
         self.name = None
         self.model = None
-        self.connection = None
 
         self.endpoint = None
         self.properties = {}
@@ -55,6 +56,7 @@ class Manager(object):
 
         self._limit = None
         self._serialize = True
+        self._connection = None
 
     def __repr__(self):
         return self.iterator()
@@ -166,6 +168,11 @@ class Manager(object):
         self._serialize = False
         return self._clone()
 
+    def using(self, connection):
+        # ConnectionMixin will validate this
+        self.connection = connection
+        return self._clone()
+
     # Other stuff
 
     def contribute_to_class(self, model, name):
@@ -190,7 +197,7 @@ class Manager(object):
         manager = self.__class__()
         manager.name = self.name
         manager.model = self.model
-        manager.connection = self.connection
+        manager._connection = self._connection
         manager.endpoint = self.endpoint
         manager.properties = deepcopy(self.properties)
         manager._limit = self._limit

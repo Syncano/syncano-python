@@ -2,7 +2,7 @@ import re
 import six
 from datetime import date, datetime
 
-from syncano.exceptions import SyncanoFieldError
+from syncano.exceptions import SyncanoFieldError, SyncanoValueError
 from .manager import RelatedManagerDescriptor
 
 
@@ -10,9 +10,10 @@ class Field(object):
     required = False
     read_only = True
     default = None
+    primary_key = False
 
-    contain_data = True
-    contain_property = False
+    has_data = True
+    has_endpoint_data = False
 
     def __init__(self, name=None, **kwargs):
         self.name = name
@@ -23,8 +24,12 @@ class Field(object):
         self.label = kwargs.pop('label', None)
         self.max_length = kwargs.pop('max_length', None)
         self.min_length = kwargs.pop('min_length', None)
-        self.contain_data = kwargs.pop('contain_data', self.contain_data)
-        self.contain_property = kwargs.pop('contain_property', self.contain_property)
+        self.has_data = kwargs.pop('has_data', self.has_data)
+        self.has_endpoint_data = kwargs.pop('has_endpoint_data', self.has_endpoint_data)
+        self.primary_key = kwargs.pop('primary_key', self.primary_key)
+
+    def __repr__(self):
+        return '<{0}: {1}>'.format(self.__class__.__name__, self.name)
 
     def __get__(self, instance, owner):
         return instance._raw_data.get(self.name, self.default)
@@ -58,12 +63,24 @@ class Field(object):
         return value
 
     def contribute_to_class(self, cls, name):
-        self.model = cls
-        cls._meta.add_field(self)
+        if name in cls._meta.endpoint_fields:
+            self.has_endpoint_data = True
 
         if not self.name:
             self.name = name
 
+        if not self.label:
+            self.label = self.name.replace('_', ' ')
+
+        if self.primary_key:
+            if cls._meta._pk:
+                raise SyncanoValueError('Multiple pk fiedls detected.')
+
+            cls._meta._pk = self
+            setattr(cls, 'pk', self)
+
+        self.model = cls
+        cls._meta.add_field(self)
         setattr(cls, name, self)
 
         ErrorClass = type(
@@ -75,14 +92,18 @@ class Field(object):
         setattr(self, 'VaidationError', ErrorClass)
 
 
+class PrimaryKeyField(Field):
+    primary_key = True
+
+
 class WritableField(Field):
     required = True
     read_only = False
 
 
 class EndpointField(WritableField):
-    contain_data = False
-    contain_property = True
+    has_data = False
+    has_endpoint_data = True
 
 
 class StringField(WritableField):

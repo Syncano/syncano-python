@@ -4,17 +4,13 @@ import six
 import re
 
 from syncano import logger
-from syncano.exceptions import SyncanoValueError
 
-from .base import Model
-from .fields import MAPPING
-from .options import Options
+__all__ = ['registry']
 
 
 class Registry(object):
 
-    def __init__(self, connection, models=None):
-        self.connection = connection
+    def __init__(self, models=None):
         self.models = models or {}
         self.patterns = []
 
@@ -45,63 +41,19 @@ class Registry(object):
     def get_model_by_name(self, name):
         return self.models.get(name)
 
-    def register_model(self, name, cls):
+    def add(self, name, cls):
 
         if name not in self.models:
             self.models[name] = cls
-            plural_name = self._get_plural_name(name)
+            related_name = cls._meta.related_name
             patterns = self.get_model_patterns(cls)
             self.patterns.extend(patterns)
 
             setattr(self, str(name), cls)
-            setattr(self, str(plural_name), cls.please)
+            setattr(self, str(related_name), cls.please)
 
-            logger.debug('New model: %s, %s', name, plural_name)
+            logger.debug('New model: %s, %s', name, related_name)
         return self
-
-    def register_definition(self, definition):
-        Meta = type(str('Meta'), (Options, ), {
-            'connection': self.connection,
-            'endpoints': definition['endpoints'],
-            'name': definition['name'],
-            'models': self,
-        })
-
-        endpoint_properties = []
-        for name, endpoint in six.iteritems(definition['endpoints']):
-            endpoint_properties.extend(endpoint.get('properties', []))
-        endpoint_properties = list(set(endpoint_properties))
-
-        attrs = {'Meta': Meta}
-        for name, _property in six.iteritems(definition.get('properties', {})):
-            field_type = _property.pop('type', 'field')  # TODO: Nested objects
-            _property['contain_property'] = name in endpoint_properties
-
-            if field_type not in MAPPING:
-                raise SyncanoValueError('Invalid field type "{0}".'.format(field_type))
-
-            attrs[name] = MAPPING[field_type](**_property)
-
-        for name in endpoint_properties:
-            if name not in attrs:
-                attrs[name] = MAPPING['endpoint']()
-
-        cls = type(str(definition['name']), (Model, ), attrs)
-        self.register_model(definition['name'], cls)
-
-        return self
-
-    def register_schema(self, schema):
-        for definition in schema:
-            self.register_definition(definition)
-        return self
-
-    def _camelcase_to_underscore(self, str):
-        return re.sub('(((?<=[a-z])[A-Z])|([A-Z](?![A-Z]|$)))', '_\\1', str).lower().strip('_')
-
-    def _get_plural_name(self, name):
-        name = self._camelcase_to_underscore(name)
-        return '{0}s'.format(name.lower())
 
     def set_default_property(self, name, value):
         for model in self:
@@ -116,3 +68,6 @@ class Registry(object):
 
     def set_default_instance(self, value):
         self.set_default_property('instance_name', value)
+
+
+registry = Registry()

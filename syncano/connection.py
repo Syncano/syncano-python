@@ -8,6 +8,9 @@ import syncano
 from syncano.exceptions import SyncanoValueError, SyncanoRequestError
 
 
+__all__ = ['default_connection', 'Connection', 'ConnectionMixin']
+
+
 def is_success(code):
     return code >= 200 and code <= 299
 
@@ -18,6 +21,25 @@ def is_client_error(code):
 
 def is_server_error(code):
     return code >= 500 and code <= 599
+
+
+class DefaultConnection(object):
+    def __init__(self):
+        self._connection = None
+
+    def __call__(self):
+        if not self._connection:
+            raise SyncanoValueError('Please open new connection.')
+        return self._connection
+
+    def open(self, *args, **kwargs):
+        if self._connection:
+            raise SyncanoValueError('Connection already defined.')
+        self._connection = Connection(*args, **kwargs)
+        return self._connection
+
+
+default_connection = DefaultConnection()
 
 
 class Connection(object):
@@ -149,3 +171,25 @@ class Connection(object):
 
         self.logger.debug('Authentication successful: %s', account_key)
         return account_key
+
+
+class ConnectionMixin(object):
+
+    def __init__(self, *args, **kwargs):
+        self._connection = None
+        super(ConnectionMixin, self).__init__(*args, **kwargs)
+
+    @property
+    def connection(self):
+        # Sometimes someone will not use super
+        return getattr(self, '_connection', None) or default_connection()
+
+    @connection.setter
+    def connection(self, value):
+        if not isinstance(value, Connection):
+            raise SyncanoValueError('"connection" needs to be a Syncano Connection instance.')
+        self._connection = value
+
+    @connection.deleter
+    def connection(self):
+        self._connection = None

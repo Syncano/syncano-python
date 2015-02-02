@@ -1,3 +1,2 @@
-from .base import Model
+from .base import *  # NOQA
 from .fields import *  # NOQA
-from .registry import Registry

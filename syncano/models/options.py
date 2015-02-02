@@ -1,14 +1,25 @@
+import re
+import six
+
+from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoValueError
+from syncano.utils import camelcase_to_underscore
 
 
-class Options(object):
+class Options(ConnectionMixin):
 
     def __init__(self, meta=None):
         self.name = None
+        self.plural_name = None
+        self.related_name = None
+
         self.endpoints = {}
+        self.endpoint_fields = []
+
         self.fields = []
-        self.connection = None
-        self.models = None
+        self.field_names = []
+
+        self._pk = False
 
         if meta:
             meta_attrs = meta.__dict__.copy()
@@ -19,7 +30,32 @@ class Options(object):
             for name, value in meta_attrs.iteritems():
                 setattr(self, name, value)
 
+        for name, endpoint in six.iteritems(self.endpoints):
+            if 'properties' not in endpoint:
+                properties = self.get_path_properties(endpoint['path'])
+                endpoint['properties'] = properties
+                self.endpoint_fields.extend((
+                    p for p in properties if p not in self.endpoint_fields
+                ))
+
+    def contribute_to_class(self, cls, name):
+        if not self.name:
+            model_name = camelcase_to_underscore(cls.__name__)
+            self.name = model_name.replace('_', ' ').capitalize()
+
+        if not self.plural_name:
+            self.plural_name = '{0}s'.format(self.name)
+
+        if not self.related_name:
+            self.related_name = self.plural_name.replace(' ', '_').lower()
+
+        setattr(cls, name, self)
+
     def add_field(self, field):
+        if field.name in self.field_names:
+            raise SyncanoValueError('Field "{0}" already defined'.format(field.name))
+
+        self.field_names.append(field.name)
         self.fields.append(field)
 
     def get_endpoint(self, name):
@@ -47,3 +83,6 @@ class Options(object):
     def get_endpoint_query_params(self, name, params):
         properties = self.get_endpoint_properties(name)
         return {k: v for k, v in params.iteritems() if k not in properties}
+
+    def get_path_properties(self, path):
+        return re.findall('/{([^}]*)}', path)

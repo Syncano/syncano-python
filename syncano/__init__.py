@@ -31,13 +31,11 @@ def connect(*args, **kwargs):
     """
     Connect to Syncano API.
     """
-    from syncano.connection import Connection
-    from syncano.models import Registry
+    from syncano.connection import default_connection
+    from syncano.models import registry
 
-    connection = Connection(*args, **kwargs)
-    models = Registry(connection)
-    models.register_schema(connection.schema)
-    return models
+    default_connection.open(*args, **kwargs)
+    return registry
 
 
 def connect_instance(name, *args, **kwargs):
