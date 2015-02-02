@@ -98,14 +98,31 @@ instance.admins.create()
 instance.admins.delete(4)
 ```
 
-### Relations (Work in progress)
+### Relations
 
-`CodeBoxExecutionTrace` is related to `instance`, `codebox` and `codebox_schedule` how we should tackle this:
+`CodeBoxExecutionTrace` is related to `instance`, `codebox` and `codebox_schedule` so model should have few aditional fields:
 
 ```python
 codebox = CodeBoxExecutionTrace()
 codebox.instance_name = 'syncano'
-codebox.lookup_codebox_schedule__codebox_id = 1
-codebox.lookup_codebox_schedule_id = 2
+codebox.codebox_id = 1
+codebox.schedule_id = 2
 codebox.save()
+```
+
+### Connection juggling
+
+
+```python
+connection = syncano.connect(email='', password='')
+second_connection = syncano.connect(email='', password='')
+
+# ORM
+instances = connection.insatcnes.using(second_connection).list()
+
+# Model instance
+insatnce = Instance()
+instance.name = 'test'
+insatcne.save(connection=second_connection)
+
 ```

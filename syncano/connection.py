@@ -33,10 +33,10 @@ class DefaultConnection(object):
         return self._connection
 
     def open(self, *args, **kwargs):
-        if self._connection:
-            raise SyncanoValueError('Connection already defined.')
-        self._connection = Connection(*args, **kwargs)
-        return self._connection
+        connection = Connection(*args, **kwargs)
+        if not self._connection:
+            self._connection = connection
+        return connection
 
 
 default_connection = DefaultConnection()
