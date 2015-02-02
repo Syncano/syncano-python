@@ -1,5 +1,6 @@
 import re
 import six
+from urlparse import urljoin
 
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoValueError
@@ -12,6 +13,7 @@ class Options(ConnectionMixin):
         self.name = None
         self.plural_name = None
         self.related_name = None
+        self.parent = None
 
         self.endpoints = {}
         self.endpoint_fields = []
@@ -49,7 +51,26 @@ class Options(ConnectionMixin):
         if not self.related_name:
             self.related_name = self.plural_name.replace(' ', '_').lower()
 
+        self.resolve_parent_data()
+
         setattr(cls, name, self)
+
+    def resolve_parent_data(self):
+        if not self.parent:
+            return
+
+        meta = self.parent._meta
+        name = meta.name.replace(' ', '_').lower()
+        endpoint = meta.get_endpoint('detail')
+        properties = ['{0}_{1}'.format(name, p) for p in endpoint['properties']]
+        prefix = endpoint['path']
+
+        for old, new in zip(endpoint['properties'], properties):
+            prefix = prefix.replace(old, new)
+
+        for name, endpoint in six.iteritems(self.endpoints):
+            endpoint['properties'] = properties + endpoint['properties']
+            endpoint['path'] = urljoin(prefix, endpoint['path'].lstrip('/'))
 
     def add_field(self, field):
         if field.name in self.field_names:

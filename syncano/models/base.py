@@ -142,27 +142,6 @@ class Model(six.with_metaclass(ModelMetaclass)):
         return properties
 
 
-class ApiKey(Model):
-    LINKS = [
-        {'type': 'detail', 'name': 'self'},
-    ]
-
-    api_key = fields.Field()
-    links = fields.HyperlinkedField(links=LINKS)
-
-    class Meta:
-        endpoints = {
-            'detail': {
-                'methods': ['get', 'delete'],
-                'path': '/v1/instances/{instance_name}/api_keys/{id}/',
-            },
-            'list': {
-                'methods': ['post', 'get'],
-                'path': '/v1/instances/{instance_name}/api_keys/',
-            }
-        }
-
-
 class Balance(Model):
 
     class Meta:
@@ -170,126 +149,6 @@ class Balance(Model):
             'list': {
                 'methods': ['get'],
                 'path': '/v1/billing/balance/',
-            }
-        }
-
-
-class Class(Model):
-    LINKS = [
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'list', 'name': 'objects'},
-    ]
-
-    name = fields.StringField(max_length=64, primary_key=True)
-    color = fields.StringField(read_only=False, min_length=7, required=False, max_length=7)
-    description = fields.StringField(read_only=False, required=False)
-    objects_count = fields.Field(read_only=True, required=False)
-    icon = fields.StringField(read_only=False, max_length=40, required=False)
-    revision = fields.IntegerField(read_only=True, required=True)
-    schema = fields.Field(read_only=False, required=True)
-    links = fields.HyperlinkedField(links=LINKS)
-    status = fields.Field()
-    updated_at = fields.DateTimeField(read_only=True, required=False)
-    created_at = fields.DateTimeField(read_only=True, required=False)
-
-    class Meta:
-        endpoints = {
-            "detail": {
-                "methods": ["delete", "post", "patch", "get"],
-                "path": "/v1/instances/{instance_name}/classes/{name}/",
-            },
-            "list": {
-                "methods": ["post", "get"],
-                "path": "/v1/instances/{instance_name}/classes/",
-            }
-        }
-
-
-class CodeBoxSchedule(Model):
-    LINKS = [
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'list', 'name': 'traces'},
-    ]
-
-    links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
-    scheduled_next = fields.DateTimeField(read_only=True, required=False)
-    created_at = fields.DateTimeField(read_only=True, required=False)
-    interval_sec = fields.IntegerField(read_only=False, required=False)
-    crontab = fields.StringField(read_only=False, max_length=40, required=False)
-    payload = fields.StringField(read_only=False, required=False)
-
-    class Meta:
-        endpoints = {
-            "detail": {
-                "methods": ["get", "delete"],
-                "path": "/v1/instances/{instance_name}/codeboxes/{codebox_id}/schedules/{id}/",
-            },
-            "list": {
-                "methods": ["post", "get"],
-                "path": "/v1/instances/{instance_name}/codeboxes/{codebox_id}/schedules/",
-            }
-        }
-
-
-class CodeBoxTrace(Model):
-    STATUS_CHOICES = (
-        {'display_name': 'Success', 'value': 'success'},
-        {'display_name': 'Failure', 'value': 'failure'},
-        {'display_name': 'Timeout', 'value': 'timeout'},
-    )
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-
-    status = fields.ChoiceField(read_only=False, choices=STATUS_CHOICES, required=True)
-    links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
-    executed_at = fields.DateTimeField(read_only=False, required=True)
-    result = fields.StringField(read_only=False, required=False)
-    duration = fields.IntegerField(read_only=False, required=True)
-
-    class Meta:
-        endpoints = {
-            "detail": {
-                "methods": ["get"],
-                "path": "/v1/instances/{instance_name}/codeboxes/{codebox_id}/schedules/{schedule_id}/traces/{id}/",
-            },
-            "list": {
-                "methods": ["get"],
-                "path": "/v1/instances/{instance_name}/codeboxes/{codebox_id}/schedules/{schedule_id}/traces/",
-            }
-        }
-
-
-class CodeBox(Model):
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'list', 'name': 'schedules'},
-        {'type': 'list', 'name': 'runtimes'},
-    )
-    RUNTIME_CHOICES = (
-        {'display_name': 'nodejs', 'value': 'nodejs'},
-        {'display_name': 'python', 'value': 'python'},
-        {'display_name': 'ruby', 'value': 'ruby'},
-    )
-
-    description = fields.StringField(required=False)
-    links = fields.HyperlinkedField(links=LINKS)
-    source = fields.StringField()
-    runtime_name = fields.ChoiceField(choices=RUNTIME_CHOICES)
-    config = fields.Field(required=False)
-    name = fields.StringField(max_length=80)
-    created_at = fields.DateTimeField(read_only=True, required=False)
-    updated_at = fields.DateTimeField(read_only=True, required=False)
-
-    class Meta:
-        endpoints = {
-            "detail": {
-                "methods": ["put", "get", "patch", "delete"],
-                "path": "/v1/instances/{instance_name}/codeboxes/{id}/",
-            },
-            "list": {
-                "methods": ["post", "get"],
-                "path": "/v1/instances/{instance_name}/codeboxes/",
             }
         }
 
@@ -359,35 +218,6 @@ class Info(Model):
         }
 
 
-class InstanceAdmin(Model):
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-    ROLE_CHOICES = (
-        {'display_name': 'full', 'value': 'full'},
-        {'display_name': 'write', 'value': 'write'},
-        {'display_name': 'read', 'value': 'read'},
-    )
-
-    first_name = fields.Field(read_only=True, required=False)
-    last_name = fields.Field(read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
-    email = fields.Field(read_only=True, required=False)
-    role = fields.ChoiceField(choices=ROLE_CHOICES)
-
-    class Meta:
-        endpoints = {
-            "detail": {
-                "methods": ["put", "get", "patch", "delete"],
-                "path": "/v1/instances/{instance_name}/admins/{id}/",
-            },
-            "list": {
-                "methods": ["get"],
-                "path": "/v1/instances/{instance_name}/admins/",
-            }
-        }
-
-
 class Instance(Model):
     LINKS = (
         {'type': 'detail', 'name': 'self'},
@@ -422,6 +252,182 @@ class Instance(Model):
         }
 
 
+class ApiKey(Model):
+    LINKS = [
+        {'type': 'detail', 'name': 'self'},
+    ]
+
+    api_key = fields.Field()
+    links = fields.HyperlinkedField(links=LINKS)
+
+    class Meta:
+        parent = Instance
+        endpoints = {
+            'detail': {
+                'methods': ['get', 'delete'],
+                'path': '/api_keys/{id}/',
+            },
+            'list': {
+                'methods': ['post', 'get'],
+                'path': '/api_keys/',
+            }
+        }
+
+
+class Class(Model):
+    LINKS = [
+        {'type': 'detail', 'name': 'self'},
+        {'type': 'list', 'name': 'objects'},
+    ]
+
+    name = fields.StringField(max_length=64, primary_key=True)
+    color = fields.StringField(read_only=False, min_length=7, required=False, max_length=7)
+    description = fields.StringField(read_only=False, required=False)
+    objects_count = fields.Field(read_only=True, required=False)
+    icon = fields.StringField(read_only=False, max_length=40, required=False)
+    revision = fields.IntegerField(read_only=True, required=True)
+    schema = fields.Field(read_only=False, required=True)
+    links = fields.HyperlinkedField(links=LINKS)
+    status = fields.Field()
+    updated_at = fields.DateTimeField(read_only=True, required=False)
+    created_at = fields.DateTimeField(read_only=True, required=False)
+
+    class Meta:
+        parent = Instance
+        endpoints = {
+            "detail": {
+                "methods": ["delete", "post", "patch", "get"],
+                "path": "/classes/{name}/",
+            },
+            "list": {
+                "methods": ["post", "get"],
+                "path": "/classes/",
+            }
+        }
+
+
+class CodeBox(Model):
+    LINKS = (
+        {'type': 'detail', 'name': 'self'},
+        {'type': 'list', 'name': 'schedules'},
+        {'type': 'list', 'name': 'runtimes'},
+    )
+    RUNTIME_CHOICES = (
+        {'display_name': 'nodejs', 'value': 'nodejs'},
+        {'display_name': 'python', 'value': 'python'},
+        {'display_name': 'ruby', 'value': 'ruby'},
+    )
+
+    description = fields.StringField(required=False)
+    links = fields.HyperlinkedField(links=LINKS)
+    source = fields.StringField()
+    runtime_name = fields.ChoiceField(choices=RUNTIME_CHOICES)
+    config = fields.Field(required=False)
+    name = fields.StringField(max_length=80)
+    created_at = fields.DateTimeField(read_only=True, required=False)
+    updated_at = fields.DateTimeField(read_only=True, required=False)
+
+    class Meta:
+        parent = Instance
+        endpoints = {
+            "detail": {
+                "methods": ["put", "get", "patch", "delete"],
+                "path": "/codeboxes/{id}/",
+            },
+            "list": {
+                "methods": ["post", "get"],
+                "path": "/codeboxes/",
+            }
+        }
+
+
+class CodeBoxSchedule(Model):
+    LINKS = [
+        {'type': 'detail', 'name': 'self'},
+        {'type': 'list', 'name': 'traces'},
+    ]
+
+    links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
+    scheduled_next = fields.DateTimeField(read_only=True, required=False)
+    created_at = fields.DateTimeField(read_only=True, required=False)
+    interval_sec = fields.IntegerField(read_only=False, required=False)
+    crontab = fields.StringField(read_only=False, max_length=40, required=False)
+    payload = fields.StringField(read_only=False, required=False)
+
+    class Meta:
+        parent = CodeBox
+        endpoints = {
+            "detail": {
+                "methods": ["get", "delete"],
+                "path": "/schedules/{id}/",
+            },
+            "list": {
+                "methods": ["post", "get"],
+                "path": "/schedules/",
+            }
+        }
+
+
+class CodeBoxTrace(Model):
+    STATUS_CHOICES = (
+        {'display_name': 'Success', 'value': 'success'},
+        {'display_name': 'Failure', 'value': 'failure'},
+        {'display_name': 'Timeout', 'value': 'timeout'},
+    )
+    LINKS = (
+        {'type': 'detail', 'name': 'self'},
+    )
+
+    status = fields.ChoiceField(read_only=False, choices=STATUS_CHOICES, required=True)
+    links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
+    executed_at = fields.DateTimeField(read_only=False, required=True)
+    result = fields.StringField(read_only=False, required=False)
+    duration = fields.IntegerField(read_only=False, required=True)
+
+    class Meta:
+        parent = CodeBoxSchedule
+        endpoints = {
+            "detail": {
+                "methods": ["get"],
+                "path": "/traces/{id}/",
+            },
+            "list": {
+                "methods": ["get"],
+                "path": "/traces/",
+            }
+        }
+
+
+class InstanceAdmin(Model):
+    LINKS = (
+        {'type': 'detail', 'name': 'self'},
+    )
+    ROLE_CHOICES = (
+        {'display_name': 'full', 'value': 'full'},
+        {'display_name': 'write', 'value': 'write'},
+        {'display_name': 'read', 'value': 'read'},
+    )
+
+    first_name = fields.Field(read_only=True, required=False)
+    last_name = fields.Field(read_only=True, required=False)
+    links = fields.HyperlinkedField(links=LINKS)
+    email = fields.Field(read_only=True, required=False)
+    role = fields.ChoiceField(choices=ROLE_CHOICES)
+
+    class Meta:
+        parent = Instance
+        endpoints = {
+            "detail": {
+                "methods": ["put", "get", "patch", "delete"],
+                "path": "/admins/{id}/",
+            },
+            "list": {
+                "methods": ["get"],
+                "path": "/admins/",
+            }
+        }
+
+
 class Invitation(Model):
     LINKS = (
         {'type': 'detail', 'name': 'self'},
@@ -434,14 +440,15 @@ class Invitation(Model):
     key = fields.StringField(read_only=False, max_length=40, required=True, label='key')
 
     class Meta:
+        parent = Instance
         endpoints = {
             "detail": {
                 "methods": ["put", "get", "patch", "delete"],
-                "path": "/v1/instances/{instance_name}/invitations/{id}/",
+                "path": "/invitations/{id}/",
             },
             "list": {
                 "methods": ["post", "get"],
-                "path": "/v1/instances/{instance_name}/invitations/",
+                "path": "/invitations/",
             }
         }
 
@@ -467,14 +474,15 @@ class Object(Model):
     updated_at = fields.DateTimeField(read_only=True, required=False, label='updated at')
 
     class Meta:
+        parent = Class
         endpoints = {
             "detail": {
                 "methods": ["delete", "post", "patch", "get"],
-                "path": "/v1/instances/{instance_name}/classes/{class_name}/objects/{id}/",
+                "path": "/objects/{id}/",
             },
             "list": {
                 "methods": ["post", "get"],
-                "path": "/v1/instances/{instance_name}/classes/{class_name}/objects/",
+                "path": "/objects/",
             }
         }
 
@@ -482,10 +490,11 @@ class Object(Model):
 class Runtime(Model):
 
     class Meta:
+        parent = Instance
         endpoints = {
             "list": {
                 "methods": ["get"],
-                "path": "/v1/instances/{instance_name}/codeboxes/runtimes/",
+                "path": "/codeboxes/runtimes/",
             }
         }
 
@@ -508,14 +517,15 @@ class Trigger(Model):
     signal = fields.ChoiceField(read_only=False, choices=SIGNAL_CHOICES, required=True, label='signal')
 
     class Meta:
+        parent = Instance
         endpoints = {
             "detail": {
                 "methods": ["put", "get", "patch", "delete"],
-                "path": "/v1/instances/{instance_name}/triggers/{id}/",
+                "path": "/triggers/{id}/",
             },
             "list": {
                 "methods": ["post", "get"],
-                "path": "/v1/instances/{instance_name}/triggers/",
+                "path": "/triggers/",
             }
         }
 
@@ -531,17 +541,18 @@ class Webhook(Model):
     links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
 
     class Meta:
+        parent = Instance
         endpoints = {
             "detail": {
                 "methods": ["put", "get", "patch", "delete"],
-                "path": "/v1/instances/{instance_name}/webhooks/{id}/",
+                "path": "/webhooks/{id}/",
             },
             "list": {
                 "methods": ["post", "get"],
-                "path": "/v1/instances/{instance_name}/webhooks/",
+                "path": "/webhooks/",
             },
             "run": {
                 "methods": ["get"],
-                "path": "/v1/instances/{instance_name}/webhooks/{id}/run/",
+                "path": "/webhooks/{id}/run/",
             }
         }
