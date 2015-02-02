@@ -4,6 +4,7 @@ from urlparse import urljoin
 
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoValueError
+from syncano.models.registry import registry
 from syncano.utils import camelcase_to_underscore
 
 
@@ -50,6 +51,9 @@ class Options(ConnectionMixin):
 
         if not self.related_name:
             self.related_name = self.plural_name.replace(' ', '_').lower()
+
+        if self.parent and isinstance(self.parent, six.string_types):
+            self.parent = registry.get_model_by_name(self.parent)
 
         self.resolve_parent_data()
 

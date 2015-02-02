@@ -172,13 +172,13 @@ class Coupon(Model):
 
     class Meta:
         endpoints = {
-            "detail": {
-                "methods": ["get", "delete"],
-                "path": "/v1/billing/coupons/{name}/",
+            'detail': {
+                'methods': ['get', 'delete'],
+                'path': '/v1/billing/coupons/{name}/',
             },
-            "list": {
-                "methods": ["post", "get"],
-                "path": "/v1/billing/coupons/",
+            'list': {
+                'methods': ['post', 'get'],
+                'path': '/v1/billing/coupons/',
             }
         }
 
@@ -188,21 +188,21 @@ class Discount(Model):
         {'type': 'detail', 'name': 'self'},
     )
 
-    end = fields.DateField(read_only=True, required=True, label='end')
-    links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
-    start = fields.DateField(read_only=True, required=False, label='start')
-    coupon = fields.Field()
     instance = fields.Field()
+    coupon = fields.Field()
+    links = fields.HyperlinkedField(links=LINKS)
+    start = fields.DateField(read_only=True, required=False)
+    end = fields.DateField(read_only=True, required=True)
 
     class Meta:
         endpoints = {
-            "detail": {
-                "methods": ["get"],
-                "path": "/v1/billing/discounts/{id}/",
+            'detail': {
+                'methods': ['get'],
+                'path': '/v1/billing/discounts/{id}/',
             },
-            "list": {
-                "methods": ["post", "get"],
-                "path": "/v1/billing/discounts/",
+            'list': {
+                'methods': ['post', 'get'],
+                'path': '/v1/billing/discounts/',
             }
         }
 
@@ -211,9 +211,9 @@ class Info(Model):
 
     class Meta:
         endpoints = {
-            "list": {
-                "methods": ["get"],
-                "path": "/v1/billing/info/",
+            'list': {
+                'methods': ['get'],
+                'path': '/v1/billing/info/',
             }
         }
 
@@ -231,8 +231,8 @@ class Instance(Model):
         {'type': 'list', 'name': 'webhooks'},
     )
 
-    name = fields.StringField(read_only=False, max_length=64, required=True, primary_key=True)
-    links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
+    name = fields.StringField(max_length=64, primary_key=True)
+    links = fields.HyperlinkedField(links=LINKS)
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
     role = fields.Field(read_only=True, required=False)
@@ -241,13 +241,13 @@ class Instance(Model):
 
     class Meta:
         endpoints = {
-            "detail": {
-                "methods": ["delete", "post", "patch", "get"],
-                "path": "/v1/instances/{name}/",
+            'detail': {
+                'methods': ['delete', 'post', 'patch', 'get'],
+                'path': '/v1/instances/{name}/',
             },
-            "list": {
-                "methods": ["post", "get"],
-                "path": "/v1/instances/",
+            'list': {
+                'methods': ['post', 'get'],
+                'path': '/v1/instances/',
             }
         }
 
@@ -295,13 +295,13 @@ class Class(Model):
     class Meta:
         parent = Instance
         endpoints = {
-            "detail": {
-                "methods": ["delete", "post", "patch", "get"],
-                "path": "/classes/{name}/",
+            'detail': {
+                'methods': ['delete', 'post', 'patch', 'get'],
+                'path': '/classes/{name}/',
             },
-            "list": {
-                "methods": ["post", "get"],
-                "path": "/classes/",
+            'list': {
+                'methods': ['post', 'get'],
+                'path': '/classes/',
             }
         }
 
@@ -330,13 +330,13 @@ class CodeBox(Model):
     class Meta:
         parent = Instance
         endpoints = {
-            "detail": {
-                "methods": ["put", "get", "patch", "delete"],
-                "path": "/codeboxes/{id}/",
+            'detail': {
+                'methods': ['put', 'get', 'patch', 'delete'],
+                'path': '/codeboxes/{id}/',
             },
-            "list": {
-                "methods": ["post", "get"],
-                "path": "/codeboxes/",
+            'list': {
+                'methods': ['post', 'get'],
+                'path': '/codeboxes/',
             }
         }
 
@@ -347,7 +347,7 @@ class CodeBoxSchedule(Model):
         {'type': 'list', 'name': 'traces'},
     ]
 
-    links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
+    links = fields.HyperlinkedField(links=LINKS)
     scheduled_next = fields.DateTimeField(read_only=True, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
     interval_sec = fields.IntegerField(read_only=False, required=False)
@@ -357,13 +357,13 @@ class CodeBoxSchedule(Model):
     class Meta:
         parent = CodeBox
         endpoints = {
-            "detail": {
-                "methods": ["get", "delete"],
-                "path": "/schedules/{id}/",
+            'detail': {
+                'methods': ['get', 'delete'],
+                'path': '/schedules/{id}/',
             },
-            "list": {
-                "methods": ["post", "get"],
-                "path": "/schedules/",
+            'list': {
+                'methods': ['post', 'get'],
+                'path': '/schedules/',
             }
         }
 
@@ -378,8 +378,8 @@ class CodeBoxTrace(Model):
         {'type': 'detail', 'name': 'self'},
     )
 
-    status = fields.ChoiceField(read_only=False, choices=STATUS_CHOICES, required=True)
-    links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
+    status = fields.ChoiceField(choices=STATUS_CHOICES)
+    links = fields.HyperlinkedField(links=LINKS)
     executed_at = fields.DateTimeField(read_only=False, required=True)
     result = fields.StringField(read_only=False, required=False)
     duration = fields.IntegerField(read_only=False, required=True)
@@ -387,13 +387,13 @@ class CodeBoxTrace(Model):
     class Meta:
         parent = CodeBoxSchedule
         endpoints = {
-            "detail": {
-                "methods": ["get"],
-                "path": "/traces/{id}/",
+            'detail': {
+                'methods': ['get'],
+                'path': '/traces/{id}/',
             },
-            "list": {
-                "methods": ["get"],
-                "path": "/traces/",
+            'list': {
+                'methods': ['get'],
+                'path': '/traces/',
             }
         }
 
@@ -417,13 +417,13 @@ class InstanceAdmin(Model):
     class Meta:
         parent = Instance
         endpoints = {
-            "detail": {
-                "methods": ["put", "get", "patch", "delete"],
-                "path": "/admins/{id}/",
+            'detail': {
+                'methods': ['put', 'get', 'patch', 'delete'],
+                'path': '/admins/{id}/',
             },
-            "list": {
-                "methods": ["get"],
-                "path": "/admins/",
+            'list': {
+                'methods': ['get'],
+                'path': '/admins/',
             }
         }
 
@@ -434,21 +434,21 @@ class Invitation(Model):
     )
 
     links = fields.HyperlinkedField(links=LINKS)
-    created_at = fields.DateTimeField(read_only=True, required=False, label='created at')
-    email = fields.EmailField(read_only=False, max_length=254, required=True, label='email')
+    created_at = fields.DateTimeField(read_only=True, required=False)
+    email = fields.EmailField(max_length=254)
     role = fields.Field(read_only=True, required=False)
-    key = fields.StringField(read_only=False, max_length=40, required=True, label='key')
+    key = fields.StringField(max_length=40)
 
     class Meta:
         parent = Instance
         endpoints = {
-            "detail": {
-                "methods": ["put", "get", "patch", "delete"],
-                "path": "/invitations/{id}/",
+            'detail': {
+                'methods': ['put', 'get', 'patch', 'delete'],
+                'path': '/invitations/{id}/',
             },
-            "list": {
-                "methods": ["post", "get"],
-                "path": "/invitations/",
+            'list': {
+                'methods': ['post', 'get'],
+                'path': '/invitations/',
             }
         }
 
@@ -457,32 +457,32 @@ class Invoice(Model):
 
     class Meta:
         endpoints = {
-            "detail": {
-                "methods": ["get"],
-                "path": "/v1/billing/invoices/{id}/",
+            'detail': {
+                'methods': ['get'],
+                'path': '/v1/billing/invoices/{id}/',
             },
-            "list": {
-                "methods": ["get"],
-                "path": "/v1/billing/invoices/",
+            'list': {
+                'methods': ['get'],
+                'path': '/v1/billing/invoices/',
             }
         }
 
 
 class Object(Model):
-    created_at = fields.DateTimeField(read_only=True, required=False, label='created at')
-    revision = fields.IntegerField(read_only=True, required=True, label='revision')
-    updated_at = fields.DateTimeField(read_only=True, required=False, label='updated at')
+    created_at = fields.DateTimeField(read_only=True, required=False)
+    revision = fields.IntegerField(read_only=True, required=True)
+    updated_at = fields.DateTimeField(read_only=True, required=False)
 
     class Meta:
         parent = Class
         endpoints = {
-            "detail": {
-                "methods": ["delete", "post", "patch", "get"],
-                "path": "/objects/{id}/",
+            'detail': {
+                'methods': ['delete', 'post', 'patch', 'get'],
+                'path': '/objects/{id}/',
             },
-            "list": {
-                "methods": ["post", "get"],
-                "path": "/objects/",
+            'list': {
+                'methods': ['post', 'get'],
+                'path': '/objects/',
             }
         }
 
@@ -492,9 +492,9 @@ class Runtime(Model):
     class Meta:
         parent = Instance
         endpoints = {
-            "list": {
-                "methods": ["get"],
-                "path": "/codeboxes/runtimes/",
+            'list': {
+                'methods': ['get'],
+                'path': '/codeboxes/runtimes/',
             }
         }
 
@@ -509,23 +509,23 @@ class Trigger(Model):
         {'display_name': 'post_delete', 'value': 'post_delete'},
     )
 
-    codebox = fields.Field(read_only=False, required=True, label='codebox')
-    links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
-    created_at = fields.DateTimeField(read_only=True, required=False, label='created at')
-    updated_at = fields.DateTimeField(read_only=True, required=False, label='updated at')
+    codebox = fields.Field(read_only=False, required=True)
+    links = fields.HyperlinkedField(links=LINKS)
+    created_at = fields.DateTimeField(read_only=True, required=False)
+    updated_at = fields.DateTimeField(read_only=True, required=False)
     klass = fields.Field(read_only=False, required=True, label='class')
-    signal = fields.ChoiceField(read_only=False, choices=SIGNAL_CHOICES, required=True, label='signal')
+    signal = fields.ChoiceField(choices=SIGNAL_CHOICES)
 
     class Meta:
         parent = Instance
         endpoints = {
-            "detail": {
-                "methods": ["put", "get", "patch", "delete"],
-                "path": "/triggers/{id}/",
+            'detail': {
+                'methods': ['put', 'get', 'patch', 'delete'],
+                'path': '/triggers/{id}/',
             },
-            "list": {
-                "methods": ["post", "get"],
-                "path": "/triggers/",
+            'list': {
+                'methods': ['post', 'get'],
+                'path': '/triggers/',
             }
         }
 
@@ -536,23 +536,23 @@ class Webhook(Model):
         {'type': 'run', 'name': 'run'},
     )
 
-    codebox = fields.Field(read_only=False, required=True, label='codebox')
-    slug = fields.SlugField(read_only=False, max_length=50, required=True, label='slug')
-    links = fields.HyperlinkedField(read_only=True, required=False, links=LINKS)
+    codebox = fields.Field(read_only=False, required=True)
+    slug = fields.SlugField(max_length=50)
+    links = fields.HyperlinkedField(links=LINKS)
 
     class Meta:
         parent = Instance
         endpoints = {
-            "detail": {
-                "methods": ["put", "get", "patch", "delete"],
-                "path": "/webhooks/{id}/",
+            'detail': {
+                'methods': ['put', 'get', 'patch', 'delete'],
+                'path': '/webhooks/{id}/',
             },
-            "list": {
-                "methods": ["post", "get"],
-                "path": "/webhooks/",
+            'list': {
+                'methods': ['post', 'get'],
+                'path': '/webhooks/',
             },
-            "run": {
-                "methods": ["get"],
-                "path": "/webhooks/{id}/run/",
+            'run': {
+                'methods': ['get'],
+                'path': '/webhooks/{id}/run/',
             }
         }
