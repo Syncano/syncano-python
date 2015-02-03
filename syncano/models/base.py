@@ -47,8 +47,8 @@ class ModelMetaclass(type):
 
         # Give the class a docstring -- its definition.
         if new_class.__doc__ is None:
-            field_names = ', '.join(meta.field_names)
-            new_class.__doc__ = "{0}({1})".format(name, field_names)
+            field_names = '\n\t- '.join(meta.field_names)
+            new_class.__doc__ = "{0}:\n\t- {1}".format(name, field_names)
 
         registry.add(name, new_class)
         return new_class
