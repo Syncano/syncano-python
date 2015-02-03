@@ -17,7 +17,7 @@ class Options(ConnectionMixin):
         self.parent = None
 
         self.endpoints = {}
-        self.endpoint_fields = []
+        self.endpoint_fields = set()
 
         self.fields = []
         self.field_names = []
@@ -33,13 +33,14 @@ class Options(ConnectionMixin):
             for name, value in meta_attrs.iteritems():
                 setattr(self, name, value)
 
+        self.build_properties()
+
+    def build_properties(self):
         for name, endpoint in six.iteritems(self.endpoints):
             if 'properties' not in endpoint:
                 properties = self.get_path_properties(endpoint['path'])
                 endpoint['properties'] = properties
-                self.endpoint_fields.extend((
-                    p for p in properties if p not in self.endpoint_fields
-                ))
+                self.endpoint_fields.update(properties)
 
     def contribute_to_class(self, cls, name):
         if not self.name:
@@ -75,6 +76,7 @@ class Options(ConnectionMixin):
         for name, endpoint in six.iteritems(self.endpoints):
             endpoint['properties'] = properties + endpoint['properties']
             endpoint['path'] = urljoin(prefix, endpoint['path'].lstrip('/'))
+            self.endpoint_fields.update(endpoint['properties'])
 
     def add_field(self, field):
         if field.name in self.field_names:
@@ -95,6 +97,10 @@ class Options(ConnectionMixin):
     def get_endpoint_path(self, name):
         endpoint = self.get_endpoint(name)
         return endpoint['path']
+
+    def get_endpoint_methods(self, name):
+        endpoint = self.get_endpoint(name)
+        return endpoint['methods']
 
     def resolve_endpoint(self, name, properties):
         endpoint = self.get_endpoint(name)

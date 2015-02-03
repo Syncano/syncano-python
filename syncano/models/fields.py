@@ -10,6 +10,7 @@ from .registry import registry
 class Field(object):
     required = False
     read_only = True
+    blank = True
     default = None
     primary_key = False
 
@@ -22,6 +23,7 @@ class Field(object):
         self.default = kwargs.pop('default', self.default)
         self.required = kwargs.pop('required', self.required)
         self.read_only = kwargs.pop('read_only', self.read_only)
+        self.blank = kwargs.pop('blank', self.blank)
         self.label = kwargs.pop('label', None)
         self.max_length = kwargs.pop('max_length', None)
         self.min_length = kwargs.pop('min_length', None)
@@ -36,7 +38,6 @@ class Field(object):
         return instance._raw_data.get(self.name, self.default)
 
     def __set__(self, instance, value):
-        self.validate(value, instance)
         instance._raw_data[self.name] = self.to_python(value)
 
     def __delete__(self, instance):
@@ -46,9 +47,6 @@ class Field(object):
     def validate(self, value, model_instance):
         if self.required and not value:
             raise self.VaidationError('This field is required.')
-
-        if self.read_only and getattr(model_instance, self.name):
-            raise self.VaidationError('Field is read only.')
 
         if isinstance(value, six.string_types):
             if self.max_length and len(value) > self.max_length:
@@ -197,11 +195,15 @@ class DateField(WritableField):
         if value is None:
             return value
 
+        if isinstance(value, date):
+            return value
+
         if isinstance(value, datetime):
             return value.date()
 
-        if isinstance(value, date):
-            return value
+        if isinstance(value, int):
+            dt = datetime.fromtimestamp(value)
+            return dt.date()
 
         try:
             parsed = self.parse_date(value)
@@ -220,7 +222,7 @@ class DateField(WritableField):
             return date(**kw)
 
     def to_native(self, value):
-        if isinstance(value, datetime.datetime):
+        if isinstance(value, datetime):
             value = value.date()
         return value.isoformat()
 
@@ -237,6 +239,9 @@ class DateTimeField(DateField):
 
         if isinstance(value, date):
             value = datetime(value.year, value.month, value.day)
+
+        if isinstance(value, int):
+            return datetime.fromtimestamp(value)
 
         value = value.split('Z')[0]
 
@@ -288,6 +293,7 @@ class ModelField(Field):
 
     def __init__(self, rel, *args, **kwargs):
         self.rel = rel
+        self.just_pk = kwargs.pop('just_pk', True)
         super(ModelField, self).__init__(*args, **kwargs)
 
     def contribute_to_class(self, cls, name):
@@ -296,7 +302,8 @@ class ModelField(Field):
         if isinstance(self.rel, six.string_types):
 
             def lazy_relation(cls, field):
-                field.rel = registry.get_model_by_name(field.rel)
+                if isinstance(field.rel, six.string_types):
+                    field.rel = registry.get_model_by_name(field.rel)
 
             try:
                 self.rel = registry.get_model_by_name(self.rel)
@@ -332,7 +339,12 @@ class ModelField(Field):
             return value
 
         if isinstance(value, self.rel):
-            return value.to_native()
+            if not self.just_pk:
+                return value.to_native()
+
+            pk_field = value._meta._pk
+            pk_value = getattr(value, pk_field.name)
+            return pk_field.to_native(pk_value)
 
         return value
 

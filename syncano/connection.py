@@ -120,7 +120,11 @@ class Connection(object):
 
         url = self.build_url(path)
         response = method(url, **params)
-        content = response.json()
+
+        try:
+            content = response.json()
+        except ValueError:
+            content = response.text
 
         if is_server_error(response.status_code):
             raise SyncanoRequestError(response.status_code, 'Server error.')

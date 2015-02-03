@@ -79,8 +79,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
             self.pk
         )
 
-    @property
-    def connection(self, **kwargs):
+    def _get_connection(self, **kwargs):
         connection = kwargs.pop('connection', None)
         return connection or self._meta.connection
 
@@ -88,14 +87,16 @@ class Model(six.with_metaclass(ModelMetaclass)):
         self.validate()
         data = self.to_native()
         connection = self._get_connection(**kwargs)
+        method = 'POST'
 
         if self.links:
             endpoint = self.links['self']
-            method = 'PUT'
+            methods = self._meta.get_endpoint_methods('detail')
+            if 'put' in methods:
+                method = 'PUT'
         else:
             properties = self.get_endpoint_data()
             endpoint = self._meta.resolve_endpoint('list', properties)
-            method = 'POST'
 
         request = {'data': data}
         response = connection.request(method, endpoint, **request)
@@ -136,6 +137,8 @@ class Model(six.with_metaclass(ModelMetaclass)):
         for field in self._meta.fields:
             if not field.read_only and field.has_data:
                 value = getattr(self, field.name)
+                if not value and field.blank:
+                    continue
                 data[field.name] = field.to_native(value)
         return data
 
@@ -145,17 +148,6 @@ class Model(six.with_metaclass(ModelMetaclass)):
             if field.has_endpoint_data:
                 properties[field.name] = getattr(self, field.name)
         return properties
-
-
-class Balance(Model):
-
-    class Meta:
-        endpoints = {
-            'list': {
-                'methods': ['get'],
-                'path': '/v1/billing/balance/',
-            }
-        }
 
 
 class Coupon(Model):
@@ -168,12 +160,12 @@ class Coupon(Model):
     )
 
     name = fields.StringField(max_length=32, primary_key=True)
-    percent_off = fields.IntegerField(required=False)
     redeem_by = fields.DateField()
     links = fields.HyperlinkedField(links=LINKS)
+    percent_off = fields.IntegerField(required=False)
     amount_off = fields.FloatField(required=False)
     currency = fields.ChoiceField(choices=CURRENCY_CHOICES)
-    duration = fields.IntegerField()
+    duration = fields.IntegerField(default=0)
 
     class Meta:
         endpoints = {
@@ -193,11 +185,12 @@ class Discount(Model):
         {'type': 'detail', 'name': 'self'},
     )
 
-    instance = fields.Field()
-    coupon = fields.Field()
+    instance = fields.ModelField('Instance')
+    coupon = fields.ModelField('Coupon')
+
     links = fields.HyperlinkedField(links=LINKS)
     start = fields.DateField(read_only=True, required=False)
-    end = fields.DateField(read_only=True, required=True)
+    end = fields.DateField(read_only=True, required=False)
 
     class Meta:
         endpoints = {
@@ -208,17 +201,6 @@ class Discount(Model):
             'list': {
                 'methods': ['post', 'get'],
                 'path': '/v1/billing/discounts/',
-            }
-        }
-
-
-class Info(Model):
-
-    class Meta:
-        endpoints = {
-            'list': {
-                'methods': ['get'],
-                'path': '/v1/billing/info/',
             }
         }
 
@@ -237,12 +219,12 @@ class Instance(Model):
     )
 
     name = fields.StringField(max_length=64, primary_key=True)
+    description = fields.StringField(read_only=False, required=False)
+    role = fields.Field(read_only=True, required=False)
+    owner = fields.ModelField('InstanceAdmin', read_only=True)
     links = fields.HyperlinkedField(links=LINKS)
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
-    role = fields.Field(read_only=True, required=False)
-    owner = fields.ModelField('InstanceAdmin')
-    description = fields.StringField(read_only=False, required=False)
 
     class Meta:
         endpoints = {
@@ -262,7 +244,7 @@ class ApiKey(Model):
         {'type': 'detail', 'name': 'self'},
     ]
 
-    api_key = fields.Field()
+    api_key = fields.StringField(read_only=True, required=False)
     links = fields.HyperlinkedField(links=LINKS)
 
     class Meta:
@@ -290,7 +272,7 @@ class Class(Model):
     description = fields.StringField(read_only=False, required=False)
     objects_count = fields.Field(read_only=True, required=False)
     icon = fields.StringField(read_only=False, max_length=40, required=False)
-    revision = fields.IntegerField(read_only=True, required=True)
+    revision = fields.IntegerField(read_only=True, required=False)
     schema = fields.Field(read_only=False, required=True)
     links = fields.HyperlinkedField(links=LINKS)
     status = fields.Field()

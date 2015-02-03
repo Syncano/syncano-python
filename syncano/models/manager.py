@@ -7,6 +7,13 @@ from syncano.exceptions import SyncanoValueError, SyncanoRequestError
 from .registry import registry
 
 
+def clone(func):
+    def inner(self, *args, **kwargs):
+        self = self._clone()
+        return func(self, *args, **kwargs)
+    return inner
+
+
 class ManagerDescriptor(object):
 
     def __init__(self, manager):
@@ -82,13 +89,18 @@ class Manager(ConnectionMixin):
     # Object actions
 
     def create(self, **kwargs):
-        instance = self.model(**kwargs)
+        attrs = kwargs.copy()
+        attrs.update(self.properties)
+
+        instance = self.model(**attrs)
         instance.save()
+
         return instance
 
     def bulk_create(self, objects):
         return [self.create(**o) for o in objects]
 
+    @clone
     def get(self, *args, **kwargs):
         self.method = 'GET'
         self.endpoint = 'detail'
@@ -103,17 +115,18 @@ class Manager(ConnectionMixin):
         try:
             instance = self.get(*args, **kwargs)
         except self.model.DoesNotExist:
-            defaults.update(self.properties)
             defaults.update(kwargs)
             instance = self.create(**defaults)
         return instance
 
+    @clone
     def delete(self, *args, **kwargs):
         self.method = 'DELETE'
         self.endpoint = 'detail'
         self._filter(*args, **kwargs)
         return self.request()
 
+    @clone
     def update(self, *args, **kwargs):
         self.method = 'PUT'
         self.endpoint = 'detail'
@@ -126,7 +139,6 @@ class Manager(ConnectionMixin):
         try:
             instance = self.update(*args, **kwargs)
         except self.model.DoesNotExist:
-            data.update(self.properties)
             data.update(kwargs)
             instance = self.create(**data)
         return instance
@@ -137,41 +149,47 @@ class Manager(ConnectionMixin):
         self._limit = None
         return self.list(*args, **kwargs)
 
+    @clone
     def list(self, *args, **kwargs):
         self.method = 'GET'
         self.endpoint = 'list'
         self._filter(*args, **kwargs)
-        return self._clone()
+        return self
 
+    @clone
     def page_size(self, value):
         if not value or not isinstance(value, six.integer_types):
             raise SyncanoValueError('page_size value needs to be an int.')
 
         self.query['page_size'] = value
-        return self._clone()
+        return self
 
+    @clone
     def limit(self, value):
         if not value or not isinstance(value, six.integer_types):
             raise SyncanoValueError('Limit value needs to be an int.')
 
         self._limit = value
-        return self._clone()
+        return self
 
+    @clone
     def order_by(self, field):
         if not field or not isinstance(field, six.string_types):
             raise SyncanoValueError('Order by field needs to be a string.')
 
         self.query['order_by'] = field
-        return self._clone()
+        return self
 
+    @clone
     def raw(self):
         self._serialize = False
-        return self._clone()
+        return self
 
+    @clone
     def using(self, connection):
         # ConnectionMixin will validate this
         self.connection = connection
-        return self._clone()
+        return self
 
     # Other stuff
 
