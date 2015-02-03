@@ -13,6 +13,7 @@ class Registry(object):
     def __init__(self, models=None):
         self.models = models or {}
         self.patterns = []
+        self._pending_lookups = {}
 
     def __str__(self):
         return 'Registry: {0}'.format(', '.join(self.models))
@@ -39,7 +40,7 @@ class Registry(object):
                 return cls
 
     def get_model_by_name(self, name):
-        return self.models.get(name)
+        return self.models[name]
 
     def add(self, name, cls):
 
@@ -53,6 +54,12 @@ class Registry(object):
             setattr(self, str(related_name), cls.please)
 
             logger.debug('New model: %s, %s', name, related_name)
+
+        if name in self._pending_lookups:
+            lookups = self._pending_lookups.pop(name)
+            for callback, args, kwargs in lookups:
+                callback(*args, **kwargs)
+
         return self
 
     def set_default_property(self, name, value):

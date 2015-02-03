@@ -45,6 +45,11 @@ class ModelMetaclass(type):
                 endpoint_field = fields.EndpointField()
                 new_class.add_to_class(field_name, endpoint_field)
 
+        # Give the class a docstring -- its definition.
+        if new_class.__doc__ is None:
+            field_names = ', '.join(meta.field_names)
+            new_class.__doc__ = "{0}({1})".format(name, field_names)
+
         registry.add(name, new_class)
         return new_class
 
@@ -236,7 +241,7 @@ class Instance(Model):
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
     role = fields.Field(read_only=True, required=False)
-    owner = fields.Field()
+    owner = fields.ModelField('InstanceAdmin')
     description = fields.StringField(read_only=False, required=False)
 
     class Meta:
@@ -294,6 +299,7 @@ class Class(Model):
 
     class Meta:
         parent = Instance
+        plural_name = 'Classes'
         endpoints = {
             'detail': {
                 'methods': ['delete', 'post', 'patch', 'get'],
@@ -329,6 +335,7 @@ class CodeBox(Model):
 
     class Meta:
         parent = Instance
+        plural_name = 'Code boxes'
         endpoints = {
             'detail': {
                 'methods': ['put', 'get', 'patch', 'delete'],

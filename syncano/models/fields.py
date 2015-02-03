@@ -4,6 +4,7 @@ from datetime import date, datetime
 
 from syncano.exceptions import SyncanoFieldError, SyncanoValueError
 from .manager import RelatedManagerDescriptor
+from .registry import registry
 
 
 class Field(object):
@@ -283,6 +284,59 @@ class HyperlinkedField(Field):
             setattr(cls, name, RelatedManagerDescriptor(self, name, endpoint))
 
 
+class ModelField(Field):
+
+    def __init__(self, rel, *args, **kwargs):
+        self.rel = rel
+        super(ModelField, self).__init__(*args, **kwargs)
+
+    def contribute_to_class(self, cls, name):
+        super(ModelField, self).contribute_to_class(cls, name)
+
+        if isinstance(self.rel, six.string_types):
+
+            def lazy_relation(cls, field):
+                field.rel = registry.get_model_by_name(field.rel)
+
+            try:
+                self.rel = registry.get_model_by_name(self.rel)
+            except LookupError:
+                value = (lazy_relation, (cls, self), {})
+                registry._pending_lookups.setdefault(self.rel, []).append(value)
+            else:
+                lazy_relation(cls, self)
+
+    def validate(self, value, model_instance):
+        super(ModelField, self).validate(value, model_instance)
+
+        if not isinstance(value, (self.rel, dict)):
+            raise self.VaidationError('Value needs to be a {0} instance.'.format(self.rel.__name__))
+
+        if self.required and isinstance(value, self.rel):
+            value.validate()
+
+    def to_python(self, value):
+        if value is None:
+            return value
+
+        if isinstance(value, self.rel):
+            return value
+
+        if isinstance(value, dict):
+            return self.rel(**value)
+
+        raise self.VaidationError("'{0}' has unsupported format.".format(value))
+
+    def to_native(self, value):
+        if value is None:
+            return value
+
+        if isinstance(value, self.rel):
+            return value.to_native()
+
+        return value
+
+
 MAPPING = {
     'string': StringField,
     'integer': IntegerField,
@@ -297,4 +351,5 @@ MAPPING = {
     'writable': WritableField,
     'endpoint': EndpointField,
     'links': HyperlinkedField,
+    'model': ModelField,
 }
