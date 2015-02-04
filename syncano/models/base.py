@@ -442,24 +442,9 @@ class Invitation(Model):
         }
 
 
-class Invoice(Model):
-
-    class Meta:
-        endpoints = {
-            'detail': {
-                'methods': ['get'],
-                'path': '/v1/billing/invoices/{id}/',
-            },
-            'list': {
-                'methods': ['get'],
-                'path': '/v1/billing/invoices/',
-            }
-        }
-
-
 class Object(Model):
+    revision = fields.IntegerField(read_only=True, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
-    revision = fields.IntegerField(read_only=True, required=True)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
     class Meta:
