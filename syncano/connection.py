@@ -49,9 +49,9 @@ class Connection(object):
 
     def __init__(self, host=None, email=None, password=None, api_key=None, **kwargs):
         self.host = host or syncano.API_ROOT
-        self.email = email
-        self.password = password
-        self.api_key = api_key
+        self.email = email or syncano.EMAIL
+        self.password = password or syncano.PASSWORD
+        self.api_key = api_key or syncano.APIKEY
         self.logger = kwargs.get('logger') or syncano.logger
         self.timeout = kwargs.get('timeout') or 30
         self.session = requests.Session()
