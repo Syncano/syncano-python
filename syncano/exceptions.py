@@ -27,7 +27,7 @@ class SyncanoRequestError(SyncanoException):
         self.status_code = status_code
 
         if isinstance(reason, dict):
-            message = reason.get('detail', '')
+            message = reason.get('detail', '') or reason.get('error', '')
             if not message:
                 for name, erros in six.iteritems(reason):
                     message += "{0}: {1}\n".format(name, ', '.join(erros))

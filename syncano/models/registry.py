@@ -38,6 +38,7 @@ class Registry(object):
         for pattern, cls in self.patterns:
             if pattern.match(path):
                 return cls
+        raise LookupError('Invalid path: {0}'.format(path))
 
     def get_model_by_name(self, name):
         return self.models[name]

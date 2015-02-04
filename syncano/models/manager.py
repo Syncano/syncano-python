@@ -4,7 +4,9 @@ import six
 
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoValueError, SyncanoRequestError
+from syncano.utils import get_class_name
 from .registry import registry
+from .options import Options
 
 
 def clone(func):
@@ -226,14 +228,15 @@ class Manager(ConnectionMixin):
 
         return manager
 
-    def serialize(self, data):
+    def serialize(self, data, model=None):
         if not isinstance(data, dict):
             return
 
+        model = model or self.model
         properties = deepcopy(self.properties)
         properties.update(data)
 
-        return self.model(**properties) if self._serialize else data
+        return model(**properties) if self._serialize else data
 
     def request(self, method=None, path=None, **request):
         meta = self.model._meta
@@ -278,3 +281,47 @@ class Manager(ConnectionMixin):
                 break
 
             response = self.request(path=next_url)
+
+
+class WebhookManager(Manager):
+
+    @clone
+    def run(self, *args, **kwargs):
+        self.method = 'GET'
+        self.endpoint = 'run'
+        self._filter(*args, **kwargs)
+        self._serialize = False
+        return self.request()
+
+
+class ObjectManager(Manager):
+
+    def serialize(self, data):
+        instance_name = self.properties.get('instance_name', '')
+        class_name = self.properties.get('class_name', '')
+        model_name = get_class_name(instance_name, class_name, 'object')
+
+        if self.model.__name__ == model_name:
+            return super(ObjectManager, self).serialize(data)
+
+        try:
+            model = registry.get_model_by_name(model_name)
+        except LookupError:
+            definition = self.get_model_definition()
+            model = self.create_model_class(model_name, definition)
+            registry.add(model_name, model)
+
+        return super(ObjectManager, self).serialize(data, model)
+
+    def get_model_definition(self):
+        path = self.model._meta.resolve_endpoint(self.endpoint, self.properties)
+        definition = self.connection.request('OPTIONS', path)
+        definition = definition['actions']['POST']
+        return definition
+
+    def create_model_class(self, name, definition):
+        attrs = {'_raw_schema': definition}
+        base_model = registry.get_model_by_name('Object')
+        cls = type(str(name), (base_model, ), attrs)
+        cls._meta = Options(base_model._meta)
+        return cls

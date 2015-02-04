@@ -27,6 +27,7 @@ setup(
     install_requires=[
         'requests==2.5.1',
         'six==1.9.0',
+        'python-slugify==0.1.0',
     ],
     tests_require=[
         'mock>=1.0.1',

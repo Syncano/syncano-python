@@ -6,7 +6,7 @@ import inspect
 from syncano.exceptions import SyncanoValidationError, SyncanoDoesNotExist
 from . import fields
 from .options import Options
-from .manager import Manager
+from .manager import Manager, WebhookManager, ObjectManager
 from .registry import registry
 
 
@@ -65,6 +65,21 @@ class ModelMetaclass(type):
             (SyncanoDoesNotExist, ),
             {}
         )
+
+
+class ObjectMetaclass(ModelMetaclass):
+
+    def __new__(cls, name, bases, attrs):
+        _raw_schema = attrs.pop('_raw_schema', None)
+        if _raw_schema:
+            for field_name, definition in six.iteritems(_raw_schema):
+                if field_name not in attrs:
+                    field_type = definition.pop('type', 'field')
+                    FieldClass = fields.MAPPING[field_type]
+                    definition['primary_key'] = field_name == 'id'
+                    attrs[field_name] = FieldClass(**definition)
+
+        return super(ObjectMetaclass, cls).__new__(cls, name, bases, attrs)
 
 
 class Model(six.with_metaclass(ModelMetaclass)):
@@ -211,7 +226,6 @@ class Instance(Model):
         {'type': 'list', 'name': 'admins'},
         {'type': 'list', 'name': 'classes'},
         {'type': 'list', 'name': 'codeboxes'},
-        {'type': 'list', 'name': 'codebox_runtimes'},
         {'type': 'list', 'name': 'invitations'},
         {'type': 'list', 'name': 'api_keys'},
         {'type': 'list', 'name': 'triggers'},
@@ -298,7 +312,6 @@ class CodeBox(Model):
     LINKS = (
         {'type': 'detail', 'name': 'self'},
         {'type': 'list', 'name': 'schedules'},
-        {'type': 'list', 'name': 'runtimes'},
     )
     RUNTIME_CHOICES = (
         {'display_name': 'nodejs', 'value': 'nodejs'},
@@ -317,7 +330,8 @@ class CodeBox(Model):
 
     class Meta:
         parent = Instance
-        plural_name = 'Code boxes'
+        name = 'Codebox'
+        plural_name = 'Codeboxes'
         endpoints = {
             'detail': {
                 'methods': ['put', 'get', 'patch', 'delete'],
@@ -336,15 +350,16 @@ class CodeBoxSchedule(Model):
         {'type': 'list', 'name': 'traces'},
     ]
 
-    links = fields.HyperlinkedField(links=LINKS)
-    scheduled_next = fields.DateTimeField(read_only=True, required=False)
-    created_at = fields.DateTimeField(read_only=True, required=False)
     interval_sec = fields.IntegerField(read_only=False, required=False)
-    crontab = fields.StringField(read_only=False, max_length=40, required=False)
-    payload = fields.StringField(read_only=False, required=False)
+    crontab = fields.StringField(max_length=40, required=False)
+    payload = fields.StringField(required=False)
+    created_at = fields.DateTimeField(read_only=True, required=False)
+    scheduled_next = fields.DateTimeField(read_only=True, required=False)
+    links = fields.HyperlinkedField(links=LINKS)
 
     class Meta:
         parent = CodeBox
+        name = 'Schedule'
         endpoints = {
             'detail': {
                 'methods': ['get', 'delete'],
@@ -367,14 +382,15 @@ class CodeBoxTrace(Model):
         {'type': 'detail', 'name': 'self'},
     )
 
-    status = fields.ChoiceField(choices=STATUS_CHOICES)
+    status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
     links = fields.HyperlinkedField(links=LINKS)
-    executed_at = fields.DateTimeField(read_only=False, required=True)
-    result = fields.StringField(read_only=False, required=False)
-    duration = fields.IntegerField(read_only=False, required=True)
+    executed_at = fields.DateTimeField(read_only=True, required=False)
+    result = fields.StringField(read_only=True, required=False)
+    duration = fields.IntegerField(read_only=True, required=False)
 
     class Meta:
         parent = CodeBoxSchedule
+        name = 'Trace'
         endpoints = {
             'detail': {
                 'methods': ['get'],
@@ -397,11 +413,11 @@ class InstanceAdmin(Model):
         {'display_name': 'read', 'value': 'read'},
     )
 
-    first_name = fields.Field(read_only=True, required=False)
-    last_name = fields.Field(read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
-    email = fields.Field(read_only=True, required=False)
+    first_name = fields.StringField(read_only=True, required=False)
+    last_name = fields.StringField(read_only=True, required=False)
+    email = fields.EmailField(read_only=True, required=False)
     role = fields.ChoiceField(choices=ROLE_CHOICES)
+    links = fields.HyperlinkedField(links=LINKS)
 
     class Meta:
         parent = Instance
@@ -417,22 +433,25 @@ class InstanceAdmin(Model):
         }
 
 
-class Invitation(Model):
+class InstanceInvitation(Model):
     LINKS = (
         {'type': 'detail', 'name': 'self'},
     )
 
+    email = fields.EmailField(max_length=254)
+    role = fields.ChoiceField(choices=InstanceAdmin.ROLE_CHOICES)
+    key = fields.StringField(read_only=True, required=False)
+    state = fields.StringField(read_only=True, required=False)
     links = fields.HyperlinkedField(links=LINKS)
     created_at = fields.DateTimeField(read_only=True, required=False)
-    email = fields.EmailField(max_length=254)
-    role = fields.Field(read_only=True, required=False)
-    key = fields.StringField(max_length=40)
+    updated_at = fields.DateTimeField(read_only=True, required=False)
 
     class Meta:
         parent = Instance
+        name = 'Invitation'
         endpoints = {
             'detail': {
-                'methods': ['put', 'get', 'patch', 'delete'],
+                'methods': ['get', 'delete'],
                 'path': '/invitations/{id}/',
             },
             'list': {
@@ -442,10 +461,12 @@ class Invitation(Model):
         }
 
 
-class Object(Model):
+class Object(six.with_metaclass(ObjectMetaclass, Model)):
     revision = fields.IntegerField(read_only=True, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
+
+    please = ObjectManager()
 
     class Meta:
         parent = Class
@@ -461,18 +482,6 @@ class Object(Model):
         }
 
 
-class Runtime(Model):
-
-    class Meta:
-        parent = Instance
-        endpoints = {
-            'list': {
-                'methods': ['get'],
-                'path': '/codeboxes/runtimes/',
-            }
-        }
-
-
 class Trigger(Model):
     LINKS = (
         {'type': 'detail', 'name': 'self'},
@@ -483,12 +492,12 @@ class Trigger(Model):
         {'display_name': 'post_delete', 'value': 'post_delete'},
     )
 
-    codebox = fields.Field(read_only=False, required=True)
+    codebox = fields.IntegerField(label='codebox id')
+    klass = fields.StringField(label='class name')
+    signal = fields.ChoiceField(choices=SIGNAL_CHOICES)
     links = fields.HyperlinkedField(links=LINKS)
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
-    klass = fields.Field(read_only=False, required=True, label='class')
-    signal = fields.ChoiceField(choices=SIGNAL_CHOICES)
 
     class Meta:
         parent = Instance
@@ -510,16 +519,18 @@ class Webhook(Model):
         {'type': 'run', 'name': 'run'},
     )
 
-    codebox = fields.Field(read_only=False, required=True)
-    slug = fields.SlugField(max_length=50)
+    slug = fields.SlugField(max_length=50, primary_key=True)
+    codebox = fields.IntegerField(label='codebox id')
     links = fields.HyperlinkedField(links=LINKS)
+
+    please = WebhookManager()
 
     class Meta:
         parent = Instance
         endpoints = {
             'detail': {
                 'methods': ['put', 'get', 'patch', 'delete'],
-                'path': '/webhooks/{id}/',
+                'path': '/webhooks/{slug}/',
             },
             'list': {
                 'methods': ['post', 'get'],
@@ -527,6 +538,14 @@ class Webhook(Model):
             },
             'run': {
                 'methods': ['get'],
-                'path': '/webhooks/{id}/run/',
+                'path': '/webhooks/{slug}/run/',
             }
         }
+
+    def run(self, **kwargs):
+        if not self.links:
+            raise SyncanoValidationError('Method allowed only on existing model.')
+
+        endpoint = self.links['run']
+        connection = self._get_connection(**kwargs)
+        return connection.request('GET', endpoint)

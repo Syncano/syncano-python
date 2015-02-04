@@ -14,7 +14,9 @@ class Options(ConnectionMixin):
         self.name = None
         self.plural_name = None
         self.related_name = None
+
         self.parent = None
+        self.parent_properties = []
 
         self.endpoints = {}
         self.endpoint_fields = set()
@@ -64,17 +66,24 @@ class Options(ConnectionMixin):
         if not self.parent:
             return
 
-        meta = self.parent._meta
-        name = meta.name.replace(' ', '_').lower()
-        endpoint = meta.get_endpoint('detail')
-        properties = ['{0}_{1}'.format(name, p) for p in endpoint['properties']]
-        prefix = endpoint['path']
+        parent_meta = self.parent._meta
+        parent_name = parent_meta.name.replace(' ', '_').lower()
+        parent_endpoint = parent_meta.get_endpoint('detail')
+        prefix = parent_endpoint['path']
 
-        for old, new in zip(endpoint['properties'], properties):
-            prefix = prefix.replace(old, new)
+        for prop in parent_endpoint.get('properties', []):
+            if prop in parent_meta.field_names and prop not in parent_meta.parent_properties:
+                prop = '{0}_{1}'.format(parent_name, prop)
+            self.parent_properties.append(prop)
+
+        for old, new in zip(parent_endpoint['properties'], self.parent_properties):
+            prefix = prefix.replace(
+                '{{{0}}}'.format(old),
+                '{{{0}}}'.format(new)
+            )
 
         for name, endpoint in six.iteritems(self.endpoints):
-            endpoint['properties'] = properties + endpoint['properties']
+            endpoint['properties'] = self.parent_properties + endpoint['properties']
             endpoint['path'] = urljoin(prefix, endpoint['path'].lstrip('/'))
             self.endpoint_fields.update(endpoint['properties'])
 
