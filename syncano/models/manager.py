@@ -188,8 +188,11 @@ class Manager(ConnectionMixin):
 
     @clone
     def first(self, *args, **kwargs):
-        self._limit = 1
-        return self.list(*args, **kwargs)[0]
+        try:
+            self._limit = 1
+            return self.list(*args, **kwargs)[0]
+        except KeyError:
+            return None
 
     @clone
     def page_size(self, value):
