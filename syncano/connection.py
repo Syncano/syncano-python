@@ -55,6 +55,7 @@ class Connection(object):
         self.logger = kwargs.get('logger') or syncano.logger
         self.timeout = kwargs.get('timeout') or 30
         self.session = requests.Session()
+        self.verify_ssl = kwargs.pop('verify_ssl', True)
 
     def build_params(self, params):
         params = deepcopy(params)
@@ -68,7 +69,7 @@ class Connection(object):
             params['headers']['Authorization'] = 'ApiKey %s' % self.api_key
 
         # We don't need to check SSL cert in DEBUG mode
-        if syncano.DEBUG:
+        if syncano.DEBUG or not self.verify_ssl:
             params['verify'] = False
 
         return params

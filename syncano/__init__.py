@@ -33,7 +33,8 @@ INSTANCE = os.getenv('SYNCANO_INSTANCE', None)
 
 def connect(*args, **kwargs):
     """
-    Connect to Syncano API.
+    Connects to Syncano API.
+
     Usage:
         connection = syncano.connect(email='', password='')
         connection = syncano.connect(api_key='')
