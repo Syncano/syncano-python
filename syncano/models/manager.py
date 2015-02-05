@@ -332,32 +332,40 @@ class WebhookManager(Manager):
 
 class ObjectManager(Manager):
 
+    def create(self, **kwargs):
+        attrs = kwargs.copy()
+        attrs.update(self.properties)
+
+        model = self.get_class_model(kwargs)
+        instance = model(**attrs)
+        instance.save()
+
+        return instance
+
     def serialize(self, data):
-        instance_name = self.properties.get('instance_name', '')
-        class_name = self.properties.get('class_name', '')
+        model = self.get_class_model(self.properties)
+        return super(ObjectManager, self).serialize(data, model)
+
+    def get_class_model(self, properties):
+        instance_name = properties.get('instance_name', '')
+        class_name = properties.get('class_name', '')
         model_name = get_class_name(instance_name, class_name, 'object')
 
         if self.model.__name__ == model_name:
-            return super(ObjectManager, self).serialize(data)
+            return self.model
 
         try:
             model = registry.get_model_by_name(model_name)
         except LookupError:
-            definition = self.get_model_definition()
-            model = self.create_model_class(model_name, definition)
+            schema = self.get_class_schema(properties)
+            model = self.model.create_subclass(model_name, schema)
             registry.add(model_name, model)
 
-        return super(ObjectManager, self).serialize(data, model)
+        return model
 
-    def get_model_definition(self):
-        path = self.model._meta.resolve_endpoint(self.endpoint, self.properties)
-        definition = self.connection.request('OPTIONS', path)
-        definition = definition['actions']['POST']
-        return definition
-
-    def create_model_class(self, name, definition):
-        attrs = {'_raw_schema': definition}
-        base_model = registry.get_model_by_name('Object')
-        cls = type(str(name), (base_model, ), attrs)
-        cls._meta = Options(base_model._meta)
-        return cls
+    def get_class_schema(self, properties):
+        instance_name = properties.get('instance_name', '')
+        class_name = properties.get('class_name', '')
+        parent = self.model._meta.parent
+        class_ = parent.please.get(instance_name, class_name)
+        return class_.schema

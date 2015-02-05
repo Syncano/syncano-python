@@ -35,7 +35,7 @@ class ModelMetaclass(type):
         for n, v in six.iteritems(attrs):
             new_class.add_to_class(n, v)
 
-        if not meta._pk:
+        if not meta.pk:
             pk_field = fields.IntegerField(primary_key=True, read_only=True,
                                            required=False)
             new_class.add_to_class('id', pk_field)
@@ -67,21 +67,6 @@ class ModelMetaclass(type):
         )
 
 
-class ObjectMetaclass(ModelMetaclass):
-
-    def __new__(cls, name, bases, attrs):
-        _raw_schema = attrs.pop('_raw_schema', None)
-        if _raw_schema:
-            for field_name, definition in six.iteritems(_raw_schema):
-                if field_name not in attrs:
-                    field_type = definition.pop('type', 'field')
-                    FieldClass = fields.MAPPING[field_type]
-                    definition['primary_key'] = field_name == 'id'
-                    attrs[field_name] = FieldClass(**definition)
-
-        return super(ObjectMetaclass, cls).__new__(cls, name, bases, attrs)
-
-
 class Model(six.with_metaclass(ModelMetaclass)):
 
     def __init__(self, **kwargs):
@@ -102,17 +87,17 @@ class Model(six.with_metaclass(ModelMetaclass)):
         self.validate()
         data = self.to_native()
         connection = self._get_connection(**kwargs)
+        properties = self.get_endpoint_data()
+        endpoint_name = 'list'
         method = 'POST'
 
-        if self.links:
-            endpoint = self.links['self']
-            methods = self._meta.get_endpoint_methods('detail')
+        if not self.is_new():
+            endpoint_name = 'detail'
+            methods = self._meta.get_endpoint_methods(endpoint_name)
             if 'put' in methods:
                 method = 'PUT'
-        else:
-            properties = self.get_endpoint_data()
-            endpoint = self._meta.resolve_endpoint('list', properties)
 
+        endpoint = self._meta.resolve_endpoint(endpoint_name, properties)
         request = {'data': data}
         response = connection.request(method, endpoint, **request)
 
@@ -140,6 +125,15 @@ class Model(six.with_metaclass(ModelMetaclass)):
             return True
         except SyncanoValidationError:
             return False
+
+    def is_new(self):
+        if 'links' in self._meta.field_names:
+            return not self.links
+
+        if self._meta.pk.read_only and not self.pk:
+            return True
+
+        return False
 
     def to_python(self, data):
         for field in self._meta.fields:
@@ -461,7 +455,7 @@ class InstanceInvitation(Model):
         }
 
 
-class Object(six.with_metaclass(ObjectMetaclass, Model)):
+class Object(Model):
     revision = fields.IntegerField(read_only=True, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
@@ -480,6 +474,27 @@ class Object(six.with_metaclass(ObjectMetaclass, Model)):
                 'path': '/objects/',
             }
         }
+
+    @classmethod
+    def create_subclass(cls, name, schema):
+        attrs = {'Meta': cls._meta}
+
+        for field in schema:
+            field_type = field.get('type')
+            FieldClass = fields.MAPPING[field_type]
+            attrs[field['name']] = FieldClass(required=False, read_only=False)
+
+        return type(str(name), (cls, ), attrs)
+
+    @classmethod
+    def get_or_create_subclass(cls, name, schema):
+        try:
+            subclass = registry.get_model_by_name(name)
+        except LookupError:
+            subclass = cls.create_subclass(name, schema)
+            registry.add(name, subclass)
+
+        return subclass
 
 
 class Trigger(Model):

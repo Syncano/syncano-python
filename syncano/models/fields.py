@@ -77,10 +77,10 @@ class Field(object):
             self.label = self.name.replace('_', ' ')
 
         if self.primary_key:
-            if cls._meta._pk:
+            if cls._meta.pk:
                 raise SyncanoValueError('Multiple pk fiedls detected.')
 
-            cls._meta._pk = self
+            cls._meta.pk = self
             setattr(cls, 'pk', self)
 
         self.model = cls
@@ -347,7 +347,7 @@ class ModelField(Field):
             if not self.just_pk:
                 return value.to_native()
 
-            pk_field = value._meta._pk
+            pk_field = value._meta.pk
             pk_value = getattr(value, pk_field.name)
             return pk_field.to_native(pk_value)
 
@@ -356,6 +356,10 @@ class ModelField(Field):
 
 MAPPING = {
     'string': StringField,
+    'text': StringField,
+    'file': StringField,
+    'ref': StringField,
+    'reference': StringField,
     'integer': IntegerField,
     'float': FloatField,
     'boolean': BooleanField,

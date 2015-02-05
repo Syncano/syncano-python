@@ -17,6 +17,7 @@ class Options(ConnectionMixin):
 
         self.parent = None
         self.parent_properties = []
+        self.parent_resolved = False
 
         self.endpoints = {}
         self.endpoint_fields = set()
@@ -24,7 +25,7 @@ class Options(ConnectionMixin):
         self.fields = []
         self.field_names = []
 
-        self._pk = False
+        self.pk = None
 
         if meta:
             meta_attrs = meta.__dict__.copy()
@@ -32,7 +33,7 @@ class Options(ConnectionMixin):
                 if name.startswith('_') or not hasattr(self, name):
                     del meta_attrs[name]
 
-            for name, value in meta_attrs.iteritems():
+            for name, value in six.iteritems(meta_attrs):
                 setattr(self, name, value)
 
         self.build_properties()
@@ -63,7 +64,7 @@ class Options(ConnectionMixin):
         setattr(cls, name, self)
 
     def resolve_parent_data(self):
-        if not self.parent:
+        if not self.parent or self.parent_resolved:
             return
 
         parent_meta = self.parent._meta
@@ -86,6 +87,8 @@ class Options(ConnectionMixin):
             endpoint['properties'] = self.parent_properties + endpoint['properties']
             endpoint['path'] = urljoin(prefix, endpoint['path'].lstrip('/'))
             self.endpoint_fields.update(endpoint['properties'])
+
+        self.parent_resolved = True
 
     def add_field(self, field):
         if field.name in self.field_names:
