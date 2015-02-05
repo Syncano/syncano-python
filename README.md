@@ -126,3 +126,20 @@ instance.name = 'test'
 insatcne.save(connection=second_connection)
 
 ```
+
+
+### Environmental variables
+
+Some settings can be overwritten via environmental variables e.g:
+
+```bash
+$ export SYNCANO_LOGLEVEL=DEBUG
+$ export SYNCANO_APIROOT='https://127.0.0.1/'
+$ export SYNCANO_EMAIL=admin@syncano.com
+$ export SYNCANO_PASSWORD=dummy
+$ export SYNCANO_APIKEY=dummy123
+$ export SYNCANO_INSTANCE=test
+
+```
+
+`DEBUG` loglevel will disbale SSL cert check.
