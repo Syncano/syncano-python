@@ -34,6 +34,9 @@ INSTANCE = os.getenv('SYNCANO_INSTANCE', None)
 def connect(*args, **kwargs):
     """
     Connect to Syncano API.
+    Usage:
+        connection = syncano.connect(email='', password='')
+        connection = syncano.connect(api_key='')
     """
     from syncano.connection import default_connection
     from syncano.models import registry
@@ -45,6 +48,12 @@ def connect(*args, **kwargs):
 
 
 def connect_instance(name=None, *args, **kwargs):
+    """
+    Connects with Syncano API and tries to load instance with provided name.
+    Usage:
+        connection = syncano.connect_instancet('insatce name', email='', password='')
+        connection = syncano.connect_instancet('insatce name', api_key='')
+    """
     name = name or INSTANCE
     connection = connect(*args, **kwargs)
     return connection.Instance.please.get(name)
