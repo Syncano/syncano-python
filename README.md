@@ -12,6 +12,9 @@ connection = syncano.connect(email='', password='')
 
 # via API key
 connection = syncano.connect(api_key='')
+
+# without SSL cert check
+connection = syncano.connect(api_key='', verify_ssl=False)
 ```
 
 
