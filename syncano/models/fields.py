@@ -2,6 +2,7 @@ import re
 import six
 from datetime import date, datetime
 
+from syncano import logger
 from syncano.exceptions import SyncanoFieldError, SyncanoValueError
 from .manager import RelatedManagerDescriptor
 from .registry import registry
@@ -38,6 +39,10 @@ class Field(object):
         return instance._raw_data.get(self.name, self.default)
 
     def __set__(self, instance, value):
+        if self.read_only and value and instance._raw_data.get(self.name):
+            logger.warning('Field "{0}"" is read only, '
+                           'your changes will not be saved.'.format(self.name))
+
         instance._raw_data[self.name] = self.to_python(value)
 
     def __delete__(self, instance):
