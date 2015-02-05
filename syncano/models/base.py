@@ -231,6 +231,7 @@ class Instance(Model):
     role = fields.Field(read_only=True, required=False)
     owner = fields.ModelField('InstanceAdmin', read_only=True)
     links = fields.HyperlinkedField(links=LINKS)
+    metadata = fields.Field(read_only=False, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
@@ -276,14 +277,16 @@ class Class(Model):
     ]
 
     name = fields.StringField(max_length=64, primary_key=True)
-    color = fields.StringField(read_only=False, min_length=7, required=False, max_length=7)
     description = fields.StringField(read_only=False, required=False)
     objects_count = fields.Field(read_only=True, required=False)
-    icon = fields.StringField(read_only=False, max_length=40, required=False)
-    revision = fields.IntegerField(read_only=True, required=False)
+
     schema = fields.Field(read_only=False, required=True)
     links = fields.HyperlinkedField(links=LINKS)
     status = fields.Field()
+    metadata = fields.Field(read_only=False, required=False)
+
+    revision = fields.IntegerField(read_only=True, required=False)
+    expected_revision = fields.IntegerField(read_only=False, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
 
