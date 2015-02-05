@@ -8,6 +8,9 @@ from syncano.utils import get_class_name
 from .registry import registry
 from .options import Options
 
+# The maximum number of items to display in a Manager.__repr__
+REPR_OUTPUT_SIZE = 20
+
 
 def clone(func):
     def inner(self, *args, **kwargs):
@@ -68,7 +71,10 @@ class Manager(ConnectionMixin):
         self._connection = None
 
     def __repr__(self):
-        return self.iterator()
+        data = list(self[:REPR_OUTPUT_SIZE + 1])
+        if len(data) > REPR_OUTPUT_SIZE:
+            data[-1] = '...(remaining elements truncated)...'
+        return repr(data)
 
     def __str__(self):
         return '<Manager: {0}>'.format(self.model.__name__)
@@ -87,6 +93,27 @@ class Manager(ConnectionMixin):
 
     def __nonzero__(self):      # Python 2 compatibility
         return type(self).__bool__(self)
+
+    def __getitem__(self, k):
+        """
+        Retrieves an item or slice from the set of results.
+        """
+        if not isinstance(k, (slice,) + six.integer_types):
+            raise TypeError
+        assert ((not isinstance(k, slice) and (k >= 0)) or
+                (isinstance(k, slice) and (k.start is None or k.start >= 0) and
+                 (k.stop is None or k.stop >= 0))), \
+            "Negative indexing is not supported."
+
+        manager = self._clone()
+
+        if isinstance(k, slice):
+            if k.stop is not None:
+                manager.limit(int(k.stop)+1)
+            return list(manager)[k.start:k.stop:k.step]
+
+        manager.limit(k+1)
+        return list(manager)[k]
 
     # Object actions
 
@@ -147,6 +174,7 @@ class Manager(ConnectionMixin):
 
     # List actions
 
+    @clone
     def all(self, *args, **kwargs):
         self._limit = None
         return self.list(*args, **kwargs)
@@ -157,6 +185,11 @@ class Manager(ConnectionMixin):
         self.endpoint = 'list'
         self._filter(*args, **kwargs)
         return self
+
+    @clone
+    def first(self, *args, **kwargs):
+        self._limit = 1
+        return self.list(*args, **kwargs)[0]
 
     @clone
     def page_size(self, value):
