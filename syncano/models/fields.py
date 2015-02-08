@@ -359,7 +359,7 @@ MAPPING = {
     'text': StringField,
     'file': StringField,
     'ref': StringField,
-    'reference': StringField,
+    'reference': IntegerField,
     'integer': IntegerField,
     'float': FloatField,
     'boolean': BooleanField,
