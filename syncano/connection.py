@@ -78,6 +78,8 @@ class Connection(object):
         if not isinstance(path, six.string_types):
             raise SyncanoValueError('"path" should be a string.')
 
+        path, query = path.split('?', 1)
+
         if path.startswith(self.host):
             return path
 
@@ -86,6 +88,9 @@ class Connection(object):
 
         if path.startswith('/'):
             path = path[1:]
+
+        if query:
+            path = '{0}?{1}'.format(path, query)
 
         return urljoin(self.host, path)
 
