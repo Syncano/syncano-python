@@ -52,7 +52,7 @@ class Registry(object):
             self.patterns.extend(patterns)
 
             setattr(self, str(name), cls)
-            setattr(self, str(related_name), cls.please)
+            setattr(self, str(related_name), cls.please.all())
 
             logger.debug('New model: %s, %s', name, related_name)
 
