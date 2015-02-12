@@ -1,0 +1,10 @@
+setup.py
+syncano/__init__.py
+syncano/callbacks.py
+syncano/client.py
+syncano/exceptions.py
+syncano.egg-info/PKG-INFO
+syncano.egg-info/SOURCES.txt
+syncano.egg-info/dependency_links.txt
+syncano.egg-info/requires.txt
+syncano.egg-info/top_level.txt

@@ -1,0 +1,15 @@
+Metadata-Version: 1.1
+Name: syncano
+Version: 0.6.2
+Summary: Python Library for syncano.com api
+Home-page: http://syncano.com
+Author: Piotr Czesław Kalmus
+Author-email: piotr.kalmus@syncano.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.3
