@@ -32,6 +32,7 @@ Creating, Modifing, Listing, Deleting Projects
 
 ::
 
+  from syncano import client.SyncanoApi
   with  SyncanoApi(instance_name, apikey) as syncano:
 
     project = syncano.project_new('test', message_id=1)
@@ -44,7 +45,7 @@ Creating, Modifing, Listing, Deleting Projects
 or
 
 ::
-
+   from syncano import client.SyncanoApi as SyncanoApi
    with  SyncanoApi(instance_name, apikey) as syncano:
 
     project = syncano.project.new('test', message_id=1)
@@ -60,6 +61,7 @@ Subscribe and listen to notifications, and pings
 
 ::
 
+  from syncano import client.SyncanoAsyncApi as SyncanoAsyncApi
   with  SyncanoAsyncApi(instance_name, apikey) as syncano:
       syncano.subscription_subscribe_project(your_project_id)
       while True:
@@ -72,7 +74,7 @@ Creating message callback, that is printing all messages from server
 --------------------------------------------------------------------
 
 ::
-
+    from syncano import client.SyncanoAsyncApi as SyncanoAsyncApi
     class PrintCallback(callbacks.JsonCallback):
 
         def process_message(self, received):
@@ -88,7 +90,7 @@ Using ObjectCallback to get "object like" response with methods
 ---------------------------------------------------------------
 
 ::
-
+    from syncano import client.SyncanoApi as SyncanoApi
     with SyncanoApi(instance_name, apikey, callback_handler=callbacks.ObjectCallback) as syncano:
         project = syncano.project.new(name)
         project.update(new_name)
