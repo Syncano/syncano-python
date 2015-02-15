@@ -46,6 +46,7 @@ Creating, Modifing, Listing, Deleting Projects
 or
 
 ::
+
    from syncano import client
    SyncanoApi = client.SyncanoApi
    with  SyncanoApi(instance_name, apikey) as syncano:
@@ -77,6 +78,7 @@ Creating message callback, that is printing all messages from server
 --------------------------------------------------------------------
 
 ::
+
     from syncano import client
     SyncanoApi = client.SyncanoApi
     class PrintCallback(callbacks.JsonCallback):
@@ -94,6 +96,7 @@ Using ObjectCallback to get "object like" response with methods
 ---------------------------------------------------------------
 
 ::
+
     from syncano import client
     SyncanoApi = client.SyncanoApi
     with SyncanoApi(instance_name, apikey, callback_handler=callbacks.ObjectCallback) as syncano:
