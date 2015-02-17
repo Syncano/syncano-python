@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import six
 import inspect
 
@@ -45,11 +43,7 @@ class ModelMetaclass(type):
                 endpoint_field = fields.EndpointField()
                 new_class.add_to_class(field_name, endpoint_field)
 
-        # Give the class a docstring -- its definition.
-        if new_class.__doc__ is None:
-            field_names = '\n\t- '.join(meta.field_names)
-            new_class.__doc__ = "{0}:\n\t- {1}".format(name, field_names)
-
+        new_class.build_doc(name, meta)
         registry.add(name, new_class)
         return new_class
 
@@ -66,6 +60,14 @@ class ModelMetaclass(type):
             {}
         )
 
+    def build_doc(cls, name, meta):
+        # Give the class a docstring -- its definition.
+        if cls.__doc__ is not None:
+            return
+
+        field_names = ['{0} = {1}'.format(f.name, f.__class__.__name__) for f in meta.fields]
+        cls.__doc__ = '{0}:\n\t{1}'.format(name, '\n\t'.join(field_names))
+
 
 class Model(six.with_metaclass(ModelMetaclass)):
 
@@ -78,6 +80,12 @@ class Model(six.with_metaclass(ModelMetaclass)):
             self.__class__.__name__,
             self.pk
         )
+
+    def __str__(self):
+        return repr(self)
+
+    def __unicode__(self):
+        return six.u(repr(self))
 
     def _get_connection(self, **kwargs):
         connection = kwargs.pop('connection', None)
