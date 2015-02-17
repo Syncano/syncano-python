@@ -18,6 +18,8 @@ class Field(object):
     has_data = True
     has_endpoint_data = False
 
+    creation_counter = 0
+
     def __init__(self, name=None, **kwargs):
         self.name = name
         self.model = None
@@ -32,8 +34,25 @@ class Field(object):
         self.has_endpoint_data = kwargs.pop('has_endpoint_data', self.has_endpoint_data)
         self.primary_key = kwargs.pop('primary_key', self.primary_key)
 
+        # Adjust the appropriate creation counter, and save our local copy.
+        self.creation_counter = Field.creation_counter
+        Field.creation_counter += 1
+
     def __repr__(self):
         return '<{0}: {1}>'.format(self.__class__.__name__, self.name)
+
+    def __eq__(self, other):
+        if isinstance(other, Field):
+            return self.creation_counter == other.creation_counter
+        return NotImplemented
+
+    def __lt__(self, other):
+        if isinstance(other, Field):
+            return self.creation_counter < other.creation_counter
+        return NotImplemented
+
+    def __hash__(self):
+        return hash(self.creation_counter)
 
     def __str__(self):
         return repr(self)

@@ -95,7 +95,7 @@ class Options(ConnectionMixin):
             raise SyncanoValueError('Field "{0}" already defined'.format(field.name))
 
         self.field_names.append(field.name)
-        self.fields.append(field)
+        self.fields.insert(field.creation_counter, field)
 
     def get_endpoint(self, name):
         if name not in self.endpoints:
