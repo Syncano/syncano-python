@@ -239,7 +239,7 @@ class Instance(Model):
     name = fields.StringField(max_length=64, primary_key=True)
     description = fields.StringField(read_only=False, required=False)
     role = fields.Field(read_only=True, required=False)
-    owner = fields.ModelField('InstanceAdmin', read_only=True)
+    owner = fields.ModelField('Admin', read_only=True)
     links = fields.HyperlinkedField(links=LINKS)
     metadata = fields.Field(read_only=False, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
@@ -410,7 +410,7 @@ class CodeBoxTrace(Model):
         }
 
 
-class InstanceAdmin(Model):
+class Admin(Model):
     LINKS = (
         {'type': 'detail', 'name': 'self'},
     )
@@ -446,7 +446,7 @@ class InstanceInvitation(Model):
     )
 
     email = fields.EmailField(max_length=254)
-    role = fields.ChoiceField(choices=InstanceAdmin.ROLE_CHOICES)
+    role = fields.ChoiceField(choices=Admin.ROLE_CHOICES)
     key = fields.StringField(read_only=True, required=False)
     state = fields.StringField(read_only=True, required=False)
     links = fields.HyperlinkedField(links=LINKS)
