@@ -35,6 +35,12 @@ class Field(object):
     def __repr__(self):
         return '<{0}: {1}>'.format(self.__class__.__name__, self.name)
 
+    def __str__(self):
+        return repr(self)
+
+    def __unicode__(self):
+        return six.u(repr(self))
+
     def __get__(self, instance, owner):
         return instance._raw_data.get(self.name, self.default)
 
