@@ -1,5 +1,6 @@
 import re
 import six
+from bisect import bisect
 from urlparse import urljoin
 
 from syncano.connection import ConnectionMixin
@@ -95,7 +96,7 @@ class Options(ConnectionMixin):
             raise SyncanoValueError('Field "{0}" already defined'.format(field.name))
 
         self.field_names.append(field.name)
-        self.fields.insert(field.creation_counter, field)
+        self.fields.insert(bisect(self.fields, field), field)
 
     def get_endpoint(self, name):
         if name not in self.endpoints:
