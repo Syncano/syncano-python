@@ -63,7 +63,7 @@ class ModelMetaclass(type):
         )
 
     def build_doc(cls, name, meta):
-        # Give the class a docstring -- its definition.
+        '''Give the class a docstring if it\'s not defined.'''
         if cls.__doc__ is not None:
             return
 
