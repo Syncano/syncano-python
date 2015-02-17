@@ -78,7 +78,10 @@ class Connection(object):
         if not isinstance(path, six.string_types):
             raise SyncanoValueError('"path" should be a string.')
 
-        path, query = path.split('?', 1)
+        query = None
+
+        if '?' in path:
+            path, query = path.split('?', 1)
 
         if path.startswith(self.host):
             return path
