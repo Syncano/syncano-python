@@ -7,3 +7,5 @@ dist
 .coverage
 coverage
 run_it.py
+*.sublime-project
+*.sublime-workspace
