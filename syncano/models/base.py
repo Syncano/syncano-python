@@ -206,10 +206,9 @@ class Discount(Model):
 
     instance = fields.ModelField('Instance')
     coupon = fields.ModelField('Coupon')
-
-    links = fields.HyperlinkedField(links=LINKS)
     start = fields.DateField(read_only=True, required=False)
     end = fields.DateField(read_only=True, required=False)
+    links = fields.HyperlinkedField(links=LINKS)
 
     class Meta:
         endpoints = {

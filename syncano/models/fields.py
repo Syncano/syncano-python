@@ -99,7 +99,7 @@ class Field(object):
             self.name = name
 
         if not self.label:
-            self.label = self.name.replace('_', ' ')
+            self.label = self.name.replace('_', ' ').capitalize()
 
         if self.primary_key:
             if cls._meta.pk:
