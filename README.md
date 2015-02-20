@@ -121,12 +121,12 @@ connection = syncano.connect(email='', password='')
 second_connection = syncano.connect(email='', password='')
 
 # ORM
-instances = connection.insatcnes.using(second_connection).list()
+instances = connection.instances.using(second_connection).list()
 
 # Model instance
-insatnce = Instance()
+instance = Instance()
 instance.name = 'test'
-insatcne.save(connection=second_connection)
+instance.save(connection=second_connection)
 
 ```
 
