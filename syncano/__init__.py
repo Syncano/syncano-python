@@ -52,8 +52,8 @@ def connect_instance(name=None, *args, **kwargs):
     """
     Connects with Syncano API and tries to load instance with provided name.
     Usage:
-        connection = syncano.connect_instancet('insatce name', email='', password='')
-        connection = syncano.connect_instancet('insatce name', api_key='')
+        my_instance = syncano.connect_instance('my_instance_name', email='', password='')
+        my_instance = syncano.connect_instance('my_instance_name', api_key='')
     """
     name = name or INSTANCE
     connection = connect(*args, **kwargs)
