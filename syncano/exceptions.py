@@ -29,8 +29,10 @@ class SyncanoRequestError(SyncanoException):
         if isinstance(reason, dict):
             message = reason.get('detail', '') or reason.get('error', '')
             if not message:
-                for name, erros in six.iteritems(reason):
-                    message += "{0}: {1}\n".format(name, ', '.join(erros))
+                for name, value in six.iteritems(reason):
+                    if isinstance(value, (list, dict)):
+                        value = ', '.join(value)
+                    message += '{0}: {1}\n'.format(name, value)
             reason = message
 
         super(SyncanoRequestError, self).__init__(reason, *args)
