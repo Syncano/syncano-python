@@ -6,7 +6,6 @@ from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoValueError, SyncanoRequestError
 from syncano.utils import get_class_name
 from .registry import registry
-from .options import Options
 
 # The maximum number of items to display in a Manager.__repr__
 REPR_OUTPUT_SIZE = 20
