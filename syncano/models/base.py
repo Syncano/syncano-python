@@ -230,6 +230,7 @@ class Instance(Model):
         {'type': 'list', 'name': 'classes'},
         {'type': 'list', 'name': 'codeboxes'},
         {'type': 'list', 'name': 'invitations'},
+        {'type': 'list', 'name': 'runtimes'},
         {'type': 'list', 'name': 'api_keys'},
         {'type': 'list', 'name': 'triggers'},
         {'type': 'list', 'name': 'webhooks'},
@@ -350,7 +351,7 @@ class CodeBox(Model):
         }
 
 
-class CodeBoxSchedule(Model):
+class Schedule(Model):
     LINKS = [
         {'type': 'detail', 'name': 'self'},
         {'type': 'list', 'name': 'traces'},
@@ -365,7 +366,6 @@ class CodeBoxSchedule(Model):
 
     class Meta:
         parent = CodeBox
-        name = 'Schedule'
         endpoints = {
             'detail': {
                 'methods': ['get', 'delete'],
@@ -378,7 +378,7 @@ class CodeBoxSchedule(Model):
         }
 
 
-class CodeBoxTrace(Model):
+class Trace(Model):
     STATUS_CHOICES = (
         {'display_name': 'Success', 'value': 'success'},
         {'display_name': 'Failure', 'value': 'failure'},
@@ -395,8 +395,7 @@ class CodeBoxTrace(Model):
     duration = fields.IntegerField(read_only=True, required=False)
 
     class Meta:
-        parent = CodeBoxSchedule
-        name = 'Trace'
+        parent = Schedule
         endpoints = {
             'detail': {
                 'methods': ['get'],
