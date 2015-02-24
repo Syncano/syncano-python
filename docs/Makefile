@@ -6,7 +6,7 @@ SPHINXOPTS      =
 SPHINXBUILD     = sphinx-build
 PAPER           =
 BUILDDIR        = build
-GIT_BRANCH_NAME = $(git symbolic-ref --short HEAD)
+GIT_BRANCH_NAME = $(shell git symbolic-ref --short HEAD)
 
 # User-friendly check for sphinx-build
 ifeq ($(shell which $(SPHINXBUILD) >/dev/null 2>&1; echo $$?), 1)
@@ -179,10 +179,10 @@ pseudoxml:
 
 gh-pages:
 	make html
-	cd ..
 	git checkout gh-pages
-	@echo $(pwd)
 	git checkout $(GIT_BRANCH_NAME)
+	# @echo "xxx $(GIT_BRANCH_NAME)"
+	# git checkout $(GIT_BRANCH_NAME)
     # git checkout gh-pages
     # rm -rf build _sources _static
     # git checkout master $(GH_PAGES_SOURCES)
