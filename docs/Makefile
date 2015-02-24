@@ -180,6 +180,10 @@ pseudoxml:
 gh-pages:
 	make html
 	git checkout gh-pages
+	cd .. && rm -rf _sources _static
+	mv -fv build/html/* ../
+	cd .. && rm -rf docs
+	cd .. && git add -A
 	git checkout $(GIT_BRANCH_NAME)
 	# @echo "xxx $(GIT_BRANCH_NAME)"
 	# git checkout $(GIT_BRANCH_NAME)
