@@ -1,5 +1,7 @@
+import json
 import re
 import six
+import validictory
 from datetime import date, datetime
 
 from syncano import logger
@@ -379,6 +381,36 @@ class ModelField(Field):
         return value
 
 
+class JSONField(WritableField):
+    schema = None
+
+    def __init__(self, *args, **kwargs):
+        self.schema = kwargs.pop('schema', None) or self.schema
+        super(JSONField, self).__init__(*args, **kwargs)
+
+    def validate(self, value, model_instance):
+        super(JSONField, self).validate(value, model_instance)
+        if self.schema:
+            try:
+                validictory.validate(value, self.schema)
+            except ValueError as e:
+                raise self.VaidationError(e)
+
+    def to_python(self, value):
+        if isinstance(value, six.string_types):
+            value = json.loads(value)
+        return value
+
+    def to_native(self, value):
+        if not isinstance(value, six.string_types):
+            value = json.dumps(value)
+        return value
+
+
+class SchemaField(JSONField):
+    pass
+
+
 MAPPING = {
     'string': StringField,
     'text': StringField,
@@ -398,4 +430,6 @@ MAPPING = {
     'endpoint': EndpointField,
     'links': HyperlinkedField,
     'model': ModelField,
+    'json': JSONField,
+    'schema': SchemaField,
 }

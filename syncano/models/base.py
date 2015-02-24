@@ -241,7 +241,7 @@ class Instance(Model):
     role = fields.Field(read_only=True, required=False)
     owner = fields.ModelField('Admin', read_only=True)
     links = fields.HyperlinkedField(links=LINKS)
-    metadata = fields.Field(read_only=False, required=False)
+    metadata = fields.JSONField(read_only=False, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
@@ -290,10 +290,10 @@ class Class(Model):
     description = fields.StringField(read_only=False, required=False)
     objects_count = fields.Field(read_only=True, required=False)
 
-    schema = fields.Field(read_only=False, required=True)
+    schema = fields.SchemaField(read_only=False, required=True)
     links = fields.HyperlinkedField(links=LINKS)
     status = fields.Field()
-    metadata = fields.Field(read_only=False, required=False)
+    metadata = fields.JSONField(read_only=False, required=False)
 
     revision = fields.IntegerField(read_only=True, required=False)
     expected_revision = fields.IntegerField(read_only=False, required=False)
