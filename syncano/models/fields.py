@@ -408,7 +408,44 @@ class JSONField(WritableField):
 
 
 class SchemaField(JSONField):
-    pass
+    schema = {
+        'type': 'array',
+        'items': {
+            'type': 'object',
+            'properties': {
+                'name': {
+                    'type': 'string',
+                    'required': True,
+                },
+                'type': {
+                    'type': 'string',
+                    'required': True,
+                    'enum': [
+                        'string',
+                        'text',
+                        'integer',
+                        'float',
+                        'boolean',
+                        'datetime',
+                        'file',
+                        'reference'
+                    ],
+                },
+                'order_index': {
+                    'type': 'boolean',
+                    'required': False,
+                },
+                'filter_index': {
+                    'type': 'boolean',
+                    'required': False,
+                },
+                'target': {
+                    'type': 'string',
+                    'required': False,
+                }
+            }
+        }
+    }
 
 
 MAPPING = {
