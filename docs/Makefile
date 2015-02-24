@@ -182,17 +182,7 @@ gh-pages:
 	git checkout gh-pages
 	cd .. && rm -rf _sources _static
 	mv -fv build/html/* ../
-	cd .. && rm -rf docs
 	cd .. && git add -A
+	cd .. && git commit -am "Generated gh-pages for `git log master -1 --pretty=short --abbrev-commit`"
+	cd .. && git push origin gh-pages
 	git checkout $(GIT_BRANCH_NAME)
-	# @echo "xxx $(GIT_BRANCH_NAME)"
-	# git checkout $(GIT_BRANCH_NAME)
-    # git checkout gh-pages
-    # rm -rf build _sources _static
-    # git checkout master $(GH_PAGES_SOURCES)
-    # git reset HEAD
-    # make html
-    # mv -fv build/html/* ./
-    # rm -rf $(GH_PAGES_SOURCES) build
-    # git add -A
-    # git ci -m "Generated gh-pages for `git log master -1 --pretty=short --abbrev-commit`" && git push origin gh-pages ; git checkout master
