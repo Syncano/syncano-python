@@ -183,6 +183,6 @@ gh-pages:
 	cd .. && rm -rf _sources _static
 	mv -fv build/html/* ../
 	cd .. && git add -A
-	cd .. && git commit -am "Generated gh-pages for `git log master -1 --pretty=short --abbrev-commit`"
+	cd .. && git commit -am "Generated gh-pages."
 	cd .. && git push origin gh-pages
 	git checkout $(GIT_BRANCH_NAME)
