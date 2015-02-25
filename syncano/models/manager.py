@@ -38,7 +38,7 @@ class RelatedManagerDescriptor(object):
 
     def __get__(self, instance, owner=None):
         if instance is None:
-            raise AttributeError("Manager is accessible only via {0} instances.".format(owner.__name__))
+            raise AttributeError("RelatedManager is accessible only via {0} instances.".format(owner.__name__))
 
         links = getattr(instance, self.field.name)
         path = links[self.name]
@@ -368,3 +368,74 @@ class ObjectManager(Manager):
         parent = self.model._meta.parent
         class_ = parent.please.get(instance_name, class_name)
         return class_.schema
+
+
+class SchemaManager(object):
+
+    def __init__(self, schema=None):
+        self.schema = schema or []
+
+    def __str__(self):
+        return str(self.schema)
+
+    def __repr__(self):
+        return '<SchemaManager>'
+
+    def __getitem__(self, key):
+        if isinstance(key, int):
+            return self.schema[key]
+
+        if isinstance(key, six.string_types):
+            for v in self.schema:
+                if v.get('name') == key:
+                    return v
+
+        raise KeyError
+
+    def __setitem__(self, key, value):
+        value = deepcopy(value)
+        value['name'] = key
+        self.remove(key)
+        self.add(value)
+
+    def __delitem__(self, key):
+        self.remove(key)
+
+    def __iter__(self):
+        return iter(self.schema)
+
+    def __contains__(self, item):
+        if not self.schema:
+            return False
+        return item in self.schema
+
+    def set(self, value):
+        self.schema = value
+
+    def add(self, *objects):
+        self.schema.extend(objects)
+
+    def remove(self, *names):
+        values = [v for v in self.schema if v.get('name') not in names]
+        self.set(values)
+
+    def clear(self):
+        self.set([])
+
+    def set_index(self, field, index_type):
+        pass
+
+    def set_order_index(self, field):
+        self.set_index(field, 'order_index')
+
+    def set_filter_index(self, field):
+        self.set_index(field, 'filter_index')
+
+    def remove_index(field, index_type):
+        pass
+
+    def remove_order_index(self, field):
+        self.remove_index(field, 'order_index')
+
+    def remove_filter_index(self, field):
+        self.remove_index(field, 'filter_index')

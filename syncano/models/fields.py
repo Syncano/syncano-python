@@ -6,7 +6,7 @@ from datetime import date, datetime
 
 from syncano import logger
 from syncano.exceptions import SyncanoFieldError, SyncanoValueError
-from .manager import RelatedManagerDescriptor
+from .manager import RelatedManagerDescriptor, SchemaManager
 from .registry import registry
 
 
@@ -446,6 +446,19 @@ class SchemaField(JSONField):
             }
         }
     }
+
+    def to_python(self, value):
+        if isinstance(value, SchemaManager):
+            return value
+
+        value = super(SchemaField, self).to_python(value)
+        return SchemaManager(value)
+
+    def to_native(self, value):
+        if isinstance(value, SchemaManager):
+            value = value.schema
+
+        return super(SchemaField, self).to_native(value)
 
 
 MAPPING = {
