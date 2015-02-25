@@ -408,6 +408,7 @@ class JSONField(WritableField):
 
 
 class SchemaField(JSONField):
+    not_indexable_types = ['text', 'file']
     schema = {
         'type': 'array',
         'items': {
@@ -452,6 +453,15 @@ class SchemaField(JSONField):
             value = value.schema
 
         super(SchemaField, self).validate(value, model_instance)
+
+        fields = [f['name'] for f in value]
+        if len(fields) != len(set(fields)):
+            raise self.VaidationError('Field names must be unique.')
+
+        for field in value:
+            has_index = ('order_index' in field or 'filter_index' in field)
+            if field['type'] in self.not_indexable_types and has_index:
+                raise self.VaidationError('"{0}" type is not indexable.'.format(field['type']))
 
     def to_python(self, value):
         if isinstance(value, SchemaManager):

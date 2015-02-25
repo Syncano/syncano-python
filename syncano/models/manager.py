@@ -387,7 +387,7 @@ class SchemaManager(object):
 
         if isinstance(key, six.string_types):
             for v in self.schema:
-                if v.get('name') == key:
+                if v['name'] == key:
                     return v
 
         raise KeyError
@@ -416,7 +416,7 @@ class SchemaManager(object):
         self.schema.extend(objects)
 
     def remove(self, *names):
-        values = [v for v in self.schema if v.get('name') not in names]
+        values = [v for v in self.schema if v['name'] not in names]
         self.set(values)
 
     def clear(self):
@@ -432,7 +432,8 @@ class SchemaManager(object):
         self.set_index(field, 'filter_index')
 
     def remove_index(self, field, index_type):
-        del self[field][index_type]
+        if index_type in self[field]:
+            del self[field][index_type]
 
     def remove_order_index(self, field):
         self.remove_index(field, 'order_index')
