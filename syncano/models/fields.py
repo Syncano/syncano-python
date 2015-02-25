@@ -447,6 +447,12 @@ class SchemaField(JSONField):
         }
     }
 
+    def validate(self, value, model_instance):
+        if isinstance(value, SchemaManager):
+            value = value.schema
+
+        super(SchemaField, self).validate(value, model_instance)
+
     def to_python(self, value):
         if isinstance(value, SchemaManager):
             return value

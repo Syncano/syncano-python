@@ -423,7 +423,7 @@ class SchemaManager(object):
         self.set([])
 
     def set_index(self, field, index_type):
-        pass
+        self[field][index_type] = True
 
     def set_order_index(self, field):
         self.set_index(field, 'order_index')
@@ -431,8 +431,8 @@ class SchemaManager(object):
     def set_filter_index(self, field):
         self.set_index(field, 'filter_index')
 
-    def remove_index(field, index_type):
-        pass
+    def remove_index(self, field, index_type):
+        del self[field][index_type]
 
     def remove_order_index(self, field):
         self.remove_index(field, 'order_index')
