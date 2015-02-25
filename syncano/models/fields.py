@@ -1,10 +1,12 @@
+import json
 import re
 import six
+import validictory
 from datetime import date, datetime
 
 from syncano import logger
 from syncano.exceptions import SyncanoFieldError, SyncanoValueError
-from .manager import RelatedManagerDescriptor
+from .manager import RelatedManagerDescriptor, SchemaManager
 from .registry import registry
 
 
@@ -379,6 +381,103 @@ class ModelField(Field):
         return value
 
 
+class JSONField(WritableField):
+    schema = None
+
+    def __init__(self, *args, **kwargs):
+        self.schema = kwargs.pop('schema', None) or self.schema
+        super(JSONField, self).__init__(*args, **kwargs)
+
+    def validate(self, value, model_instance):
+        super(JSONField, self).validate(value, model_instance)
+        if self.schema:
+            try:
+                validictory.validate(value, self.schema)
+            except ValueError as e:
+                raise self.VaidationError(e)
+
+    def to_python(self, value):
+        if isinstance(value, six.string_types):
+            value = json.loads(value)
+        return value
+
+    def to_native(self, value):
+        if not isinstance(value, six.string_types):
+            value = json.dumps(value)
+        return value
+
+
+class SchemaField(JSONField):
+    not_indexable_types = ['text', 'file']
+    schema = {
+        'type': 'array',
+        'items': {
+            'type': 'object',
+            'properties': {
+                'name': {
+                    'type': 'string',
+                    'required': True,
+                },
+                'type': {
+                    'type': 'string',
+                    'required': True,
+                    'enum': [
+                        'string',
+                        'text',
+                        'integer',
+                        'float',
+                        'boolean',
+                        'datetime',
+                        'file',
+                        'reference'
+                    ],
+                },
+                'order_index': {
+                    'type': 'boolean',
+                    'required': False,
+                },
+                'filter_index': {
+                    'type': 'boolean',
+                    'required': False,
+                },
+                'target': {
+                    'type': 'string',
+                    'required': False,
+                }
+            }
+        }
+    }
+
+    def validate(self, value, model_instance):
+        if isinstance(value, SchemaManager):
+            value = value.schema
+
+        super(SchemaField, self).validate(value, model_instance)
+
+        fields = [f['name'] for f in value]
+        if len(fields) != len(set(fields)):
+            raise self.VaidationError('Field names must be unique.')
+
+        for field in value:
+            is_not_indexable = field['type'] in self.not_indexable_types
+            has_index = ('order_index' in field or 'filter_index' in field)
+            if is_not_indexable and has_index:
+                raise self.VaidationError('"{0}" type is not indexable.'.format(field['type']))
+
+    def to_python(self, value):
+        if isinstance(value, SchemaManager):
+            return value
+
+        value = super(SchemaField, self).to_python(value)
+        return SchemaManager(value)
+
+    def to_native(self, value):
+        if isinstance(value, SchemaManager):
+            value = value.schema
+
+        return super(SchemaField, self).to_native(value)
+
+
 MAPPING = {
     'string': StringField,
     'text': StringField,
@@ -398,4 +497,6 @@ MAPPING = {
     'endpoint': EndpointField,
     'links': HyperlinkedField,
     'model': ModelField,
+    'json': JSONField,
+    'schema': SchemaField,
 }
