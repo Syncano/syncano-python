@@ -459,8 +459,9 @@ class SchemaField(JSONField):
             raise self.VaidationError('Field names must be unique.')
 
         for field in value:
+            is_not_indexable = field['type'] in self.not_indexable_types
             has_index = ('order_index' in field or 'filter_index' in field)
-            if field['type'] in self.not_indexable_types and has_index:
+            if is_not_indexable and has_index:
                 raise self.VaidationError('"{0}" type is not indexable.'.format(field['type']))
 
     def to_python(self, value):
