@@ -422,21 +422,34 @@ class SchemaManager(object):
     def clear(self):
         self.set([])
 
-    def set_index(self, field, index_type):
-        self[field][index_type] = True
+    def set_index(self, field, order=False, filter=False):
+        if not order and not filter:
+            raise ValueError('Choose at least one index.')
+
+        if order:
+            self[field]['order_index'] = True
+
+        if filter:
+            self[field]['filter_index'] = True
 
     def set_order_index(self, field):
-        self.set_index(field, 'order_index')
+        self.set_index(field, order=True)
 
     def set_filter_index(self, field):
-        self.set_index(field, 'filter_index')
+        self.set_index(field, filter=True)
 
-    def remove_index(self, field, index_type):
-        if index_type in self[field]:
-            del self[field][index_type]
+    def remove_index(self, field, order=False, filter=False):
+        if not order and not filter:
+            raise ValueError('Choose at least one index.')
+
+        if order and 'order_index' in self[field]:
+            del self[field]['order_index']
+
+        if filter and 'filter_index' in self[field]:
+            del self[field]['filter_index']
 
     def remove_order_index(self, field):
-        self.remove_index(field, 'order_index')
+        self.remove_index(field, order=True)
 
     def remove_filter_index(self, field):
-        self.remove_index(field, 'filter_index')
+        self.remove_index(field, filter=True)
