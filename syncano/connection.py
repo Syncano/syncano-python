@@ -43,8 +43,18 @@ default_connection = DefaultConnection()
 
 
 class Connection(object):
+    """Base connection class.
+
+    :ivar host: Syncano API host
+    :ivar email: Your Syncano email address
+    :ivar password: Your Syncano password
+    :ivar api_key: Your Syncano ``Account Key``
+    :ivar logger: Python logger instance
+    :ivar timeout: Default request timeout
+    :ivar verify_ssl: Verify SSL certificate
+    """
+
     AUTH_SUFFIX = 'v1/account/auth'
-    SCHEMA_SUFFIX = 'v1/schema'
     CONTENT_TYPE = 'application/json'
 
     def __init__(self, host=None, email=None, password=None, api_key=None, **kwargs):
@@ -58,6 +68,13 @@ class Connection(object):
         self.verify_ssl = kwargs.pop('verify_ssl', True)
 
     def build_params(self, params):
+        """
+        :type params: dict
+        :param params: Params which will be passed to request
+
+        :rtype: dict
+        :return: Request params
+        """
         params = deepcopy(params)
         params['timeout'] = params.get('timeout') or self.timeout
         params['headers'] = params.get('headers') or {}
@@ -75,6 +92,14 @@ class Connection(object):
         return params
 
     def build_url(self, path):
+        """Ensures proper format for provided path.
+
+        :type path: string
+        :param path: Request path
+
+        :rtype: string
+        :return: Request URL
+        """
         if not isinstance(path, six.string_types):
             raise SyncanoValueError('"path" should be a string.')
 
@@ -151,17 +176,21 @@ class Connection(object):
 
         return content
 
-    @property
-    def schema(self):
-        if not hasattr(self, '_schema'):
-            response = self.make_request('GET', self.SCHEMA_SUFFIX)
-            self._schema = response
-        return self._schema
-
     def is_authenticated(self):
         return self.api_key is not None
 
     def authenticate(self, email=None, password=None):
+        """
+        :type email: string
+        :param email: Your Syncano account email address
+
+        :type password: string
+        :param password: Your Syncano password
+
+        :rtype: string
+        :return: Your ``Account Key``
+        """
+
         if self.is_authenticated():
             self.logger.debug('Connection already authenticated: %s', self.api_key)
             return self.api_key

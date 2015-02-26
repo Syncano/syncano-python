@@ -5,8 +5,6 @@ import re
 
 from syncano import logger
 
-__all__ = ['registry']
-
 
 class Registry(object):
 

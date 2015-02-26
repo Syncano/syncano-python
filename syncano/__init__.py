@@ -35,7 +35,23 @@ def connect(*args, **kwargs):
     """
     Connects to Syncano API.
 
-    Usage:
+    :type email: string
+    :param email: Your Syncano account email address
+
+    :type password: string
+    :param password: Your Syncano password
+
+    :type api_key: string
+    :param api_key: Your Syncano account key
+
+    :type verify_ssl: boolean
+    :param verify_ssl: Verify SSL certificate
+
+    :rtype: :class:`syncano.models.registry.Registry`
+    :return: A models registry
+
+    Example::
+
         connection = syncano.connect(email='', password='')
         connection = syncano.connect(api_key='')
     """
@@ -51,7 +67,27 @@ def connect(*args, **kwargs):
 def connect_instance(name=None, *args, **kwargs):
     """
     Connects with Syncano API and tries to load instance with provided name.
-    Usage:
+
+    :type name: string
+    :param name: Chosen instance name
+
+    :type email: string
+    :param email: Your Syncano account email address
+
+    :type password: string
+    :param password: Your Syncano password
+
+    :type api_key: string
+    :param api_key: Your Syncano account key
+
+    :type verify_ssl: boolean
+    :param verify_ssl: Verify SSL certificate
+
+    :rtype: :class:`syncano.models.base.Instance`
+    :return: Instance object
+
+    Example::
+
         my_instance = syncano.connect_instance('my_instance_name', email='', password='')
         my_instance = syncano.connect_instance('my_instance_name', api_key='')
     """
