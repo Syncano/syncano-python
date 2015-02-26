@@ -73,7 +73,7 @@ Making Connections
     >>> import syncano
     >>> connection = syncano.connect(email='YOUR_EMAIL', password='YOUR_PASSWORD')
 
-If you want to connect directly to chosen instance you can use ``connect_instance`` function::
+If you want to connect directly to chosen instance you can use :func:`~syncano.connect_instance` function::
 
     >>> import syncano
     >>> connection = syncano.connect_insatnce('insatnce_name', email='YOUR_EMAIL', password='YOUR_PASSWORD')
@@ -87,20 +87,49 @@ If you have obtained your ``Account Key`` from the website you can omit ``email`
 
 Troubleshooting Connections
 ---------------------------
+When calling the various queries, you might run into an error like this:
 
-TODO SSL Info / Debug
+    >>> import syncano
+    >>> connection = syncano.connect(api_key='abcd')
+    >>> list(connection.instances)
+    Traceback (most recent call last):
+      ...
+        raise SSLError(e, request=request)
+    requests.exceptions.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:581)
 
+This is because your endpoint has invalid SSL certificate.
+If you want to skip SSL verification you need to create a new connection like this::
+
+    >>> import syncano
+    >>> connection = syncano.connect(api_key='abcd', verify_ssl=False)
+    >>> list(connection.instances)
+    [<Instance: syncano>]
 
 Interacting with Syncano
 ------------------------
 
-TODO
+The following code demonstrates how to create a new :class:`~syncano.models.base.Instance`
+and add a :class:`~syncano.models.base.ApiKey` to it::
 
+    >>> import syncano
+    >>> connection = syncano.connect(api_key='abcd')
+    >>> instance = connection.instances.create(name='dummy_test', description='test')
+    >>> instance
+    <Instance: dummy_test>
+
+    >>> api_key = instance.api_keys.create()
+    >>> ApiKey: 47>
+    <ApiKey: 47>
+    >>> api_key.api_key
+    u'aad17f86d41483db7088ad2549ccb87902d60e45'
+
+Each model has a different set of fields and commands. For more informations check :ref:`available models <models>`.
 
 Next Steps
 ----------
 
-TODO
+If you'd like more information on interacting with Syncano, check out the :ref:`interacting tutorial<interacting>` or if you
+want to know what kind of models are avalable check out the :ref:`available models <models>` list.
 
 
 

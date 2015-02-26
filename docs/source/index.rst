@@ -8,7 +8,7 @@ Syncano: A Python interface to Syncano services
 Getting Started
 ---------------
 
-If you've never used ``syncano`` before, you should read the :doc:`Getting Started with syncano <getting_started>`
+If you've never used ``syncano`` before, you should read the :doc:`Getting Started with Syncano <getting_started>`
 guide to get familiar with ``syncano`` & its usage.
 
 
@@ -18,6 +18,8 @@ Contents:
    :maxdepth: 2
 
    getting_started
+   interacting
+   models
    refs/syncano
 
 

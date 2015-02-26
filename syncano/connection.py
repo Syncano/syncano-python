@@ -123,8 +123,18 @@ class Connection(object):
         return urljoin(self.host, path)
 
     def request(self, method_name, path, **kwargs):
-        '''Simple wrapper around make_request which
-        will ensure that request is authenticated.'''
+        """Simple wrapper around :func:`~syncano.connection.Connection.make_request` which
+        will ensure that request is authenticated.
+
+        :type method_name: string
+        :param method_name: HTTP request method e.g: GET
+
+        :type path: string
+        :param path: Request path or full URL
+
+        :rtype: dict
+        :return: JSON response
+        """
 
         if not self.is_authenticated():
             self.authenticate()
@@ -132,6 +142,19 @@ class Connection(object):
         return self.make_request(method_name, path, **kwargs)
 
     def make_request(self, method_name, path, **kwargs):
+        """
+        :type method_name: string
+        :param method_name: HTTP request method e.g: GET
+
+        :type path: string
+        :param path: Request path or full URL
+
+        :rtype: dict
+        :return: JSON response
+
+        :raises SyncanoValueError: if invalid request method was chosen
+        :raises SyncanoRequestError: if something went wrong during the request
+        """
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)
 
@@ -177,6 +200,12 @@ class Connection(object):
         return content
 
     def is_authenticated(self):
+        """Checks if current session is authenticated.
+
+        :rtype: boolean
+        :return: Session authentication state
+        """
+
         return self.api_key is not None
 
     def authenticate(self, email=None, password=None):
@@ -216,6 +245,7 @@ class Connection(object):
 
 
 class ConnectionMixin(object):
+    """Injects connection attribute with support of basic validation."""
 
     def __init__(self, *args, **kwargs):
         self._connection = None

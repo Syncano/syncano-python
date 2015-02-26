@@ -72,6 +72,7 @@ class ModelMetaclass(type):
 
 
 class Model(six.with_metaclass(ModelMetaclass)):
+    """Base class for all models."""
 
     def __init__(self, **kwargs):
         self._raw_data = {}
@@ -94,6 +95,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
         return connection or self._meta.connection
 
     def save(self, **kwargs):
+        """Create or update a model instance."""
         self.validate()
         data = self.to_native()
         connection = self._get_connection(**kwargs)
@@ -115,6 +117,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
         return self
 
     def delete(self, **kwargs):
+        """Delete a model instance."""
         if not self.links:
             raise SyncanoValidationError('Method allowed only on existing model.')
 
@@ -124,6 +127,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
         self._raw_data = {}
 
     def validate(self):
+        """Validate a model instance."""
         for field in self._meta.fields:
             if not field.read_only:
                 value = getattr(self, field.name)

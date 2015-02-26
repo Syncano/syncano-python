@@ -50,7 +50,7 @@ def connect(*args, **kwargs):
     :rtype: :class:`syncano.models.registry.Registry`
     :return: A models registry
 
-    Example::
+    Usage::
 
         connection = syncano.connect(email='', password='')
         connection = syncano.connect(api_key='')
@@ -86,7 +86,7 @@ def connect_instance(name=None, *args, **kwargs):
     :rtype: :class:`syncano.models.base.Instance`
     :return: Instance object
 
-    Example::
+    Usage::
 
         my_instance = syncano.connect_instance('my_instance_name', email='', password='')
         my_instance = syncano.connect_instance('my_instance_name', api_key='')
