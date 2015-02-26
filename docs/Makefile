@@ -180,7 +180,6 @@ pseudoxml:
 gh-pages:
 	make html
 	git checkout gh-pages
-	cd .. && rm -rf _sources _static
 	mv -fv build/html/* ../
 	cd .. && git add -A
 	cd .. && git commit -am "Generated gh-pages."
