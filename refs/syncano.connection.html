@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>syncano.connection &mdash; Syncano 1.0.0 documentation</title>
+  <title>syncano.connection &mdash; Syncano 4.0.0 documentation</title>
   
 
   
@@ -28,7 +28,7 @@
   
 
   
-    <link rel="top" title="Syncano 1.0.0 documentation" href="../index.html"/>
+    <link rel="top" title="Syncano 4.0.0 documentation" href="../index.html"/>
         <link rel="up" title="Syncano references" href="syncano.html"/>
         <link rel="next" title="syncano.exceptions" href="syncano.exceptions.html"/>
         <link rel="prev" title="syncano.models.registry" href="syncano.models.registry.html"/> 
@@ -68,6 +68,19 @@
 <li class="toctree-l2"><a class="reference internal" href="../getting_started.html#next-steps">Next Steps</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#getting-existing-objects">Getting Existing Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-new-objects">Creating New Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#updating-existing-object">Updating Existing Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#deleting-existing-object">Deleting Existing Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#relations">Relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#getting-a-raw-json">Getting a raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#connection-juggling">Connection juggling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../models.html">Available models</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="syncano.html">Syncano references</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="syncano.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="syncano.html#submodules">Submodules</a></li>
@@ -205,18 +218,71 @@
 <dl class="method">
 <dt id="syncano.connection.Connection.is_authenticated">
 <tt class="descname">is_authenticated</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.is_authenticated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.is_authenticated" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Checks if current session is authenticated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Session authentication state</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.connection.Connection.make_request">
 <tt class="descname">make_request</tt><big>(</big><em>method_name</em>, <em>path</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.make_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.make_request" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>method_name</strong> (<em>string</em>) &#8211; HTTP request method e.g: GET</li>
+<li><strong>path</strong> (<em>string</em>) &#8211; Request path or full URL</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">dict</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">JSON response</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>SyncanoValueError</strong> &#8211; if invalid request method was chosen</li>
+<li><strong>SyncanoRequestError</strong> &#8211; if something went wrong during the request</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.connection.Connection.request">
 <tt class="descname">request</tt><big>(</big><em>method_name</em>, <em>path</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.request" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simple wrapper around make_request which
+<dd><p>Simple wrapper around <a class="reference internal" href="#syncano.connection.Connection.make_request" title="syncano.connection.Connection.make_request"><tt class="xref py py-func docutils literal"><span class="pre">make_request()</span></tt></a> which
 will ensure that request is authenticated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>method_name</strong> (<em>string</em>) &#8211; HTTP request method e.g: GET</li>
+<li><strong>path</strong> (<em>string</em>) &#8211; Request path or full URL</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">dict</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">JSON response</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -225,6 +291,7 @@ will ensure that request is authenticated.</p>
 <dt id="syncano.connection.ConnectionMixin">
 <em class="property">class </em><tt class="descname">ConnectionMixin</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#ConnectionMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.ConnectionMixin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Injects connection attribute with support of basic validation.</p>
 <dl class="attribute">
 <dt id="syncano.connection.ConnectionMixin.connection">
 <tt class="descname">connection</tt><a class="reference internal" href="../_modules/syncano/connection.html#ConnectionMixin.connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.ConnectionMixin.connection" title="Permalink to this definition">¶</a></dt>
@@ -272,7 +339,7 @@ will ensure that request is authenticated.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'1.0.0',
+            VERSION:'4.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Getting Started with Syncano &mdash; Syncano 1.0.0 documentation</title>
+  <title>Getting Started with Syncano &mdash; Syncano 4.0.0 documentation</title>
   
 
   
@@ -28,7 +28,8 @@
   
 
   
-    <link rel="top" title="Syncano 1.0.0 documentation" href="index.html"/>
+    <link rel="top" title="Syncano 4.0.0 documentation" href="index.html"/>
+        <link rel="next" title="Interacting with Syncano" href="interacting.html"/>
         <link rel="prev" title="Syncano: A Python interface to Syncano services" href="index.html"/> 
 
   
@@ -64,6 +65,25 @@
 <li class="toctree-l2"><a class="reference internal" href="#troubleshooting-connections">Troubleshooting Connections</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#interacting-with-syncano">Interacting with Syncano</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#getting-existing-objects">Getting Existing Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#creating-new-objects">Creating New Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#updating-existing-object">Updating Existing Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#deleting-existing-object">Deleting Existing Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#relations">Relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#getting-a-raw-json">Getting a raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#connection-juggling">Connection juggling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Available models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="refs/syncano.html">Syncano references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="refs/syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="refs/syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="refs/syncano.html#module-syncano">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -159,7 +179,7 @@ is an excellent tool that lets you easily manage your virtual environments.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s">&#39;YOUR_EMAIL&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;YOUR_PASSWORD&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>If you want to connect directly to chosen instance you can use <tt class="docutils literal"><span class="pre">connect_instance</span></tt> function:</p>
+<p>If you want to connect directly to chosen instance you can use <a class="reference internal" href="refs/syncano.html#syncano.connect_instance" title="syncano.connect_instance"><tt class="xref py py-func docutils literal"><span class="pre">connect_instance()</span></tt></a> function:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect_insatnce</span><span class="p">(</span><span class="s">&#39;insatnce_name&#39;</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="s">&#39;YOUR_EMAIL&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;YOUR_PASSWORD&#39;</span><span class="p">)</span>
 </pre></div>
@@ -173,15 +193,48 @@ is an excellent tool that lets you easily manage your virtual environments.</p>
 </div>
 <div class="section" id="troubleshooting-connections">
 <h2>Troubleshooting Connections<a class="headerlink" href="#troubleshooting-connections" title="Permalink to this headline">¶</a></h2>
-<p>TODO SSL Info / Debug</p>
+<p>When calling the various queries, you might run into an error like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s">&#39;abcd&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+    <span class="k">raise</span> <span class="n">SSLError</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">)</span>
+<span class="gr">requests.exceptions.SSLError</span>: <span class="n">[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:581)</span>
+</pre></div>
+</div>
+<p>This is because your endpoint has invalid SSL certificate.
+If you want to skip SSL verification you need to create a new connection like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s">&#39;abcd&#39;</span><span class="p">,</span> <span class="n">verify_ssl</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
+<span class="go">[&lt;Instance: syncano&gt;]</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="interacting-with-syncano">
 <h2>Interacting with Syncano<a class="headerlink" href="#interacting-with-syncano" title="Permalink to this headline">¶</a></h2>
-<p>TODO</p>
+<p>The following code demonstrates how to create a new <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Instance" title="syncano.models.base.Instance"><tt class="xref py py-class docutils literal"><span class="pre">Instance</span></tt></a>
+and add a <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.ApiKey" title="syncano.models.base.ApiKey"><tt class="xref py py-class docutils literal"><span class="pre">ApiKey</span></tt></a> to it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s">&#39;abcd&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">instances</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;dummy_test&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span>
+<span class="go">&lt;Instance: dummy_test&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api_key</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">api_keys</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ApiKey</span><span class="p">:</span> <span class="mi">47</span><span class="o">&gt;</span>
+<span class="go">&lt;ApiKey: 47&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api_key</span><span class="o">.</span><span class="n">api_key</span>
+<span class="go">u&#39;aad17f86d41483db7088ad2549ccb87902d60e45&#39;</span>
+</pre></div>
+</div>
+<p>Each model has a different set of fields and commands. For more informations check <a class="reference internal" href="models.html#models"><em>available models</em></a>.</p>
 </div>
 <div class="section" id="next-steps">
 <h2>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
-<p>TODO</p>
+<p>If you&#8217;d like more information on interacting with Syncano, check out the <a class="reference internal" href="interacting.html#interacting"><em>interacting tutorial</em></a> or if you
+want to know what kind of models are avalable check out the <a class="reference internal" href="models.html#models"><em>available models</em></a> list.</p>
 </div>
 </div>
 
@@ -190,6 +243,8 @@ is an excellent tool that lets you easily manage your virtual environments.</p>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="interacting.html" class="btn btn-neutral float-right" title="Interacting with Syncano"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral" title="Syncano: A Python interface to Syncano services"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -221,7 +276,7 @@ is an excellent tool that lets you easily manage your virtual environments.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.0.0',
+            VERSION:'4.0.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
