@@ -1,0 +1,746 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>syncano.models.base &mdash; Syncano 1.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 1.0.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="syncano" href="../../syncano.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../../index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../refs/syncano.html">Syncano references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../syncano.html">syncano</a> &raquo;</li>
+      
+    <li>syncano.models.base</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for syncano.models.base</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+
+<span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoValidationError</span><span class="p">,</span> <span class="n">SyncanoDoesNotExist</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">.options</span> <span class="kn">import</span> <span class="n">Options</span>
+<span class="kn">from</span> <span class="nn">.manager</span> <span class="kn">import</span> <span class="n">Manager</span><span class="p">,</span> <span class="n">WebhookManager</span><span class="p">,</span> <span class="n">ObjectManager</span>
+<span class="kn">from</span> <span class="nn">.registry</span> <span class="kn">import</span> <span class="n">registry</span>
+
+
+<div class="viewcode-block" id="ModelMetaclass"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.ModelMetaclass">[docs]</a><span class="k">class</span> <span class="nc">ModelMetaclass</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="n">super_new</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ModelMetaclass</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span>
+
+        <span class="n">parents</span> <span class="o">=</span> <span class="p">[</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bases</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">ModelMetaclass</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">parents</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">super_new</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+
+        <span class="n">module</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;__module__&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">new_class</span> <span class="o">=</span> <span class="n">super_new</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;__module__&#39;</span><span class="p">:</span> <span class="n">module</span><span class="p">})</span>
+
+        <span class="n">meta</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;Meta&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">new_class</span><span class="p">,</span> <span class="s">&#39;Meta&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="n">Options</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+        <span class="n">new_class</span><span class="o">.</span><span class="n">add_to_class</span><span class="p">(</span><span class="s">&#39;_meta&#39;</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+
+        <span class="n">manager</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;please&#39;</span><span class="p">,</span> <span class="n">Manager</span><span class="p">())</span>
+        <span class="n">new_class</span><span class="o">.</span><span class="n">add_to_class</span><span class="p">(</span><span class="s">&#39;please&#39;</span><span class="p">,</span> <span class="n">manager</span><span class="p">)</span>
+
+        <span class="n">error_class</span> <span class="o">=</span> <span class="n">new_class</span><span class="o">.</span><span class="n">create_error_class</span><span class="p">()</span>
+        <span class="n">new_class</span><span class="o">.</span><span class="n">add_to_class</span><span class="p">(</span><span class="s">&#39;DoesNotExist&#39;</span><span class="p">,</span> <span class="n">error_class</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">attrs</span><span class="p">):</span>
+            <span class="n">new_class</span><span class="o">.</span><span class="n">add_to_class</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span><span class="o">.</span><span class="n">pk</span><span class="p">:</span>
+            <span class="n">pk_field</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                                           <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">new_class</span><span class="o">.</span><span class="n">add_to_class</span><span class="p">(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">pk_field</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">meta</span><span class="o">.</span><span class="n">endpoint_fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">meta</span><span class="o">.</span><span class="n">field_names</span><span class="p">:</span>
+                <span class="n">endpoint_field</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">EndpointField</span><span class="p">()</span>
+                <span class="n">new_class</span><span class="o">.</span><span class="n">add_to_class</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">endpoint_field</span><span class="p">)</span>
+
+        <span class="n">new_class</span><span class="o">.</span><span class="n">build_doc</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+        <span class="n">registry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">new_class</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_class</span>
+
+<div class="viewcode-block" id="ModelMetaclass.add_to_class"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.ModelMetaclass.add_to_class">[docs]</a>    <span class="k">def</span> <span class="nf">add_to_class</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s">&#39;contribute_to_class&#39;</span><span class="p">):</span>
+            <span class="n">value</span><span class="o">.</span><span class="n">contribute_to_class</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ModelMetaclass.create_error_class"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.ModelMetaclass.create_error_class">[docs]</a>    <span class="k">def</span> <span class="nf">create_error_class</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="s">&#39;{0}DoesNotExist&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">__name__</span><span class="p">)),</span>
+            <span class="p">(</span><span class="n">SyncanoDoesNotExist</span><span class="p">,</span> <span class="p">),</span>
+            <span class="p">{}</span>
+        <span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ModelMetaclass.build_doc"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.ModelMetaclass.build_doc">[docs]</a>    <span class="k">def</span> <span class="nf">build_doc</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Give the class a docstring if it\&#39;s not defined.&#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">__doc__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;{0} = {1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">meta</span><span class="o">.</span><span class="n">fields</span><span class="p">]</span>
+        <span class="n">cls</span><span class="o">.</span><span class="n">__doc__</span> <span class="o">=</span> <span class="s">&#39;{0}:</span><span class="se">\n\t</span><span class="s">{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">field_names</span><span class="p">))</span>
+
+</div></div>
+<div class="viewcode-block" id="Model"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">six</span><span class="o">.</span><span class="n">with_metaclass</span><span class="p">(</span><span class="n">ModelMetaclass</span><span class="p">)):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;&lt;{0}: {1}&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pk</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_get_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;connection&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">connection</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">connection</span>
+
+<div class="viewcode-block" id="Model.save"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_native</span><span class="p">()</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_data</span><span class="p">()</span>
+        <span class="n">endpoint_name</span> <span class="o">=</span> <span class="s">&#39;list&#39;</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="s">&#39;POST&#39;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_new</span><span class="p">():</span>
+            <span class="n">endpoint_name</span> <span class="o">=</span> <span class="s">&#39;detail&#39;</span>
+            <span class="n">methods</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_endpoint_methods</span><span class="p">(</span><span class="n">endpoint_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s">&#39;put&#39;</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
+                <span class="n">method</span> <span class="o">=</span> <span class="s">&#39;PUT&#39;</span>
+
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="n">endpoint_name</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">}</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">request</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="Model.delete"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span><span class="s">&#39;Method allowed only on existing model.&#39;</span><span class="p">)</span>
+
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="s">&#39;self&#39;</span><span class="p">]</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;DELETE&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span> <span class="o">=</span> <span class="p">{}</span>
+</div>
+<div class="viewcode-block" id="Model.validate"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">read_only</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">field</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Model.is_valid"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.is_valid">[docs]</a>    <span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">except</span> <span class="n">SyncanoValidationError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="Model.is_new"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.is_new">[docs]</a>    <span class="k">def</span> <span class="nf">is_new</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s">&#39;links&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">field_names</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">pk</span><span class="o">.</span><span class="n">read_only</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+
+        <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="Model.to_python"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.to_python">[docs]</a>    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Model.to_native"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.to_native">[docs]</a>    <span class="k">def</span> <span class="nf">to_native</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">read_only</span> <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">has_data</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span> <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">blank</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">to_native</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span>
+</div>
+<div class="viewcode-block" id="Model.get_endpoint_data"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.get_endpoint_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_endpoint_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">has_endpoint_data</span><span class="p">:</span>
+                <span class="n">properties</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">properties</span>
+
+</div></div>
+<div class="viewcode-block" id="Coupon"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Coupon">[docs]</a><span class="k">class</span> <span class="nc">Coupon</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;redeem&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">CURRENCY_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;USD&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;usd&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">redeem_by</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
+    <span class="n">percent_off</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">amount_off</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">currency</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">CURRENCY_CHOICES</span><span class="p">)</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">,</span> <span class="s">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/v1/billing/coupons/{name}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/v1/billing/coupons/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="Discount"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Discount">[docs]</a><span class="k">class</span> <span class="nc">Discount</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ModelField</span><span class="p">(</span><span class="s">&#39;Instance&#39;</span><span class="p">)</span>
+    <span class="n">coupon</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ModelField</span><span class="p">(</span><span class="s">&#39;Coupon&#39;</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/v1/billing/discounts/{id}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/v1/billing/discounts/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="Instance"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Instance">[docs]</a><span class="k">class</span> <span class="nc">Instance</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;admins&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;classes&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;codeboxes&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;invitations&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;runtimes&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;api_keys&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;triggers&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;webhooks&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">role</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">owner</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ModelField</span><span class="p">(</span><span class="s">&#39;Admin&#39;</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;delete&#39;</span><span class="p">,</span> <span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;patch&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/v1/instances/{name}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/v1/instances/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="ApiKey"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.ApiKey">[docs]</a><span class="k">class</span> <span class="nc">ApiKey</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">LINKS</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
+    <span class="p">]</span>
+
+    <span class="n">api_key</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">,</span> <span class="s">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/api_keys/{id}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/api_keys/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="Class"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Class">[docs]</a><span class="k">class</span> <span class="nc">Class</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">LINKS</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;objects&#39;</span><span class="p">},</span>
+    <span class="p">]</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">objects_count</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="n">schema</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">SchemaField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="n">revision</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">expected_revision</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
+        <span class="n">plural_name</span> <span class="o">=</span> <span class="s">&#39;Classes&#39;</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;delete&#39;</span><span class="p">,</span> <span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;patch&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/classes/{name}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/classes/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="CodeBox"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.CodeBox">[docs]</a><span class="k">class</span> <span class="nc">CodeBox</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;schedules&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">RUNTIME_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;nodejs&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;nodejs&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;python&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;python&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;ruby&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;ruby&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">description</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
+    <span class="n">source</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">()</span>
+    <span class="n">runtime_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">RUNTIME_CHOICES</span><span class="p">)</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Codebox&#39;</span>
+        <span class="n">plural_name</span> <span class="o">=</span> <span class="s">&#39;Codeboxes&#39;</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;put&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">,</span> <span class="s">&#39;patch&#39;</span><span class="p">,</span> <span class="s">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/codeboxes/{id}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/codeboxes/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="Schedule"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Schedule">[docs]</a><span class="k">class</span> <span class="nc">Schedule</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">LINKS</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;traces&#39;</span><span class="p">},</span>
+    <span class="p">]</span>
+
+    <span class="n">interval_sec</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">crontab</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">scheduled_next</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">CodeBox</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">,</span> <span class="s">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/schedules/{id}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/schedules/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="Trace"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Trace">[docs]</a><span class="k">class</span> <span class="nc">Trace</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">STATUS_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Success&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;success&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Failure&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;failure&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Timeout&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;timeout&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">status</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">STATUS_CHOICES</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
+    <span class="n">executed_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Schedule</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/traces/{id}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/traces/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="Admin"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Admin">[docs]</a><span class="k">class</span> <span class="nc">Admin</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">ROLE_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;full&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;full&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;write&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;write&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;read&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;read&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">role</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">ROLE_CHOICES</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;put&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">,</span> <span class="s">&#39;patch&#39;</span><span class="p">,</span> <span class="s">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/admins/{id}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/admins/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="InstanceInvitation"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.InstanceInvitation">[docs]</a><span class="k">class</span> <span class="nc">InstanceInvitation</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">email</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">254</span><span class="p">)</span>
+    <span class="n">role</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">Admin</span><span class="o">.</span><span class="n">ROLE_CHOICES</span><span class="p">)</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Invitation&#39;</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">,</span> <span class="s">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/invitations/{id}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/invitations/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="Object"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Object">[docs]</a><span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">revision</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="n">please</span> <span class="o">=</span> <span class="n">ObjectManager</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Class</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;delete&#39;</span><span class="p">,</span> <span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;patch&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/objects/{id}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/objects/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Object.create_subclass"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Object.create_subclass">[docs]</a>    <span class="k">def</span> <span class="nf">create_subclass</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">schema</span><span class="p">):</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;Meta&#39;</span><span class="p">:</span> <span class="n">cls</span><span class="o">.</span><span class="n">_meta</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">schema</span><span class="p">:</span>
+            <span class="n">field_type</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;type&#39;</span><span class="p">)</span>
+            <span class="n">FieldClass</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">MAPPING</span><span class="p">[</span><span class="n">field_type</span><span class="p">]</span>
+            <span class="n">attrs</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">FieldClass</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="p">),</span> <span class="n">attrs</span><span class="p">)</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Object.get_or_create_subclass"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Object.get_or_create_subclass">[docs]</a>    <span class="k">def</span> <span class="nf">get_or_create_subclass</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">schema</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">subclass</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">get_model_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">LookupError</span><span class="p">:</span>
+            <span class="n">subclass</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">create_subclass</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
+            <span class="n">registry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">subclass</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">subclass</span>
+
+</div></div>
+<div class="viewcode-block" id="Trigger"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Trigger">[docs]</a><span class="k">class</span> <span class="nc">Trigger</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">SIGNAL_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;post_update&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;post_update&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;post_create&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;post_create&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;post_delete&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;post_delete&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">codebox</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;codebox id&#39;</span><span class="p">)</span>
+    <span class="n">klass</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;class name&#39;</span><span class="p">)</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">SIGNAL_CHOICES</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;put&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">,</span> <span class="s">&#39;patch&#39;</span><span class="p">,</span> <span class="s">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/triggers/{id}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/triggers/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="Webhook"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Webhook">[docs]</a><span class="k">class</span> <span class="nc">Webhook</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;run&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;run&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">slug</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">codebox</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;codebox id&#39;</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
+
+    <span class="n">please</span> <span class="o">=</span> <span class="n">WebhookManager</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;put&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">,</span> <span class="s">&#39;patch&#39;</span><span class="p">,</span> <span class="s">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/webhooks/{slug}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/webhooks/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;run&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/webhooks/{slug}/run/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span><span class="s">&#39;Method allowed only on existing model.&#39;</span><span class="p">)</span>
+
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="s">&#39;run&#39;</span><span class="p">]</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

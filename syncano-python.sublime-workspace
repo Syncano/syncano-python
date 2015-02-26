@@ -1,0 +1,326 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"filter",
+				"filter_index	param"
+			],
+			[
+				"ord",
+				"order_index	param"
+			],
+			[
+				"is",
+				"is_not_indexable	statement"
+			],
+			[
+				"index",
+				"index_type	param"
+			],
+			[
+				"Order",
+				"OrderedDict	class"
+			],
+			[
+				"stri",
+				"string_types	statement"
+			],
+			[
+				"val",
+				"value	statement"
+			],
+			[
+				"Schema",
+				"SchemaManager	class"
+			],
+			[
+				"to",
+				"to_python	function"
+			],
+			[
+				"re",
+				"required"
+			],
+			[
+				"defa",
+				"default_attrs	statement"
+			],
+			[
+				"def",
+				"default_param_decls"
+			],
+			[
+				"pa",
+				"param_decls	param"
+			],
+			[
+				"get",
+				"get_filed_type	function"
+			],
+			[
+				"MA",
+				"OPTIONS_MAPPING"
+			],
+			[
+				"prop",
+				"prompt"
+			],
+			[
+				"iter",
+				"iteritems	function"
+			],
+			[
+				"pre",
+				"pre_hook	function"
+			],
+			[
+				"dec",
+				"decorators	param"
+			],
+			[
+				"for",
+				"format	function"
+			],
+			[
+				"Mode",
+				"ModelFieldsOption	class"
+			],
+			[
+				"f",
+				"fields	statement"
+			],
+			[
+				"field",
+				"field_to_option	function"
+			],
+			[
+				"ge",
+				"get_option_attrs	function"
+			],
+			[
+				"str",
+				"strip"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"setru",
+				"Set Syntax: Ruby"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 593.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/dancio/Projects/syncano-python",
+		"/Users/dancio/Projects/syncano-python/syncano",
+		"/Users/dancio/Projects/syncano-python/syncano/models"
+	],
+	"file_history":
+	[
+		"/Users/dancio/Projects/syncano-python/run_it.py",
+		"/Users/dancio/Projects/syncano-python/syncano/models/base.py",
+		"/Users/dancio/Projects/syncano-python/syncano/models/fields.py",
+		"/Users/dancio/Projects/syncano-python/syncano/models/manager.py",
+		"/Users/dancio/Projects/syncano-python/README.md",
+		"/Users/dancio/Projects/syncano-cli/syncanocli/commands/auth.py",
+		"/Users/dancio/Projects/syncano-cli/.gitignore",
+		"/Users/dancio/Projects/syncano-python/.gitignore",
+		"/Users/dancio/Projects/syncano-platform/apps/invitations/models.py",
+		"/Users/dancio/Projects/syncano-platform/Vagrantfile",
+		"/Users/dancio/Projects/syncano-platform/setup.cfg",
+		"/Users/dancio/Projects/syncano-platform/docs/source/node_modules/grunt-contrib-sass/docs/sass-examples.md",
+		"/Users/dancio/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/dancio/Library/Application Support/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"order",
+			"index_type",
+			"_index",
+			"order_index",
+			"schema",
+			"non_indexable_types",
+			"self.value",
+			"value",
+			"update",
+			"get_attr_name",
+			"get_option_name",
+			"default_attrs",
+			"args",
+			"options",
+			"ModelOptions",
+			"ctx",
+			"Destroy",
+			"destroy",
+			"Retrieve",
+			"retrieve",
+			"ctx",
+			"model",
+			"fields",
+			"attrs",
+			"model_update_fields",
+			"model_endpoint_fields",
+			"model_options",
+			"Decorator",
+			")\n",
+			"field_func",
+			"                                         │",
+			"ApiKey",
+			"UniqueKeyAbstractModel"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "syncano-python.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"run",
+				"run_it.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 251.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

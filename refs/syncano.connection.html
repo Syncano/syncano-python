@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>syncano.connection &mdash; Syncano 1.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 1.0.0 documentation" href="../index.html"/>
+        <link rel="up" title="Syncano references" href="syncano.html"/>
+        <link rel="next" title="syncano.exceptions" href="syncano.exceptions.html"/>
+        <link rel="prev" title="syncano.models.registry" href="syncano.models.registry.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="syncano.html">Syncano references</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="syncano.html">Syncano references</a> &raquo;</li>
+      
+    <li>syncano.connection</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/refs/syncano.connection.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="module-syncano.connection">
+<span id="syncano-connection"></span><h1>syncano.connection<a class="headerlink" href="#module-syncano.connection" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="syncano.connection.Connection">
+<em class="property">class </em><tt class="descname">Connection</tt><big>(</big><em>host=None</em>, <em>email=None</em>, <em>password=None</em>, <em>api_key=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Base connection class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>host</strong> &#8211; Syncano API host</li>
+<li><strong>email</strong> &#8211; Your Syncano email address</li>
+<li><strong>password</strong> &#8211; Your Syncano password</li>
+<li><strong>api_key</strong> &#8211; Your Syncano <tt class="docutils literal"><span class="pre">Account</span> <span class="pre">Key</span></tt></li>
+<li><strong>logger</strong> &#8211; Python logger instance</li>
+<li><strong>timeout</strong> &#8211; Default request timeout</li>
+<li><strong>verify_ssl</strong> &#8211; Verify SSL certificate</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="syncano.connection.Connection.AUTH_SUFFIX">
+<tt class="descname">AUTH_SUFFIX</tt><em class="property"> = 'v1/account/auth'</em><a class="headerlink" href="#syncano.connection.Connection.AUTH_SUFFIX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.connection.Connection.CONTENT_TYPE">
+<tt class="descname">CONTENT_TYPE</tt><em class="property"> = 'application/json'</em><a class="headerlink" href="#syncano.connection.Connection.CONTENT_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.connection.Connection.authenticate">
+<tt class="descname">authenticate</tt><big>(</big><em>email=None</em>, <em>password=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.authenticate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.authenticate" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>email</strong> (<em>string</em>) &#8211; Your Syncano account email address</li>
+<li><strong>password</strong> (<em>string</em>) &#8211; Your Syncano password</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">string</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Your <tt class="docutils literal"><span class="pre">Account</span> <span class="pre">Key</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.connection.Connection.build_params">
+<tt class="descname">build_params</tt><big>(</big><em>params</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.build_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.build_params" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> (<em>dict</em>) &#8211; Params which will be passed to request</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Request params</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.connection.Connection.build_url">
+<tt class="descname">build_url</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.build_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.build_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensures proper format for provided path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>string</em>) &#8211; Request path</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Request URL</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.connection.Connection.is_authenticated">
+<tt class="descname">is_authenticated</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.is_authenticated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.is_authenticated" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.connection.Connection.make_request">
+<tt class="descname">make_request</tt><big>(</big><em>method_name</em>, <em>path</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.make_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.make_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.connection.Connection.request">
+<tt class="descname">request</tt><big>(</big><em>method_name</em>, <em>path</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple wrapper around make_request which
+will ensure that request is authenticated.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.connection.ConnectionMixin">
+<em class="property">class </em><tt class="descname">ConnectionMixin</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#ConnectionMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.ConnectionMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="attribute">
+<dt id="syncano.connection.ConnectionMixin.connection">
+<tt class="descname">connection</tt><a class="reference internal" href="../_modules/syncano/connection.html#ConnectionMixin.connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.ConnectionMixin.connection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="syncano.exceptions.html" class="btn btn-neutral float-right" title="syncano.exceptions"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="syncano.models.registry.html" class="btn btn-neutral" title="syncano.models.registry"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

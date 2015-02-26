@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Getting Started with Syncano &mdash; Syncano 1.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 1.0.0 documentation" href="index.html"/>
+        <link rel="prev" title="Syncano: A Python interface to Syncano services" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Getting Started with Syncano</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/getting_started.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="getting-started-with-syncano">
+<span id="getting-started"></span><h1>Getting Started with Syncano<a class="headerlink" href="#getting-started-with-syncano" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial will walk you through installing and configuring <tt class="docutils literal"><span class="pre">syncano</span></tt>, as
+well how to use it to make API calls.</p>
+<p>This tutorial assumes you are familiar with Python &amp; that you have registered
+for an <a class="reference external" href="http://www.syncano.com/">Syncano</a> account.</p>
+<div class="section" id="installing-syncano">
+<h2>Installing Syncano<a class="headerlink" href="#installing-syncano" title="Permalink to this headline">¶</a></h2>
+<p>You can use <tt class="docutils literal"><span class="pre">pip</span></tt> to install the latest released version of <tt class="docutils literal"><span class="pre">syncano</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install syncano
+</pre></div>
+</div>
+<p>If you want to install <tt class="docutils literal"><span class="pre">syncano</span></tt> from source:</p>
+<div class="highlight-python"><div class="highlight"><pre>git clone git@github.com:Syncano/syncano-python.git
+cd syncano-python
+python setup.py install
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-virtual-environments">
+<h2>Using Virtual Environments<a class="headerlink" href="#using-virtual-environments" title="Permalink to this headline">¶</a></h2>
+<p>Another common way to install <tt class="docutils literal"><span class="pre">syncano</span></tt> is to use a <tt class="docutils literal"><span class="pre">virtualenv</span></tt>, which
+provides isolated environments. First, install the <tt class="docutils literal"><span class="pre">virtualenv</span></tt> Python
+package:</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install virtualenv
+</pre></div>
+</div>
+<p>Next, create a virtual environment by using the <tt class="docutils literal"><span class="pre">virtualenv</span></tt> command and
+specifying where you want the virtualenv to be created (you can specify
+any directory you like, though this example allows for compatibility with
+<tt class="docutils literal"><span class="pre">virtualenvwrapper</span></tt>):</p>
+<div class="highlight-python"><div class="highlight"><pre>mkdir ~/.virtualenvs
+virtualenv ~/.virtualenvs/syncano
+</pre></div>
+</div>
+<p>You can now activate the virtual environment:</p>
+<div class="highlight-python"><div class="highlight"><pre>source ~/.virtualenvs/syncano/bin/activate
+</pre></div>
+</div>
+<p>Now, any usage of <tt class="docutils literal"><span class="pre">python</span></tt> or <tt class="docutils literal"><span class="pre">pip</span></tt> (within the current shell) will default
+to the new, isolated version within your virtualenv.</p>
+<p>You can now install <tt class="docutils literal"><span class="pre">syncano</span></tt> into this virtual environment:</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install syncano
+</pre></div>
+</div>
+<p>When you are done using <tt class="docutils literal"><span class="pre">syncano</span></tt>, you can deactivate your virtual environment:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">deactivate</span>
+</pre></div>
+</div>
+<p>If you are creating a lot of virtual environments, <a class="reference external" href="http://virtualenvwrapper.readthedocs.org/en/latest/">virtualenvwrapper</a>
+is an excellent tool that lets you easily manage your virtual environments.</p>
+</div>
+<div class="section" id="making-connections">
+<h2>Making Connections<a class="headerlink" href="#making-connections" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">syncano</span></tt> provides a number of convenience functions to simplify connecting to our services:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s">&#39;YOUR_EMAIL&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;YOUR_PASSWORD&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you want to connect directly to chosen instance you can use <tt class="docutils literal"><span class="pre">connect_instance</span></tt> function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect_insatnce</span><span class="p">(</span><span class="s">&#39;insatnce_name&#39;</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="s">&#39;YOUR_EMAIL&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;YOUR_PASSWORD&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you have obtained your <tt class="docutils literal"><span class="pre">Account</span> <span class="pre">Key</span></tt> from the website you can omit <tt class="docutils literal"><span class="pre">email</span></tt> &amp; <tt class="docutils literal"><span class="pre">password</span></tt> and pass <tt class="docutils literal"><span class="pre">Account</span> <span class="pre">Key</span></tt> directly to connection:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s">&#39;YOUR_API_KEY&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect_insatnce</span><span class="p">(</span><span class="s">&#39;insatnce_name&#39;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s">&#39;YOUR_API_KEY&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="troubleshooting-connections">
+<h2>Troubleshooting Connections<a class="headerlink" href="#troubleshooting-connections" title="Permalink to this headline">¶</a></h2>
+<p>TODO SSL Info / Debug</p>
+</div>
+<div class="section" id="interacting-with-syncano">
+<h2>Interacting with Syncano<a class="headerlink" href="#interacting-with-syncano" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+</div>
+<div class="section" id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Syncano: A Python interface to Syncano services"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
