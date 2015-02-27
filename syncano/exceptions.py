@@ -18,7 +18,7 @@ class SyncanoException(Exception):
 
 
 class SyncanoValueError(SyncanoException):
-    """An Python ValueError error occurred."""
+    """An Python :class:`ValueError` error occurred."""
 
 
 class SyncanoRequestError(SyncanoException):

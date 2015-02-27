@@ -186,3 +186,6 @@ gh-pages:
 	cd .. && git commit -am "Generated gh-pages."
 	cd .. && git push origin gh-pages
 	git checkout $(GIT_BRANCH_NAME)
+
+rst:
+	sphinx-apidoc -o source/refs ../ -T -e

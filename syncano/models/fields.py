@@ -11,6 +11,8 @@ from .registry import registry
 
 
 class Field(object):
+    """Base class for all field types."""
+
     required = False
     read_only = True
     blank = True
@@ -41,6 +43,7 @@ class Field(object):
         Field.creation_counter += 1
 
     def __repr__(self):
+        """Displays current instane class name and field name."""
         return '<{0}: {1}>'.format(self.__class__.__name__, self.name)
 
     def __eq__(self, other):
@@ -57,9 +60,11 @@ class Field(object):
         return hash(self.creation_counter)
 
     def __str__(self):
+        """Wrapper around ```repr`` method."""
         return repr(self)
 
     def __unicode__(self):
+        """Wrapper around ```repr`` method with proper encoding."""
         return six.u(repr(self))
 
     def __get__(self, instance, owner):
@@ -77,6 +82,11 @@ class Field(object):
             del instance._raw_data[self.name]
 
     def validate(self, value, model_instance):
+        """
+        Validates the current field instance.
+
+        :raises: SyncanoFieldError
+        """
         if self.required and not value:
             raise self.VaidationError('This field is required.')
 
@@ -88,9 +98,15 @@ class Field(object):
                 raise self.VaidationError('Min length reached.')
 
     def to_python(self, value):
+        """
+        Returns field's value prepared for usage in Python.
+        """
         return value
 
     def to_native(self, value):
+        """
+        Returns field's value prepared for serialization into JSON.
+        """
         return value
 
     def contribute_to_class(self, cls, name):
