@@ -7,6 +7,7 @@ from syncano import logger
 
 
 class Registry(object):
+    """Models registry."""
 
     def __init__(self, models=None):
         self.models = models or {}

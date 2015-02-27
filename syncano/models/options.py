@@ -10,6 +10,7 @@ from syncano.utils import camelcase_to_underscore
 
 
 class Options(ConnectionMixin):
+    """Holds metadata related to model definition."""
 
     def __init__(self, meta=None):
         self.name = None
