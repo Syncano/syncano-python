@@ -134,7 +134,12 @@ class Manager(ConnectionMixin):
         return instance
 
     def bulk_create(self, objects):
-        """Creates many new instances based on provided list of objects."""
+        """
+        Creates many new instances based on provided list of objects.
+
+        .. warning::
+            This method is not meant to be used with large datasets.
+        """
         return [self.create(**o) for o in objects]
 
     @clone
