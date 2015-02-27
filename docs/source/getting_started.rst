@@ -7,8 +7,7 @@ Getting Started with Syncano
 This tutorial will walk you through installing and configuring ``syncano``, as
 well how to use it to make API calls.
 
-This tutorial assumes you are familiar with Python & that you have registered
-for an `Syncano`_ account.
+This tutorial assumes you are familiar with Python & that you have registered `Syncano`_ account.
 
 .. _`Syncano`: http://www.syncano.com/
 
