@@ -142,10 +142,15 @@
 
 </div>
 <div class="viewcode-block" id="SyncanoValueError"><a class="viewcode-back" href="../../refs/syncano.exceptions.html#syncano.exceptions.SyncanoValueError">[docs]</a><span class="k">class</span> <span class="nc">SyncanoValueError</span><span class="p">(</span><span class="n">SyncanoException</span><span class="p">):</span>
-    <span class="k">pass</span>
+    <span class="sd">&quot;&quot;&quot;An Python :class:`ValueError` error occurred.&quot;&quot;&quot;</span>
 
 </div>
 <div class="viewcode-block" id="SyncanoRequestError"><a class="viewcode-back" href="../../refs/syncano.exceptions.html#syncano.exceptions.SyncanoRequestError">[docs]</a><span class="k">class</span> <span class="nc">SyncanoRequestError</span><span class="p">(</span><span class="n">SyncanoException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An HTTP error occurred.</span>
+
+<span class="sd">    :ivar status_code: HTTP status code e.g: 404</span>
+<span class="sd">    :ivar reason: Error text representation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status_code</span><span class="p">,</span> <span class="n">reason</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="n">status_code</span>
@@ -169,10 +174,14 @@
 
 </div>
 <div class="viewcode-block" id="SyncanoValidationError"><a class="viewcode-back" href="../../refs/syncano.exceptions.html#syncano.exceptions.SyncanoValidationError">[docs]</a><span class="k">class</span> <span class="nc">SyncanoValidationError</span><span class="p">(</span><span class="n">SyncanoValueError</span><span class="p">):</span>
-    <span class="k">pass</span>
+    <span class="sd">&quot;&quot;&quot;An validation error occurred.&quot;&quot;&quot;</span>
 
 </div>
 <div class="viewcode-block" id="SyncanoFieldError"><a class="viewcode-back" href="../../refs/syncano.exceptions.html#syncano.exceptions.SyncanoFieldError">[docs]</a><span class="k">class</span> <span class="nc">SyncanoFieldError</span><span class="p">(</span><span class="n">SyncanoValidationError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A field error occurred.</span>
+
+<span class="sd">    :ivar field_name: Related field name</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">field_name</span> <span class="o">=</span> <span class="bp">None</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -183,7 +192,7 @@
 
 </div>
 <div class="viewcode-block" id="SyncanoDoesNotExist"><a class="viewcode-back" href="../../refs/syncano.exceptions.html#syncano.exceptions.SyncanoDoesNotExist">[docs]</a><span class="k">class</span> <span class="nc">SyncanoDoesNotExist</span><span class="p">(</span><span class="n">SyncanoException</span><span class="p">):</span>
-    <span class="k">pass</span></div>
+    <span class="sd">&quot;&quot;&quot;An does&#39;t exist error occurred.&quot;&quot;&quot;</span></div>
 </pre></div>
 
           </div>

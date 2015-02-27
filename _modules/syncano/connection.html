@@ -136,18 +136,23 @@
 
 
 <span class="k">def</span> <span class="nf">is_success</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Checks if response code is successful.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">code</span> <span class="o">&gt;=</span> <span class="mi">200</span> <span class="ow">and</span> <span class="n">code</span> <span class="o">&lt;=</span> <span class="mi">299</span>
 
 
 <span class="k">def</span> <span class="nf">is_client_error</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Checks if response code has client error.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">code</span> <span class="o">&gt;=</span> <span class="mi">400</span> <span class="ow">and</span> <span class="n">code</span> <span class="o">&lt;=</span> <span class="mi">499</span>
 
 
 <span class="k">def</span> <span class="nf">is_server_error</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Checks if response code has server error.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">code</span> <span class="o">&gt;=</span> <span class="mi">500</span> <span class="ow">and</span> <span class="n">code</span> <span class="o">&lt;=</span> <span class="mi">599</span>
 
 
 <span class="k">class</span> <span class="nc">DefaultConnection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Singleton class which holds default connection.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span> <span class="o">=</span> <span class="bp">None</span>
 

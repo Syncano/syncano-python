@@ -122,8 +122,14 @@
             
   <div class="section" id="interacting-with-syncano">
 <span id="interacting"></span><h1>Interacting with Syncano<a class="headerlink" href="#interacting-with-syncano" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial will walk you through our ORM syntax and how to use it to make proper API calls.</p>
 <div class="section" id="creating-a-connection">
 <h2>Creating a Connection<a class="headerlink" href="#creating-a-connection" title="Permalink to this headline">¶</a></h2>
+<p>In each example I&#8217;ll be assuming that you have configured and open connection to <cite>syncano</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s">&#39;YOUR_EMAIL&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;YOUR_PASSWORD&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="getting-existing-objects">
 <h2>Getting Existing Objects<a class="headerlink" href="#getting-existing-objects" title="Permalink to this headline">¶</a></h2>

@@ -135,6 +135,7 @@
 
 
 <div class="viewcode-block" id="ModelMetaclass"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.ModelMetaclass">[docs]</a><span class="k">class</span> <span class="nc">ModelMetaclass</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Metaclass for all models.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
         <span class="n">super_new</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ModelMetaclass</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span><span class="o">.</span><span class="n">__new__</span>
@@ -187,7 +188,7 @@
         <span class="p">)</span>
 </div>
 <div class="viewcode-block" id="ModelMetaclass.build_doc"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.ModelMetaclass.build_doc">[docs]</a>    <span class="k">def</span> <span class="nf">build_doc</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Give the class a docstring if it\&#39;s not defined.&#39;&#39;&#39;</span>
+        <span class="sd">&quot;&quot;&quot;Give the class a docstring if it\&#39;s not defined.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">__doc__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">return</span>
 
@@ -203,15 +204,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Displays current instance class name and pk.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s">&#39;&lt;{0}: {1}&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pk</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Wrapper around ```repr`` method.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Wrapper around ```repr`` method with proper encoding.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_get_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -219,7 +223,10 @@
         <span class="k">return</span> <span class="n">connection</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">connection</span>
 
 <div class="viewcode-block" id="Model.save"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create or update a model instance.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates or updates the current instance.</span>
+<span class="sd">        Override this in a subclass if you want to control the saving process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_native</span><span class="p">()</span>
         <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -241,7 +248,7 @@
         <span class="k">return</span> <span class="bp">self</span>
 </div>
 <div class="viewcode-block" id="Model.delete"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Delete a model instance.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Removes the current instance.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span><span class="s">&#39;Method allowed only on existing model.&#39;</span><span class="p">)</span>
 
@@ -251,7 +258,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span> <span class="o">=</span> <span class="p">{}</span>
 </div>
 <div class="viewcode-block" id="Model.validate"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Validate a model instance.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validates the current instance.</span>
+
+<span class="sd">        :raises: SyncanoValidationError, SyncanoFieldError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">read_only</span><span class="p">:</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -274,12 +285,20 @@
         <span class="k">return</span> <span class="bp">False</span>
 </div>
 <div class="viewcode-block" id="Model.to_python"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.to_python">[docs]</a>    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts raw data to python types and built-in objects.</span>
+
+<span class="sd">        :type data: dict</span>
+<span class="sd">        :param data: Raw data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Model.to_native"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.to_native">[docs]</a>    <span class="k">def</span> <span class="nf">to_native</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Converts the current instance to raw data which</span>
+<span class="sd">        can be serialized to JSON and send to API.&quot;&quot;&quot;</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">read_only</span> <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">has_data</span><span class="p">:</span>

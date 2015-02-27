@@ -1,0 +1,371 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tests.test_connection &mdash; Syncano 4.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 4.0.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../interacting.html#getting-existing-objects">Getting Existing Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../interacting.html#creating-new-objects">Creating New Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../interacting.html#updating-existing-object">Updating Existing Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../interacting.html#deleting-existing-object">Deleting Existing Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../interacting.html#relations">Relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../interacting.html#getting-a-raw-json">Getting a raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../interacting.html#connection-juggling">Connection juggling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../models.html">Available models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../refs/syncano.html">Syncano references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../refs/syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../refs/syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../refs/syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>tests.test_connection</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for tests.test_connection</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">urlparse</span> <span class="kn">import</span> <span class="n">urljoin</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">mock</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">mock</span>
+
+<span class="kn">from</span> <span class="nn">syncano</span> <span class="kn">import</span> <span class="n">connect</span>
+<span class="kn">from</span> <span class="nn">syncano.connection</span> <span class="kn">import</span> <span class="n">Connection</span>
+<span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoValueError</span><span class="p">,</span> <span class="n">SyncanoRequestError</span>
+
+
+<span class="nd">@unittest.skip</span><span class="p">(</span><span class="s">&#39;CI fix for now&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ConnectTestCase"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectTestCase">[docs]</a><span class="k">class</span> <span class="nc">ConnectTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="nd">@mock.patch</span><span class="p">(</span><span class="s">&#39;syncano.connection.Connection&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ConnectTestCase.test_connect"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectTestCase.test_connect">[docs]</a>    <span class="k">def</span> <span class="nf">test_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_mock</span><span class="p">):</span>
+        <span class="n">connection_mock</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">connection_mock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">connection_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+
+        <span class="n">connection</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">connection_mock</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">connection_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">connection_mock</span><span class="p">)</span>
+
+</div></div>
+<span class="nd">@unittest.skip</span><span class="p">(</span><span class="s">&#39;CI fix for now&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ConnectionTestCase"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase">[docs]</a><span class="k">class</span> <span class="nc">ConnectionTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ConnectionTestCase.setUp"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span> <span class="o">=</span> <span class="n">Connection</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="ConnectionTestCase.test_init"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.test_init">[docs]</a>    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="ConnectionTestCase.test_build_params"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.test_build_params">[docs]</a>    <span class="k">def</span> <span class="nf">test_build_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="s">&#39;test&#39;</span>
+        <span class="n">empty</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}}</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">build_params</span><span class="p">(</span><span class="n">empty</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotEqual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">empty</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s">&#39;timeout&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;timeout&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s">&#39;headers&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s">&#39;Authorization&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">][</span><span class="s">&#39;Authorization&#39;</span><span class="p">],</span> <span class="s">&#39;ApiKey {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">api_key</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="s">&#39;content-type&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">][</span><span class="s">&#39;content-type&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">CONTENT_TYPE</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">],</span> <span class="s">&#39;{&quot;a&quot;: 1}&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ConnectionTestCase.test_build_url"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.test_build_url">[docs]</a>    <span class="k">def</span> <span class="nf">test_build_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="s">&#39;test/&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">),</span> <span class="n">result</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="s">&#39;/test&#39;</span><span class="p">),</span> <span class="n">result</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="s">&#39;/test/&#39;</span><span class="p">),</span> <span class="n">result</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">result</span><span class="p">),</span> <span class="n">result</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">SyncanoValueError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+</div>
+    <span class="nd">@mock.patch</span><span class="p">(</span><span class="s">&#39;syncano.connection.Connection.authenticate&#39;</span><span class="p">)</span>
+    <span class="nd">@mock.patch</span><span class="p">(</span><span class="s">&#39;syncano.connection.Connection.make_request&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ConnectionTestCase.test_request_authentication"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.test_request_authentication">[docs]</a>    <span class="k">def</span> <span class="nf">test_request_authentication</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">make_request_mock</span><span class="p">,</span> <span class="n">authenticate_mock</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">make_request_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">authenticate_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;test&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">make_request_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">authenticate_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+</div>
+    <span class="nd">@mock.patch</span><span class="p">(</span><span class="s">&#39;syncano.connection.Connection.authenticate&#39;</span><span class="p">)</span>
+    <span class="nd">@mock.patch</span><span class="p">(</span><span class="s">&#39;syncano.connection.Connection.make_request&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ConnectionTestCase.test_request_serialization"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.test_request_serialization">[docs]</a>    <span class="k">def</span> <span class="nf">test_request_serialization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">make_request_mock</span><span class="p">,</span> <span class="n">authenticate_mock</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">make_request_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">authenticate_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+
+        <span class="n">make_request_mock</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;test&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">make_request_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">authenticate_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">make_request_mock</span><span class="o">.</span><span class="n">return_value</span><span class="p">)</span>
+
+        <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="n">result_class</span><span class="o">=</span><span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">)</span>
+
+        <span class="n">make_request_mock</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;objects&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s">&#39;next&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+            <span class="s">&#39;prev&#39;</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;test&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">RESULT_SET_CLASS</span><span class="p">)</span>
+</div>
+    <span class="nd">@mock.patch</span><span class="p">(</span><span class="s">&#39;requests.Session.post&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ConnectionTestCase.test_make_request"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.test_make_request">[docs]</a>    <span class="k">def</span> <span class="nf">test_make_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post_mock</span><span class="p">):</span>
+        <span class="n">response_mock</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">(</span>
+            <span class="n">status_code</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+                <span class="s">&#39;content-type&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+        <span class="n">response_mock</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;ok&#39;</span><span class="p">:</span> <span class="s">&#39;ok&#39;</span><span class="p">}</span>
+        <span class="n">post_mock</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">response_mock</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;test&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">post_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">response_mock</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">return_value</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ConnectionTestCase.test_invalid_method_name"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.test_invalid_method_name">[docs]</a>    <span class="k">def</span> <span class="nf">test_invalid_method_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">SyncanoValueError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s">&#39;INVALID&#39;</span><span class="p">,</span> <span class="s">&#39;test&#39;</span><span class="p">)</span>
+</div>
+    <span class="nd">@mock.patch</span><span class="p">(</span><span class="s">&#39;requests.Session.post&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ConnectionTestCase.test_request_error"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.test_request_error">[docs]</a>    <span class="k">def</span> <span class="nf">test_request_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post_mock</span><span class="p">):</span>
+        <span class="n">post_mock</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">&#39;Invalid request&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">post_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">SyncanoRequestError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="s">&#39;test&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">post_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ConnectionTestCase.test_is_authenticated"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.test_is_authenticated">[docs]</a>    <span class="k">def</span> <span class="nf">test_is_authenticated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="s">&#39;xxxx&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">())</span>
+</div>
+    <span class="nd">@mock.patch</span><span class="p">(</span><span class="s">&#39;syncano.connection.Connection.make_request&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ConnectionTestCase.test_already_authenticated"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.test_already_authenticated">[docs]</a>    <span class="k">def</span> <span class="nf">test_already_authenticated</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">make_request_mock</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">make_request_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="s">&#39;Ala has a cat&#39;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">authenticate</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s">&#39;Ala has a cat&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">make_request_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+</div>
+    <span class="nd">@mock.patch</span><span class="p">(</span><span class="s">&#39;syncano.connection.Connection.make_request&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ConnectionTestCase.test_authentication_empty_email"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.test_authentication_empty_email">[docs]</a>    <span class="k">def</span> <span class="nf">test_authentication_empty_email</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">make_request_mock</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">make_request_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">SyncanoValueError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">authenticate</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">make_request_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+</div>
+    <span class="nd">@mock.patch</span><span class="p">(</span><span class="s">&#39;syncano.connection.Connection.make_request&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ConnectionTestCase.test_authentication_empty_password"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.test_authentication_empty_password">[docs]</a>    <span class="k">def</span> <span class="nf">test_authentication_empty_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">make_request_mock</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">make_request_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">SyncanoValueError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s">&#39;dummy&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">make_request_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+</div>
+    <span class="nd">@mock.patch</span><span class="p">(</span><span class="s">&#39;requests.Session.post&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ConnectionTestCase.test_invalid_credentials"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.test_invalid_credentials">[docs]</a>    <span class="k">def</span> <span class="nf">test_invalid_credentials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">post_mock</span><span class="p">):</span>
+        <span class="n">post_mock</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">MagicMock</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s">&#39;Invalid email or password.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">post_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">SyncanoRequestError</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s">&#39;dummy&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;dummy&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">exception</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">401</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">exception</span><span class="o">.</span><span class="n">message</span><span class="p">,</span> <span class="s">&#39;Invalid email or password.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">post_mock</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
+
+        <span class="n">post_mock</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span>
+            <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">AUTH_SUFFIX</span><span class="p">),</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;content-type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">CONTENT_TYPE</span><span class="p">},</span>
+            <span class="n">data</span><span class="o">=</span><span class="s">&#39;{&quot;password&quot;: &quot;dummy&quot;, &quot;email&quot;: &quot;dummy&quot;}&#39;</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span>
+        <span class="p">)</span>
+</div>
+    <span class="nd">@mock.patch</span><span class="p">(</span><span class="s">&#39;syncano.connection.Connection.make_request&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="ConnectionTestCase.test_successful_authentication"><a class="viewcode-back" href="../../refs/tests.test_connection.html#tests.test_connection.ConnectionTestCase.test_successful_authentication">[docs]</a>    <span class="k">def</span> <span class="nf">test_successful_authentication</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">make_request</span><span class="p">):</span>
+        <span class="n">make_request</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;account_key&#39;</span><span class="p">:</span> <span class="s">&#39;test&#39;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">make_request</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
+
+        <span class="n">api_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s">&#39;dummy&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;dummy&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">make_request</span><span class="o">.</span><span class="n">called</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">api_key</span><span class="p">,</span> <span class="n">api_key</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'4.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

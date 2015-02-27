@@ -397,7 +397,7 @@ instance_name = EndpointField</p>
 <dl class="method">
 <dt id="syncano.models.base.Model.delete">
 <tt class="descname">delete</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete a model instance.</p>
+<dd><p>Removes the current instance.</p>
 </dd></dl>
 
 <dl class="method">
@@ -418,23 +418,43 @@ instance_name = EndpointField</p>
 <dl class="method">
 <dt id="syncano.models.base.Model.save">
 <tt class="descname">save</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create or update a model instance.</p>
+<dd><p>Creates or updates the current instance.
+Override this in a subclass if you want to control the saving process.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.base.Model.to_native">
 <tt class="descname">to_native</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.to_native" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Converts the current instance to raw data which
+can be serialized to JSON and send to API.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.base.Model.to_python">
 <tt class="descname">to_python</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.to_python" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Converts raw data to python types and built-in objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>dict</em>) &#8211; Raw data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.base.Model.validate">
 <tt class="descname">validate</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.validate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validate a model instance.</p>
+<dd><p>Validates the current instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">SyncanoValidationError, SyncanoFieldError</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -443,6 +463,7 @@ instance_name = EndpointField</p>
 <dt id="syncano.models.base.ModelMetaclass">
 <em class="property">class </em><tt class="descname">ModelMetaclass</tt><a class="reference internal" href="../_modules/syncano/models/base.html#ModelMetaclass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.ModelMetaclass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">type</span></tt></p>
+<p>Metaclass for all models.</p>
 <dl class="method">
 <dt id="syncano.models.base.ModelMetaclass.add_to_class">
 <tt class="descname">add_to_class</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#ModelMetaclass.add_to_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.ModelMetaclass.add_to_class" title="Permalink to this definition">¶</a></dt>
