@@ -1,7 +1,0 @@
-run_it module
-=============
-
-.. automodule:: run_it
-    :members:
-    :undoc-members:
-    :show-inheritance:
