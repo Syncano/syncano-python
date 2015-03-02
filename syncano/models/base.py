@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 
-import six
 import inspect
+
+import six
 
 from syncano.exceptions import SyncanoValidationError, SyncanoDoesNotExist
 from . import fields
@@ -11,6 +12,7 @@ from .registry import registry
 
 
 class ModelMetaclass(type):
+    """Metaclass for all models."""
 
     def __new__(cls, name, bases, attrs):
         super_new = super(ModelMetaclass, cls).__new__
@@ -63,7 +65,7 @@ class ModelMetaclass(type):
         )
 
     def build_doc(cls, name, meta):
-        '''Give the class a docstring if it\'s not defined.'''
+        """Give the class a docstring if it's not defined."""
         if cls.__doc__ is not None:
             return
 
@@ -72,21 +74,25 @@ class ModelMetaclass(type):
 
 
 class Model(six.with_metaclass(ModelMetaclass)):
+    """Base class for all models."""
 
     def __init__(self, **kwargs):
         self._raw_data = {}
         self.to_python(kwargs)
 
     def __repr__(self):
+        """Displays current instance class name and pk."""
         return '<{0}: {1}>'.format(
             self.__class__.__name__,
             self.pk
         )
 
     def __str__(self):
+        """Wrapper around ```repr`` method."""
         return repr(self)
 
     def __unicode__(self):
+        """Wrapper around ```repr`` method with proper encoding."""
         return six.u(repr(self))
 
     def _get_connection(self, **kwargs):
@@ -94,6 +100,10 @@ class Model(six.with_metaclass(ModelMetaclass)):
         return connection or self._meta.connection
 
     def save(self, **kwargs):
+        """
+        Creates or updates the current instance.
+        Override this in a subclass if you want to control the saving process.
+        """
         self.validate()
         data = self.to_native()
         connection = self._get_connection(**kwargs)
@@ -115,6 +125,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
         return self
 
     def delete(self, **kwargs):
+        """Removes the current instance."""
         if not self.links:
             raise SyncanoValidationError('Method allowed only on existing model.')
 
@@ -124,6 +135,11 @@ class Model(six.with_metaclass(ModelMetaclass)):
         self._raw_data = {}
 
     def validate(self):
+        """
+        Validates the current instance.
+
+        :raises: SyncanoValidationError, SyncanoFieldError
+        """
         for field in self._meta.fields:
             if not field.read_only:
                 value = getattr(self, field.name)
@@ -146,12 +162,20 @@ class Model(six.with_metaclass(ModelMetaclass)):
         return False
 
     def to_python(self, data):
+        """
+        Converts raw data to python types and built-in objects.
+
+        :type data: dict
+        :param data: Raw data
+        """
         for field in self._meta.fields:
             if field.name in data:
                 value = data[field.name]
                 setattr(self, field.name, value)
 
     def to_native(self):
+        """Converts the current instance to raw data which
+        can be serialized to JSON and send to API."""
         data = {}
         for field in self._meta.fields:
             if not field.read_only and field.has_data:

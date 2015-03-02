@@ -1,14 +1,14 @@
 from __future__ import unicode_literals
 
-import six
 import re
+
+import six
 
 from syncano import logger
 
-__all__ = ['registry']
-
 
 class Registry(object):
+    """Models registry."""
 
     def __init__(self, models=None):
         self.models = models or {}

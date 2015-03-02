@@ -180,9 +180,12 @@ pseudoxml:
 gh-pages:
 	make html
 	git checkout gh-pages
-	cd .. && rm -rf _sources _static
+	cd .. && rm -rf _modules _sources _static refs syncano
 	mv -fv build/html/* ../
 	cd .. && git add -A
 	cd .. && git commit -am "Generated gh-pages."
 	cd .. && git push origin gh-pages
 	git checkout $(GIT_BRANCH_NAME)
+
+rst:
+	sphinx-apidoc -o source/refs ../ -T -e

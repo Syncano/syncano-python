@@ -1,4 +1,5 @@
 from copy import deepcopy
+from functools import wraps
 
 import six
 
@@ -7,11 +8,15 @@ from syncano.exceptions import SyncanoValueError, SyncanoRequestError
 from syncano.utils import get_class_name
 from .registry import registry
 
+
 # The maximum number of items to display in a Manager.__repr__
 REPR_OUTPUT_SIZE = 20
 
 
 def clone(func):
+    """Decorator which will ensure that we are working on copy of ``self``."""
+
+    @wraps(func)
     def inner(self, *args, **kwargs):
         self = self._clone()
         return func(self, *args, **kwargs)
@@ -53,6 +58,7 @@ class RelatedManagerDescriptor(object):
 
 
 class Manager(ConnectionMixin):
+    """Base class responsible for all ORM (``please``) actions."""
 
     def __init__(self):
         self.name = None
@@ -117,6 +123,9 @@ class Manager(ConnectionMixin):
     # Object actions
 
     def create(self, **kwargs):
+        """
+        A convenience method for creating an object and saving it all in one step.
+        """
         attrs = kwargs.copy()
         attrs.update(self.properties)
 
@@ -126,19 +135,29 @@ class Manager(ConnectionMixin):
         return instance
 
     def bulk_create(self, objects):
+        """
+        Creates many new instances based on provided list of objects.
+
+        .. warning::
+            This method is not meant to be used with large datasets.
+        """
         return [self.create(**o) for o in objects]
 
     @clone
     def get(self, *args, **kwargs):
+        """Returns the object matching the given lookup parameters."""
         self.method = 'GET'
         self.endpoint = 'detail'
         self._filter(*args, **kwargs)
         return self.request()
 
     def detail(self, *args, **kwargs):
+        """Wrapper around ``get`` method."""
         return self.get(*args, **kwargs)
 
     def get_or_create(self, *args, **kwargs):
+        """A convenience method for looking up an object with the given
+        lookup parameters, creating one if necessary."""
         defaults = deepcopy(kwargs.pop('defaults', {}))
         try:
             instance = self.get(*args, **kwargs)
@@ -149,6 +168,7 @@ class Manager(ConnectionMixin):
 
     @clone
     def delete(self, *args, **kwargs):
+        """Removes single instance based on provided arguments."""
         self.method = 'DELETE'
         self.endpoint = 'detail'
         self._filter(*args, **kwargs)
@@ -156,6 +176,7 @@ class Manager(ConnectionMixin):
 
     @clone
     def update(self, *args, **kwargs):
+        """Updates single instance based on provided arguments."""
         self.method = 'PUT'
         self.endpoint = 'detail'
         self.data = kwargs.pop('data')
@@ -163,23 +184,29 @@ class Manager(ConnectionMixin):
         return self.request()
 
     def update_or_create(self, *args, **kwargs):
-        data = deepcopy(kwargs.get('data', {}))
+        """
+        A convenience method for updating an object with the given parameters, creating a new one if necessary.
+        The ``defaults`` is a dictionary of (field, value) pairs used to update the object.
+        """
+        defaults = deepcopy(kwargs.get('defaults', {}))
         try:
             instance = self.update(*args, **kwargs)
         except self.model.DoesNotExist:
-            data.update(kwargs)
-            instance = self.create(**data)
+            defaults.update(kwargs)
+            instance = self.create(**defaults)
         return instance
 
     # List actions
 
     @clone
     def all(self, *args, **kwargs):
+        """Returns a copy of the current ``Manager`` with limit removed."""
         self._limit = None
         return self.list(*args, **kwargs)
 
     @clone
     def list(self, *args, **kwargs):
+        """Returns a copy of the current ``Manager`` containing objects that match the given lookup parameters."""
         self.method = 'GET'
         self.endpoint = 'list'
         self._filter(*args, **kwargs)
@@ -187,6 +214,7 @@ class Manager(ConnectionMixin):
 
     @clone
     def first(self, *args, **kwargs):
+        """Returns the first object matched by the lookup parameters or None, if there is no matching object."""
         try:
             self._limit = 1
             return self.list(*args, **kwargs)[0]
@@ -195,6 +223,7 @@ class Manager(ConnectionMixin):
 
     @clone
     def page_size(self, value):
+        """Sets page size."""
         if not value or not isinstance(value, six.integer_types):
             raise SyncanoValueError('page_size value needs to be an int.')
 
@@ -203,6 +232,7 @@ class Manager(ConnectionMixin):
 
     @clone
     def limit(self, value):
+        """Sets limit of returned objects."""
         if not value or not isinstance(value, six.integer_types):
             raise SyncanoValueError('Limit value needs to be an int.')
 
@@ -211,6 +241,7 @@ class Manager(ConnectionMixin):
 
     @clone
     def order_by(self, field):
+        """Sets order of returned objects."""
         if not field or not isinstance(field, six.string_types):
             raise SyncanoValueError('Order by field needs to be a string.')
 
@@ -219,11 +250,13 @@ class Manager(ConnectionMixin):
 
     @clone
     def raw(self):
+        """Disables serialization. ``request`` method will return raw Python types."""
         self._serialize = False
         return self
 
     @clone
     def using(self, connection):
+        """Connection juggling."""
         # ConnectionMixin will validate this
         self.connection = connection
         return self
@@ -264,6 +297,7 @@ class Manager(ConnectionMixin):
         return manager
 
     def serialize(self, data, model=None):
+        """Serializes passed data to related :class:`~syncano.models.base.Model` class."""
         if not isinstance(data, dict):
             return
 
@@ -274,6 +308,7 @@ class Manager(ConnectionMixin):
         return model(**properties) if self._serialize else data
 
     def request(self, method=None, path=None, **request):
+        """Internal method, which calls Syncano API and returns serialized data."""
         meta = self.model._meta
         method = method or self.method
         path = path or meta.resolve_endpoint(self.endpoint, self.properties)
@@ -297,7 +332,7 @@ class Manager(ConnectionMixin):
         return response
 
     def iterator(self):
-        '''Pagination handler'''
+        """Pagination handler"""
 
         response = self.request()
         results = 0
@@ -319,6 +354,10 @@ class Manager(ConnectionMixin):
 
 
 class WebhookManager(Manager):
+    """
+    Custom :class:`~syncano.models.manager.Manager`
+    class for :class:`~syncano.models.base.Webhook` model.
+    """
 
     @clone
     def run(self, *args, **kwargs):
@@ -330,6 +369,10 @@ class WebhookManager(Manager):
 
 
 class ObjectManager(Manager):
+    """
+    Custom :class:`~syncano.models.manager.Manager`
+    class for :class:`~syncano.models.base.Object` model.
+    """
 
     def create(self, **kwargs):
         attrs = kwargs.copy()
@@ -346,6 +389,7 @@ class ObjectManager(Manager):
         return super(ObjectManager, self).serialize(data, model)
 
     def get_class_model(self, properties):
+        """Creates custom :class:`~syncano.models.base.Object` sub-class definition based on passed ``properties``."""
         instance_name = properties.get('instance_name', '')
         class_name = properties.get('class_name', '')
         model_name = get_class_name(instance_name, class_name, 'object')
@@ -371,6 +415,10 @@ class ObjectManager(Manager):
 
 
 class SchemaManager(object):
+    """
+    Custom :class:`~syncano.models.manager.Manager`
+    class for :class:`~syncano.models.fields.SchemaFiled`.
+    """
 
     def __init__(self, schema=None):
         self.schema = schema or []
@@ -410,19 +458,34 @@ class SchemaManager(object):
         return item in self.schema
 
     def set(self, value):
+        """Sets schema value."""
         self.schema = value
 
     def add(self, *objects):
+        """Adds multiple objects to schema."""
         self.schema.extend(objects)
 
     def remove(self, *names):
+        """Removes selected objects based on their names."""
         values = [v for v in self.schema if v['name'] not in names]
         self.set(values)
 
     def clear(self):
+        """Sets empty schema."""
         self.set([])
 
     def set_index(self, field, order=False, filter=False):
+        """Sets index on selected field.
+
+        :type field: string
+        :param field: Name of schema field
+
+        :type filter: bool
+        :param filter: Sets filter index on selected field
+
+        :type order: bool
+        :param order: Sets order index on selected field
+        """
         if not order and not filter:
             raise ValueError('Choose at least one index.')
 
@@ -433,12 +496,25 @@ class SchemaManager(object):
             self[field]['filter_index'] = True
 
     def set_order_index(self, field):
+        """Shortcut for ``set_index(field, order=True)``."""
         self.set_index(field, order=True)
 
     def set_filter_index(self, field):
+        """Shortcut for ``set_index(field, filter=True)``."""
         self.set_index(field, filter=True)
 
     def remove_index(self, field, order=False, filter=False):
+        """Removes index from selected field.
+
+        :type field: string
+        :param field: Name of schema field
+
+        :type filter: bool
+        :param filter: Removes filter index from selected field
+
+        :type order: bool
+        :param order: Removes order index from selected field
+        """
         if not order and not filter:
             raise ValueError('Choose at least one index.')
 
@@ -449,7 +525,9 @@ class SchemaManager(object):
             del self[field]['filter_index']
 
     def remove_order_index(self, field):
+        """Shortcut for ``remove_index(field, order=True)``."""
         self.remove_index(field, order=True)
 
     def remove_filter_index(self, field):
+        """Shortcut for ``remove_index(field, filter=True)``."""
         self.remove_index(field, filter=True)
