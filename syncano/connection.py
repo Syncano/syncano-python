@@ -13,17 +13,17 @@ __all__ = ['default_connection', 'Connection', 'ConnectionMixin']
 
 def is_success(code):
     """Checks if response code is successful."""
-    return code >= 200 and code <= 299
+    return 200 <= code <= 299
 
 
 def is_client_error(code):
     """Checks if response code has client error."""
-    return code >= 400 and code <= 499
+    return 400 <= code <= 499
 
 
 def is_server_error(code):
     """Checks if response code has server error."""
-    return code >= 500 and code <= 599
+    return 500 <= code <= 599
 
 
 class DefaultConnection(object):

@@ -457,16 +457,20 @@ class SchemaManager(object):
         return item in self.schema
 
     def set(self, value):
+        """Sets schema value."""
         self.schema = value
 
     def add(self, *objects):
+        """Adds multiple objects to schema."""
         self.schema.extend(objects)
 
     def remove(self, *names):
+        """Removes selected objects based on their names."""
         values = [v for v in self.schema if v['name'] not in names]
         self.set(values)
 
     def clear(self):
+        """Sets empty schema."""
         self.set([])
 
     def set_index(self, field, order=False, filter=False):

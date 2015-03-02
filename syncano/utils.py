@@ -4,13 +4,13 @@ from slugify import slugify
 
 
 def camelcase_to_underscore(text):
-    """Converts camelcase text to underscore fromat."""
+    """Converts camelcase text to underscore format."""
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', text)
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
 
 def underscore_to_camelcase(text):
-    """Converts underscore text to camelcase fromat."""
+    """Converts underscore text to camelcase format."""
     text = text.replace('_', ' ').title()
     return text.replace(' ', '')
 

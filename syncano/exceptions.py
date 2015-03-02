@@ -68,4 +68,4 @@ class SyncanoFieldError(SyncanoValidationError):
 
 
 class SyncanoDoesNotExist(SyncanoException):
-    """An does't exist error occurred."""
+    """An doesn't exist error occurred."""

@@ -75,13 +75,13 @@ Making Connections
 If you want to connect directly to chosen instance you can use :func:`~syncano.connect_instance` function::
 
     >>> import syncano
-    >>> connection = syncano.connect_insatnce('insatnce_name', email='YOUR_EMAIL', password='YOUR_PASSWORD')
+    >>> connection = syncano.connect_instance('instance_name', email='YOUR_EMAIL', password='YOUR_PASSWORD')
 
 If you have obtained your ``Account Key`` from the website you can omit ``email`` & ``password`` and pass ``Account Key`` directly to connection:
 
     >>> import syncano
     >>> connection = syncano.connect(api_key='YOUR_API_KEY')
-    >>> connection = syncano.connect_insatnce('insatnce_name', api_key='YOUR_API_KEY')
+    >>> connection = syncano.connect_instance('instance_name', api_key='YOUR_API_KEY')
 
 
 Troubleshooting Connections
@@ -122,13 +122,13 @@ and add a :class:`~syncano.models.base.ApiKey` to it::
     >>> api_key.api_key
     u'aad17f86d41483db7088ad2549ccb87902d60e45'
 
-Each model has a different set of fields and commands. For more informations check :ref:`available models <models>`.
+Each model has a different set of fields and commands. For more information check :ref:`available models <models>`.
 
 Next Steps
 ----------
 
 If you'd like more information on interacting with Syncano, check out the :ref:`interacting tutorial<interacting>` or if you
-want to know what kind of models are avalable check out the :ref:`available models <models>` list.
+want to know what kind of models are available check out the :ref:`available models <models>` list.
 
 
 
