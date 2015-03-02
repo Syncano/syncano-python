@@ -18,7 +18,7 @@ class SyncanoException(Exception):
 
 
 class SyncanoValueError(SyncanoException):
-    """An Python :class:`ValueError` error occurred."""
+    """A Python :class:`ValueError` error occurred."""
 
 
 class SyncanoRequestError(SyncanoException):
@@ -50,7 +50,7 @@ class SyncanoRequestError(SyncanoException):
 
 
 class SyncanoValidationError(SyncanoValueError):
-    """An validation error occurred."""
+    """A validation error occurred."""
 
 
 class SyncanoFieldError(SyncanoValidationError):
@@ -68,4 +68,4 @@ class SyncanoFieldError(SyncanoValidationError):
 
 
 class SyncanoDoesNotExist(SyncanoException):
-    """An doesn't exist error occurred."""
+    """Syncano object doesn't exist error occurred."""

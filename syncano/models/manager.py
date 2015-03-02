@@ -152,7 +152,7 @@ class Manager(ConnectionMixin):
         return self.request()
 
     def detail(self, *args, **kwargs):
-        """Wrapper around ``get``` method."""
+        """Wrapper around ``get`` method."""
         return self.get(*args, **kwargs)
 
     def get_or_create(self, *args, **kwargs):
@@ -214,7 +214,7 @@ class Manager(ConnectionMixin):
 
     @clone
     def first(self, *args, **kwargs):
-        """Returns the first object matched by the lookup parameters, or None if there is no matching object."""
+        """Returns the first object matched by the lookup parameters or None, if there is no matching object."""
         try:
             self._limit = 1
             return self.list(*args, **kwargs)[0]
@@ -308,7 +308,7 @@ class Manager(ConnectionMixin):
         return model(**properties) if self._serialize else data
 
     def request(self, method=None, path=None, **request):
-        """Internal method which calls Syncano API and returns serialized data."""
+        """Internal method, which calls Syncano API and returns serialized data."""
         meta = self.model._meta
         method = method or self.method
         path = path or meta.resolve_endpoint(self.endpoint, self.properties)
