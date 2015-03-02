@@ -1,1 +1,5 @@
 docs
+*.pyc
+.idea
+*.sublime-project
+*.sublime-workspace
