@@ -1,8 +1,9 @@
 import json
-import requests
-import six
 from urlparse import urljoin
 from copy import deepcopy
+
+import requests
+import six
 
 import syncano
 from syncano.exceptions import SyncanoValueError, SyncanoRequestError

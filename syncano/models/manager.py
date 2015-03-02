@@ -8,6 +8,7 @@ from syncano.exceptions import SyncanoValueError, SyncanoRequestError
 from syncano.utils import get_class_name
 from .registry import registry
 
+
 # The maximum number of items to display in a Manager.__repr__
 REPR_OUTPUT_SIZE = 20
 
@@ -474,6 +475,17 @@ class SchemaManager(object):
         self.set([])
 
     def set_index(self, field, order=False, filter=False):
+        """Sets index on selected field.
+
+        :type field: string
+        :param field: Name of schema field
+
+        :type filter: bool
+        :param filter: Sets filter index on selected field
+
+        :type order: bool
+        :param order: Sets order index on selected field
+        """
         if not order and not filter:
             raise ValueError('Choose at least one index.')
 
@@ -484,12 +496,25 @@ class SchemaManager(object):
             self[field]['filter_index'] = True
 
     def set_order_index(self, field):
+        """Shortcut for ``set_index(field, order=True)``."""
         self.set_index(field, order=True)
 
     def set_filter_index(self, field):
+        """Shortcut for ``set_index(field, filter=True)``."""
         self.set_index(field, filter=True)
 
     def remove_index(self, field, order=False, filter=False):
+        """Removes index from selected field.
+
+        :type field: string
+        :param field: Name of schema field
+
+        :type filter: bool
+        :param filter: Removes filter index from selected field
+
+        :type order: bool
+        :param order: Removes order index from selected field
+        """
         if not order and not filter:
             raise ValueError('Choose at least one index.')
 
@@ -500,7 +525,9 @@ class SchemaManager(object):
             del self[field]['filter_index']
 
     def remove_order_index(self, field):
+        """Shortcut for ``remove_index(field, order=True)``."""
         self.remove_index(field, order=True)
 
     def remove_filter_index(self, field):
+        """Shortcut for ``remove_index(field, filter=True)``."""
         self.remove_index(field, filter=True)

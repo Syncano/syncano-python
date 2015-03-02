@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 
-import six
 import inspect
+
+import six
 
 from syncano.exceptions import SyncanoValidationError, SyncanoDoesNotExist
 from . import fields

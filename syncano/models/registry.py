@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
 
-import six
 import re
+
+import six
 
 from syncano import logger
 

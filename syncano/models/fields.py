@@ -1,8 +1,9 @@
 import json
 import re
+from datetime import date, datetime
+
 import six
 import validictory
-from datetime import date, datetime
 
 from syncano import logger
 from syncano.exceptions import SyncanoFieldError, SyncanoValueError
