@@ -3,3 +3,4 @@ docs
 .idea
 *.sublime-project
 *.sublime-workspace
+run_it.py
