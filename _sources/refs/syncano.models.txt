@@ -1,5 +1,5 @@
-syncano.models package
-======================
+syncano.models
+==============
 
 Submodules
 ----------

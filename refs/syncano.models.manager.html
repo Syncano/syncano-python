@@ -29,7 +29,7 @@
 
   
     <link rel="top" title="Syncano 4.0.0 documentation" href="../index.html"/>
-        <link rel="up" title="syncano.models package" href="syncano.models.html"/>
+        <link rel="up" title="syncano.models" href="syncano.models.html"/>
         <link rel="next" title="syncano.models.options" href="syncano.models.options.html"/>
         <link rel="prev" title="syncano.models.fields" href="syncano.models.fields.html"/> 
 
@@ -112,7 +112,7 @@
       
           <li><a href="syncano.html">Syncano references</a> &raquo;</li>
       
-          <li><a href="syncano.models.html">syncano.models package</a> &raquo;</li>
+          <li><a href="syncano.models.html">syncano.models</a> &raquo;</li>
       
     <li>syncano.models.manager</li>
       <li class="wy-breadcrumbs-aside">
@@ -142,6 +142,10 @@
 <dt id="syncano.models.manager.Manager.bulk_create">
 <tt class="descname">bulk_create</tt><big>(</big><em>objects</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.bulk_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.bulk_create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates many new instances based on provided list of objects.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This method is not meant to be used with large datasets.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -305,17 +309,20 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Schema
 <dl class="method">
 <dt id="syncano.models.manager.SchemaManager.add">
 <tt class="descname">add</tt><big>(</big><em>*objects</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.add" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Adds multiple objects to schema.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.manager.SchemaManager.clear">
 <tt class="descname">clear</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.clear" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Sets empty schema.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.manager.SchemaManager.remove">
 <tt class="descname">remove</tt><big>(</big><em>*names</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.remove" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Removes selected objects based on their names.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.manager.SchemaManager.remove_filter_index">
@@ -335,7 +342,8 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Schema
 <dl class="method">
 <dt id="syncano.models.manager.SchemaManager.set">
 <tt class="descname">set</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.set" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Sets schema value.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.manager.SchemaManager.set_filter_index">

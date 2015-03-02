@@ -258,7 +258,12 @@
         <span class="k">return</span> <span class="n">instance</span>
 </div>
 <div class="viewcode-block" id="Manager.bulk_create"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.bulk_create">[docs]</a>    <span class="k">def</span> <span class="nf">bulk_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objects</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Creates many new instances based on provided list of objects.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates many new instances based on provided list of objects.</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">            This method is not meant to be used with large datasets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="o">**</span><span class="n">o</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">]</span>
 </div>
     <span class="nd">@clone</span>
@@ -576,16 +581,20 @@
         <span class="k">return</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span>
 
 <div class="viewcode-block" id="SchemaManager.set"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.set">[docs]</a>    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets schema value.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="o">=</span> <span class="n">value</span>
 </div>
 <div class="viewcode-block" id="SchemaManager.add"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">objects</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds multiple objects to schema.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">objects</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="SchemaManager.remove"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">names</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Removes selected objects based on their names.&quot;&quot;&quot;</span>
         <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="SchemaManager.clear"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets empty schema.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">([])</span>
 </div>
 <div class="viewcode-block" id="SchemaManager.set_index"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.set_index">[docs]</a>    <span class="k">def</span> <span class="nf">set_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
