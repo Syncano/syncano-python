@@ -117,7 +117,7 @@ and add a :class:`~syncano.models.base.ApiKey` to it::
     <Instance: dummy_test>
 
     >>> api_key = instance.api_keys.create()
-    >>> ApiKey: 47>
+    >>> api_key
     <ApiKey: 47>
     >>> api_key.api_key
     u'aad17f86d41483db7088ad2549ccb87902d60e45'
