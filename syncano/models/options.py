@@ -1,7 +1,8 @@
 import re
-import six
 from bisect import bisect
 from urlparse import urljoin
+
+import six
 
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoValueError
@@ -10,6 +11,7 @@ from syncano.utils import camelcase_to_underscore
 
 
 class Options(ConnectionMixin):
+    """Holds metadata related to model definition."""
 
     def __init__(self, meta=None):
         self.name = None

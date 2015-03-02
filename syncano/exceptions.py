@@ -18,10 +18,15 @@ class SyncanoException(Exception):
 
 
 class SyncanoValueError(SyncanoException):
-    pass
+    """A Python :class:`ValueError` error occurred."""
 
 
 class SyncanoRequestError(SyncanoException):
+    """An HTTP error occurred.
+
+    :ivar status_code: HTTP status code e.g: 404
+    :ivar reason: Error text representation
+    """
 
     def __init__(self, status_code, reason, *args):
         self.status_code = status_code
@@ -45,10 +50,14 @@ class SyncanoRequestError(SyncanoException):
 
 
 class SyncanoValidationError(SyncanoValueError):
-    pass
+    """A validation error occurred."""
 
 
 class SyncanoFieldError(SyncanoValidationError):
+    """A field error occurred.
+
+    :ivar field_name: Related field name
+    """
     field_name = None
 
     def __repr__(self):
@@ -59,4 +68,4 @@ class SyncanoFieldError(SyncanoValidationError):
 
 
 class SyncanoDoesNotExist(SyncanoException):
-    pass
+    """Syncano object doesn't exist error occurred."""

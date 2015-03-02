@@ -1,8 +1,9 @@
 import json
-import requests
-import six
 from urlparse import urljoin
 from copy import deepcopy
+
+import requests
+import six
 
 import syncano
 from syncano.exceptions import SyncanoValueError, SyncanoRequestError
@@ -12,18 +13,23 @@ __all__ = ['default_connection', 'Connection', 'ConnectionMixin']
 
 
 def is_success(code):
-    return code >= 200 and code <= 299
+    """Checks if response code is successful."""
+    return 200 <= code <= 299
 
 
 def is_client_error(code):
-    return code >= 400 and code <= 499
+    """Checks if response code has client error."""
+    return 400 <= code <= 499
 
 
 def is_server_error(code):
-    return code >= 500 and code <= 599
+    """Checks if response code has server error."""
+    return 500 <= code <= 599
 
 
 class DefaultConnection(object):
+    """Singleton class which holds default connection."""
+
     def __init__(self):
         self._connection = None
 
@@ -43,8 +49,18 @@ default_connection = DefaultConnection()
 
 
 class Connection(object):
+    """Base connection class.
+
+    :ivar host: Syncano API host
+    :ivar email: Your Syncano email address
+    :ivar password: Your Syncano password
+    :ivar api_key: Your Syncano ``Account Key``
+    :ivar logger: Python logger instance
+    :ivar timeout: Default request timeout
+    :ivar verify_ssl: Verify SSL certificate
+    """
+
     AUTH_SUFFIX = 'v1/account/auth'
-    SCHEMA_SUFFIX = 'v1/schema'
     CONTENT_TYPE = 'application/json'
 
     def __init__(self, host=None, email=None, password=None, api_key=None, **kwargs):
@@ -58,6 +74,13 @@ class Connection(object):
         self.verify_ssl = kwargs.pop('verify_ssl', True)
 
     def build_params(self, params):
+        """
+        :type params: dict
+        :param params: Params which will be passed to request
+
+        :rtype: dict
+        :return: Request params
+        """
         params = deepcopy(params)
         params['timeout'] = params.get('timeout') or self.timeout
         params['headers'] = params.get('headers') or {}
@@ -75,6 +98,14 @@ class Connection(object):
         return params
 
     def build_url(self, path):
+        """Ensures proper format for provided path.
+
+        :type path: string
+        :param path: Request path
+
+        :rtype: string
+        :return: Request URL
+        """
         if not isinstance(path, six.string_types):
             raise SyncanoValueError('"path" should be a string.')
 
@@ -98,8 +129,18 @@ class Connection(object):
         return urljoin(self.host, path)
 
     def request(self, method_name, path, **kwargs):
-        '''Simple wrapper around make_request which
-        will ensure that request is authenticated.'''
+        """Simple wrapper around :func:`~syncano.connection.Connection.make_request` which
+        will ensure that request is authenticated.
+
+        :type method_name: string
+        :param method_name: HTTP request method e.g: GET
+
+        :type path: string
+        :param path: Request path or full URL
+
+        :rtype: dict
+        :return: JSON response
+        """
 
         if not self.is_authenticated():
             self.authenticate()
@@ -107,6 +148,19 @@ class Connection(object):
         return self.make_request(method_name, path, **kwargs)
 
     def make_request(self, method_name, path, **kwargs):
+        """
+        :type method_name: string
+        :param method_name: HTTP request method e.g: GET
+
+        :type path: string
+        :param path: Request path or full URL
+
+        :rtype: dict
+        :return: JSON response
+
+        :raises SyncanoValueError: if invalid request method was chosen
+        :raises SyncanoRequestError: if something went wrong during the request
+        """
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)
 
@@ -151,17 +205,27 @@ class Connection(object):
 
         return content
 
-    @property
-    def schema(self):
-        if not hasattr(self, '_schema'):
-            response = self.make_request('GET', self.SCHEMA_SUFFIX)
-            self._schema = response
-        return self._schema
-
     def is_authenticated(self):
+        """Checks if current session is authenticated.
+
+        :rtype: boolean
+        :return: Session authentication state
+        """
+
         return self.api_key is not None
 
     def authenticate(self, email=None, password=None):
+        """
+        :type email: string
+        :param email: Your Syncano account email address
+
+        :type password: string
+        :param password: Your Syncano password
+
+        :rtype: string
+        :return: Your ``Account Key``
+        """
+
         if self.is_authenticated():
             self.logger.debug('Connection already authenticated: %s', self.api_key)
             return self.api_key
@@ -187,6 +251,7 @@ class Connection(object):
 
 
 class ConnectionMixin(object):
+    """Injects connection attribute with support of basic validation."""
 
     def __init__(self, *args, **kwargs):
         self._connection = None
