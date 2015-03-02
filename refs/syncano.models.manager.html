@@ -168,13 +168,13 @@
 <dl class="method">
 <dt id="syncano.models.manager.Manager.detail">
 <tt class="descname">detail</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.detail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.detail" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper around <tt class="docutils literal"><span class="pre">get`</span></tt> method.</p>
+<dd><p>Wrapper around <tt class="docutils literal"><span class="pre">get</span></tt> method.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.manager.Manager.first">
 <tt class="descname">first</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.first"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.first" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the first object matched by the lookup parameters, or None if there is no matching object.</p>
+<dd><p>Returns the first object matched by the lookup parameters or None, if there is no matching object.</p>
 </dd></dl>
 
 <dl class="method">
@@ -229,7 +229,7 @@ lookup parameters, creating one if necessary.</p>
 <dl class="method">
 <dt id="syncano.models.manager.Manager.request">
 <tt class="descname">request</tt><big>(</big><em>method=None</em>, <em>path=None</em>, <em>**request</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.request" title="Permalink to this definition">¶</a></dt>
-<dd><p>Internal method which calls Syncano API and returns serialized data.</p>
+<dd><p>Internal method, which calls Syncano API and returns serialized data.</p>
 </dd></dl>
 
 <dl class="method">
@@ -327,17 +327,33 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Schema
 <dl class="method">
 <dt id="syncano.models.manager.SchemaManager.remove_filter_index">
 <tt class="descname">remove_filter_index</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.remove_filter_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.remove_filter_index" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Shortcut for <tt class="docutils literal"><span class="pre">remove_index(field,</span> <span class="pre">filter=True)</span></tt>.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.manager.SchemaManager.remove_index">
 <tt class="descname">remove_index</tt><big>(</big><em>field</em>, <em>order=False</em>, <em>filter=False</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.remove_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.remove_index" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Removes index from selected field.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field</strong> (<em>string</em>) &#8211; Name of schema field</li>
+<li><strong>filter</strong> (<em>bool</em>) &#8211; Removes filter index from selected field</li>
+<li><strong>order</strong> (<em>bool</em>) &#8211; Removes order index from selected field</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.manager.SchemaManager.remove_order_index">
 <tt class="descname">remove_order_index</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.remove_order_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.remove_order_index" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Shortcut for <tt class="docutils literal"><span class="pre">remove_index(field,</span> <span class="pre">order=True)</span></tt>.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.manager.SchemaManager.set">
@@ -348,17 +364,33 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Schema
 <dl class="method">
 <dt id="syncano.models.manager.SchemaManager.set_filter_index">
 <tt class="descname">set_filter_index</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.set_filter_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.set_filter_index" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Shortcut for <tt class="docutils literal"><span class="pre">set_index(field,</span> <span class="pre">filter=True)</span></tt>.</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.manager.SchemaManager.set_index">
 <tt class="descname">set_index</tt><big>(</big><em>field</em>, <em>order=False</em>, <em>filter=False</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.set_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.set_index" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Sets index on selected field.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field</strong> (<em>string</em>) &#8211; Name of schema field</li>
+<li><strong>filter</strong> (<em>bool</em>) &#8211; Sets filter index on selected field</li>
+<li><strong>order</strong> (<em>bool</em>) &#8211; Sets order index on selected field</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.manager.SchemaManager.set_order_index">
 <tt class="descname">set_order_index</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.set_order_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.set_order_index" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Shortcut for <tt class="docutils literal"><span class="pre">set_index(field,</span> <span class="pre">order=True)</span></tt>.</p>
+</dd></dl>
 
 </dd></dl>
 

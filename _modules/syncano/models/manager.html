@@ -132,6 +132,7 @@
 <span class="kn">from</span> <span class="nn">syncano.utils</span> <span class="kn">import</span> <span class="n">get_class_name</span>
 <span class="kn">from</span> <span class="nn">.registry</span> <span class="kn">import</span> <span class="n">registry</span>
 
+
 <span class="c"># The maximum number of items to display in a Manager.__repr__</span>
 <span class="n">REPR_OUTPUT_SIZE</span> <span class="o">=</span> <span class="mi">20</span>
 
@@ -275,7 +276,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Manager.detail"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.detail">[docs]</a>    <span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Wrapper around ``get``` method.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Wrapper around ``get`` method.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Manager.get_or_create"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.get_or_create">[docs]</a>    <span class="k">def</span> <span class="nf">get_or_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -337,7 +338,7 @@
 </div>
     <span class="nd">@clone</span>
 <div class="viewcode-block" id="Manager.first"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.first">[docs]</a>    <span class="k">def</span> <span class="nf">first</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the first object matched by the lookup parameters, or None if there is no matching object.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns the first object matched by the lookup parameters or None, if there is no matching object.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_limit</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -431,7 +432,7 @@
         <span class="k">return</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">properties</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_serialize</span> <span class="k">else</span> <span class="n">data</span>
 </div>
 <div class="viewcode-block" id="Manager.request"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.request">[docs]</a>    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">request</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Internal method which calls Syncano API and returns serialized data.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Internal method, which calls Syncano API and returns serialized data.&quot;&quot;&quot;</span>
         <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span>
         <span class="n">method</span> <span class="o">=</span> <span class="n">method</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">path</span> <span class="ow">or</span> <span class="n">meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
@@ -598,6 +599,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">([])</span>
 </div>
 <div class="viewcode-block" id="SchemaManager.set_index"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.set_index">[docs]</a>    <span class="k">def</span> <span class="nf">set_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets index on selected field.</span>
+
+<span class="sd">        :type field: string</span>
+<span class="sd">        :param field: Name of schema field</span>
+
+<span class="sd">        :type filter: bool</span>
+<span class="sd">        :param filter: Sets filter index on selected field</span>
+
+<span class="sd">        :type order: bool</span>
+<span class="sd">        :param order: Sets order index on selected field</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">order</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">filter</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Choose at least one index.&#39;</span><span class="p">)</span>
 
@@ -608,12 +620,25 @@
             <span class="bp">self</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s">&#39;filter_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
 </div>
 <div class="viewcode-block" id="SchemaManager.set_order_index"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.set_order_index">[docs]</a>    <span class="k">def</span> <span class="nf">set_order_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Shortcut for ``set_index(field, order=True)``.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="SchemaManager.set_filter_index"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.set_filter_index">[docs]</a>    <span class="k">def</span> <span class="nf">set_filter_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Shortcut for ``set_index(field, filter=True)``.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="SchemaManager.remove_index"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.remove_index">[docs]</a>    <span class="k">def</span> <span class="nf">remove_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Removes index from selected field.</span>
+
+<span class="sd">        :type field: string</span>
+<span class="sd">        :param field: Name of schema field</span>
+
+<span class="sd">        :type filter: bool</span>
+<span class="sd">        :param filter: Removes filter index from selected field</span>
+
+<span class="sd">        :type order: bool</span>
+<span class="sd">        :param order: Removes order index from selected field</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">order</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">filter</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Choose at least one index.&#39;</span><span class="p">)</span>
 
@@ -624,9 +649,11 @@
             <span class="k">del</span> <span class="bp">self</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s">&#39;filter_index&#39;</span><span class="p">]</span>
 </div>
 <div class="viewcode-block" id="SchemaManager.remove_order_index"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.remove_order_index">[docs]</a>    <span class="k">def</span> <span class="nf">remove_order_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Shortcut for ``remove_index(field, order=True)``.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">remove_index</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="SchemaManager.remove_filter_index"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.remove_filter_index">[docs]</a>    <span class="k">def</span> <span class="nf">remove_filter_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Shortcut for ``remove_index(field, filter=True)``.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">remove_index</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></div></div>
 </pre></div>
 
