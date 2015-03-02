@@ -110,6 +110,12 @@ class Field(object):
         """
         return value
 
+    def to_query(self, value, lookup_type):
+        """
+        Returns field's value prepared for usage in HTTP request query.
+        """
+        return value
+
     def contribute_to_class(self, cls, name):
         if name in cls._meta.endpoint_fields:
             self.has_endpoint_data = True
