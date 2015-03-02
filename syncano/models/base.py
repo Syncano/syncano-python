@@ -517,7 +517,9 @@ class Object(Model):
         for field in schema:
             field_type = field.get('type')
             field_class = fields.MAPPING[field_type]
-            attrs[field['name']] = field_class(required=False, read_only=False)
+            query_allowed = ('order_index' in field or 'filter_index' in field)
+            attrs[field['name']] = field_class(required=False, read_only=False,
+                                               query_allowed=query_allowed)
 
         return type(str(name), (cls, ), attrs)
 
