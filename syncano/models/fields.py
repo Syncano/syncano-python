@@ -78,14 +78,14 @@ class Field(object):
 
     def validate(self, value, model_instance):
         if self.required and not value:
-            raise self.VaidationError('This field is required.')
+            raise self.ValidationError('This field is required.')
 
         if isinstance(value, six.string_types):
             if self.max_length and len(value) > self.max_length:
-                raise self.VaidationError('Max length reached.')
+                raise self.ValidationError('Max length reached.')
 
             if self.min_length and len(value) < self.min_length:
-                raise self.VaidationError('Min length reached.')
+                raise self.ValidationError('Min length reached.')
 
     def to_python(self, value):
         return value
@@ -105,7 +105,7 @@ class Field(object):
 
         if self.primary_key:
             if cls._meta.pk:
-                raise SyncanoValueError('Multiple pk fiedls detected.')
+                raise SyncanoValueError('Multiple pk fields detected.')
 
             cls._meta.pk = self
             setattr(cls, 'pk', self)
@@ -115,12 +115,12 @@ class Field(object):
         setattr(cls, name, self)
 
         ErrorClass = type(
-            '{0}VaidationError'.format(self.__class__.__name__),
+            '{0}ValidationError'.format(self.__class__.__name__),
             (SyncanoFieldError, ),
             {'field_name': name}
         )
 
-        setattr(self, 'VaidationError', ErrorClass)
+        setattr(self, 'ValidationError', ErrorClass)
 
 
 class PrimaryKeyField(Field):
@@ -153,7 +153,7 @@ class IntegerField(WritableField):
         try:
             return int(value)
         except (TypeError, ValueError):
-            raise self.VaidationError('Invalid value. Value should be an integer.')
+            raise self.ValidationError('Invalid value. Value should be an integer.')
 
 
 class FloatField(WritableField):
@@ -164,7 +164,7 @@ class FloatField(WritableField):
         try:
             return float(value)
         except (TypeError, ValueError):
-            raise self.VaidationError('Invalid value. Value should be a float.')
+            raise self.ValidationError('Invalid value. Value should be a float.')
 
 
 class BooleanField(WritableField):
@@ -179,7 +179,7 @@ class BooleanField(WritableField):
         if value in ('f', 'False', '0'):
             return False
 
-        raise self.VaidationError('Invalid value. Value should be a boolean.')
+        raise self.ValidationError('Invalid value. Value should be a boolean.')
 
 
 class SlugField(StringField):
@@ -188,7 +188,7 @@ class SlugField(StringField):
     def validate(self, value, model_instance):
         super(SlugField, self).validate(value, model_instance)
         if not bool(self.regex.search(value)):
-            raise self.VaidationError('Invalid value.')
+            raise self.ValidationError('Invalid value.')
         return value
 
 
@@ -199,10 +199,10 @@ class EmailField(StringField):
         super(EmailField, self).validate(value, model_instance)
 
         if not value or '@' not in value:
-            raise self.VaidationError('Enter a valid email address.')
+            raise self.ValidationError('Enter a valid email address.')
 
         if not bool(self.regex.match(value)):
-            raise self.VaidationError('Enter a valid email address.')
+            raise self.ValidationError('Enter a valid email address.')
 
 
 class ChoiceField(WritableField):
@@ -215,7 +215,7 @@ class ChoiceField(WritableField):
     def validate(self, value, model_instance):
         super(ChoiceField, self).validate(value, model_instance)
         if self.choices and value not in self.allowed_values:
-            raise self.VaidationError("Value '{0}' is not a valid choice.".format(value))
+            raise self.ValidationError("Value '{0}' is not a valid choice.".format(value))
 
 
 class DateField(WritableField):
@@ -244,7 +244,7 @@ class DateField(WritableField):
         except ValueError:
             pass
 
-        raise self.VaidationError("'{0}' value has an invalid date format. It must be "
+        raise self.ValidationError("'{0}' value has an invalid date format. It must be "
                                   "in YYYY-MM-DD format.".format(value))
 
     def parse_date(self, value):
@@ -289,7 +289,7 @@ class DateTimeField(DateField):
         except ValueError:
             pass
 
-        raise self.VaidationError("'{0}' value has an invalid format. It must be in "
+        raise self.ValidationError("'{0}' value has an invalid format. It must be in "
                                   "YYYY-MM-DD HH:MM[:ss[.uuuuuu]] format.".format(value))
 
     def to_native(self, value):
@@ -349,7 +349,7 @@ class ModelField(Field):
         super(ModelField, self).validate(value, model_instance)
 
         if not isinstance(value, (self.rel, dict)):
-            raise self.VaidationError('Value needs to be a {0} instance.'.format(self.rel.__name__))
+            raise self.ValidationError('Value needs to be a {0} instance.'.format(self.rel.__name__))
 
         if self.required and isinstance(value, self.rel):
             value.validate()
@@ -364,7 +364,7 @@ class ModelField(Field):
         if isinstance(value, dict):
             return self.rel(**value)
 
-        raise self.VaidationError("'{0}' has unsupported format.".format(value))
+        raise self.ValidationError("'{0}' has unsupported format.".format(value))
 
     def to_native(self, value):
         if value is None:
@@ -394,7 +394,7 @@ class JSONField(WritableField):
             try:
                 validictory.validate(value, self.schema)
             except ValueError as e:
-                raise self.VaidationError(e)
+                raise self.ValidationError(e)
 
     def to_python(self, value):
         if isinstance(value, six.string_types):
@@ -456,13 +456,13 @@ class SchemaField(JSONField):
 
         fields = [f['name'] for f in value]
         if len(fields) != len(set(fields)):
-            raise self.VaidationError('Field names must be unique.')
+            raise self.ValidationError('Field names must be unique.')
 
         for field in value:
             is_not_indexable = field['type'] in self.not_indexable_types
             has_index = ('order_index' in field or 'filter_index' in field)
             if is_not_indexable and has_index:
-                raise self.VaidationError('"{0}" type is not indexable.'.format(field['type']))
+                raise self.ValidationError('"{0}" type is not indexable.'.format(field['type']))
 
     def to_python(self, value):
         if isinstance(value, SchemaManager):
