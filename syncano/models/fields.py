@@ -114,13 +114,13 @@ class Field(object):
         cls._meta.add_field(self)
         setattr(cls, name, self)
 
-        ErrorClass = type(
+        error_class = type(
             '{0}ValidationError'.format(self.__class__.__name__),
             (SyncanoFieldError, ),
             {'field_name': name}
         )
 
-        setattr(self, 'ValidationError', ErrorClass)
+        setattr(self, 'ValidationError', error_class)
 
 
 class PrimaryKeyField(Field):
@@ -245,7 +245,7 @@ class DateField(WritableField):
             pass
 
         raise self.ValidationError("'{0}' value has an invalid date format. It must be "
-                                  "in YYYY-MM-DD format.".format(value))
+                                   "in YYYY-MM-DD format.".format(value))
 
     def parse_date(self, value):
         match = self.date_regex.match(value)
@@ -290,7 +290,7 @@ class DateTimeField(DateField):
             pass
 
         raise self.ValidationError("'{0}' value has an invalid format. It must be in "
-                                  "YYYY-MM-DD HH:MM[:ss[.uuuuuu]] format.".format(value))
+                                   "YYYY-MM-DD HH:MM[:ss[.uuuuuu]] format.".format(value))
 
     def to_native(self, value):
         if value is None:

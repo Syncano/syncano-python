@@ -492,8 +492,8 @@ class Object(Model):
 
         for field in schema:
             field_type = field.get('type')
-            FieldClass = fields.MAPPING[field_type]
-            attrs[field['name']] = FieldClass(required=False, read_only=False)
+            field_class = fields.MAPPING[field_type]
+            attrs[field['name']] = field_class(required=False, read_only=False)
 
         return type(str(name), (cls, ), attrs)
 

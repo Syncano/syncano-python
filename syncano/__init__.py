@@ -25,10 +25,10 @@ logger.addHandler(console_handler)
 VERSION = __version__
 DEBUG = env_loglevel.lower() == 'debug'
 API_ROOT = os.getenv('SYNCANO_APIROOT', 'https://v4.hydraengine.com/')
-EMAIL = os.getenv('SYNCANO_EMAIL', None)
-PASSWORD = os.getenv('SYNCANO_PASSWORD', None)
-APIKEY = os.getenv('SYNCANO_APIKEY', None)
-INSTANCE = os.getenv('SYNCANO_INSTANCE', None)
+EMAIL = os.getenv('SYNCANO_EMAIL')
+PASSWORD = os.getenv('SYNCANO_PASSWORD')
+APIKEY = os.getenv('SYNCANO_APIKEY')
+INSTANCE = os.getenv('SYNCANO_INSTANCE')
 
 
 def connect(*args, **kwargs):
