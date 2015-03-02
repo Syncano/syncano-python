@@ -1,3 +1,4 @@
+import json
 from copy import deepcopy
 from functools import wraps
 
@@ -421,28 +422,30 @@ class ObjectManager(Manager):
     @clone
     def filter(self, **kwargs):
         query = {}
-        for key, value in six.iteritems(kwargs):
-            field_name, lookup = key.split(self.LOOKUP_SEPARATOR, 1)
+        model = self.get_class_model(self.properties)
 
-            if not lookup:
-                lookup = 'eq'
+        for field_name, value in six.iteritems(kwargs):
+            lookup = 'eq'
 
-            if field_name not in self.model.field_names:
-                allowed = ', '.join(self.model.field_names)
-                raise SyncanoValueError('Invalid field name {0} allowed are {1}.'.format(field_name, allowed))
+            if self.LOOKUP_SEPARATOR in field_name:
+                field_name, lookup = field_name.split(self.LOOKUP_SEPARATOR, 1)
+
+            if field_name not in model._meta.field_names:
+                allowed = ', '.join(model._meta.field_names)
+                raise SyncanoValueError('Invalid field name "{0}" allowed are {1}.'.format(field_name, allowed))
 
             if lookup not in self.ALLOWED_LOOKUPS:
                 allowed = ', '.join(self.ALLOWED_LOOKUPS)
-                raise SyncanoValueError('Invalid lookup type {0} allowed are {1}.'.format(lookup, allowed))
+                raise SyncanoValueError('Invalid lookup type "{0}" allowed are {1}.'.format(lookup, allowed))
 
-            for field in self.model.fields:
+            for field in model._meta.fields:
                 if field.name == field_name:
                     break
 
             query.setdefault(field_name, {})
             query[field_name]['_{0}'.format(lookup)] = field.to_query(value, lookup)
 
-        self.query['query'] = query
+        self.query['query'] = json.dumps(query)
         self.method = 'GET'
         self.endpoint = 'list'
         return self
