@@ -23,6 +23,8 @@ class Field(object):
     has_data = True
     has_endpoint_data = False
 
+    query_allowed = True
+
     creation_counter = 0
 
     def __init__(self, name=None, **kwargs):
@@ -35,6 +37,7 @@ class Field(object):
         self.label = kwargs.pop('label', None)
         self.max_length = kwargs.pop('max_length', None)
         self.min_length = kwargs.pop('min_length', None)
+        self.query_allowed = kwargs.pop('query_allowed', self.query_allowed)
         self.has_data = kwargs.pop('has_data', self.has_data)
         self.has_endpoint_data = kwargs.pop('has_endpoint_data', self.has_endpoint_data)
         self.primary_key = kwargs.pop('primary_key', self.primary_key)
@@ -114,7 +117,10 @@ class Field(object):
         """
         Returns field's value prepared for usage in HTTP request query.
         """
-        return value
+        if not self.query_allowed:
+            raise self.ValidationError('Queries on this field are not supported.')
+
+        return self.to_native(value)
 
     def contribute_to_class(self, cls, name):
         if name in cls._meta.endpoint_fields:
@@ -325,6 +331,7 @@ class DateTimeField(DateField):
 
 
 class HyperlinkedField(Field):
+    query_allowed = False
     IGNORED_LINKS = ('self', )
 
     def __init__(self, *args, **kwargs):
@@ -405,6 +412,7 @@ class ModelField(Field):
 
 
 class JSONField(WritableField):
+    query_allowed = False
     schema = None
 
     def __init__(self, *args, **kwargs):
@@ -431,6 +439,7 @@ class JSONField(WritableField):
 
 
 class SchemaField(JSONField):
+    query_allowed = False
     not_indexable_types = ['text', 'file']
     schema = {
         'type': 'array',

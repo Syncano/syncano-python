@@ -373,6 +373,11 @@ class ObjectManager(Manager):
     Custom :class:`~syncano.models.manager.Manager`
     class for :class:`~syncano.models.base.Object` model.
     """
+    LOOKUP_SEPARATOR = '__'
+    ALLOWED_LOOKUPS = [
+        'gt', 'gte', 'lt', 'lte',
+        'eq', 'neq', 'exists', 'in',
+    ]
 
     def create(self, **kwargs):
         attrs = kwargs.copy()
@@ -412,6 +417,35 @@ class ObjectManager(Manager):
         parent = self.model._meta.parent
         class_ = parent.please.get(instance_name, class_name)
         return class_.schema
+
+    @clone
+    def filter(self, **kwargs):
+        query = {}
+        for key, value in six.iteritems(kwargs):
+            field_name, lookup = key.split(self.LOOKUP_SEPARATOR, 1)
+
+            if not lookup:
+                lookup = 'eq'
+
+            if field_name not in self.model.field_names:
+                allowed = ', '.join(self.model.field_names)
+                raise SyncanoValueError('Invalid field name {0} allowed are {1}.'.format(field_name, allowed))
+
+            if lookup not in self.ALLOWED_LOOKUPS:
+                allowed = ', '.join(self.ALLOWED_LOOKUPS)
+                raise SyncanoValueError('Invalid lookup type {0} allowed are {1}.'.format(lookup, allowed))
+
+            for field in self.model.fields:
+                if field.name == field_name:
+                    break
+
+            query.setdefault(field_name, {})
+            query[field_name]['_{0}'.format(lookup)] = field.to_query(value, lookup)
+
+        self.query['query'] = query
+        self.method = 'GET'
+        self.endpoint = 'list'
+        return self
 
 
 class SchemaManager(object):
