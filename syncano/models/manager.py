@@ -243,7 +243,7 @@ class Manager(ConnectionMixin):
         """
         self.method = 'PUT'
         self.endpoint = 'detail'
-        self.data = kwargs.pop('defaults')
+        self.data = kwargs.pop('data')
         self._filter(*args, **kwargs)
         return self.request()
 
