@@ -125,7 +125,16 @@ class Manager(ConnectionMixin):
 
     def create(self, **kwargs):
         """
-        A convenience method for creating an object and saving it all in one step.
+        A convenience method for creating an object and saving it all in one step. Thus::
+
+            instance = Instance.please.create(name='test-one', description='description')
+
+        and::
+
+            instance = Instance(name='test-one', description='description')
+            instance.save()
+
+        are equivalent.
         """
         attrs = kwargs.copy()
         attrs.update(self.properties)
@@ -139,37 +148,83 @@ class Manager(ConnectionMixin):
         """
         Creates many new instances based on provided list of objects.
 
+        Usage::
+
+            objects = [{'name': 'test-one'}, {'name': 'test-two'}]
+            instances = Instance.please.bulk_create(objects)
+
         .. warning::
-            This method is not meant to be used with large datasets.
+            This method is not meant to be used with large data sets.
         """
         return [self.create(**o) for o in objects]
 
     @clone
     def get(self, *args, **kwargs):
-        """Returns the object matching the given lookup parameters."""
+        """
+        Returns the object matching the given lookup parameters.
+
+        Usage::
+
+            instance = Instance.please.get('test-one')
+            instance = Instance.please.get(name='test-one')
+        """
         self.method = 'GET'
         self.endpoint = 'detail'
         self._filter(*args, **kwargs)
         return self.request()
 
     def detail(self, *args, **kwargs):
-        """Wrapper around ``get`` method."""
+        """
+        Wrapper around ``get`` method.
+
+        Usage::
+
+            instance = Instance.please.detail('test-one')
+            instance = Instance.please.detail(name='test-one')
+        """
         return self.get(*args, **kwargs)
 
     def get_or_create(self, *args, **kwargs):
-        """A convenience method for looking up an object with the given
-        lookup parameters, creating one if necessary."""
+        """
+        A convenience method for looking up an object with the given
+        lookup parameters, creating one if necessary.
+
+        Returns a tuple of **(object, created)**, where **object** is the retrieved or
+        **created** object and created is a boolean specifying whether a new object was created.
+
+        This is meant as a shortcut to boilerplatish code. For example::
+
+            try:
+                instance = Instance.please.get(name='test-one')
+            except Instance.DoesNotExist:
+                instance = Instance(name='test-one', description='test')
+                instance.save()
+
+        The above example can be rewritten using **get_or_create()** like so::
+
+            instance, created = Instance.please.get_or_create(name='test-one', defaults={'description': 'test'})
+        """
         defaults = deepcopy(kwargs.pop('defaults', {}))
         try:
             instance = self.get(*args, **kwargs)
         except self.model.DoesNotExist:
             defaults.update(kwargs)
             instance = self.create(**defaults)
-        return instance
+            created = True
+        else:
+            created = False
+        return instance, created
 
     @clone
     def delete(self, *args, **kwargs):
-        """Removes single instance based on provided arguments."""
+        """
+        Removes single instance based on provided arguments.
+
+        Usage::
+
+            instance = Instance.please.delete('test-one')
+            instance = Instance.please.delete(name='test-one')
+        """
         self.method = 'DELETE'
         self.endpoint = 'detail'
         self._filter(*args, **kwargs)
@@ -177,37 +232,81 @@ class Manager(ConnectionMixin):
 
     @clone
     def update(self, *args, **kwargs):
-        """Updates single instance based on provided arguments."""
+        """
+        Updates single instance based on provided arguments.
+        The **data** is a dictionary of (field, value) pairs used to update the object.
+
+        Usage::
+
+            instance = Instance.please.update('test-one', data={'description': 'new one'})
+            instance = Instance.please.update(name='test-one', data={'description': 'new one'})
+        """
         self.method = 'PUT'
         self.endpoint = 'detail'
-        self.data = kwargs.pop('data')
+        self.data = kwargs.pop('defaults')
         self._filter(*args, **kwargs)
         return self.request()
 
-    def update_or_create(self, *args, **kwargs):
+    def update_or_create(self, defaults=None, **kwargs):
         """
         A convenience method for updating an object with the given parameters, creating a new one if necessary.
         The ``defaults`` is a dictionary of (field, value) pairs used to update the object.
+
+        Returns a tuple of **(object, created)**, where object is the created or updated object and created
+        is a boolean specifying whether a new object was created.
+
+        The **update_or_create** method tries to fetch an object from Syncano API based on the given kwargs.
+        If a match is found, it updates the fields passed in the defaults dictionary.
+
+        This is meant as a shortcut to boilerplatish code. For example::
+
+            try:
+                instance = Instance.please.update(name='test-one', data=updated_values)
+            except Instance.DoesNotExist:
+                updated_values.update({'name': 'test-one'})
+                instance = Instance(**updated_values)
+                instance.save()
+
+        This pattern gets quite unwieldy as the number of fields in a model goes up.
+        The above example can be rewritten using **update_or_create()** like so::
+
+            instance, created = Instance.please.update_or_create(name='test-one',
+                                                                 defaults=updated_values)
         """
-        defaults = deepcopy(kwargs.get('defaults', {}))
+        defaults = deepcopy(defaults or {})
         try:
-            instance = self.update(*args, **kwargs)
+            instance = self.update(**kwargs)
         except self.model.DoesNotExist:
             defaults.update(kwargs)
             instance = self.create(**defaults)
-        return instance
+            created = True
+        else:
+            created = False
+        return instance, created
 
     # List actions
 
     @clone
     def all(self, *args, **kwargs):
-        """Returns a copy of the current ``Manager`` with limit removed."""
+        """
+        Returns a copy of the current ``Manager`` with limit removed.
+
+        Usage::
+
+            instances = Instance.please.all()
+        """
         self._limit = None
         return self.list(*args, **kwargs)
 
     @clone
     def list(self, *args, **kwargs):
-        """Returns a copy of the current ``Manager`` containing objects that match the given lookup parameters."""
+        """
+        Returns a copy of the current ``Manager`` containing objects that match the given lookup parameters.
+
+        Usage::
+            instance = Instance.please.list()
+            classes = Class.please.list(instance_name='test-one')
+        """
         self.method = 'GET'
         self.endpoint = 'list'
         self._filter(*args, **kwargs)
@@ -215,7 +314,14 @@ class Manager(ConnectionMixin):
 
     @clone
     def first(self, *args, **kwargs):
-        """Returns the first object matched by the lookup parameters or None, if there is no matching object."""
+        """
+        Returns the first object matched by the lookup parameters or None, if there is no matching object.
+
+        Usage::
+
+            instance = Instance.please.first()
+            classes = Class.please.first(instance_name='test-one')
+        """
         try:
             self._limit = 1
             return self.list(*args, **kwargs)[0]
@@ -224,7 +330,13 @@ class Manager(ConnectionMixin):
 
     @clone
     def page_size(self, value):
-        """Sets page size."""
+        """
+        Sets page size.
+
+        Usage::
+
+            instances = Instance.please.page_size(20).all()
+        """
         if not value or not isinstance(value, six.integer_types):
             raise SyncanoValueError('page_size value needs to be an int.')
 
@@ -233,7 +345,14 @@ class Manager(ConnectionMixin):
 
     @clone
     def limit(self, value):
-        """Sets limit of returned objects."""
+        """
+        Sets limit of returned objects.
+
+        Usage::
+
+            instances = Instance.please.list().limit(10)
+            classes = Class.please.list(instance_name='test-one').limit(10)
+        """
         if not value or not isinstance(value, six.integer_types):
             raise SyncanoValueError('Limit value needs to be an int.')
 
@@ -242,7 +361,13 @@ class Manager(ConnectionMixin):
 
     @clone
     def order_by(self, field):
-        """Sets order of returned objects."""
+        """
+        Sets order of returned objects.
+
+        Usage::
+
+            instances = Instance.please.order_by('name')
+        """
         if not field or not isinstance(field, six.string_types):
             raise SyncanoValueError('Order by field needs to be a string.')
 
@@ -251,13 +376,23 @@ class Manager(ConnectionMixin):
 
     @clone
     def raw(self):
-        """Disables serialization. ``request`` method will return raw Python types."""
+        """
+        Disables serialization. ``request`` method will return raw Python types.
+
+        Usage::
+
+            >>> instances = Instance.please.list().raw()
+            >>> instances
+            [{'description': 'new one', 'name': 'test-one'...}...]
+        """
         self._serialize = False
         return self
 
     @clone
     def using(self, connection):
-        """Connection juggling."""
+        """
+        Connection juggling.
+        """
         # ConnectionMixin will validate this
         self.connection = connection
         return self
@@ -390,7 +525,7 @@ class ObjectManager(Manager):
 
         return instance
 
-    def serialize(self, data):
+    def serialize(self, data, model=None):
         model = self.get_class_model(self.properties)
         return super(ObjectManager, self).serialize(data, model)
 
@@ -421,6 +556,13 @@ class ObjectManager(Manager):
 
     @clone
     def filter(self, **kwargs):
+        """
+        Special method just for data object :class:`~syncano.models.base.Object` model.
+
+        Usage::
+
+            objects = Object.please.list('instance-name', 'class-name').filter(henryk__gte='hello')
+        """
         query = {}
         model = self.get_class_model(self.properties)
 
