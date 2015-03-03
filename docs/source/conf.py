@@ -104,3 +104,5 @@ texinfo_documents = [
 # texinfo_domain_indices = True
 # texinfo_show_urls = 'footnote'
 # texinfo_no_detailmenu = False
+
+autodoc_member_order = 'bysource'
