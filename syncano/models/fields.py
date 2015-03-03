@@ -118,7 +118,7 @@ class Field(object):
         Returns field's value prepared for usage in HTTP request query.
         """
         if not self.query_allowed:
-            raise self.ValidationError('Querie on this field is not supported.')
+            raise self.ValidationError('Query on this field is not supported.')
 
         return self.to_native(value)
 
