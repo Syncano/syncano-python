@@ -568,7 +568,7 @@ class Trigger(Model):
 class Webhook(Model):
     LINKS = (
         {'type': 'detail', 'name': 'self'},
-        {'type': 'run', 'name': 'run'},
+        {'type': 'detail', 'name': 'codebox'},
     )
 
     slug = fields.SlugField(max_length=50, primary_key=True)

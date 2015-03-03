@@ -47,8 +47,10 @@ class RelatedManagerDescriptor(object):
             raise AttributeError("RelatedManager is accessible only via {0} instances.".format(owner.__name__))
 
         links = getattr(instance, self.field.name)
-        path = links[self.name]
+        if not links or self.name not in links:
+            return None
 
+        path = links[self.name]
         Model = registry.get_model_by_path(path)
         method = getattr(Model.please, self.endpoint, Model.please.all)
 
