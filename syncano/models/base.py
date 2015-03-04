@@ -389,7 +389,7 @@ class Schedule(Model):
     links = fields.HyperlinkedField(links=LINKS)
 
     class Meta:
-        parent = CodeBox
+        parent = Instance
         endpoints = {
             'detail': {
                 'methods': ['get', 'delete'],
