@@ -68,13 +68,18 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../interacting.html">Interacting with Syncano</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-a-connection">Creating a Connection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#getting-existing-objects">Getting Existing Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-new-objects">Creating New Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#updating-existing-object">Updating Existing Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#deleting-existing-object">Deleting Existing Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#relations">Relations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#getting-a-raw-json">Getting a raw JSON</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#connection-juggling">Connection juggling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#environmental-variables">Environmental variables</a></li>
 </ul>
 </li>
@@ -513,7 +518,7 @@
     <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">parent</span> <span class="o">=</span> <span class="n">CodeBox</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
         <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">,</span> <span class="s">&#39;delete&#39;</span><span class="p">],</span>
@@ -641,7 +646,9 @@
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">schema</span><span class="p">:</span>
             <span class="n">field_type</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;type&#39;</span><span class="p">)</span>
             <span class="n">field_class</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">MAPPING</span><span class="p">[</span><span class="n">field_type</span><span class="p">]</span>
-            <span class="n">attrs</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field_class</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">query_allowed</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;order_index&#39;</span> <span class="ow">in</span> <span class="n">field</span> <span class="ow">or</span> <span class="s">&#39;filter_index&#39;</span> <span class="ow">in</span> <span class="n">field</span><span class="p">)</span>
+            <span class="n">attrs</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field_class</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                                               <span class="n">query_allowed</span><span class="o">=</span><span class="n">query_allowed</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="p">),</span> <span class="n">attrs</span><span class="p">)</span>
 </div>
@@ -690,7 +697,7 @@
 <div class="viewcode-block" id="Webhook"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Webhook">[docs]</a><span class="k">class</span> <span class="nc">Webhook</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;run&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;run&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;codebox&#39;</span><span class="p">},</span>
     <span class="p">)</span>
 
     <span class="n">slug</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -716,13 +723,13 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Webhook.run"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Webhook.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span><span class="s">&#39;Method allowed only on existing model.&#39;</span><span class="p">)</span>
 
         <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="s">&#39;run&#39;</span><span class="p">]</span>
         <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>

@@ -70,14 +70,10 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../interacting.html">Interacting with Syncano</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-a-connection">Creating a Connection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#getting-existing-objects">Getting Existing Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-new-objects">Creating New Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#updating-existing-object">Updating Existing Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#deleting-existing-object">Deleting Existing Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#relations">Relations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#getting-a-raw-json">Getting a raw JSON</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#connection-juggling">Connection juggling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#environmental-variables">Environmental variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-objects">Retrieving objects</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../models.html">Available models</a></li>
@@ -127,136 +123,10 @@
             
   <div class="section" id="module-syncano.models.manager">
 <span id="syncano-models-manager"></span><h1>syncano.models.manager<a class="headerlink" href="#module-syncano.models.manager" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="syncano.models.manager.Manager">
-<em class="property">class </em><tt class="descname">Manager</tt><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="syncano.connection.html#syncano.connection.ConnectionMixin" title="syncano.connection.ConnectionMixin"><tt class="xref py py-class docutils literal"><span class="pre">syncano.connection.ConnectionMixin</span></tt></a></p>
-<p>Base class responsible for all ORM (<tt class="docutils literal"><span class="pre">please</span></tt>) actions.</p>
-<dl class="method">
-<dt id="syncano.models.manager.Manager.all">
-<tt class="descname">all</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a copy of the current <tt class="docutils literal"><span class="pre">Manager</span></tt> with limit removed.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.bulk_create">
-<tt class="descname">bulk_create</tt><big>(</big><em>objects</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.bulk_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.bulk_create" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates many new instances based on provided list of objects.</p>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This method is not meant to be used with large datasets.</p>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.contribute_to_class">
-<tt class="descname">contribute_to_class</tt><big>(</big><em>model</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.contribute_to_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.contribute_to_class" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.create">
-<tt class="descname">create</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.create" title="Permalink to this definition">¶</a></dt>
-<dd><p>A convenience method for creating an object and saving it all in one step.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.delete">
-<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes single instance based on provided arguments.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.detail">
-<tt class="descname">detail</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.detail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.detail" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper around <tt class="docutils literal"><span class="pre">get</span></tt> method.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.first">
-<tt class="descname">first</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.first"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.first" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the first object matched by the lookup parameters or None, if there is no matching object.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.get">
-<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.get" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the object matching the given lookup parameters.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.get_or_create">
-<tt class="descname">get_or_create</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.get_or_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.get_or_create" title="Permalink to this definition">¶</a></dt>
-<dd><p>A convenience method for looking up an object with the given
-lookup parameters, creating one if necessary.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.iterator">
-<tt class="descname">iterator</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.iterator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.iterator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pagination handler</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.limit">
-<tt class="descname">limit</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.limit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.limit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets limit of returned objects.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.list">
-<tt class="descname">list</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.list" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a copy of the current <tt class="docutils literal"><span class="pre">Manager</span></tt> containing objects that match the given lookup parameters.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.order_by">
-<tt class="descname">order_by</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.order_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.order_by" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets order of returned objects.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.page_size">
-<tt class="descname">page_size</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.page_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.page_size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets page size.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.raw">
-<tt class="descname">raw</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.raw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Disables serialization. <tt class="docutils literal"><span class="pre">request</span></tt> method will return raw Python types.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.request">
-<tt class="descname">request</tt><big>(</big><em>method=None</em>, <em>path=None</em>, <em>**request</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.request" title="Permalink to this definition">¶</a></dt>
-<dd><p>Internal method, which calls Syncano API and returns serialized data.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.serialize">
-<tt class="descname">serialize</tt><big>(</big><em>data</em>, <em>model=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.serialize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Serializes passed data to related <a class="reference internal" href="syncano.models.base.html#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.update">
-<tt class="descname">update</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates single instance based on provided arguments.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.update_or_create">
-<tt class="descname">update_or_create</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.update_or_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.update_or_create" title="Permalink to this definition">¶</a></dt>
-<dd><p>A convenience method for updating an object with the given parameters, creating a new one if necessary.
-The <tt class="docutils literal"><span class="pre">defaults</span></tt> is a dictionary of (field, value) pairs used to update the object.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.Manager.using">
-<tt class="descname">using</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.using"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.using" title="Permalink to this definition">¶</a></dt>
-<dd><p>Connection juggling.</p>
-</dd></dl>
-
+<dl class="function">
+<dt id="syncano.models.manager.clone">
+<tt class="descname">clone</tt><big>(</big><em>func</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator which will ensure that we are working on copy of <tt class="docutils literal"><span class="pre">self</span></tt>.</p>
 </dd></dl>
 
 <dl class="class">
@@ -266,14 +136,281 @@ The <tt class="docutils literal"><span class="pre">defaults</span></tt> is a dic
 </dd></dl>
 
 <dl class="class">
+<dt id="syncano.models.manager.RelatedManagerDescriptor">
+<em class="property">class </em><tt class="descname">RelatedManagerDescriptor</tt><big>(</big><em>field</em>, <em>name</em>, <em>endpoint</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#RelatedManagerDescriptor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.RelatedManagerDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.manager.Manager">
+<em class="property">class </em><tt class="descname">Manager</tt><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.connection.html#syncano.connection.ConnectionMixin" title="syncano.connection.ConnectionMixin"><tt class="xref py py-class docutils literal"><span class="pre">syncano.connection.ConnectionMixin</span></tt></a></p>
+<p>Base class responsible for all ORM (<tt class="docutils literal"><span class="pre">please</span></tt>) actions.</p>
+<dl class="method">
+<dt id="syncano.models.manager.Manager.create">
+<tt class="descname">create</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience method for creating an object and saving it all in one step. Thus:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;description&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;description&#39;</span><span class="p">)</span>
+<span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>are equivalent.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.bulk_create">
+<tt class="descname">bulk_create</tt><big>(</big><em>objects</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.bulk_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.bulk_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates many new instances based on provided list of objects.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">objects</span> <span class="o">=</span> <span class="p">[{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;test-one&#39;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;test-two&#39;</span><span class="p">}]</span>
+<span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">bulk_create</span><span class="p">(</span><span class="n">objects</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This method is not meant to be used with large data sets.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.get">
+<tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the object matching the given lookup parameters.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.detail">
+<tt class="descname">detail</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.detail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.detail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper around <tt class="docutils literal"><span class="pre">get</span></tt> method.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">detail</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">detail</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.get_or_create">
+<tt class="descname">get_or_create</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.get_or_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.get_or_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience method for looking up an object with the given
+lookup parameters, creating one if necessary.</p>
+<p>Returns a tuple of <strong>(object, created)</strong>, where <strong>object</strong> is the retrieved or
+<strong>created</strong> object and created is a boolean specifying whether a new object was created.</p>
+<p>This is meant as a shortcut to boilerplatish code. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">Instance</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+    <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The above example can be rewritten using <strong>get_or_create()</strong> like so:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">defaults</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;test&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.delete">
+<tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes single instance based on provided arguments.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.update">
+<tt class="descname">update</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates single instance based on provided arguments.
+The <strong>data</strong> is a dictionary of (field, value) pairs used to update the object.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;new one&#39;</span><span class="p">})</span>
+<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;new one&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.update_or_create">
+<tt class="descname">update_or_create</tt><big>(</big><em>defaults=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.update_or_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.update_or_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience method for updating an object with the given parameters, creating a new one if necessary.
+The <tt class="docutils literal"><span class="pre">defaults</span></tt> is a dictionary of (field, value) pairs used to update the object.</p>
+<p>Returns a tuple of <strong>(object, created)</strong>, where object is the created or updated object and created
+is a boolean specifying whether a new object was created.</p>
+<p>The <strong>update_or_create</strong> method tries to fetch an object from Syncano API based on the given kwargs.
+If a match is found, it updates the fields passed in the defaults dictionary.</p>
+<p>This is meant as a shortcut to boilerplatish code. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">updated_values</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">Instance</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+    <span class="n">updated_values</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;test-one&#39;</span><span class="p">})</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="o">**</span><span class="n">updated_values</span><span class="p">)</span>
+    <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This pattern gets quite unwieldy as the number of fields in a model goes up.
+The above example can be rewritten using <strong>update_or_create()</strong> like so:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span>
+                                                     <span class="n">defaults</span><span class="o">=</span><span class="n">updated_values</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.all">
+<tt class="descname">all</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of the current <tt class="docutils literal"><span class="pre">Manager</span></tt> with limit removed.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.list">
+<tt class="descname">list</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of the current <tt class="docutils literal"><span class="pre">Manager</span></tt> containing objects that match the given lookup parameters.</p>
+<dl class="docutils">
+<dt>Usage::</dt>
+<dd>instance = Instance.please.list()
+classes = Class.please.list(instance_name=&#8217;test-one&#8217;)</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.first">
+<tt class="descname">first</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.first"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.first" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the first object matched by the lookup parameters or None, if there is no matching object.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+<span class="n">classes</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">first</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.page_size">
+<tt class="descname">page_size</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.page_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.page_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets page size.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">page_size</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.limit">
+<tt class="descname">limit</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.limit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets limit of returned objects.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">classes</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.order_by">
+<tt class="descname">order_by</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.order_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.order_by" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets order of returned objects.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.raw">
+<tt class="descname">raw</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disables serialization. <tt class="docutils literal"><span class="pre">request</span></tt> method will return raw Python types.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span><span class="o">.</span><span class="n">raw</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instances</span>
+<span class="go">[{&#39;description&#39;: &#39;new one&#39;, &#39;name&#39;: &#39;test-one&#39;...}...]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.using">
+<tt class="descname">using</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.using"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.using" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connection juggling.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.contribute_to_class">
+<tt class="descname">contribute_to_class</tt><big>(</big><em>model</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.contribute_to_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.contribute_to_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.serialize">
+<tt class="descname">serialize</tt><big>(</big><em>data</em>, <em>model=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes passed data to related <a class="reference internal" href="syncano.models.base.html#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.request">
+<tt class="descname">request</tt><big>(</big><em>method=None</em>, <em>path=None</em>, <em>**request</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internal method, which calls Syncano API and returns serialized data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.Manager.iterator">
+<tt class="descname">iterator</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.iterator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.iterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pagination handler</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.manager.WebhookManager">
+<em class="property">class </em><tt class="descname">WebhookManager</tt><a class="reference internal" href="../_modules/syncano/models/manager.html#WebhookManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.WebhookManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.manager.Manager</span></tt></a></p>
+<p>Custom <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a>
+class for <a class="reference internal" href="syncano.models.base.html#syncano.models.base.Webhook" title="syncano.models.base.Webhook"><tt class="xref py py-class docutils literal"><span class="pre">Webhook</span></tt></a> model.</p>
+<dl class="method">
+<dt id="syncano.models.manager.WebhookManager.run">
+<tt class="descname">run</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#WebhookManager.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.WebhookManager.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="syncano.models.manager.ObjectManager">
 <em class="property">class </em><tt class="descname">ObjectManager</tt><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.manager.Manager</span></tt></a></p>
 <p>Custom <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a>
 class for <a class="reference internal" href="syncano.models.base.html#syncano.models.base.Object" title="syncano.models.base.Object"><tt class="xref py py-class docutils literal"><span class="pre">Object</span></tt></a> model.</p>
+<dl class="attribute">
+<dt id="syncano.models.manager.ObjectManager.LOOKUP_SEPARATOR">
+<tt class="descname">LOOKUP_SEPARATOR</tt><em class="property"> = '__'</em><a class="headerlink" href="#syncano.models.manager.ObjectManager.LOOKUP_SEPARATOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.manager.ObjectManager.ALLOWED_LOOKUPS">
+<tt class="descname">ALLOWED_LOOKUPS</tt><em class="property"> = ['gt', 'gte', 'lt', 'lte', 'eq', 'neq', 'exists', 'in']</em><a class="headerlink" href="#syncano.models.manager.ObjectManager.ALLOWED_LOOKUPS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="syncano.models.manager.ObjectManager.create">
 <tt class="descname">create</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.ObjectManager.serialize">
+<tt class="descname">serialize</tt><big>(</big><em>data</em>, <em>model=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.serialize" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -288,16 +425,15 @@ class for <a class="reference internal" href="syncano.models.base.html#syncano.m
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.manager.ObjectManager.serialize">
-<tt class="descname">serialize</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.serialize" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dt id="syncano.models.manager.ObjectManager.filter">
+<tt class="descname">filter</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Special method just for data object <a class="reference internal" href="syncano.models.base.html#syncano.models.base.Object" title="syncano.models.base.Object"><tt class="xref py py-class docutils literal"><span class="pre">Object</span></tt></a> model.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">objects</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;class-name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">henryk__gte</span><span class="o">=</span><span class="s">&#39;hello&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
-<dl class="class">
-<dt id="syncano.models.manager.RelatedManagerDescriptor">
-<em class="property">class </em><tt class="descname">RelatedManagerDescriptor</tt><big>(</big><em>field</em>, <em>name</em>, <em>endpoint</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#RelatedManagerDescriptor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.RelatedManagerDescriptor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 </dd></dl>
 
 <dl class="class">
@@ -307,15 +443,15 @@ class for <a class="reference internal" href="syncano.models.base.html#syncano.m
 <p>Custom <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a>
 class for <tt class="xref py py-class docutils literal"><span class="pre">SchemaFiled</span></tt>.</p>
 <dl class="method">
-<dt id="syncano.models.manager.SchemaManager.add">
-<tt class="descname">add</tt><big>(</big><em>*objects</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds multiple objects to schema.</p>
+<dt id="syncano.models.manager.SchemaManager.set">
+<tt class="descname">set</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets schema value.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.manager.SchemaManager.clear">
-<tt class="descname">clear</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.clear" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets empty schema.</p>
+<dt id="syncano.models.manager.SchemaManager.add">
+<tt class="descname">add</tt><big>(</big><em>*objects</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds multiple objects to schema.</p>
 </dd></dl>
 
 <dl class="method">
@@ -325,9 +461,40 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Schema
 </dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.manager.SchemaManager.remove_filter_index">
-<tt class="descname">remove_filter_index</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.remove_filter_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.remove_filter_index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shortcut for <tt class="docutils literal"><span class="pre">remove_index(field,</span> <span class="pre">filter=True)</span></tt>.</p>
+<dt id="syncano.models.manager.SchemaManager.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets empty schema.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.SchemaManager.set_index">
+<tt class="descname">set_index</tt><big>(</big><em>field</em>, <em>order=False</em>, <em>filter=False</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.set_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.set_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets index on selected field.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field</strong> (<em>string</em>) &#8211; Name of schema field</li>
+<li><strong>filter</strong> (<em>bool</em>) &#8211; Sets filter index on selected field</li>
+<li><strong>order</strong> (<em>bool</em>) &#8211; Sets order index on selected field</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.SchemaManager.set_order_index">
+<tt class="descname">set_order_index</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.set_order_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.set_order_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortcut for <tt class="docutils literal"><span class="pre">set_index(field,</span> <span class="pre">order=True)</span></tt>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.SchemaManager.set_filter_index">
+<tt class="descname">set_filter_index</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.set_filter_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.set_filter_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortcut for <tt class="docutils literal"><span class="pre">set_index(field,</span> <span class="pre">filter=True)</span></tt>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -356,61 +523,11 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Schema
 </dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.manager.SchemaManager.set">
-<tt class="descname">set</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.set" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets schema value.</p>
+<dt id="syncano.models.manager.SchemaManager.remove_filter_index">
+<tt class="descname">remove_filter_index</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.remove_filter_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.remove_filter_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortcut for <tt class="docutils literal"><span class="pre">remove_index(field,</span> <span class="pre">filter=True)</span></tt>.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="syncano.models.manager.SchemaManager.set_filter_index">
-<tt class="descname">set_filter_index</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.set_filter_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.set_filter_index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shortcut for <tt class="docutils literal"><span class="pre">set_index(field,</span> <span class="pre">filter=True)</span></tt>.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.SchemaManager.set_index">
-<tt class="descname">set_index</tt><big>(</big><em>field</em>, <em>order=False</em>, <em>filter=False</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.set_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.set_index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets index on selected field.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>field</strong> (<em>string</em>) &#8211; Name of schema field</li>
-<li><strong>filter</strong> (<em>bool</em>) &#8211; Sets filter index on selected field</li>
-<li><strong>order</strong> (<em>bool</em>) &#8211; Sets order index on selected field</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.manager.SchemaManager.set_order_index">
-<tt class="descname">set_order_index</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#SchemaManager.set_order_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.SchemaManager.set_order_index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shortcut for <tt class="docutils literal"><span class="pre">set_index(field,</span> <span class="pre">order=True)</span></tt>.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.manager.WebhookManager">
-<em class="property">class </em><tt class="descname">WebhookManager</tt><a class="reference internal" href="../_modules/syncano/models/manager.html#WebhookManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.WebhookManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.manager.Manager</span></tt></a></p>
-<p>Custom <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a>
-class for <a class="reference internal" href="syncano.models.base.html#syncano.models.base.Webhook" title="syncano.models.base.Webhook"><tt class="xref py py-class docutils literal"><span class="pre">Webhook</span></tt></a> model.</p>
-<dl class="method">
-<dt id="syncano.models.manager.WebhookManager.run">
-<tt class="descname">run</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#WebhookManager.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.WebhookManager.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="syncano.models.manager.clone">
-<tt class="descname">clone</tt><big>(</big><em>func</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.clone" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decorator which will ensure that we are working on copy of <tt class="docutils literal"><span class="pre">self</span></tt>.</p>
 </dd></dl>
 
 </div>

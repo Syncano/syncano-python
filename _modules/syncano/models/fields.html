@@ -68,13 +68,18 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../interacting.html">Interacting with Syncano</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-a-connection">Creating a Connection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#getting-existing-objects">Getting Existing Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-new-objects">Creating New Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#updating-existing-object">Updating Existing Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#deleting-existing-object">Deleting Existing Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#relations">Relations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#getting-a-raw-json">Getting a raw JSON</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#connection-juggling">Connection juggling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#environmental-variables">Environmental variables</a></li>
 </ul>
 </li>
@@ -147,6 +152,8 @@
     <span class="n">has_data</span> <span class="o">=</span> <span class="bp">True</span>
     <span class="n">has_endpoint_data</span> <span class="o">=</span> <span class="bp">False</span>
 
+    <span class="n">query_allowed</span> <span class="o">=</span> <span class="bp">True</span>
+
     <span class="n">creation_counter</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -159,6 +166,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_length</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;max_length&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">min_length</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;min_length&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query_allowed</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;query_allowed&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_allowed</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">has_data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;has_data&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_data</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">has_endpoint_data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;has_endpoint_data&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_endpoint_data</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">primary_key</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;primary_key&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">primary_key</span><span class="p">)</span>
@@ -238,7 +246,10 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns field&#39;s value prepared for usage in HTTP request query.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_allowed</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s">&#39;Query on this field is not supported.&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_native</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Field.contribute_to_class"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.Field.contribute_to_class">[docs]</a>    <span class="k">def</span> <span class="nf">contribute_to_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">endpoint_fields</span><span class="p">:</span>
@@ -449,6 +460,7 @@
 
 </div></div>
 <div class="viewcode-block" id="HyperlinkedField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.HyperlinkedField">[docs]</a><span class="k">class</span> <span class="nc">HyperlinkedField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+    <span class="n">query_allowed</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="n">IGNORED_LINKS</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;self&#39;</span><span class="p">,</span> <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -529,6 +541,7 @@
 
 </div></div>
 <div class="viewcode-block" id="JSONField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.JSONField">[docs]</a><span class="k">class</span> <span class="nc">JSONField</span><span class="p">(</span><span class="n">WritableField</span><span class="p">):</span>
+    <span class="n">query_allowed</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="n">schema</span> <span class="o">=</span> <span class="bp">None</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -555,6 +568,7 @@
 
 </div></div>
 <div class="viewcode-block" id="SchemaField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.SchemaField">[docs]</a><span class="k">class</span> <span class="nc">SchemaField</span><span class="p">(</span><span class="n">JSONField</span><span class="p">):</span>
+    <span class="n">query_allowed</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="n">not_indexable_types</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;text&#39;</span><span class="p">,</span> <span class="s">&#39;file&#39;</span><span class="p">]</span>
     <span class="n">schema</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;array&#39;</span><span class="p">,</span>

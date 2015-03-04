@@ -128,91 +128,117 @@
   <div class="section" id="module-syncano.models.fields">
 <span id="syncano-models-fields"></span><h1>syncano.models.fields<a class="headerlink" href="#module-syncano.models.fields" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="syncano.models.fields.BooleanField">
-<em class="property">class </em><tt class="descname">BooleanField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#BooleanField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.BooleanField" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.WritableField" title="syncano.models.fields.WritableField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.WritableField</span></tt></a></p>
+<dt id="syncano.models.fields.Field">
+<em class="property">class </em><tt class="descname">Field</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#Field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.Field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Base class for all field types.</p>
+<dl class="attribute">
+<dt id="syncano.models.fields.Field.default">
+<tt class="descname">default</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.fields.Field.default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.fields.Field.required">
+<tt class="descname">required</tt><em class="property"> = False</em><a class="headerlink" href="#syncano.models.fields.Field.required" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.fields.Field.read_only">
+<tt class="descname">read_only</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.fields.Field.read_only" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.fields.Field.blank">
+<tt class="descname">blank</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.fields.Field.blank" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.fields.Field.query_allowed">
+<tt class="descname">query_allowed</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.fields.Field.query_allowed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.fields.Field.has_data">
+<tt class="descname">has_data</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.fields.Field.has_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.fields.Field.has_endpoint_data">
+<tt class="descname">has_endpoint_data</tt><em class="property"> = False</em><a class="headerlink" href="#syncano.models.fields.Field.has_endpoint_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.fields.Field.primary_key">
+<tt class="descname">primary_key</tt><em class="property"> = False</em><a class="headerlink" href="#syncano.models.fields.Field.primary_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.fields.Field.creation_counter">
+<tt class="descname">creation_counter</tt><em class="property"> = 99</em><a class="headerlink" href="#syncano.models.fields.Field.creation_counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
-<dt id="syncano.models.fields.BooleanField.to_python">
-<tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#BooleanField.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.BooleanField.to_python" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.Field.validate">
+<tt class="descname">validate</tt><big>(</big><em>value</em>, <em>model_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#Field.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.Field.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates the current field instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">SyncanoFieldError</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.fields.Field.to_python">
+<tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#Field.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.Field.to_python" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns field&#8217;s value prepared for usage in Python.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.fields.Field.to_native">
+<tt class="descname">to_native</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#Field.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.Field.to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns field&#8217;s value prepared for serialization into JSON.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.fields.Field.to_query">
+<tt class="descname">to_query</tt><big>(</big><em>value</em>, <em>lookup_type</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#Field.to_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.Field.to_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns field&#8217;s value prepared for usage in HTTP request query.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.fields.Field.contribute_to_class">
+<tt class="descname">contribute_to_class</tt><big>(</big><em>cls</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#Field.contribute_to_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.Field.contribute_to_class" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="syncano.models.fields.ChoiceField">
-<em class="property">class </em><tt class="descname">ChoiceField</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#ChoiceField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.ChoiceField" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.WritableField" title="syncano.models.fields.WritableField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.WritableField</span></tt></a></p>
-<dl class="method">
-<dt id="syncano.models.fields.ChoiceField.validate">
-<tt class="descname">validate</tt><big>(</big><em>value</em>, <em>model_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#ChoiceField.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.ChoiceField.validate" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.PrimaryKeyField">
+<em class="property">class </em><tt class="descname">PrimaryKeyField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#PrimaryKeyField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.PrimaryKeyField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.Field" title="syncano.models.fields.Field"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.Field</span></tt></a></p>
+<dl class="attribute">
+<dt id="syncano.models.fields.PrimaryKeyField.primary_key">
+<tt class="descname">primary_key</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.fields.PrimaryKeyField.primary_key" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="syncano.models.fields.DateField">
-<em class="property">class </em><tt class="descname">DateField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#DateField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.DateField" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.WritableField" title="syncano.models.fields.WritableField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.WritableField</span></tt></a></p>
+<dt id="syncano.models.fields.WritableField">
+<em class="property">class </em><tt class="descname">WritableField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#WritableField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.WritableField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.Field" title="syncano.models.fields.Field"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.Field</span></tt></a></p>
 <dl class="attribute">
-<dt id="syncano.models.fields.DateField.date_regex">
-<tt class="descname">date_regex</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x102042ae0&gt;</em><a class="headerlink" href="#syncano.models.fields.DateField.date_regex" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.fields.DateField.parse_date">
-<tt class="descname">parse_date</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#DateField.parse_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.DateField.parse_date" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.WritableField.required">
+<tt class="descname">required</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.fields.WritableField.required" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.fields.DateField.re">
-<tt class="descname">re</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x102042ae0&gt;</em><a class="headerlink" href="#syncano.models.fields.DateField.re" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.fields.DateField.to_native">
-<tt class="descname">to_native</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#DateField.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.DateField.to_native" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.fields.DateField.to_python">
-<tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#DateField.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.DateField.to_python" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.fields.DateTimeField">
-<em class="property">class </em><tt class="descname">DateTimeField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#DateTimeField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.DateTimeField" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.DateField" title="syncano.models.fields.DateField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.DateField</span></tt></a></p>
-<dl class="attribute">
-<dt id="syncano.models.fields.DateTimeField.FORMAT">
-<tt class="descname">FORMAT</tt><em class="property"> = '%Y-%m-%dT%H:%M:%S.%f'</em><a class="headerlink" href="#syncano.models.fields.DateTimeField.FORMAT" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.fields.DateTimeField.to_native">
-<tt class="descname">to_native</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#DateTimeField.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.DateTimeField.to_native" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.fields.DateTimeField.to_python">
-<tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#DateTimeField.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.DateTimeField.to_python" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.fields.EmailField">
-<em class="property">class </em><tt class="descname">EmailField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#EmailField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.EmailField" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.StringField</span></tt></a></p>
-<dl class="attribute">
-<dt id="syncano.models.fields.EmailField.regex">
-<tt class="descname">regex</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x1021dd310&gt;</em><a class="headerlink" href="#syncano.models.fields.EmailField.regex" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.fields.EmailField.validate">
-<tt class="descname">validate</tt><big>(</big><em>value</em>, <em>model_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#EmailField.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.EmailField.validate" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.WritableField.read_only">
+<tt class="descname">read_only</tt><em class="property"> = False</em><a class="headerlink" href="#syncano.models.fields.WritableField.read_only" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -234,112 +260,12 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="syncano.models.fields.Field">
-<em class="property">class </em><tt class="descname">Field</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#Field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.Field" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Base class for all field types.</p>
-<dl class="attribute">
-<dt id="syncano.models.fields.Field.blank">
-<tt class="descname">blank</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.fields.Field.blank" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.fields.Field.contribute_to_class">
-<tt class="descname">contribute_to_class</tt><big>(</big><em>cls</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#Field.contribute_to_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.Field.contribute_to_class" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.fields.Field.creation_counter">
-<tt class="descname">creation_counter</tt><em class="property"> = 99</em><a class="headerlink" href="#syncano.models.fields.Field.creation_counter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.fields.Field.default">
-<tt class="descname">default</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.fields.Field.default" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.fields.Field.has_data">
-<tt class="descname">has_data</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.fields.Field.has_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.fields.Field.has_endpoint_data">
-<tt class="descname">has_endpoint_data</tt><em class="property"> = False</em><a class="headerlink" href="#syncano.models.fields.Field.has_endpoint_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.fields.Field.primary_key">
-<tt class="descname">primary_key</tt><em class="property"> = False</em><a class="headerlink" href="#syncano.models.fields.Field.primary_key" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.fields.Field.read_only">
-<tt class="descname">read_only</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.fields.Field.read_only" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.fields.Field.required">
-<tt class="descname">required</tt><em class="property"> = False</em><a class="headerlink" href="#syncano.models.fields.Field.required" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.fields.Field.to_native">
-<tt class="descname">to_native</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#Field.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.Field.to_native" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns field&#8217;s value prepared for serialization into JSON.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.fields.Field.to_python">
-<tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#Field.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.Field.to_python" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns field&#8217;s value prepared for usage in Python.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.fields.Field.to_query">
-<tt class="descname">to_query</tt><big>(</big><em>value</em>, <em>lookup_type</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#Field.to_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.Field.to_query" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns field&#8217;s value prepared for usage in HTTP request query.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.fields.Field.validate">
-<tt class="descname">validate</tt><big>(</big><em>value</em>, <em>model_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#Field.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.Field.validate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validates the current field instance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">SyncanoFieldError</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.fields.FloatField">
-<em class="property">class </em><tt class="descname">FloatField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#FloatField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.FloatField" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.StringField">
+<em class="property">class </em><tt class="descname">StringField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#StringField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.StringField" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.WritableField" title="syncano.models.fields.WritableField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.WritableField</span></tt></a></p>
 <dl class="method">
-<dt id="syncano.models.fields.FloatField.to_python">
-<tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#FloatField.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.FloatField.to_python" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.fields.HyperlinkedField">
-<em class="property">class </em><tt class="descname">HyperlinkedField</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#HyperlinkedField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.HyperlinkedField" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.Field" title="syncano.models.fields.Field"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.Field</span></tt></a></p>
-<dl class="attribute">
-<dt id="syncano.models.fields.HyperlinkedField.IGNORED_LINKS">
-<tt class="descname">IGNORED_LINKS</tt><em class="property"> = ('self',)</em><a class="headerlink" href="#syncano.models.fields.HyperlinkedField.IGNORED_LINKS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.fields.HyperlinkedField.contribute_to_class">
-<tt class="descname">contribute_to_class</tt><big>(</big><em>cls</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#HyperlinkedField.contribute_to_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.HyperlinkedField.contribute_to_class" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.StringField.to_python">
+<tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#StringField.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.StringField.to_python" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -356,27 +282,139 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="syncano.models.fields.JSONField">
-<em class="property">class </em><tt class="descname">JSONField</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#JSONField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.JSONField" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.FloatField">
+<em class="property">class </em><tt class="descname">FloatField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#FloatField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.FloatField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.WritableField" title="syncano.models.fields.WritableField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.WritableField</span></tt></a></p>
+<dl class="method">
+<dt id="syncano.models.fields.FloatField.to_python">
+<tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#FloatField.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.FloatField.to_python" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.fields.BooleanField">
+<em class="property">class </em><tt class="descname">BooleanField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#BooleanField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.BooleanField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.WritableField" title="syncano.models.fields.WritableField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.WritableField</span></tt></a></p>
+<dl class="method">
+<dt id="syncano.models.fields.BooleanField.to_python">
+<tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#BooleanField.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.BooleanField.to_python" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.fields.SlugField">
+<em class="property">class </em><tt class="descname">SlugField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#SlugField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.SlugField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.StringField</span></tt></a></p>
+<dl class="attribute">
+<dt id="syncano.models.fields.SlugField.regex">
+<tt class="descname">regex</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x10318ff08&gt;</em><a class="headerlink" href="#syncano.models.fields.SlugField.regex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.fields.SlugField.validate">
+<tt class="descname">validate</tt><big>(</big><em>value</em>, <em>model_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#SlugField.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.SlugField.validate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.fields.EmailField">
+<em class="property">class </em><tt class="descname">EmailField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#EmailField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.EmailField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.StringField</span></tt></a></p>
+<dl class="attribute">
+<dt id="syncano.models.fields.EmailField.regex">
+<tt class="descname">regex</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x1033e81a0&gt;</em><a class="headerlink" href="#syncano.models.fields.EmailField.regex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.fields.EmailField.validate">
+<tt class="descname">validate</tt><big>(</big><em>value</em>, <em>model_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#EmailField.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.EmailField.validate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.fields.ChoiceField">
+<em class="property">class </em><tt class="descname">ChoiceField</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#ChoiceField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.ChoiceField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.WritableField" title="syncano.models.fields.WritableField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.WritableField</span></tt></a></p>
+<dl class="method">
+<dt id="syncano.models.fields.ChoiceField.validate">
+<tt class="descname">validate</tt><big>(</big><em>value</em>, <em>model_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#ChoiceField.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.ChoiceField.validate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.fields.DateField">
+<em class="property">class </em><tt class="descname">DateField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#DateField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.DateField" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.WritableField" title="syncano.models.fields.WritableField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.WritableField</span></tt></a></p>
 <dl class="attribute">
-<dt id="syncano.models.fields.JSONField.schema">
-<tt class="descname">schema</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.fields.JSONField.schema" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.DateField.date_regex">
+<tt class="descname">date_regex</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x103182ae0&gt;</em><a class="headerlink" href="#syncano.models.fields.DateField.date_regex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.fields.DateField.re">
+<tt class="descname">re</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x103182ae0&gt;</em><a class="headerlink" href="#syncano.models.fields.DateField.re" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.fields.JSONField.to_native">
-<tt class="descname">to_native</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#JSONField.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.JSONField.to_native" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.DateField.to_python">
+<tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#DateField.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.DateField.to_python" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.fields.JSONField.to_python">
-<tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#JSONField.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.JSONField.to_python" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.DateField.parse_date">
+<tt class="descname">parse_date</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#DateField.parse_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.DateField.parse_date" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.fields.JSONField.validate">
-<tt class="descname">validate</tt><big>(</big><em>value</em>, <em>model_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#JSONField.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.JSONField.validate" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.DateField.to_native">
+<tt class="descname">to_native</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#DateField.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.DateField.to_native" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.fields.DateTimeField">
+<em class="property">class </em><tt class="descname">DateTimeField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#DateTimeField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.DateTimeField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.DateField" title="syncano.models.fields.DateField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.DateField</span></tt></a></p>
+<dl class="attribute">
+<dt id="syncano.models.fields.DateTimeField.FORMAT">
+<tt class="descname">FORMAT</tt><em class="property"> = '%Y-%m-%dT%H:%M:%S.%f'</em><a class="headerlink" href="#syncano.models.fields.DateTimeField.FORMAT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.fields.DateTimeField.to_python">
+<tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#DateTimeField.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.DateTimeField.to_python" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.fields.DateTimeField.to_native">
+<tt class="descname">to_native</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#DateTimeField.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.DateTimeField.to_native" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.fields.HyperlinkedField">
+<em class="property">class </em><tt class="descname">HyperlinkedField</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#HyperlinkedField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.HyperlinkedField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.Field" title="syncano.models.fields.Field"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.Field</span></tt></a></p>
+<dl class="attribute">
+<dt id="syncano.models.fields.HyperlinkedField.query_allowed">
+<tt class="descname">query_allowed</tt><em class="property"> = False</em><a class="headerlink" href="#syncano.models.fields.HyperlinkedField.query_allowed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.fields.HyperlinkedField.IGNORED_LINKS">
+<tt class="descname">IGNORED_LINKS</tt><em class="property"> = ('self',)</em><a class="headerlink" href="#syncano.models.fields.HyperlinkedField.IGNORED_LINKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.fields.HyperlinkedField.contribute_to_class">
+<tt class="descname">contribute_to_class</tt><big>(</big><em>cls</em>, <em>name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#HyperlinkedField.contribute_to_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.HyperlinkedField.contribute_to_class" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -391,8 +429,8 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.fields.ModelField.to_native">
-<tt class="descname">to_native</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#ModelField.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.ModelField.to_native" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.ModelField.validate">
+<tt class="descname">validate</tt><big>(</big><em>value</em>, <em>model_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#ModelField.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.ModelField.validate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -401,19 +439,39 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.fields.ModelField.validate">
-<tt class="descname">validate</tt><big>(</big><em>value</em>, <em>model_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#ModelField.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.ModelField.validate" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.ModelField.to_native">
+<tt class="descname">to_native</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#ModelField.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.ModelField.to_native" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="syncano.models.fields.PrimaryKeyField">
-<em class="property">class </em><tt class="descname">PrimaryKeyField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#PrimaryKeyField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.PrimaryKeyField" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.Field" title="syncano.models.fields.Field"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.Field</span></tt></a></p>
+<dt id="syncano.models.fields.JSONField">
+<em class="property">class </em><tt class="descname">JSONField</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#JSONField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.JSONField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.WritableField" title="syncano.models.fields.WritableField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.WritableField</span></tt></a></p>
 <dl class="attribute">
-<dt id="syncano.models.fields.PrimaryKeyField.primary_key">
-<tt class="descname">primary_key</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.fields.PrimaryKeyField.primary_key" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.JSONField.query_allowed">
+<tt class="descname">query_allowed</tt><em class="property"> = False</em><a class="headerlink" href="#syncano.models.fields.JSONField.query_allowed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.fields.JSONField.schema">
+<tt class="descname">schema</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.fields.JSONField.schema" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.fields.JSONField.validate">
+<tt class="descname">validate</tt><big>(</big><em>value</em>, <em>model_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#JSONField.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.JSONField.validate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.fields.JSONField.to_python">
+<tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#JSONField.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.JSONField.to_python" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.fields.JSONField.to_native">
+<tt class="descname">to_native</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#JSONField.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.JSONField.to_native" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -422,6 +480,11 @@
 <dt id="syncano.models.fields.SchemaField">
 <em class="property">class </em><tt class="descname">SchemaField</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#SchemaField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.SchemaField" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.JSONField" title="syncano.models.fields.JSONField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.JSONField</span></tt></a></p>
+<dl class="attribute">
+<dt id="syncano.models.fields.SchemaField.query_allowed">
+<tt class="descname">query_allowed</tt><em class="property"> = False</em><a class="headerlink" href="#syncano.models.fields.SchemaField.query_allowed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="syncano.models.fields.SchemaField.not_indexable_types">
 <tt class="descname">not_indexable_types</tt><em class="property"> = ['text', 'file']</em><a class="headerlink" href="#syncano.models.fields.SchemaField.not_indexable_types" title="Permalink to this definition">¶</a></dt>
@@ -433,8 +496,8 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.fields.SchemaField.to_native">
-<tt class="descname">to_native</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#SchemaField.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.SchemaField.to_native" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.SchemaField.validate">
+<tt class="descname">validate</tt><big>(</big><em>value</em>, <em>model_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#SchemaField.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.SchemaField.validate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -443,51 +506,8 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.fields.SchemaField.validate">
-<tt class="descname">validate</tt><big>(</big><em>value</em>, <em>model_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#SchemaField.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.SchemaField.validate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.fields.SlugField">
-<em class="property">class </em><tt class="descname">SlugField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#SlugField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.SlugField" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.StringField</span></tt></a></p>
-<dl class="attribute">
-<dt id="syncano.models.fields.SlugField.regex">
-<tt class="descname">regex</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x1021dff08&gt;</em><a class="headerlink" href="#syncano.models.fields.SlugField.regex" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.fields.SlugField.validate">
-<tt class="descname">validate</tt><big>(</big><em>value</em>, <em>model_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#SlugField.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.SlugField.validate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.fields.StringField">
-<em class="property">class </em><tt class="descname">StringField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#StringField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.StringField" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.WritableField" title="syncano.models.fields.WritableField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.WritableField</span></tt></a></p>
-<dl class="method">
-<dt id="syncano.models.fields.StringField.to_python">
-<tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#StringField.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.StringField.to_python" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.fields.WritableField">
-<em class="property">class </em><tt class="descname">WritableField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#WritableField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.WritableField" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.Field" title="syncano.models.fields.Field"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.Field</span></tt></a></p>
-<dl class="attribute">
-<dt id="syncano.models.fields.WritableField.read_only">
-<tt class="descname">read_only</tt><em class="property"> = False</em><a class="headerlink" href="#syncano.models.fields.WritableField.read_only" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.fields.WritableField.required">
-<tt class="descname">required</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.fields.WritableField.required" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.fields.SchemaField.to_native">
+<tt class="descname">to_native</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#SchemaField.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.SchemaField.to_native" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

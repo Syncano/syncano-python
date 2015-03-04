@@ -70,13 +70,18 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../interacting.html">Interacting with Syncano</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-a-connection">Creating a Connection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#getting-existing-objects">Getting Existing Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-new-objects">Creating New Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#updating-existing-object">Updating Existing Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#deleting-existing-object">Deleting Existing Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#relations">Relations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#getting-a-raw-json">Getting a raw JSON</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../interacting.html#connection-juggling">Connection juggling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../interacting.html#environmental-variables">Environmental variables</a></li>
 </ul>
 </li>
@@ -128,36 +133,189 @@
   <div class="section" id="syncano-models-base">
 <h1>syncano.models.base<a class="headerlink" href="#syncano-models-base" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-syncano.models.base"></span><dl class="class">
-<dt id="syncano.models.base.Admin">
-<em class="property">class </em><tt class="descname">Admin</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Admin" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.base.ModelMetaclass">
+<em class="property">class </em><tt class="descname">ModelMetaclass</tt><a class="reference internal" href="../_modules/syncano/models/base.html#ModelMetaclass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.ModelMetaclass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">type</span></tt></p>
+<p>Metaclass for all models.</p>
+<dl class="method">
+<dt id="syncano.models.base.ModelMetaclass.add_to_class">
+<tt class="descname">add_to_class</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#ModelMetaclass.add_to_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.ModelMetaclass.add_to_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.base.ModelMetaclass.create_error_class">
+<tt class="descname">create_error_class</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#ModelMetaclass.create_error_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.ModelMetaclass.create_error_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.base.ModelMetaclass.build_doc">
+<tt class="descname">build_doc</tt><big>(</big><em>name</em>, <em>meta</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#ModelMetaclass.build_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.ModelMetaclass.build_doc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give the class a docstring if it&#8217;s not defined.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.base.Model">
+<em class="property">class </em><tt class="descname">Model</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Base class for all models.</p>
+<dl class="method">
+<dt id="syncano.models.base.Model.save">
+<tt class="descname">save</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates or updates the current instance.
+Override this in a subclass if you want to control the saving process.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.base.Model.delete">
+<tt class="descname">delete</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the current instance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.base.Model.validate">
+<tt class="descname">validate</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates the current instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">SyncanoValidationError, SyncanoFieldError</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.base.Model.is_valid">
+<tt class="descname">is_valid</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.is_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.is_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.base.Model.is_new">
+<tt class="descname">is_new</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.is_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.is_new" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.base.Model.to_python">
+<tt class="descname">to_python</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.to_python" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts raw data to python types and built-in objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>dict</em>) &#8211; Raw data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.base.Model.to_native">
+<tt class="descname">to_native</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.to_native" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the current instance to raw data which
+can be serialized to JSON and send to API.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.base.Model.get_endpoint_data">
+<tt class="descname">get_endpoint_data</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.get_endpoint_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.get_endpoint_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.base.Coupon">
+<em class="property">class </em><tt class="descname">Coupon</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Coupon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Coupon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
-<p>Admin:
-first_name = StringField
-last_name = StringField
-email = EmailField
-role = ChoiceField
+<p>Coupon:
+name = StringField
+redeem_by = DateField
 links = HyperlinkedField
-id = IntegerField
-instance_name = EndpointField</p>
+percent_off = IntegerField
+amount_off = FloatField
+currency = ChoiceField
+duration = IntegerField</p>
 <dl class="attribute">
-<dt id="syncano.models.base.Admin.DoesNotExist">
-<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Admin.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">AdminDoesNotExist</span></tt></p>
+<dt id="syncano.models.base.Coupon.LINKS">
+<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'redeem'})</em><a class="headerlink" href="#syncano.models.base.Coupon.LINKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.Coupon.CURRENCY_CHOICES">
+<tt class="descname">CURRENCY_CHOICES</tt><em class="property"> = ({u'display_name': u'USD', u'value': u'usd'},)</em><a class="headerlink" href="#syncano.models.base.Coupon.CURRENCY_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.Coupon.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Coupon.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">CouponDoesNotExist</span></tt></p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.base.Admin.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'},)</em><a class="headerlink" href="#syncano.models.base.Admin.LINKS" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.base.Coupon.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.Coupon.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.base.Discount">
+<em class="property">class </em><tt class="descname">Discount</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Discount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Discount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
+<p>Discount:
+instance = ModelField
+coupon = ModelField
+start = DateField
+end = DateField
+links = HyperlinkedField
+id = IntegerField</p>
+<dl class="attribute">
+<dt id="syncano.models.base.Discount.LINKS">
+<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'},)</em><a class="headerlink" href="#syncano.models.base.Discount.LINKS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.base.Admin.ROLE_CHOICES">
-<tt class="descname">ROLE_CHOICES</tt><em class="property"> = ({u'display_name': u'full', u'value': u'full'}, {u'display_name': u'write', u'value': u'write'}, {u'display_name': u'read', u'value': u'read'})</em><a class="headerlink" href="#syncano.models.base.Admin.ROLE_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.base.Discount.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Discount.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">DiscountDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.Discount.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.Discount.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.base.Instance">
+<em class="property">class </em><tt class="descname">Instance</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
+<p>Instance:
+name = StringField
+description = StringField
+role = Field
+owner = ModelField
+links = HyperlinkedField
+metadata = JSONField
+created_at = DateTimeField
+updated_at = DateTimeField</p>
+<dl class="attribute">
+<dt id="syncano.models.base.Instance.LINKS">
+<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'admins'}, {u'type': u'list', u'name': u'classes'}, {u'type': u'list', u'name': u'codeboxes'}, {u'type': u'list', u'name': u'invitations'}, {u'type': u'list', u'name': u'runtimes'}, {u'type': u'list', u'name': u'api_keys'}, {u'type': u'list', u'name': u'triggers'}, {u'type': u'list', u'name': u'webhooks'})</em><a class="headerlink" href="#syncano.models.base.Instance.LINKS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.base.Admin.please">
-<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.Admin.please" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.base.Instance.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Instance.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">InstanceDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.Instance.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.Instance.please" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -172,15 +330,15 @@ links = HyperlinkedField
 id = IntegerField
 instance_name = EndpointField</p>
 <dl class="attribute">
+<dt id="syncano.models.base.ApiKey.LINKS">
+<tt class="descname">LINKS</tt><em class="property"> = [{u'type': u'detail', u'name': u'self'}]</em><a class="headerlink" href="#syncano.models.base.ApiKey.LINKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="syncano.models.base.ApiKey.DoesNotExist">
 <tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.ApiKey.DoesNotExist" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">ApiKeyDoesNotExist</span></tt></p>
 </dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.ApiKey.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = [{u'type': u'detail', u'name': u'self'}]</em><a class="headerlink" href="#syncano.models.base.ApiKey.LINKS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="syncano.models.base.ApiKey.please">
@@ -207,15 +365,15 @@ updated_at = DateTimeField
 created_at = DateTimeField
 instance_name = EndpointField</p>
 <dl class="attribute">
+<dt id="syncano.models.base.Class.LINKS">
+<tt class="descname">LINKS</tt><em class="property"> = [{u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'objects'}]</em><a class="headerlink" href="#syncano.models.base.Class.LINKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="syncano.models.base.Class.DoesNotExist">
 <tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Class.DoesNotExist" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">ClassDoesNotExist</span></tt></p>
 </dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.Class.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = [{u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'objects'}]</em><a class="headerlink" href="#syncano.models.base.Class.LINKS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="syncano.models.base.Class.please">
@@ -240,12 +398,6 @@ updated_at = DateTimeField
 id = IntegerField
 instance_name = EndpointField</p>
 <dl class="attribute">
-<dt id="syncano.models.base.CodeBox.DoesNotExist">
-<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.CodeBox.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">CodeBoxDoesNotExist</span></tt></p>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="syncano.models.base.CodeBox.LINKS">
 <tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'schedules'})</em><a class="headerlink" href="#syncano.models.base.CodeBox.LINKS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -256,262 +408,14 @@ instance_name = EndpointField</p>
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="syncano.models.base.CodeBox.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.CodeBox.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">CodeBoxDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="syncano.models.base.CodeBox.please">
 <tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.CodeBox.please" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.base.Coupon">
-<em class="property">class </em><tt class="descname">Coupon</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Coupon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Coupon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
-<p>Coupon:
-name = StringField
-redeem_by = DateField
-links = HyperlinkedField
-percent_off = IntegerField
-amount_off = FloatField
-currency = ChoiceField
-duration = IntegerField</p>
-<dl class="attribute">
-<dt id="syncano.models.base.Coupon.CURRENCY_CHOICES">
-<tt class="descname">CURRENCY_CHOICES</tt><em class="property"> = ({u'display_name': u'USD', u'value': u'usd'},)</em><a class="headerlink" href="#syncano.models.base.Coupon.CURRENCY_CHOICES" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.Coupon.DoesNotExist">
-<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Coupon.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">CouponDoesNotExist</span></tt></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.Coupon.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'redeem'})</em><a class="headerlink" href="#syncano.models.base.Coupon.LINKS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.Coupon.please">
-<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.Coupon.please" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.base.Discount">
-<em class="property">class </em><tt class="descname">Discount</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Discount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Discount" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
-<p>Discount:
-instance = ModelField
-coupon = ModelField
-start = DateField
-end = DateField
-links = HyperlinkedField
-id = IntegerField</p>
-<dl class="attribute">
-<dt id="syncano.models.base.Discount.DoesNotExist">
-<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Discount.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">DiscountDoesNotExist</span></tt></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.Discount.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'},)</em><a class="headerlink" href="#syncano.models.base.Discount.LINKS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.Discount.please">
-<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.Discount.please" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.base.Instance">
-<em class="property">class </em><tt class="descname">Instance</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Instance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
-<p>Instance:
-name = StringField
-description = StringField
-role = Field
-owner = ModelField
-links = HyperlinkedField
-metadata = JSONField
-created_at = DateTimeField
-updated_at = DateTimeField</p>
-<dl class="attribute">
-<dt id="syncano.models.base.Instance.DoesNotExist">
-<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Instance.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">InstanceDoesNotExist</span></tt></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.Instance.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'admins'}, {u'type': u'list', u'name': u'classes'}, {u'type': u'list', u'name': u'codeboxes'}, {u'type': u'list', u'name': u'invitations'}, {u'type': u'list', u'name': u'runtimes'}, {u'type': u'list', u'name': u'api_keys'}, {u'type': u'list', u'name': u'triggers'}, {u'type': u'list', u'name': u'webhooks'})</em><a class="headerlink" href="#syncano.models.base.Instance.LINKS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.Instance.please">
-<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.Instance.please" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.base.InstanceInvitation">
-<em class="property">class </em><tt class="descname">InstanceInvitation</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#InstanceInvitation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.InstanceInvitation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
-<p>InstanceInvitation:
-email = EmailField
-role = ChoiceField
-key = StringField
-state = StringField
-links = HyperlinkedField
-created_at = DateTimeField
-updated_at = DateTimeField
-id = IntegerField
-instance_name = EndpointField</p>
-<dl class="attribute">
-<dt id="syncano.models.base.InstanceInvitation.DoesNotExist">
-<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.InstanceInvitation.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">InstanceInvitationDoesNotExist</span></tt></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.InstanceInvitation.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'},)</em><a class="headerlink" href="#syncano.models.base.InstanceInvitation.LINKS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.InstanceInvitation.please">
-<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.InstanceInvitation.please" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.base.Model">
-<em class="property">class </em><tt class="descname">Model</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Base class for all models.</p>
-<dl class="method">
-<dt id="syncano.models.base.Model.delete">
-<tt class="descname">delete</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes the current instance.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.base.Model.get_endpoint_data">
-<tt class="descname">get_endpoint_data</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.get_endpoint_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.get_endpoint_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.base.Model.is_new">
-<tt class="descname">is_new</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.is_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.is_new" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.base.Model.is_valid">
-<tt class="descname">is_valid</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.is_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.is_valid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.base.Model.save">
-<tt class="descname">save</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates or updates the current instance.
-Override this in a subclass if you want to control the saving process.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.base.Model.to_native">
-<tt class="descname">to_native</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.to_native" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts the current instance to raw data which
-can be serialized to JSON and send to API.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.base.Model.to_python">
-<tt class="descname">to_python</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.to_python" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts raw data to python types and built-in objects.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>dict</em>) &#8211; Raw data</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.base.Model.validate">
-<tt class="descname">validate</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Model.validate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Model.validate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Validates the current instance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body">SyncanoValidationError, SyncanoFieldError</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.base.ModelMetaclass">
-<em class="property">class </em><tt class="descname">ModelMetaclass</tt><a class="reference internal" href="../_modules/syncano/models/base.html#ModelMetaclass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.ModelMetaclass" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">type</span></tt></p>
-<p>Metaclass for all models.</p>
-<dl class="method">
-<dt id="syncano.models.base.ModelMetaclass.add_to_class">
-<tt class="descname">add_to_class</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#ModelMetaclass.add_to_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.ModelMetaclass.add_to_class" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.base.ModelMetaclass.build_doc">
-<tt class="descname">build_doc</tt><big>(</big><em>name</em>, <em>meta</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#ModelMetaclass.build_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.ModelMetaclass.build_doc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Give the class a docstring if it&#8217;s not defined.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.base.ModelMetaclass.create_error_class">
-<tt class="descname">create_error_class</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#ModelMetaclass.create_error_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.ModelMetaclass.create_error_class" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="syncano.models.base.Object">
-<em class="property">class </em><tt class="descname">Object</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Object" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
-<p>Object:
-revision = IntegerField
-created_at = DateTimeField
-updated_at = DateTimeField
-id = IntegerField
-instance_name = EndpointField
-class_name = EndpointField</p>
-<dl class="attribute">
-<dt id="syncano.models.base.Object.DoesNotExist">
-<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Object.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">ObjectDoesNotExist</span></tt></p>
-</dd></dl>
-
-<dl class="classmethod">
-<dt id="syncano.models.base.Object.create_subclass">
-<em class="property">classmethod </em><tt class="descname">create_subclass</tt><big>(</big><em>name</em>, <em>schema</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Object.create_subclass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Object.create_subclass" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="classmethod">
-<dt id="syncano.models.base.Object.get_or_create_subclass">
-<em class="property">classmethod </em><tt class="descname">get_or_create_subclass</tt><big>(</big><em>name</em>, <em>schema</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Object.get_or_create_subclass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Object.get_or_create_subclass" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.Object.please">
-<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.Object.please" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -528,18 +432,17 @@ created_at = DateTimeField
 scheduled_next = DateTimeField
 links = HyperlinkedField
 id = IntegerField
-instance_name = EndpointField
-codebox_id = EndpointField</p>
+instance_name = EndpointField</p>
+<dl class="attribute">
+<dt id="syncano.models.base.Schedule.LINKS">
+<tt class="descname">LINKS</tt><em class="property"> = [{u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'traces'}]</em><a class="headerlink" href="#syncano.models.base.Schedule.LINKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="syncano.models.base.Schedule.DoesNotExist">
 <tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Schedule.DoesNotExist" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">ScheduleDoesNotExist</span></tt></p>
 </dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.Schedule.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = [{u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'traces'}]</em><a class="headerlink" href="#syncano.models.base.Schedule.LINKS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="syncano.models.base.Schedule.please">
@@ -560,13 +463,11 @@ result = StringField
 duration = IntegerField
 id = IntegerField
 instance_name = EndpointField
-schedule_id = EndpointField
-codebox_id = EndpointField</p>
+schedule_id = EndpointField</p>
 <dl class="attribute">
-<dt id="syncano.models.base.Trace.DoesNotExist">
-<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Trace.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">TraceDoesNotExist</span></tt></p>
-</dd></dl>
+<dt id="syncano.models.base.Trace.STATUS_CHOICES">
+<tt class="descname">STATUS_CHOICES</tt><em class="property"> = ({u'display_name': u'Success', u'value': u'success'}, {u'display_name': u'Failure', u'value': u'failure'}, {u'display_name': u'Timeout', u'value': u'timeout'})</em><a class="headerlink" href="#syncano.models.base.Trace.STATUS_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="syncano.models.base.Trace.LINKS">
@@ -574,14 +475,116 @@ codebox_id = EndpointField</p>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.base.Trace.STATUS_CHOICES">
-<tt class="descname">STATUS_CHOICES</tt><em class="property"> = ({u'display_name': u'Success', u'value': u'success'}, {u'display_name': u'Failure', u'value': u'failure'}, {u'display_name': u'Timeout', u'value': u'timeout'})</em><a class="headerlink" href="#syncano.models.base.Trace.STATUS_CHOICES" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="syncano.models.base.Trace.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Trace.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">TraceDoesNotExist</span></tt></p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="syncano.models.base.Trace.please">
 <tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.Trace.please" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.base.Admin">
+<em class="property">class </em><tt class="descname">Admin</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Admin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
+<p>Admin:
+first_name = StringField
+last_name = StringField
+email = EmailField
+role = ChoiceField
+links = HyperlinkedField
+id = IntegerField
+instance_name = EndpointField</p>
+<dl class="attribute">
+<dt id="syncano.models.base.Admin.LINKS">
+<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'},)</em><a class="headerlink" href="#syncano.models.base.Admin.LINKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.Admin.ROLE_CHOICES">
+<tt class="descname">ROLE_CHOICES</tt><em class="property"> = ({u'display_name': u'full', u'value': u'full'}, {u'display_name': u'write', u'value': u'write'}, {u'display_name': u'read', u'value': u'read'})</em><a class="headerlink" href="#syncano.models.base.Admin.ROLE_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.Admin.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Admin.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">AdminDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.Admin.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.Admin.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.base.InstanceInvitation">
+<em class="property">class </em><tt class="descname">InstanceInvitation</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#InstanceInvitation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.InstanceInvitation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
+<p>InstanceInvitation:
+email = EmailField
+role = ChoiceField
+key = StringField
+state = StringField
+links = HyperlinkedField
+created_at = DateTimeField
+updated_at = DateTimeField
+id = IntegerField
+instance_name = EndpointField</p>
+<dl class="attribute">
+<dt id="syncano.models.base.InstanceInvitation.LINKS">
+<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'},)</em><a class="headerlink" href="#syncano.models.base.InstanceInvitation.LINKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.InstanceInvitation.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.InstanceInvitation.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">InstanceInvitationDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.InstanceInvitation.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.InstanceInvitation.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.base.Object">
+<em class="property">class </em><tt class="descname">Object</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
+<p>Object:
+revision = IntegerField
+created_at = DateTimeField
+updated_at = DateTimeField
+id = IntegerField
+instance_name = EndpointField
+class_name = EndpointField</p>
+<dl class="attribute">
+<dt id="syncano.models.base.Object.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.Object.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="syncano.models.base.Object.create_subclass">
+<em class="property">classmethod </em><tt class="descname">create_subclass</tt><big>(</big><em>name</em>, <em>schema</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Object.create_subclass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Object.create_subclass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="syncano.models.base.Object.get_or_create_subclass">
+<em class="property">classmethod </em><tt class="descname">get_or_create_subclass</tt><big>(</big><em>name</em>, <em>schema</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Object.get_or_create_subclass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Object.get_or_create_subclass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.Object.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Object.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">ObjectDoesNotExist</span></tt></p>
+</dd></dl>
 
 </dd></dl>
 
@@ -599,12 +602,6 @@ updated_at = DateTimeField
 id = IntegerField
 instance_name = EndpointField</p>
 <dl class="attribute">
-<dt id="syncano.models.base.Trigger.DoesNotExist">
-<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Trigger.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">TriggerDoesNotExist</span></tt></p>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="syncano.models.base.Trigger.LINKS">
 <tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'},)</em><a class="headerlink" href="#syncano.models.base.Trigger.LINKS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -613,6 +610,12 @@ instance_name = EndpointField</p>
 <dt id="syncano.models.base.Trigger.SIGNAL_CHOICES">
 <tt class="descname">SIGNAL_CHOICES</tt><em class="property"> = ({u'display_name': u'post_update', u'value': u'post_update'}, {u'display_name': u'post_create', u'value': u'post_create'}, {u'display_name': u'post_delete', u'value': u'post_delete'})</em><a class="headerlink" href="#syncano.models.base.Trigger.SIGNAL_CHOICES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.Trigger.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Trigger.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">TriggerDoesNotExist</span></tt></p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="syncano.models.base.Trigger.please">
@@ -631,20 +634,25 @@ codebox = IntegerField
 links = HyperlinkedField
 instance_name = EndpointField</p>
 <dl class="attribute">
-<dt id="syncano.models.base.Webhook.DoesNotExist">
-<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Webhook.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">WebhookDoesNotExist</span></tt></p>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="syncano.models.base.Webhook.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'run', u'name': u'run'})</em><a class="headerlink" href="#syncano.models.base.Webhook.LINKS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'detail', u'name': u'codebox'})</em><a class="headerlink" href="#syncano.models.base.Webhook.LINKS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="syncano.models.base.Webhook.please">
 <tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.Webhook.please" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.base.Webhook.run">
+<tt class="descname">run</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Webhook.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Webhook.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.Webhook.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Webhook.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">WebhookDoesNotExist</span></tt></p>
+</dd></dl>
 
 </dd></dl>
 

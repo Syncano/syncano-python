@@ -126,13 +126,6 @@
   <div class="section" id="module-syncano.exceptions">
 <span id="syncano-exceptions"></span><h1>syncano.exceptions<a class="headerlink" href="#module-syncano.exceptions" title="Permalink to this headline">¶</a></h1>
 <dl class="exception">
-<dt id="syncano.exceptions.SyncanoDoesNotExist">
-<em class="property">exception </em><tt class="descname">SyncanoDoesNotExist</tt><big>(</big><em>reason=None</em>, <em>*args</em><big>)</big><a class="reference internal" href="../_modules/syncano/exceptions.html#SyncanoDoesNotExist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.exceptions.SyncanoDoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.exceptions.SyncanoException" title="syncano.exceptions.SyncanoException"><tt class="xref py py-class docutils literal"><span class="pre">syncano.exceptions.SyncanoException</span></tt></a></p>
-<p>Syncano object doesn&#8217;t exist error occurred.</p>
-</dd></dl>
-
-<dl class="exception">
 <dt id="syncano.exceptions.SyncanoException">
 <em class="property">exception </em><tt class="descname">SyncanoException</tt><big>(</big><em>reason=None</em>, <em>*args</em><big>)</big><a class="reference internal" href="../_modules/syncano/exceptions.html#SyncanoException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.exceptions.SyncanoException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
@@ -140,23 +133,10 @@
 </dd></dl>
 
 <dl class="exception">
-<dt id="syncano.exceptions.SyncanoFieldError">
-<em class="property">exception </em><tt class="descname">SyncanoFieldError</tt><big>(</big><em>reason=None</em>, <em>*args</em><big>)</big><a class="reference internal" href="../_modules/syncano/exceptions.html#SyncanoFieldError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.exceptions.SyncanoFieldError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.exceptions.SyncanoValidationError" title="syncano.exceptions.SyncanoValidationError"><tt class="xref py py-class docutils literal"><span class="pre">syncano.exceptions.SyncanoValidationError</span></tt></a></p>
-<p>A field error occurred.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><strong>field_name</strong> &#8211; Related field name</td>
-</tr>
-</tbody>
-</table>
-<dl class="attribute">
-<dt id="syncano.exceptions.SyncanoFieldError.field_name">
-<tt class="descname">field_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.exceptions.SyncanoFieldError.field_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dt id="syncano.exceptions.SyncanoValueError">
+<em class="property">exception </em><tt class="descname">SyncanoValueError</tt><big>(</big><em>reason=None</em>, <em>*args</em><big>)</big><a class="reference internal" href="../_modules/syncano/exceptions.html#SyncanoValueError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.exceptions.SyncanoValueError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.exceptions.SyncanoException" title="syncano.exceptions.SyncanoException"><tt class="xref py py-class docutils literal"><span class="pre">syncano.exceptions.SyncanoException</span></tt></a></p>
+<p>A Python <tt class="xref py py-class docutils literal"><span class="pre">ValueError</span></tt> error occurred.</p>
 </dd></dl>
 
 <dl class="exception">
@@ -186,10 +166,30 @@
 </dd></dl>
 
 <dl class="exception">
-<dt id="syncano.exceptions.SyncanoValueError">
-<em class="property">exception </em><tt class="descname">SyncanoValueError</tt><big>(</big><em>reason=None</em>, <em>*args</em><big>)</big><a class="reference internal" href="../_modules/syncano/exceptions.html#SyncanoValueError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.exceptions.SyncanoValueError" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.exceptions.SyncanoFieldError">
+<em class="property">exception </em><tt class="descname">SyncanoFieldError</tt><big>(</big><em>reason=None</em>, <em>*args</em><big>)</big><a class="reference internal" href="../_modules/syncano/exceptions.html#SyncanoFieldError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.exceptions.SyncanoFieldError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.exceptions.SyncanoValidationError" title="syncano.exceptions.SyncanoValidationError"><tt class="xref py py-class docutils literal"><span class="pre">syncano.exceptions.SyncanoValidationError</span></tt></a></p>
+<p>A field error occurred.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><strong>field_name</strong> &#8211; Related field name</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="syncano.exceptions.SyncanoFieldError.field_name">
+<tt class="descname">field_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.exceptions.SyncanoFieldError.field_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="syncano.exceptions.SyncanoDoesNotExist">
+<em class="property">exception </em><tt class="descname">SyncanoDoesNotExist</tt><big>(</big><em>reason=None</em>, <em>*args</em><big>)</big><a class="reference internal" href="../_modules/syncano/exceptions.html#SyncanoDoesNotExist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.exceptions.SyncanoDoesNotExist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#syncano.exceptions.SyncanoException" title="syncano.exceptions.SyncanoException"><tt class="xref py py-class docutils literal"><span class="pre">syncano.exceptions.SyncanoException</span></tt></a></p>
-<p>A Python <tt class="xref py py-class docutils literal"><span class="pre">ValueError</span></tt> error occurred.</p>
+<p>Syncano object doesn&#8217;t exist error occurred.</p>
 </dd></dl>
 
 </div>

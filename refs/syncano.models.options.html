@@ -133,11 +133,6 @@
 <dd><p>Bases: <a class="reference internal" href="syncano.connection.html#syncano.connection.ConnectionMixin" title="syncano.connection.ConnectionMixin"><tt class="xref py py-class docutils literal"><span class="pre">syncano.connection.ConnectionMixin</span></tt></a></p>
 <p>Holds metadata related to model definition.</p>
 <dl class="method">
-<dt id="syncano.models.options.Options.add_field">
-<tt class="descname">add_field</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/options.html#Options.add_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.options.Options.add_field" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="syncano.models.options.Options.build_properties">
 <tt class="descname">build_properties</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/options.html#Options.build_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.options.Options.build_properties" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -148,13 +143,23 @@
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="syncano.models.options.Options.resolve_parent_data">
+<tt class="descname">resolve_parent_data</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/options.html#Options.resolve_parent_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.options.Options.resolve_parent_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.options.Options.add_field">
+<tt class="descname">add_field</tt><big>(</big><em>field</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/options.html#Options.add_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.options.Options.add_field" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="syncano.models.options.Options.get_endpoint">
 <tt class="descname">get_endpoint</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/options.html#Options.get_endpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.options.Options.get_endpoint" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.options.Options.get_endpoint_methods">
-<tt class="descname">get_endpoint_methods</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/options.html#Options.get_endpoint_methods"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.options.Options.get_endpoint_methods" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.options.Options.get_endpoint_properties">
+<tt class="descname">get_endpoint_properties</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/options.html#Options.get_endpoint_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.options.Options.get_endpoint_properties" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -163,8 +168,13 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.options.Options.get_endpoint_properties">
-<tt class="descname">get_endpoint_properties</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/options.html#Options.get_endpoint_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.options.Options.get_endpoint_properties" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.options.Options.get_endpoint_methods">
+<tt class="descname">get_endpoint_methods</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/options.html#Options.get_endpoint_methods"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.options.Options.get_endpoint_methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.options.Options.resolve_endpoint">
+<tt class="descname">resolve_endpoint</tt><big>(</big><em>name</em>, <em>properties</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/options.html#Options.resolve_endpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.options.Options.resolve_endpoint" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -175,16 +185,6 @@
 <dl class="method">
 <dt id="syncano.models.options.Options.get_path_properties">
 <tt class="descname">get_path_properties</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/options.html#Options.get_path_properties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.options.Options.get_path_properties" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.options.Options.resolve_endpoint">
-<tt class="descname">resolve_endpoint</tt><big>(</big><em>name</em>, <em>properties</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/options.html#Options.resolve_endpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.options.Options.resolve_endpoint" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.options.Options.resolve_parent_data">
-<tt class="descname">resolve_parent_data</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/options.html#Options.resolve_parent_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.options.Options.resolve_parent_data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

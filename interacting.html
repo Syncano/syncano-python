@@ -69,13 +69,18 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Interacting with Syncano</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#creating-a-connection">Creating a Connection</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#getting-existing-objects">Getting Existing Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#creating-new-objects">Creating New Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#updating-existing-object">Updating Existing Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#deleting-existing-object">Deleting Existing Object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#relations">Relations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#getting-a-raw-json">Getting a raw JSON</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#connection-juggling">Connection juggling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#falling-back-to-raw-json">Falling back to raw JSON</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#environmental-variables">Environmental variables</a></li>
 </ul>
 </li>
@@ -125,35 +130,238 @@
 <p>This tutorial will walk you through our ORM syntax and how to use it to make proper API calls.</p>
 <div class="section" id="creating-a-connection">
 <h2>Creating a Connection<a class="headerlink" href="#creating-a-connection" title="Permalink to this headline">¶</a></h2>
-<p>In each example I&#8217;ll be assuming that you have configured and open connection to <cite>syncano</cite>:</p>
+<p>In each example I&#8217;ll be assuming that you have configured connection to <cite>syncano</cite>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s">&#39;YOUR_EMAIL&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;YOUR_PASSWORD&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="getting-existing-objects">
-<h2>Getting Existing Objects<a class="headerlink" href="#getting-existing-objects" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="accessing-models">
+<h2>Accessing models<a class="headerlink" href="#accessing-models" title="Permalink to this headline">¶</a></h2>
+<p>All models are defined in <a class="reference internal" href="refs/syncano.models.base.html#module-syncano.models.base" title="syncano.models.base"><tt class="xref py py-mod docutils literal"><span class="pre">syncano.models.base</span></tt></a> but <tt class="docutils literal"><span class="pre">syncano</span></tt> simplifies access to them
+by attaching all of them directly to <tt class="docutils literal"><span class="pre">connection</span></tt>. Thus:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">syncano.models.base</span> <span class="kn">import</span> <span class="n">Instance</span>
+</pre></div>
 </div>
-<div class="section" id="creating-new-objects">
-<h2>Creating New Objects<a class="headerlink" href="#creating-new-objects" title="Permalink to this headline">¶</a></h2>
+<p>and:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Instance</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">Instance</span>
+</pre></div>
 </div>
-<div class="section" id="updating-existing-object">
-<h2>Updating Existing Object<a class="headerlink" href="#updating-existing-object" title="Permalink to this headline">¶</a></h2>
+<p>are equivalent.</p>
 </div>
-<div class="section" id="deleting-existing-object">
-<h2>Deleting Existing Object<a class="headerlink" href="#deleting-existing-object" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creating-objects">
+<h2>Creating objects<a class="headerlink" href="#creating-objects" title="Permalink to this headline">¶</a></h2>
+<p>A model class represents a single <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> endpoint,
+and an instance of that class represents a particular record in this endpoint.</p>
+<p>To create an object, instantiate it using <strong>keyword arguments</strong> to the model class,
+then call <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Model.save" title="syncano.models.base.Model.save"><tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt></a> to save it to the <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt>.</p>
+<p>Here’s an example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
 </div>
-<div class="section" id="relations">
-<h2>Relations<a class="headerlink" href="#relations" title="Permalink to this headline">¶</a></h2>
+<p>This performs a <strong>POST</strong> request to <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> behind the scenes.
+Syncano doesn’t hit the API until you explicitly call <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Model.save" title="syncano.models.base.Model.save"><tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To create and save <strong>an object</strong> in a single step, use the <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.create" title="syncano.models.manager.Manager.create"><tt class="xref py py-meth docutils literal"><span class="pre">create()</span></tt></a> method.
+To create and save <strong>multiple objects</strong> in a single step, use the <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.bulk_create" title="syncano.models.manager.Manager.bulk_create"><tt class="xref py py-meth docutils literal"><span class="pre">bulk_create()</span></tt></a> method.</p>
 </div>
-<div class="section" id="getting-a-raw-json">
-<h2>Getting a raw JSON<a class="headerlink" href="#getting-a-raw-json" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="connection-juggling">
-<h2>Connection juggling<a class="headerlink" href="#connection-juggling" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="saving-changes-to-objects">
+<h2>Saving changes to objects<a class="headerlink" href="#saving-changes-to-objects" title="Permalink to this headline">¶</a></h2>
+<p>To save changes to an object that’s already in the <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt>, use <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Model.save" title="syncano.models.base.Model.save"><tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt></a>.
+Regarding our <strong>instance</strong> from previous example,
+this example changes its description and updates its record in the <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s">&#39;new description&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This performs a <strong>PUT</strong> request to <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> behind the scenes.
+Syncano doesn’t hit the API until you explicitly call <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Model.save" title="syncano.models.base.Model.save"><tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To change and save <strong>an object</strong> in a single step, use the <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.update" title="syncano.models.manager.Manager.update"><tt class="xref py py-meth docutils literal"><span class="pre">update()</span></tt></a> method.</p>
+</div>
+</div>
+<div class="section" id="retrieving-objects">
+<h2>Retrieving objects<a class="headerlink" href="#retrieving-objects" title="Permalink to this headline">¶</a></h2>
+<p>To retrieve objects from <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt>, construct a query via a <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a> on your model class.</p>
+<p>Each model has only one <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a>, and it’s called <strong>please</strong> by default.
+Access it directly via the model class, like so:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span>
+<span class="go">[&lt;Instance: test&gt;, &lt;Instance: test-two&gt;, &#39;...(remaining elements truncated)...&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Foo&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;Bar&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span><span class="o">.</span><span class="n">please</span>
+<span class="go">Traceback:</span>
+<span class="gp">...</span>
+<span class="go">AttributeError: Manager isn&#39;t accessible via Instance instances.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>Managers</strong> are accessible only via model classes, rather than from model instances,
+to enforce a separation between “table-level” operations and “record-level” operations.</p>
+</div>
+</div>
+<div class="section" id="retrieving-all-objects">
+<h2>Retrieving all objects<a class="headerlink" href="#retrieving-all-objects" title="Permalink to this headline">¶</a></h2>
+<p>The simplest way to retrieve objects from a <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> is to get all of them.
+To do this, use the <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.all" title="syncano.models.manager.Manager.all"><tt class="xref py py-meth docutils literal"><span class="pre">all()</span></tt></a> or <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.list" title="syncano.models.manager.Manager.list"><tt class="xref py py-meth docutils literal"><span class="pre">list()</span></tt></a>
+method on a <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This performs a <strong>GET</strong> request to <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> list endpoint behind the scenes.</p>
+</div>
+<div class="section" id="manager-is-lazy">
+<h2>Manager is lazy<a class="headerlink" href="#manager-is-lazy" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a> is lazy – the act of creating a <strong>Manager</strong> doesn’t involve any API activity.
+You can stack Manager methods all day long, and Syncano won’t actually run the API call until the <strong>Manager</strong> is evaluated.
+Take a look at this example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">query</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s">&#39;test-instance&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Though this looks like two API calls, in fact it hits API only once, at the last line (<tt class="docutils literal"><span class="pre">print(query)</span></tt>).
+In general, the results of a <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a> aren’t fetched from API until you “ask” for them.</p>
+</div>
+<div class="section" id="retrieving-a-single-object">
+<h2>Retrieving a single object<a class="headerlink" href="#retrieving-a-single-object" title="Permalink to this headline">¶</a></h2>
+<p>If you know there is only one object that matches your API call,
+you can use the <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.get" title="syncano.models.manager.Manager.get"><tt class="xref py py-meth docutils literal"><span class="pre">get()</span></tt></a> method on a <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a>
+which returns the object directly:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This performs a <strong>GET</strong> request to <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> details endpoint behind the scenes.</p>
+<p>If there are no results that match the API call, <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.get" title="syncano.models.manager.Manager.get"><tt class="xref py py-meth docutils literal"><span class="pre">get()</span></tt></a>
+will raise a <a class="reference internal" href="refs/syncano.exceptions.html#syncano.exceptions.SyncanoDoesNotExist" title="syncano.exceptions.SyncanoDoesNotExist"><tt class="xref py py-class docutils literal"><span class="pre">SyncanoDoesNotExist</span></tt></a> exception.
+This exception is an attribute of the model class that the API call is being performed on - so in the code above,
+if there is no <strong>Instance</strong> object with a name equal &#8220;instance-name&#8221;, Syncano will raise <strong>Instance.DoesNotExist</strong>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To have more RESTful like method names there is <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.detail" title="syncano.models.manager.Manager.detail"><tt class="xref py py-meth docutils literal"><span class="pre">detail()</span></tt></a>
+alias for <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.get" title="syncano.models.manager.Manager.get"><tt class="xref py py-meth docutils literal"><span class="pre">get()</span></tt></a> method.</p>
+</div>
+</div>
+<div class="section" id="removing-a-single-object">
+<h2>Removing a single object<a class="headerlink" href="#removing-a-single-object" title="Permalink to this headline">¶</a></h2>
+<p>The delete method, conveniently, is named <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Model.delete" title="syncano.models.base.Model.delete"><tt class="xref py py-meth docutils literal"><span class="pre">delete()</span></tt></a>.
+This method immediately deletes the object and has no return value.
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This performs a <strong>DELETE</strong> request to <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> details endpoint behind the scenes.</p>
+</div>
+<div class="section" id="limiting-returned-objects">
+<h2>Limiting returned objects<a class="headerlink" href="#limiting-returned-objects" title="Permalink to this headline">¶</a></h2>
+<p>Use a subset of Python’s array-slicing syntax to limit your
+<a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a> to a certain number of results.</p>
+<p>For example, this returns the first 5 objects:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>This returns the sixth through tenth objects:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Negative indexing (i.e. <strong>Instance.please.all()[-1]</strong>) is not supported.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you don&#8217;t want to use array-slicing syntax there
+is a special manager method  called <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.limit" title="syncano.models.manager.Manager.limit"><tt class="xref py py-meth docutils literal"><span class="pre">limit()</span></tt></a>.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Python’s array-slicing syntax is a expensive operation in context of API calls so using
+<a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.limit" title="syncano.models.manager.Manager.limit"><tt class="xref py py-meth docutils literal"><span class="pre">limit()</span></tt></a> is a recommended way.</p>
+</div>
+</div>
+<div class="section" id="lookups-that-span-relationships">
+<h2>Lookups that span relationships<a class="headerlink" href="#lookups-that-span-relationships" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> has nested architecture so in some cases there will be a need to provide
+a few additional arguments to resolve endpoint URL.</p>
+<p>For example <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.ApiKey" title="syncano.models.base.ApiKey"><tt class="xref py py-class docutils literal"><span class="pre">ApiKey</span></tt></a> is related to <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Instance" title="syncano.models.base.Instance"><tt class="xref py py-class docutils literal"><span class="pre">Instance</span></tt></a> and
+its URL patter looks like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>/v1/instances/{instance_name}/api_keys/{id}
+</pre></div>
+</div>
+<p>This example will not work:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ApiKey</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+<span class="go">Traceback:</span>
+<span class="gp">...</span>
+<span class="go">SyncanoValueError: Request property &quot;instance_name&quot; is required.</span>
+</pre></div>
+</div>
+<p>So how to fix that? We need to provide <tt class="docutils literal"><span class="pre">instance_name</span></tt> as an argument
+to <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.list" title="syncano.models.manager.Manager.list"><tt class="xref py py-meth docutils literal"><span class="pre">list()</span></tt></a> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ApiKey</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="go">[&lt;ApiKey 1&gt;...]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ApiKey</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="go">[&lt;ApiKey 1&gt;...]</span>
+</pre></div>
+</div>
+<p>This performs a <strong>GET</strong> request to <tt class="docutils literal"><span class="pre">/v1/instances/test-one/api_keys/</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Additional request properties are resolved in order as they occurred in URL pattern.
+So if you have pattern like this <tt class="docutils literal"><span class="pre">/v1/{a}/{b}/{c}/</span></tt> <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.list" title="syncano.models.manager.Manager.list"><tt class="xref py py-meth docutils literal"><span class="pre">list()</span></tt></a>
+method can be invoked like any other Python function i.e <tt class="docutils literal"><span class="pre">list('a',</span> <span class="pre">'b',</span> <span class="pre">'c')</span></tt> or <tt class="docutils literal"><span class="pre">list('a',</span> <span class="pre">c='c',</span> <span class="pre">b='b')</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="backward-relations">
+<h2>Backward relations<a class="headerlink" href="#backward-relations" title="Permalink to this headline">¶</a></h2>
+<p>For example <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Instance" title="syncano.models.base.Instance"><tt class="xref py py-class docutils literal"><span class="pre">Instance</span></tt></a> has related <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.ApiKey" title="syncano.models.base.ApiKey"><tt class="xref py py-class docutils literal"><span class="pre">ApiKey</span></tt></a> model so
+all <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Instance" title="syncano.models.base.Instance"><tt class="xref py py-class docutils literal"><span class="pre">Instance</span></tt></a> objects will have backward relation to list of <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.ApiKey" title="syncano.models.base.ApiKey"><tt class="xref py py-class docutils literal"><span class="pre">ApiKey</span></tt></a>&#8216;s:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">api_keys</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+<span class="go">[&lt;ApiKey 1&gt;...]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">api_keys</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">&lt;ApiKey 1&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><strong>Related</strong> objects do not require additional request properties passed to
+<a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.list" title="syncano.models.manager.Manager.list"><tt class="xref py py-meth docutils literal"><span class="pre">list()</span></tt></a> method.</p>
+</div>
+</div>
+<div class="section" id="falling-back-to-raw-json">
+<h2>Falling back to raw JSON<a class="headerlink" href="#falling-back-to-raw-json" title="Permalink to this headline">¶</a></h2>
+<p>If you find yourself needing to work on raw JSON data instead of Python objects just use
+<a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.raw" title="syncano.models.manager.Manager.raw"><tt class="xref py py-meth docutils literal"><span class="pre">raw()</span></tt></a> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+<span class="go">[&lt;Instance: test&gt;, &lt;Instance: test-two&gt;, &#39;...(remaining elements truncated)...&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span><span class="o">.</span><span class="n">raw</span><span class="p">()</span>
+<span class="go">[{u&#39;name&#39;: u&#39;test-one&#39;...} ...]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">raw</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="go">{u&#39;name&#39;: u&#39;test-one&#39;...}</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="environmental-variables">
 <h2>Environmental variables<a class="headerlink" href="#environmental-variables" title="Permalink to this headline">¶</a></h2>
+<p>Some settings can be overwritten via environmental variables e.g:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">export </span><span class="nv">SYNCANO_LOGLEVEL</span><span class="o">=</span>DEBUG
+<span class="nv">$ </span><span class="nb">export </span><span class="nv">SYNCANO_APIROOT</span><span class="o">=</span><span class="s1">&#39;https://127.0.0.1/&#39;</span>
+<span class="nv">$ </span><span class="nb">export </span><span class="nv">SYNCANO_EMAIL</span><span class="o">=</span>admin@syncano.com
+<span class="nv">$ </span><span class="nb">export </span><span class="nv">SYNCANO_PASSWORD</span><span class="o">=</span>dummy
+<span class="nv">$ </span><span class="nb">export </span><span class="nv">SYNCANO_APIKEY</span><span class="o">=</span>dummy123
+<span class="nv">$ </span><span class="nb">export </span><span class="nv">SYNCANO_INSTANCE</span><span class="o">=</span><span class="nb">test</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><strong>DEBUG</strong> loglevel will <strong>disbale</strong> SSL cert check.</p>
+</div>
 </div>
 </div>
 
