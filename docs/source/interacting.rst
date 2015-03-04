@@ -107,7 +107,7 @@ Manager is lazy
 ---------------
 
 :class:`~syncano.models.manager.Manager` is lazy – the act of creating a **Manager** doesn’t involve any API activity.
-You can stack filters Manager methods all day long, and Syncano won’t actually run the API call until the **Manager** is evaluated.
+You can stack Manager methods all day long, and Syncano won’t actually run the API call until the **Manager** is evaluated.
 Take a look at this example::
 
 >>> query = Class.please.list('test-instance')
