@@ -181,10 +181,52 @@ Negative indexing (i.e. **Instance.please.all()[-1]**) is not supported.
 Lookups that span relationships
 -------------------------------
 
+``Syncano API`` has nested architecture so in some cases there will be a need to provide
+a few additional arguments to resolve endpoint URL.
 
-Related objects
----------------
+For example :class:`~syncano.models.base.ApiKey` is related to :class:`~syncano.models.base.Instance` and
+its URL patter looks like this::
 
+/v1/instances/{instance_name}/api_keys/{id}
+
+This example will not work::
+
+    >>> ApiKey.please.list()
+    Traceback:
+    ...
+    SyncanoValueError: Request property "instance_name" is required.
+
+So how to fix that? We need to provide ``instance_name`` as an argument
+to :meth:`~syncano.models.manager.Manager.list` method::
+
+    >>> ApiKey.please.list(instance_name='test-one')
+    [<ApiKey 1>...]
+    >>> ApiKey.please.list('test-one')
+    [<ApiKey 1>...]
+
+This performs a **GET** request to ``/v1/instances/test-one/api_keys/``.
+
+.. note::
+    Additional request properties are resolved in order as they occurred in URL pattern.
+    So if you have pattern like this ``/v1/{a}/{b}/{c}/`` :meth:`~syncano.models.manager.Manager.list`
+    method can be invoked like any other Python function i.e ``list('a', 'b', 'c')`` or ``list('a', c='c', b='b')``.
+
+
+Backward relations
+------------------
+
+For example :class:`~syncano.models.base.Instance` has related :class:`~syncano.models.base.ApiKey` model so
+all :class:`~syncano.models.base.Instance` objects will have backward relation to list of :class:`~syncano.models.base.ApiKey`'s::
+
+    >>> instance = Instance.please.get('test-one')
+    >>> instance.api_keys.list()
+    [<ApiKey 1>...]
+    >>> instance.api_keys.get(1)
+    <ApiKey 1>
+
+.. note::
+    **Related** objects do not require additional request properties passed to
+    :meth:`~syncano.models.manager.Manager.list` method.
 
 Falling back to raw JSON
 ------------------------
