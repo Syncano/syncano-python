@@ -293,6 +293,7 @@ class Instance(Model):
         {'type': 'list', 'name': 'api_keys'},
         {'type': 'list', 'name': 'triggers'},
         {'type': 'list', 'name': 'webhooks'},
+        {'type': 'list', 'name': 'schedules'},
     )
 
     name = fields.StringField(max_length=64, primary_key=True)
@@ -416,7 +417,9 @@ class CodeBox(Model):
 
     LINKS = (
         {'type': 'detail', 'name': 'self'},
-        {'type': 'list', 'name': 'schedules'},
+        {'type': 'list', 'name': 'runtimes'},
+        {'type': 'detail', 'name': 'run'},
+        {'type': 'detail', 'name': 'traces'},
     )
     RUNTIME_CHOICES = (
         {'display_name': 'nodejs', 'value': 'nodejs'},
@@ -466,6 +469,7 @@ class Schedule(Model):
     LINKS = [
         {'type': 'detail', 'name': 'self'},
         {'type': 'list', 'name': 'traces'},
+        {'type': 'list', 'name': 'codebox'},
     ]
 
     interval_sec = fields.IntegerField(read_only=False, required=False)
@@ -680,6 +684,9 @@ class Trigger(Model):
 
     LINKS = (
         {'type': 'detail', 'name': 'self'},
+        {'type': 'detail', 'name': 'codebox'},
+        {'type': 'detail', 'name': 'klass'},
+        {'type': 'detail', 'name': 'traces'},
     )
     SIGNAL_CHOICES = (
         {'display_name': 'post_update', 'value': 'post_update'},
