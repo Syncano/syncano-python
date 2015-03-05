@@ -194,6 +194,18 @@ class Model(six.with_metaclass(ModelMetaclass)):
 
 
 class Coupon(Model):
+    """
+    OO wrapper around coupons `endpoint <TODO>`_.
+
+    :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar redeem_by: :class:`~syncano.models.fields.DateField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar percent_off: :class:`~syncano.models.fields.IntegerField`
+    :ivar amount_off: :class:`~syncano.models.fields.FloatField`
+    :ivar currency: :class:`~syncano.models.fields.ChoiceField`
+    :ivar duration: :class:`~syncano.models.fields.IntegerField`
+    """
+
     LINKS = (
         {'type': 'detail', 'name': 'self'},
         {'type': 'list', 'name': 'redeem'},
@@ -224,6 +236,16 @@ class Coupon(Model):
 
 
 class Discount(Model):
+    """
+    OO wrapper around discounts `endpoint <TODO>`_.
+
+    :ivar instance: :class:`~syncano.models.fields.ModelField`
+    :ivar coupon: :class:`~syncano.models.fields.ModelField`
+    :ivar start: :class:`~syncano.models.fields.DateField`
+    :ivar end: :class:`~syncano.models.fields.DateField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    """
+
     LINKS = (
         {'type': 'detail', 'name': 'self'},
     )
@@ -248,6 +270,19 @@ class Discount(Model):
 
 
 class Instance(Model):
+    """
+    OO wrapper around instances `endpoint <http://docs.syncano.com/v4.0/docs/instances>`_.
+
+    :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar description: :class:`~syncano.models.fields.StringField`
+    :ivar role: :class:`~syncano.models.fields.Field`
+    :ivar owner: :class:`~syncano.models.fields.ModelField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar metadata: :class:`~syncano.models.fields.JSONField`
+    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+    """
+
     LINKS = (
         {'type': 'detail', 'name': 'self'},
         {'type': 'list', 'name': 'admins'},
@@ -283,6 +318,12 @@ class Instance(Model):
 
 
 class ApiKey(Model):
+    """
+    OO wrapper around instance api keys `endpoint <TODO>`_.
+
+    :ivar api_key: :class:`~syncano.models.fields.StringField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    """
     LINKS = [
         {'type': 'detail', 'name': 'self'},
     ]
@@ -305,6 +346,26 @@ class ApiKey(Model):
 
 
 class Class(Model):
+    """
+    OO wrapper around instance classes `endpoint <http://docs.syncano.com/v4.0/docs/instancesinstanceclasses>`_.
+
+    :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar description: :class:`~syncano.models.fields.StringField`
+    :ivar objects_count: :class:`~syncano.models.fields.Field`
+    :ivar schema: :class:`~syncano.models.fields.SchemaField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar status: :class:`~syncano.models.fields.Field`
+    :ivar metadata: :class:`~syncano.models.fields.JSONField`
+    :ivar revision: :class:`~syncano.models.fields.IntegerField`
+    :ivar expected_revision: :class:`~syncano.models.fields.IntegerField`
+    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
+
+    .. note::
+        This model is special because each related :class:`~syncano.models.base.Object` will be
+        **dynamically populated** with fields defined in schema attribute.
+    """
+
     LINKS = [
         {'type': 'detail', 'name': 'self'},
         {'type': 'list', 'name': 'objects'},
@@ -340,6 +401,19 @@ class Class(Model):
 
 
 class CodeBox(Model):
+    """
+    OO wrapper around codeboxes `endpoint <http://docs.syncano.com/v4.0/docs/codebox-list-codeboxes>`_.
+
+    :ivar description: :class:`~syncano.models.fields.StringField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar source: :class:`~syncano.models.fields.StringField`
+    :ivar runtime_name: :class:`~syncano.models.fields.ChoiceField`
+    :ivar config: :class:`~syncano.models.fields.Field`
+    :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+    """
+
     LINKS = (
         {'type': 'detail', 'name': 'self'},
         {'type': 'list', 'name': 'schedules'},
@@ -376,6 +450,19 @@ class CodeBox(Model):
 
 
 class Schedule(Model):
+    """
+    OO wrapper around codebox schedules `endpoint <http://docs.syncano.com/v4.0/docs/codebox-schedules-list>`_.
+
+    :ivar description: :class:`~syncano.models.fields.StringField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar source: :class:`~syncano.models.fields.StringField`
+    :ivar runtime_name: :class:`~syncano.models.fields.ChoiceField`
+    :ivar config: :class:`~syncano.models.fields.Field`
+    :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+    """
+
     LINKS = [
         {'type': 'detail', 'name': 'self'},
         {'type': 'list', 'name': 'traces'},
@@ -403,6 +490,16 @@ class Schedule(Model):
 
 
 class Trace(Model):
+    """
+    OO wrapper around codebox schedules traces `endpoint <http://docs.syncano.com/v4.0/docs/codebox-schedules-traces>`_.
+
+    :ivar status: :class:`~syncano.models.fields.ChoiceField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar executed_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar result: :class:`~syncano.models.fields.StringField`
+    :ivar duration: :class:`~syncano.models.fields.IntegerField`
+    """
+
     STATUS_CHOICES = (
         {'display_name': 'Success', 'value': 'success'},
         {'display_name': 'Failure', 'value': 'failure'},
@@ -433,6 +530,16 @@ class Trace(Model):
 
 
 class Admin(Model):
+    """
+    OO wrapper around instance admins `endpoint <http://docs.syncano.com/v4.0/docs/v1instancesinstanceadmins>`_.
+
+    :ivar first_name: :class:`~syncano.models.fields.StringField`
+    :ivar last_name: :class:`~syncano.models.fields.StringField`
+    :ivar email: :class:`~syncano.models.fields.EmailField`
+    :ivar role: :class:`~syncano.models.fields.ChoiceField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    """
+
     LINKS = (
         {'type': 'detail', 'name': 'self'},
     )
@@ -463,6 +570,19 @@ class Admin(Model):
 
 
 class InstanceInvitation(Model):
+    """
+    OO wrapper around instance invitations
+    `endpoint <http://docs.syncano.com/v4.0/docs/list-administrator-invitations>`_.
+
+    :ivar email: :class:`~syncano.models.fields.EmailField`
+    :ivar role: :class:`~syncano.models.fields.ChoiceField`
+    :ivar key: :class:`~syncano.models.fields.StringField`
+    :ivar state: :class:`~syncano.models.fields.StringField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+    """
+
     LINKS = (
         {'type': 'detail', 'name': 'self'},
     )
@@ -491,6 +611,18 @@ class InstanceInvitation(Model):
 
 
 class Object(Model):
+    """
+    OO wrapper around data objects `endpoint <http://docs.syncano.com/v4.0/docs/view-data-objects>`_.
+
+    :ivar revision: :class:`~syncano.models.fields.IntegerField`
+    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+
+    .. note::
+        This model is special because each instance will be **dynamically populated**
+        with fields defined in related :class:`~syncano.models.base.Class` schema attribute.
+    """
+
     revision = fields.IntegerField(read_only=True, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
@@ -535,6 +667,17 @@ class Object(Model):
 
 
 class Trigger(Model):
+    """
+    OO wrapper around triggers `endpoint <http://docs.syncano.com/v4.0/docs/triggers-list>`_.
+
+    :ivar codebox: :class:`~syncano.models.fields.IntegerField`
+    :ivar klass: :class:`~syncano.models.fields.StringField`
+    :ivar signal: :class:`~syncano.models.fields.ChoiceField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+    """
+
     LINKS = (
         {'type': 'detail', 'name': 'self'},
     )
@@ -566,6 +709,24 @@ class Trigger(Model):
 
 
 class Webhook(Model):
+    """
+    OO wrapper around webhooks `endpoint <http://docs.syncano.com/v4.0/docs/webhooks-list>`_.
+
+    :ivar slug: :class:`~syncano.models.fields.SlugField`
+    :ivar codebox: :class:`~syncano.models.fields.IntegerField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+
+    .. note::
+        **WebHook** has special method called ``run`` which will execute related codebox::
+
+            >>> Webhook.please.run('instance-name', 'webhook-slug')
+
+        or via instance::
+
+            >>> wh = Webhook.please.get('instance-name', 'webhook-slug')
+            >>> wh.run()
+    """
+
     LINKS = (
         {'type': 'detail', 'name': 'self'},
         {'type': 'detail', 'name': 'codebox'},
