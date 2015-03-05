@@ -215,6 +215,12 @@ method on a <a class="reference internal" href="refs/syncano.models.manager.html
 </pre></div>
 </div>
 <p>This performs a <strong>GET</strong> request to <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> list endpoint behind the scenes.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.all" title="syncano.models.manager.Manager.all"><tt class="xref py py-meth docutils literal"><span class="pre">all()</span></tt></a> removes any limits from query and loads all
+possible objects from API, while the <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.list" title="syncano.models.manager.Manager.list"><tt class="xref py py-meth docutils literal"><span class="pre">list()</span></tt></a> method
+just executes current query.</p>
+</div>
 </div>
 <div class="section" id="manager-is-lazy">
 <h2>Manager is lazy<a class="headerlink" href="#manager-is-lazy" title="Permalink to this headline">¶</a></h2>
@@ -341,6 +347,9 @@ all <a class="reference internal" href="refs/syncano.models.base.html#syncano.mo
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span><span class="o">.</span><span class="n">raw</span><span class="p">()</span>
 <span class="go">[{u&#39;name&#39;: u&#39;test-one&#39;...} ...]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">raw</span><span class="p">()</span>
+<span class="go">[{u&#39;name&#39;: u&#39;test-one&#39;...}]</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">raw</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
 <span class="go">{u&#39;name&#39;: u&#39;test-one&#39;...}</span>

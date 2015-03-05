@@ -103,6 +103,11 @@ method on a :class:`~syncano.models.manager.Manager`::
 
 This performs a **GET** request to ``Syncano API`` list endpoint behind the scenes.
 
+.. note::
+    :meth:`~syncano.models.manager.Manager.all` removes any limits from query and loads all
+    possible objects from API, while the :meth:`~syncano.models.manager.Manager.list` method
+    just executes current query.
+
 Manager is lazy
 ---------------
 
@@ -239,6 +244,9 @@ If you find yourself needing to work on raw JSON data instead of Python objects 
 
     >>> Instance.please.list().raw()
     [{u'name': u'test-one'...} ...]
+
+    >>> Instance.please.list().limit(1).raw()
+    [{u'name': u'test-one'...}]
 
     >>> Instance.please.raw().get('test-one')
     {u'name': u'test-one'...}
