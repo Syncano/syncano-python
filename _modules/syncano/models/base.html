@@ -323,6 +323,18 @@
 
 </div></div>
 <div class="viewcode-block" id="Coupon"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Coupon">[docs]</a><span class="k">class</span> <span class="nc">Coupon</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around coupons `endpoint &lt;TODO&gt;`_.</span>
+
+<span class="sd">    :ivar name: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar redeem_by: :class:`~syncano.models.fields.DateField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    :ivar percent_off: :class:`~syncano.models.fields.IntegerField`</span>
+<span class="sd">    :ivar amount_off: :class:`~syncano.models.fields.FloatField`</span>
+<span class="sd">    :ivar currency: :class:`~syncano.models.fields.ChoiceField`</span>
+<span class="sd">    :ivar duration: :class:`~syncano.models.fields.IntegerField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;redeem&#39;</span><span class="p">},</span>
@@ -353,6 +365,16 @@
 
 </div>
 <div class="viewcode-block" id="Discount"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Discount">[docs]</a><span class="k">class</span> <span class="nc">Discount</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around discounts `endpoint &lt;TODO&gt;`_.</span>
+
+<span class="sd">    :ivar instance: :class:`~syncano.models.fields.ModelField`</span>
+<span class="sd">    :ivar coupon: :class:`~syncano.models.fields.ModelField`</span>
+<span class="sd">    :ivar start: :class:`~syncano.models.fields.DateField`</span>
+<span class="sd">    :ivar end: :class:`~syncano.models.fields.DateField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
     <span class="p">)</span>
@@ -377,6 +399,19 @@
 
 </div>
 <div class="viewcode-block" id="Instance"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Instance">[docs]</a><span class="k">class</span> <span class="nc">Instance</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around instances `endpoint &lt;http://docs.syncano.com/v4.0/docs/instances&gt;`_.</span>
+
+<span class="sd">    :ivar name: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar description: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar role: :class:`~syncano.models.fields.Field`</span>
+<span class="sd">    :ivar owner: :class:`~syncano.models.fields.ModelField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    :ivar metadata: :class:`~syncano.models.fields.JSONField`</span>
+<span class="sd">    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;admins&#39;</span><span class="p">},</span>
@@ -412,6 +447,12 @@
 
 </div>
 <div class="viewcode-block" id="ApiKey"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.ApiKey">[docs]</a><span class="k">class</span> <span class="nc">ApiKey</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around instance api keys `endpoint &lt;TODO&gt;`_.</span>
+
+<span class="sd">    :ivar api_key: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
     <span class="p">]</span>
@@ -434,6 +475,26 @@
 
 </div>
 <div class="viewcode-block" id="Class"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Class">[docs]</a><span class="k">class</span> <span class="nc">Class</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around instance classes `endpoint &lt;http://docs.syncano.com/v4.0/docs/instancesinstanceclasses&gt;`_.</span>
+
+<span class="sd">    :ivar name: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar description: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar objects_count: :class:`~syncano.models.fields.Field`</span>
+<span class="sd">    :ivar schema: :class:`~syncano.models.fields.SchemaField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    :ivar status: :class:`~syncano.models.fields.Field`</span>
+<span class="sd">    :ivar metadata: :class:`~syncano.models.fields.JSONField`</span>
+<span class="sd">    :ivar revision: :class:`~syncano.models.fields.IntegerField`</span>
+<span class="sd">    :ivar expected_revision: :class:`~syncano.models.fields.IntegerField`</span>
+<span class="sd">    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        This model is special because each related :class:`~syncano.models.base.Object` will be</span>
+<span class="sd">        **dynamically populated** with fields defined in schema attribute.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;objects&#39;</span><span class="p">},</span>
@@ -469,6 +530,19 @@
 
 </div>
 <div class="viewcode-block" id="CodeBox"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.CodeBox">[docs]</a><span class="k">class</span> <span class="nc">CodeBox</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around codeboxes `endpoint &lt;http://docs.syncano.com/v4.0/docs/codebox-list-codeboxes&gt;`_.</span>
+
+<span class="sd">    :ivar description: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    :ivar source: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar runtime_name: :class:`~syncano.models.fields.ChoiceField`</span>
+<span class="sd">    :ivar config: :class:`~syncano.models.fields.Field`</span>
+<span class="sd">    :ivar name: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;schedules&#39;</span><span class="p">},</span>
@@ -505,6 +579,19 @@
 
 </div>
 <div class="viewcode-block" id="Schedule"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Schedule">[docs]</a><span class="k">class</span> <span class="nc">Schedule</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around codebox schedules `endpoint &lt;http://docs.syncano.com/v4.0/docs/codebox-schedules-list&gt;`_.</span>
+
+<span class="sd">    :ivar description: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    :ivar source: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar runtime_name: :class:`~syncano.models.fields.ChoiceField`</span>
+<span class="sd">    :ivar config: :class:`~syncano.models.fields.Field`</span>
+<span class="sd">    :ivar name: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;traces&#39;</span><span class="p">},</span>
@@ -532,6 +619,16 @@
 
 </div>
 <div class="viewcode-block" id="Trace"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Trace">[docs]</a><span class="k">class</span> <span class="nc">Trace</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around codebox schedules traces `endpoint &lt;http://docs.syncano.com/v4.0/docs/codebox-schedules-traces&gt;`_.</span>
+
+<span class="sd">    :ivar status: :class:`~syncano.models.fields.ChoiceField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    :ivar executed_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    :ivar result: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar duration: :class:`~syncano.models.fields.IntegerField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">STATUS_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Success&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;success&#39;</span><span class="p">},</span>
         <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Failure&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;failure&#39;</span><span class="p">},</span>
@@ -562,6 +659,16 @@
 
 </div>
 <div class="viewcode-block" id="Admin"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Admin">[docs]</a><span class="k">class</span> <span class="nc">Admin</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around instance admins `endpoint &lt;http://docs.syncano.com/v4.0/docs/v1instancesinstanceadmins&gt;`_.</span>
+
+<span class="sd">    :ivar first_name: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar last_name: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar email: :class:`~syncano.models.fields.EmailField`</span>
+<span class="sd">    :ivar role: :class:`~syncano.models.fields.ChoiceField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
     <span class="p">)</span>
@@ -592,6 +699,19 @@
 
 </div>
 <div class="viewcode-block" id="InstanceInvitation"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.InstanceInvitation">[docs]</a><span class="k">class</span> <span class="nc">InstanceInvitation</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around instance invitations</span>
+<span class="sd">    `endpoint &lt;http://docs.syncano.com/v4.0/docs/list-administrator-invitations&gt;`_.</span>
+
+<span class="sd">    :ivar email: :class:`~syncano.models.fields.EmailField`</span>
+<span class="sd">    :ivar role: :class:`~syncano.models.fields.ChoiceField`</span>
+<span class="sd">    :ivar key: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar state: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
     <span class="p">)</span>
@@ -620,6 +740,18 @@
 
 </div>
 <div class="viewcode-block" id="Object"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Object">[docs]</a><span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around data objects `endpoint &lt;http://docs.syncano.com/v4.0/docs/view-data-objects&gt;`_.</span>
+
+<span class="sd">    :ivar revision: :class:`~syncano.models.fields.IntegerField`</span>
+<span class="sd">    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        This model is special because each instance will be **dynamically populated**</span>
+<span class="sd">        with fields defined in related :class:`~syncano.models.base.Class` schema attribute.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">revision</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
     <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
     <span class="n">updated_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
@@ -664,6 +796,17 @@
 
 </div></div>
 <div class="viewcode-block" id="Trigger"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Trigger">[docs]</a><span class="k">class</span> <span class="nc">Trigger</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around triggers `endpoint &lt;http://docs.syncano.com/v4.0/docs/triggers-list&gt;`_.</span>
+
+<span class="sd">    :ivar codebox: :class:`~syncano.models.fields.IntegerField`</span>
+<span class="sd">    :ivar klass: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar signal: :class:`~syncano.models.fields.ChoiceField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
     <span class="p">)</span>
@@ -695,6 +838,24 @@
 
 </div>
 <div class="viewcode-block" id="Webhook"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Webhook">[docs]</a><span class="k">class</span> <span class="nc">Webhook</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around webhooks `endpoint &lt;http://docs.syncano.com/v4.0/docs/webhooks-list&gt;`_.</span>
+
+<span class="sd">    :ivar slug: :class:`~syncano.models.fields.SlugField`</span>
+<span class="sd">    :ivar codebox: :class:`~syncano.models.fields.IntegerField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        **WebHook** has special method called ``run`` which will execute related codebox::</span>
+
+<span class="sd">            &gt;&gt;&gt; Webhook.please.run(&#39;instance-name&#39;, &#39;webhook-slug&#39;)</span>
+
+<span class="sd">        or via instance::</span>
+
+<span class="sd">            &gt;&gt;&gt; wh = Webhook.please.get(&#39;instance-name&#39;, &#39;webhook-slug&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; wh.run()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;codebox&#39;</span><span class="p">},</span>
