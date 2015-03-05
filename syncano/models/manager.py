@@ -32,7 +32,7 @@ class ManagerDescriptor(object):
     def __get__(self, instance, owner=None):
         if instance is not None:
             raise AttributeError("Manager isn't accessible via {0} instances.".format(owner.__name__))
-        return self.manager
+        return self.manager.all()
 
 
 class RelatedManagerDescriptor(object):
