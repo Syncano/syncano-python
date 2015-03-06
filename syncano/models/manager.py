@@ -488,6 +488,27 @@ class Manager(ConnectionMixin):
             response = self.request(path=next_url)
 
 
+class CodeBoxManager(Manager):
+    """
+    Custom :class:`~syncano.models.manager.Manager`
+    class for :class:`~syncano.models.base.CodeBox` model.
+    """
+
+    @clone
+    def run(self, *args, **kwargs):
+        payload = kwargs.pop('payload', {})
+
+        if not isinstance(payload, six.string_types):
+            payload = json.dumps(payload)
+
+        self.method = 'POST'
+        self.endpoint = 'run'
+        self.data['payload'] = payload
+        self._filter(*args, **kwargs)
+        self._serialize = False
+        return self.request()
+
+
 class WebhookManager(Manager):
     """
     Custom :class:`~syncano.models.manager.Manager`

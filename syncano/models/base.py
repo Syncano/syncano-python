@@ -1,13 +1,14 @@
 from __future__ import unicode_literals
 
 import inspect
+import json
 
 import six
 
 from syncano.exceptions import SyncanoValidationError, SyncanoDoesNotExist
 from . import fields
 from .options import Options
-from .manager import Manager, WebhookManager, ObjectManager
+from .manager import Manager, WebhookManager, ObjectManager, CodeBoxManager
 from .registry import registry
 
 
@@ -413,12 +414,25 @@ class CodeBox(Model):
     :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+
+    .. note::
+        **CodeBox** has special method called ``run`` which will execute attached source code::
+
+            >>> CodeBox.please.run('instance-name', 1234, payload={'variable_one': 1, 'variable_two': 2})
+            >>> CodeBox.please.run('instance-name', 1234, payload="{\"variable_one\": 1, \"variable_two\": 2}")
+
+        or via instance::
+
+            >>> cb = CodeBox.please.get('instance-name', 1234)
+            >>> cb.run(variable_one=1, variable_two=2)
     """
 
     LINKS = (
         {'type': 'detail', 'name': 'self'},
         {'type': 'list', 'name': 'runtimes'},
-        {'type': 'detail', 'name': 'run'},
+        # This will cause name collision between model run method
+        # and HyperlinkedField dynamic methods.
+        # {'type': 'detail', 'name': 'run'},
         {'type': 'detail', 'name': 'traces'},
     )
     RUNTIME_CHOICES = (
@@ -436,6 +450,8 @@ class CodeBox(Model):
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
+    please = CodeBoxManager()
+
     class Meta:
         parent = Instance
         name = 'Codebox'
@@ -448,8 +464,25 @@ class CodeBox(Model):
             'list': {
                 'methods': ['post', 'get'],
                 'path': '/codeboxes/',
+            },
+            'run': {
+                'methods': ['post'],
+                'path': '/codeboxes/{id}/run/',
+            },
+        }
+
+    def run(self, **payload):
+        if not self.links:
+            raise SyncanoValidationError('Method allowed only on existing model.')
+
+        endpoint = self.links['run']
+        connection = self._get_connection(**payload)
+        request = {
+            'data': {
+                'payload': json.dumps(payload)
             }
         }
+        return connection.request('POST', endpoint, **request)
 
 
 class Schedule(Model):
