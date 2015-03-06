@@ -6,24 +6,77 @@ try:
 except ImportError:
     import mock
 
-from syncano import connect
+from syncano import connect, connect_instance
 from syncano.connection import Connection
 from syncano.exceptions import SyncanoValueError, SyncanoRequestError
 
 
-@unittest.skip('CI fix for now')
 class ConnectTestCase(unittest.TestCase):
 
-    @mock.patch('syncano.connection.Connection')
-    def test_connect(self, connection_mock):
-        connection_mock.return_value = connection_mock
-        self.assertFalse(connection_mock.called)
+    @mock.patch('syncano.models.registry')
+    @mock.patch('syncano.connection.default_connection.open')
+    def test_connect(self, open_mock, registry_mock):
+        registry_mock.return_value = registry_mock
+
+        self.assertFalse(registry_mock.called)
+        self.assertFalse(open_mock.called)
 
         connection = connect(1, 2, 3, a=1, b=2, c=3)
-        connection_mock.assert_called_once_with(1, 2, 3, a=1, b=2, c=3)
+        open_mock.assert_called_once_with(1, 2, 3, a=1, b=2, c=3)
 
-        self.assertTrue(connection_mock.called)
-        self.assertEqual(connection, connection_mock)
+        self.assertTrue(open_mock.called)
+        self.assertEqual(connection, registry_mock)
+
+    @mock.patch('syncano.connection.default_connection.open')
+    @mock.patch('syncano.models.registry')
+    @mock.patch('syncano.INSTANCE')
+    def test_env_instance(self, instance_mock, registry_mock, *args):
+        self.assertFalse(registry_mock.set_default_instance.called)
+
+        connect(1, 2, 3, a=1, b=2, c=3)
+
+        self.assertTrue(registry_mock.set_default_instance.called)
+        registry_mock.set_default_instance.assert_called_once_with(instance_mock)
+
+
+class ConnectInstanceTestCase(unittest.TestCase):
+
+    @mock.patch('syncano.connect')
+    def test_connect_instance(self, connect_mock):
+        connect_mock.return_value = connect_mock
+        get_mock = connect_mock.Instance.please.get
+        get_mock.return_value = get_mock
+
+        self.assertFalse(connect_mock.called)
+        self.assertFalse(get_mock.called)
+
+        instance = connect_instance('test-name', a=1, b=2)
+
+        self.assertTrue(connect_mock.called)
+        self.assertTrue(get_mock.called)
+
+        connect_mock.assert_called_once_with(a=1, b=2)
+        get_mock.assert_called_once_with('test-name')
+        self.assertEqual(instance, get_mock)
+
+    @mock.patch('syncano.connect')
+    @mock.patch('syncano.INSTANCE')
+    def test_env_connect_instance(self, instance_mock, connect_mock):
+        connect_mock.return_value = connect_mock
+        get_mock = connect_mock.Instance.please.get
+        get_mock.return_value = get_mock
+
+        self.assertFalse(connect_mock.called)
+        self.assertFalse(get_mock.called)
+
+        instance = connect_instance(a=1, b=2)
+
+        self.assertTrue(connect_mock.called)
+        self.assertTrue(get_mock.called)
+
+        connect_mock.assert_called_once_with(a=1, b=2)
+        get_mock.assert_called_once_with(instance_mock)
+        self.assertEqual(instance, get_mock)
 
 
 @unittest.skip('CI fix for now')
