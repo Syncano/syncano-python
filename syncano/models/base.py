@@ -8,7 +8,7 @@ import six
 from syncano.exceptions import SyncanoValidationError, SyncanoDoesNotExist
 from . import fields
 from .options import Options
-from .manager import Manager, WebhookManager, ObjectManager
+from .manager import Manager, WebhookManager, ObjectManager, CodeBoxManager
 from .registry import registry
 
 
@@ -446,6 +446,8 @@ class CodeBox(Model):
     name = fields.StringField(max_length=80)
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
+
+    please = CodeBoxManager()
 
     class Meta:
         parent = Instance
