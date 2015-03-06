@@ -163,6 +163,7 @@ class Connection(object):
         """
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)
+        encode_request = kwargs.pop('encode_request', True)
 
         # JSON dump can be expensive
         if syncano.DEBUG:
@@ -178,7 +179,7 @@ class Connection(object):
             raise SyncanoValueError('Invalid request method: {0}.'.format(method_name))
 
         # Encode request payload
-        if 'data' in params and not isinstance(params['data'], six.string_types):
+        if encode_request and 'data' in params and not isinstance(params['data'], six.string_types):
             params['data'] = json.dumps(params['data'])
 
         url = self.build_url(path)
