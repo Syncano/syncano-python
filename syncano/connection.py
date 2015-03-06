@@ -111,11 +111,11 @@ class Connection(object):
 
         query = None
 
-        if '?' in path:
-            path, query = path.split('?', 1)
-
         if path.startswith(self.host):
             return path
+
+        if '?' in path:
+            path, query = path.split('?', 1)
 
         if not path.endswith('/'):
             path += '/'

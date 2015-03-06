@@ -79,7 +79,6 @@ class ConnectInstanceTestCase(unittest.TestCase):
         self.assertEqual(instance, get_mock)
 
 
-@unittest.skip('CI fix for now')
 class ConnectionTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -90,6 +89,7 @@ class ConnectionTestCase(unittest.TestCase):
 
     def test_build_params(self):
         self.connection.api_key = 'test'
+        self.connection.verify_ssl = False
         empty = {'data': {'a': 1}}
         params = self.connection.build_params(empty)
         self.assertNotEqual(params, empty)
@@ -105,13 +105,17 @@ class ConnectionTestCase(unittest.TestCase):
         self.assertTrue('content-type' in params['headers'])
         self.assertEqual(params['headers']['content-type'], self.connection.CONTENT_TYPE)
 
-        self.assertEqual(params['data'], '{"a": 1}')
+        self.assertTrue('verify' in params)
+        self.assertFalse(params['verify'])
+
+        self.assertEqual(params['data'], {'a': 1})
 
     def test_build_url(self):
         result = urljoin(self.connection.host, 'test/')
-        self.assertEqual(self.connection.build_url('test'), result)
-        self.assertEqual(self.connection.build_url('/test'), result)
-        self.assertEqual(self.connection.build_url('/test/'), result)
+        result += '?q=1'
+        self.assertEqual(self.connection.build_url('test?q=1'), result)
+        self.assertEqual(self.connection.build_url('/test?q=1'), result)
+        self.assertEqual(self.connection.build_url('/test/?q=1'), result)
         self.assertEqual(self.connection.build_url(result), result)
 
         with self.assertRaises(SyncanoValueError):
@@ -138,17 +142,6 @@ class ConnectionTestCase(unittest.TestCase):
         self.assertTrue(make_request_mock.called)
         self.assertTrue(authenticate_mock.called)
         self.assertEqual(content, make_request_mock.return_value)
-
-        content = self.connection.request('POST', 'test', result_class=mock.MagicMock)
-        self.assertIsInstance(content, mock.MagicMock)
-
-        make_request_mock.return_value = {
-            'objects': [],
-            'next': None,
-            'prev': None,
-        }
-        content = self.connection.request('POST', 'test')
-        self.assertIsInstance(content, self.connection.RESULT_SET_CLASS)
 
     @mock.patch('requests.Session.post')
     def test_make_request(self, post_mock):
@@ -211,7 +204,10 @@ class ConnectionTestCase(unittest.TestCase):
 
     @mock.patch('requests.Session.post')
     def test_invalid_credentials(self, post_mock):
-        post_mock.return_value = mock.MagicMock(status_code=401, text='Invalid email or password.')
+        response = mock.MagicMock(status_code=401)
+        response.json.return_value = 'Invalid email or password.'
+        post_mock.return_value = response
+
         self.assertFalse(post_mock.called)
         self.assertIsNone(self.connection.api_key)
 
@@ -219,13 +215,13 @@ class ConnectionTestCase(unittest.TestCase):
             self.connection.authenticate(email='dummy', password='dummy')
 
         self.assertEqual(cm.exception.status_code, 401)
-        self.assertEqual(cm.exception.message, 'Invalid email or password.')
+        self.assertEqual(cm.exception.reason, 'Invalid email or password.')
 
         self.assertTrue(post_mock.called)
         self.assertIsNone(self.connection.api_key)
 
         post_mock.assert_called_once_with(
-            urljoin(self.connection.host, self.connection.AUTH_SUFFIX),
+            urljoin(self.connection.host, '{0}/'.format(self.connection.AUTH_SUFFIX)),
             headers={'content-type': self.connection.CONTENT_TYPE},
             data='{"password": "dummy", "email": "dummy"}',
             timeout=30
@@ -242,3 +238,11 @@ class ConnectionTestCase(unittest.TestCase):
         self.assertTrue(make_request.called)
         self.assertIsNotNone(self.connection.api_key)
         self.assertEqual(self.connection.api_key, api_key)
+
+
+class DefaultConnectionTestCase(unittest.TestCase):
+    pass
+
+
+class ConnectionMixinTestCase(unittest.TestCase):
+    pass
