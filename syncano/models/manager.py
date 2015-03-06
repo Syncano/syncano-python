@@ -496,9 +496,14 @@ class CodeBoxManager(Manager):
 
     @clone
     def run(self, *args, **kwargs):
+        payload = kwargs.pop('payload', {})
+
+        if not isinstance(payload, six.string_types):
+            payload = json.dumps(payload)
+
         self.method = 'POST'
         self.endpoint = 'run'
-        self.data['payload'] = json.dumps(kwargs.pop('payload', {}))
+        self.data['payload'] = payload
         self._filter(*args, **kwargs)
         self._serialize = False
         return self.request()

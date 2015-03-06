@@ -419,6 +419,7 @@ class CodeBox(Model):
         **CodeBox** has special method called ``run`` which will execute attached source code::
 
             >>> CodeBox.please.run('instance-name', 1234, payload={'variable_one': 1, 'variable_two': 2})
+            >>> CodeBox.please.run('instance-name', 1234, payload="{\"variable_one\": 1, \"variable_two\": 2}")
 
         or via instance::
 
@@ -429,6 +430,8 @@ class CodeBox(Model):
     LINKS = (
         {'type': 'detail', 'name': 'self'},
         {'type': 'list', 'name': 'runtimes'},
+        # This will cause name collision between model run method
+        # and HyperlinkedField dynamic methods.
         # {'type': 'detail', 'name': 'run'},
         {'type': 'detail', 'name': 'traces'},
     )
