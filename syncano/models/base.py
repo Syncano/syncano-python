@@ -473,7 +473,6 @@ class CodeBox(Model):
         endpoint = self.links['run']
         connection = self._get_connection(**payload)
         request = {
-            'encode_request': False,
             'data': {
                 'payload': json.dumps(payload)
             }

@@ -496,13 +496,12 @@ class CodeBoxManager(Manager):
 
     @clone
     def run(self, *args, **kwargs):
-        payload = kwargs.pop('payload', {})
         self.method = 'POST'
         self.endpoint = 'run'
-        self.data['payload'] = json.dumps(payload)
+        self.data['payload'] = json.dumps(kwargs.pop('payload', {}))
         self._filter(*args, **kwargs)
         self._serialize = False
-        return self.request(encode_request=False)
+        return self.request()
 
 
 class WebhookManager(Manager):
