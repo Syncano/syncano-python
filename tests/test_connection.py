@@ -7,7 +7,7 @@ except ImportError:
     import mock
 
 from syncano import connect, connect_instance
-from syncano.connection import Connection
+from syncano.connection import Connection, ConnectionMixin, default_connection
 from syncano.exceptions import SyncanoValueError, SyncanoRequestError
 
 
@@ -81,11 +81,71 @@ class ConnectInstanceTestCase(unittest.TestCase):
 
 class ConnectionTestCase(unittest.TestCase):
 
+    def _get_response_mock(self, **kwargs):
+        return_value = kwargs.pop('return_value', None) or {'ok': 'ok'}
+        defaults = {
+            'status_code': 200,
+            'headers': {
+                'content-type': 'application/json'
+            },
+        }
+        defaults.update(kwargs)
+        response_mock = mock.MagicMock(**defaults)
+        response_mock.json.return_value = return_value
+        return response_mock
+
     def setUp(self):
         self.connection = Connection()
 
-    def test_init(self):
-        pass
+    @mock.patch('requests.Session.post')
+    @mock.patch('syncano.connection.json.dumps')
+    @mock.patch('syncano.DEBUG')
+    def test_debug(self, debug_mock, dumps_mock, post_mock):
+        debug_mock.return_value = True
+        post_mock.return_value = self._get_response_mock()
+
+        self.assertFalse(dumps_mock.called)
+        self.connection.make_request('POST', 'test')
+        self.assertTrue(dumps_mock.called)
+        dumps_mock.assert_called_once_with(
+            {'headers': {'content-type': 'application/json'}, 'timeout': 30, 'verify': False},
+            sort_keys=True, indent=2, separators=(',', ': '))
+
+    @mock.patch('requests.Session.post')
+    def test_invalid_json_response(self, post_mock):
+        response_mock = self._get_response_mock(text='test')
+        response_mock.json.side_effect = ValueError
+        post_mock.return_value = response_mock
+
+        content = self.connection.make_request('POST', 'test')
+        self.assertEqual(content, 'test')
+
+    @mock.patch('requests.Session.post')
+    def test_server_error(self, post_mock):
+        response_mock = self._get_response_mock(status_code=500)
+        post_mock.return_value = response_mock
+
+        with self.assertRaises(SyncanoRequestError):
+            self.connection.make_request('POST', 'test')
+
+    @mock.patch('requests.Session.post')
+    def test_client_error(self, post_mock):
+        response_mock = self._get_response_mock(status_code=401)
+        post_mock.return_value = response_mock
+
+        with self.assertRaises(SyncanoRequestError):
+            self.connection.make_request('POST', 'test')
+
+    @mock.patch('syncano.logger.debug')
+    @mock.patch('requests.Session.post')
+    def test_other_error(self, post_mock, debug_mock):
+        response_mock = self._get_response_mock(status_code=301)
+        post_mock.return_value = response_mock
+
+        self.assertFalse(debug_mock.called)
+        with self.assertRaises(SyncanoRequestError):
+            self.connection.make_request('POST', 'test')
+        self.assertTrue(debug_mock.called)
 
     def test_build_params(self):
         self.connection.api_key = 'test'
@@ -145,13 +205,7 @@ class ConnectionTestCase(unittest.TestCase):
 
     @mock.patch('requests.Session.post')
     def test_make_request(self, post_mock):
-        response_mock = mock.MagicMock(
-            status_code=200,
-            headers={
-                'content-type': 'application/json'
-            },
-        )
-        response_mock.json.return_value = {'ok': 'ok'}
+        response_mock = self._get_response_mock()
         post_mock.return_value = response_mock
 
         out = self.connection.make_request('POST', 'test')
@@ -241,8 +295,59 @@ class ConnectionTestCase(unittest.TestCase):
 
 
 class DefaultConnectionTestCase(unittest.TestCase):
-    pass
+
+    def setUp(self):
+        self.connection = default_connection
+        self.connection._connection = None
+
+    def test_call(self):
+        with self.assertRaises(SyncanoValueError):
+            self.connection()
+
+        self.connection._connection = '1234'
+        self.assertEqual(self.connection(), '1234')
+
+    @mock.patch('syncano.connection.Connection')
+    def test_open(self, connection_mock):
+        connection_mock.return_value = connection_mock
+        self.assertFalse(connection_mock.called)
+        connection = self.connection.open(a=1, b=2)
+        self.assertTrue(connection_mock.called)
+        self.assertEqual(connection, connection_mock)
+        self.assertEqual(self.connection._connection, connection_mock)
+        connection_mock.assert_called_once_with(a=1, b=2)
 
 
 class ConnectionMixinTestCase(unittest.TestCase):
-    pass
+
+    def setUp(self):
+        self.mixin = ConnectionMixin()
+
+    @mock.patch('syncano.connection.default_connection')
+    def test_getter(self, default_connection_mock):
+        default_connection_mock.return_value = default_connection_mock
+
+        self.assertFalse(default_connection_mock.called)
+        connection = self.mixin.connection
+
+        self.assertTrue(default_connection_mock.called)
+        self.assertEqual(connection, default_connection_mock)
+
+    def test_setter(self):
+        connection = Connection()
+        self.mixin.connection = connection
+        self.assertEqual(self.mixin._connection, connection)
+
+    def test_setter_validation(self):
+        self.assertEqual(self.mixin._connection, None)
+        with self.assertRaises(SyncanoValueError):
+            self.mixin.connection = 4
+        self.assertEqual(self.mixin._connection, None)
+
+    def test_deleter(self):
+        self.assertEqual(self.mixin._connection, None)
+        connection = Connection()
+        self.mixin.connection = connection
+        self.assertEqual(self.mixin._connection, connection)
+        del self.mixin.connection
+        self.assertEqual(self.mixin._connection, None)
