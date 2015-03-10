@@ -13,5 +13,6 @@ test:
 general:
   artifacts:
     - coverage
-  ignore:
-    - gh-pages
+  branches:
+      ignore:
+        - gh-pages
