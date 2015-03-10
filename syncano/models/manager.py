@@ -75,28 +75,28 @@ class Manager(ConnectionMixin):
         self._serialize = True
         self._connection = None
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         data = list(self[:REPR_OUTPUT_SIZE + 1])
         if len(data) > REPR_OUTPUT_SIZE:
             data[-1] = '...(remaining elements truncated)...'
         return repr(data)
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return '<Manager: {0}>'.format(self.model.__name__)
 
-    def __unicode__(self):
+    def __unicode__(self):  # pragma: no cover
         return six.u(str(self))
 
-    def __len__(self):
+    def __len__(self):  # pragma: no cover
         return self.iterator()
 
-    def __iter__(self):
+    def __iter__(self):  # pragma: no cover
         return iter(self.iterator())
 
-    def __bool__(self):
+    def __bool__(self):  # pragma: no cover
         return bool(self.iterator())
 
-    def __nonzero__(self):      # Python 2 compatibility
+    def __nonzero__(self):  # pragma: no cover
         return type(self).__bool__(self)
 
     def __getitem__(self, k):
@@ -143,7 +143,7 @@ class Manager(ConnectionMixin):
 
         return instance
 
-    def bulk_create(self, objects):
+    def bulk_create(self, *objects):
         """
         Creates many new instances based on provided list of objects.
 
@@ -183,7 +183,7 @@ class Manager(ConnectionMixin):
         """
         return self.get(*args, **kwargs)
 
-    def get_or_create(self, *args, **kwargs):
+    def get_or_create(self, **kwargs):
         """
         A convenience method for looking up an object with the given
         lookup parameters, creating one if necessary.
@@ -205,7 +205,7 @@ class Manager(ConnectionMixin):
         """
         defaults = deepcopy(kwargs.pop('defaults', {}))
         try:
-            instance = self.get(*args, **kwargs)
+            instance = self.get(**kwargs)
         except self.model.DoesNotExist:
             defaults.update(kwargs)
             instance = self.create(**defaults)
@@ -398,7 +398,7 @@ class Manager(ConnectionMixin):
 
     # Other stuff
 
-    def contribute_to_class(self, model, name):
+    def contribute_to_class(self, model, name):  # pragma: no cover
         setattr(model, name, ManagerDescriptor(self))
 
         self.model = model
@@ -433,10 +433,14 @@ class Manager(ConnectionMixin):
 
     def serialize(self, data, model=None):
         """Serializes passed data to related :class:`~syncano.models.base.Model` class."""
-        if not isinstance(data, dict):
-            return
-
         model = model or self.model
+
+        if isinstance(data, model):
+            return data
+
+        if not isinstance(data, dict):
+            raise SyncanoValueError('Unsupported data type.')
+
         properties = deepcopy(self.properties)
         properties.update(data)
 
@@ -622,10 +626,10 @@ class SchemaManager(object):
     def __init__(self, schema=None):
         self.schema = schema or []
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return str(self.schema)
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         return '<SchemaManager>'
 
     def __getitem__(self, key):

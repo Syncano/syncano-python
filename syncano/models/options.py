@@ -48,7 +48,7 @@ class Options(ConnectionMixin):
                 endpoint['properties'] = properties
                 self.endpoint_fields.update(properties)
 
-    def contribute_to_class(self, cls, name):
+    def contribute_to_class(self, cls, name):  # pragma: no cover
         if not self.name:
             model_name = camelcase_to_underscore(cls.__name__)
             self.name = model_name.replace('_', ' ').capitalize()
