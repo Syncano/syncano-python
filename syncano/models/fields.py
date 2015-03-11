@@ -7,6 +7,7 @@ import validictory
 
 from syncano import logger
 from syncano.exceptions import SyncanoFieldError, SyncanoValueError
+from syncano.utils import force_text
 from .manager import RelatedManagerDescriptor, SchemaManager
 from .registry import registry
 
@@ -46,7 +47,7 @@ class Field(object):
         self.creation_counter = Field.creation_counter
         Field.creation_counter += 1
 
-    def __repr__(self):  # pragma: no cover
+    def __repr__(self):
         """Displays current instance class name and field name."""
         return '<{0}: {1}>'.format(self.__class__.__name__, self.name)
 
@@ -63,11 +64,11 @@ class Field(object):
     def __hash__(self):  # pragma: no cover
         return hash(self.creation_counter)
 
-    def __str__(self):  # pragma: no cover
+    def __str__(self):
         """Wrapper around ```repr`` method."""
         return repr(self)
 
-    def __unicode__(self):  # pragma: no cover
+    def __unicode__(self):
         """Wrapper around ```repr`` method with proper encoding."""
         return six.u(repr(self))
 
@@ -171,7 +172,7 @@ class StringField(WritableField):
     def to_python(self, value):
         if isinstance(value, six.string_types) or value is None:
             return value
-        return six.u(value)
+        return force_text(value)
 
 
 class IntegerField(WritableField):
@@ -216,6 +217,10 @@ class SlugField(StringField):
 
     def validate(self, value, model_instance):
         super(SlugField, self).validate(value, model_instance)
+        
+        if not isinstance(value, six.string_types):
+            raise self.ValidationError('Invalid value. Value should be a string.')
+
         if not bool(self.regex.search(value)):
             raise self.ValidationError('Invalid value.')
         return value
@@ -226,6 +231,9 @@ class EmailField(StringField):
 
     def validate(self, value, model_instance):
         super(EmailField, self).validate(value, model_instance)
+
+        if not isinstance(value, six.string_types):
+            raise self.ValidationError('Invalid value. Value should be a string.')
 
         if not value or '@' not in value:
             raise self.ValidationError('Enter a valid email address.')
