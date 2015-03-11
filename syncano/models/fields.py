@@ -46,8 +46,8 @@ class Field(object):
         self.creation_counter = Field.creation_counter
         Field.creation_counter += 1
 
-    def __repr__(self):
-        """Displays current instane class name and field name."""
+    def __repr__(self):  # pragma: no cover
+        """Displays current instance class name and field name."""
         return '<{0}: {1}>'.format(self.__class__.__name__, self.name)
 
     def __eq__(self, other):
@@ -60,14 +60,14 @@ class Field(object):
             return self.creation_counter < other.creation_counter
         return NotImplemented
 
-    def __hash__(self):
+    def __hash__(self):  # pragma: no cover
         return hash(self.creation_counter)
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         """Wrapper around ```repr`` method."""
         return repr(self)
 
-    def __unicode__(self):
+    def __unicode__(self):  # pragma: no cover
         """Wrapper around ```repr`` method with proper encoding."""
         return six.u(repr(self))
 

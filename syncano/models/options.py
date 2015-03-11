@@ -100,6 +100,18 @@ class Options(ConnectionMixin):
         self.field_names.append(field.name)
         self.fields.insert(bisect(self.fields, field), field)
 
+    def get_field(self, field_name):
+        if not field_name:
+            raise SyncanoValueError('Field name is required.')
+
+        if not isinstance(field_name, six.string_types):
+            raise SyncanoValueError('Field name should be a string.') 
+
+        for field in self.fields:
+            if field.name == field_name:
+                return field
+        raise SyncanoValueError('Field "{0}" not found.'.format(field_name))
+
     def get_endpoint(self, name):
         if name not in self.endpoints:
             raise SyncanoValueError('Invalid path name: "{0}".'.format(name))
