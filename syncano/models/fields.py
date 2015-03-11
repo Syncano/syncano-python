@@ -7,6 +7,7 @@ import validictory
 
 from syncano import logger
 from syncano.exceptions import SyncanoFieldError, SyncanoValueError
+from syncano.utils import force_text
 from .manager import RelatedManagerDescriptor, SchemaManager
 from .registry import registry
 
@@ -47,7 +48,7 @@ class Field(object):
         Field.creation_counter += 1
 
     def __repr__(self):
-        """Displays current instane class name and field name."""
+        """Displays current instance class name and field name."""
         return '<{0}: {1}>'.format(self.__class__.__name__, self.name)
 
     def __eq__(self, other):
@@ -60,7 +61,7 @@ class Field(object):
             return self.creation_counter < other.creation_counter
         return NotImplemented
 
-    def __hash__(self):
+    def __hash__(self):  # pragma: no cover
         return hash(self.creation_counter)
 
     def __str__(self):
@@ -171,7 +172,7 @@ class StringField(WritableField):
     def to_python(self, value):
         if isinstance(value, six.string_types) or value is None:
             return value
-        return six.u(value)
+        return force_text(value)
 
 
 class IntegerField(WritableField):
@@ -216,6 +217,10 @@ class SlugField(StringField):
 
     def validate(self, value, model_instance):
         super(SlugField, self).validate(value, model_instance)
+        
+        if not isinstance(value, six.string_types):
+            raise self.ValidationError('Invalid value. Value should be a string.')
+
         if not bool(self.regex.search(value)):
             raise self.ValidationError('Invalid value.')
         return value
@@ -226,6 +231,9 @@ class EmailField(StringField):
 
     def validate(self, value, model_instance):
         super(EmailField, self).validate(value, model_instance)
+
+        if not isinstance(value, six.string_types):
+            raise self.ValidationError('Invalid value. Value should be a string.')
 
         if not value or '@' not in value:
             raise self.ValidationError('Enter a valid email address.')
@@ -256,13 +264,13 @@ class DateField(WritableField):
         if value is None:
             return value
 
-        if isinstance(value, date):
-            return value
-
         if isinstance(value, datetime):
             return value.date()
 
-        if isinstance(value, int):
+        if isinstance(value, date):
+            return value
+
+        if isinstance(value, (int, float)):
             dt = datetime.fromtimestamp(value)
             return dt.date()
 
@@ -270,7 +278,7 @@ class DateField(WritableField):
             parsed = self.parse_date(value)
             if parsed is not None:
                 return parsed
-        except ValueError:
+        except (ValueError, TypeError):
             pass
 
         raise self.ValidationError("'{0}' value has an invalid date format. It must be "
@@ -299,23 +307,24 @@ class DateTimeField(DateField):
             return value
 
         if isinstance(value, date):
-            value = datetime(value.year, value.month, value.day)
+            return datetime(value.year, value.month, value.day)
 
-        if isinstance(value, int):
+        if isinstance(value, (int, float)):
             return datetime.fromtimestamp(value)
 
-        value = value.split('Z')[0]
+        if isinstance(value, six.string_types):
+            value = value.split('Z')[0]
 
         try:
             return datetime.strptime(value, self.FORMAT)
-        except ValueError:
+        except (ValueError, TypeError):
             pass
 
         try:
             parsed = self.parse_date(value)
             if parsed is not None:
                 return datetime(parsed.year, parsed.month, parsed.day)
-        except ValueError:
+        except (ValueError, TypeError):
             pass
 
         raise self.ValidationError("'{0}' value has an invalid format. It must be in "
@@ -428,11 +437,17 @@ class JSONField(WritableField):
                 raise self.ValidationError(e)
 
     def to_python(self, value):
+        if value is None:
+            return value
+
         if isinstance(value, six.string_types):
             value = json.loads(value)
         return value
 
     def to_native(self, value):
+        if value is None:
+            return value
+            
         if not isinstance(value, six.string_types):
             value = json.dumps(value)
         return value
