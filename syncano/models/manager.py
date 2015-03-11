@@ -626,6 +626,11 @@ class SchemaManager(object):
     def __init__(self, schema=None):
         self.schema = schema or []
 
+    def __eq__(self, other):
+        if isinstance(other, SchemaManager):
+            return self.schema == other.schema
+        return NotImplemented
+
     def __str__(self):  # pragma: no cover
         return str(self.schema)
 

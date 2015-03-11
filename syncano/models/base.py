@@ -96,6 +96,11 @@ class Model(six.with_metaclass(ModelMetaclass)):
         """Wrapper around ```repr`` method with proper encoding."""
         return six.u(repr(self))
 
+    def __eq__(self, other):
+        if isinstance(other, Model):
+            return self.pk == other.pk
+        return NotImplemented
+
     def _get_connection(self, **kwargs):
         connection = kwargs.pop('connection', None)
         return connection or self._meta.connection

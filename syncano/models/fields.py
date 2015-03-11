@@ -264,13 +264,13 @@ class DateField(WritableField):
         if value is None:
             return value
 
-        if isinstance(value, date):
-            return value
-
         if isinstance(value, datetime):
             return value.date()
 
-        if isinstance(value, int):
+        if isinstance(value, date):
+            return value
+
+        if isinstance(value, (int, float)):
             dt = datetime.fromtimestamp(value)
             return dt.date()
 
@@ -278,7 +278,7 @@ class DateField(WritableField):
             parsed = self.parse_date(value)
             if parsed is not None:
                 return parsed
-        except ValueError:
+        except (ValueError, TypeError):
             pass
 
         raise self.ValidationError("'{0}' value has an invalid date format. It must be "
@@ -307,23 +307,24 @@ class DateTimeField(DateField):
             return value
 
         if isinstance(value, date):
-            value = datetime(value.year, value.month, value.day)
+            return datetime(value.year, value.month, value.day)
 
-        if isinstance(value, int):
+        if isinstance(value, (int, float)):
             return datetime.fromtimestamp(value)
 
-        value = value.split('Z')[0]
+        if isinstance(value, six.string_types):
+            value = value.split('Z')[0]
 
         try:
             return datetime.strptime(value, self.FORMAT)
-        except ValueError:
+        except (ValueError, TypeError):
             pass
 
         try:
             parsed = self.parse_date(value)
             if parsed is not None:
                 return datetime(parsed.year, parsed.month, parsed.day)
-        except ValueError:
+        except (ValueError, TypeError):
             pass
 
         raise self.ValidationError("'{0}' value has an invalid format. It must be in "
@@ -436,11 +437,17 @@ class JSONField(WritableField):
                 raise self.ValidationError(e)
 
     def to_python(self, value):
+        if value is None:
+            return value
+
         if isinstance(value, six.string_types):
             value = json.loads(value)
         return value
 
     def to_native(self, value):
+        if value is None:
+            return value
+            
         if not isinstance(value, six.string_types):
             value = json.dumps(value)
         return value
