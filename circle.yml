@@ -2,12 +2,17 @@ machine:
   python:
     version: 2.7.5
 
-test:
-  post:
+dependencies:
+  pre:
     - pip install coverage>=3.7.1
     - pip install mock>=1.0.1
-    - rm -f .coverage
+    - pip install flake8
+
+test:
+  override:
     - coverage run -m unittest discover
+    - flake8 .
+  post:
     - coverage html
 
 general:
