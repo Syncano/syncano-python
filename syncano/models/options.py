@@ -105,7 +105,7 @@ class Options(ConnectionMixin):
             raise SyncanoValueError('Field name is required.')
 
         if not isinstance(field_name, six.string_types):
-            raise SyncanoValueError('Field name should be a string.') 
+            raise SyncanoValueError('Field name should be a string.')
 
         for field in self.fields:
             if field.name == field_name:

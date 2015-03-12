@@ -114,10 +114,10 @@ class Manager(ConnectionMixin):
 
         if isinstance(k, slice):
             if k.stop is not None:
-                manager.limit(int(k.stop)+1)
+                manager.limit(int(k.stop) + 1)
             return list(manager)[k.start:k.stop:k.step]
 
-        manager.limit(k+1)
+        manager.limit(k + 1)
         return list(manager)[k]
 
     # Object actions
