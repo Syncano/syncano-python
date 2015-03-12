@@ -42,7 +42,7 @@ class AllFieldsModel(models.Model):
     base_field = models.Field()
     default_base_field = models.Field(default=10)
     read_only_base_field = models.Field(read_only=True)
-    
+
     primary_key_field = models.PrimaryKeyField()
     writable_field = models.WritableField()
     endpoint_field = models.EndpointField()
@@ -87,19 +87,28 @@ class BaseTestCase(unittest.TestCase):
 
     @skip_base_class
     def test_field_repr(self):
-        expected = '<{0}: {1}>'.format(self.field.__class__.__name__, self.field_name)
+        expected = '<{0}: {1}>'.format(
+            self.field.__class__.__name__,
+            self.field_name
+        )
         out = repr(self.field)
         self.assertEqual(out, expected)
 
     @skip_base_class
     def test_field_str(self):
-        expected = '<{0}: {1}>'.format(self.field.__class__.__name__, self.field_name)
+        expected = '<{0}: {1}>'.format(
+            self.field.__class__.__name__,
+            self.field_name
+        )
         out = str(self.field)
         self.assertEqual(out, expected)
 
     @skip_base_class
     def test_field_unicode(self):
-        expected = u'<{0}: {1}>'.format(self.field.__class__.__name__, self.field_name)
+        expected = u'<{0}: {1}>'.format(
+            self.field.__class__.__name__,
+            self.field_name
+        )
         out = unicode(self.field)
         self.assertEqual(out, expected)
 
@@ -225,7 +234,6 @@ class PrimaryKeyTestCase(BaseTestCase):
                 pk_two = models.PrimaryKeyField()
 
 
-
 class WritableFieldTestCase(BaseTestCase):
     field_name = 'writable_field'
 
@@ -259,7 +267,7 @@ class IntegerFieldTestCase(BaseTestCase):
             self.field.to_python('test')
 
         with self.assertRaises(SyncanoValidationError):
-            self.field.to_python({'a': 2})            
+            self.field.to_python({'a': 2})
 
 
 class FloatFieldTestCase(BaseTestCase):
@@ -274,7 +282,7 @@ class FloatFieldTestCase(BaseTestCase):
             self.field.to_python('test')
 
         with self.assertRaises(SyncanoValidationError):
-            self.field.to_python({'a': 2}) 
+            self.field.to_python({'a': 2})
 
 
 class BooleanFieldTestCase(BaseTestCase):
@@ -295,7 +303,7 @@ class BooleanFieldTestCase(BaseTestCase):
             self.field.to_python('test')
 
         with self.assertRaises(SyncanoValidationError):
-            self.field.to_python({'a': 2}) 
+            self.field.to_python({'a': 2})
 
 
 class SlugFieldTestCase(BaseTestCase):
@@ -447,7 +455,6 @@ class ModelFieldTestCase(BaseTestCase):
         self.assertEqual(self.field.to_native(value), value.to_native())
 
 
-
 class JSONFieldTestCase(BaseTestCase):
     field_name = 'json_field'
 
@@ -456,7 +463,7 @@ class JSONFieldTestCase(BaseTestCase):
         self.field.validate(value, self.instance)
 
     def test_validation_failure(self):
-        value = {'results': [1 , 2 ,3 ,4]}
+        value = {'results': [1, 2, 3, 4]}
         with self.assertRaises(SyncanoValidationError):
             self.field.validate(value, self.instance)
 
@@ -476,7 +483,7 @@ class SchemaFieldTestCase(BaseTestCase):
 
     def test_successful_validation(self):
         value = [
-            {'name': 'username', 'type': 'string'}, 
+            {'name': 'username', 'type': 'string'},
             {'name': 'result', 'type': 'integer'},
         ]
         self.field.validate(value, self.instance)
@@ -484,17 +491,16 @@ class SchemaFieldTestCase(BaseTestCase):
 
     def test_unique_names_validation(self):
         value = [
-            {'name': 'username', 'type': 'string'}, 
+            {'name': 'username', 'type': 'string'},
             {'name': 'username', 'type': 'integer'},
         ]
 
         with self.assertRaises(SyncanoValidationError):
             self.field.validate(value, self.instance)
 
-
     def test_index_validation(self):
         value = [
-            {'name': 'result', 'type': 'string'}, 
+            {'name': 'result', 'type': 'string'},
             {'name': 'username', 'type': 'text', 'order_index': True},
         ]
 
@@ -503,7 +509,7 @@ class SchemaFieldTestCase(BaseTestCase):
 
     def test_to_python(self):
         value = [
-            {'name': 'username', 'type': 'string'}, 
+            {'name': 'username', 'type': 'string'},
             {'name': 'result', 'type': 'integer'},
         ]
 

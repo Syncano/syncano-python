@@ -77,10 +77,11 @@ html_static_path = ['_static']
 htmlhelp_basename = 'Syncanodoc'
 
 latex_elements = {}
-latex_documents = [
-  ('index', 'Syncano.tex', 'Syncano Documentation',
-   'Syncano', 'manual'),
-]
+latex_documents = [(
+    'index', 'Syncano.tex',
+    'Syncano Documentation',
+    'Syncano', 'manual'
+)]
 # latex_logo = None
 # latex_use_parts = False
 # latex_show_pagerefs = False
@@ -94,11 +95,11 @@ man_pages = [
 ]
 # man_show_urls = False
 
-texinfo_documents = [
-  ('index', 'Syncano', 'Syncano Documentation',
-   'Syncano', 'Syncano', 'One line description of project.',
-   'Miscellaneous'),
-]
+texinfo_documents = [(
+    'index', 'Syncano', 'Syncano Documentation',
+    'Syncano', 'Syncano', 'One line description of project.',
+    'Miscellaneous'
+)]
 
 # texinfo_appendices = []
 # texinfo_domain_indices = True

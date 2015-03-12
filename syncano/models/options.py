@@ -48,7 +48,7 @@ class Options(ConnectionMixin):
                 endpoint['properties'] = properties
                 self.endpoint_fields.update(properties)
 
-    def contribute_to_class(self, cls, name):  # pragma: no cover
+    def contribute_to_class(self, cls, name):
         if not self.name:
             model_name = camelcase_to_underscore(cls.__name__)
             self.name = model_name.replace('_', ' ').capitalize()
@@ -105,11 +105,12 @@ class Options(ConnectionMixin):
             raise SyncanoValueError('Field name is required.')
 
         if not isinstance(field_name, six.string_types):
-            raise SyncanoValueError('Field name should be a string.') 
+            raise SyncanoValueError('Field name should be a string.')
 
         for field in self.fields:
             if field.name == field_name:
                 return field
+
         raise SyncanoValueError('Field "{0}" not found.'.format(field_name))
 
     def get_endpoint(self, name):
@@ -140,7 +141,7 @@ class Options(ConnectionMixin):
 
     def get_endpoint_query_params(self, name, params):
         properties = self.get_endpoint_properties(name)
-        return {k: v for k, v in params.iteritems() if k not in properties}
+        return {k: v for k, v in six.iteritems(params) if k not in properties}
 
     def get_path_properties(self, path):
         return re.findall('/{([^}]*)}', path)
