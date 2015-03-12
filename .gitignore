@@ -6,6 +6,7 @@ dist
 *.pyo
 .coverage
 coverage
+reports
 run_it.py
 *.sublime-project
 *.sublime-workspace

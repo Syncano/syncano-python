@@ -6,11 +6,12 @@ dependencies:
   pre:
     - pip install coverage>=3.7.1
     - pip install mock>=1.0.1
+    - pip install unittest-xml-reporting>=1.11.0
     - pip install flake8
 
 test:
   override:
-    - coverage run -m unittest discover
+    - coverage run -m tests
     - flake8 .
   post:
     - coverage html

@@ -33,5 +33,6 @@ setup(
     tests_require=[
         'mock>=1.0.1',
         'coverage>=3.7.1',
+        'unittest-xml-reporting>=1.11.0',
     ],
 )
