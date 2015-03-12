@@ -78,7 +78,7 @@ class Options(ConnectionMixin):
         for prop in parent_endpoint.get('properties', []):
             if prop in parent_meta.field_names and prop not in parent_meta.parent_properties:
                 prop = '{0}_{1}'.format(parent_name, prop)
-                self.parent_properties.append(prop)
+            self.parent_properties.append(prop)
 
         for old, new in zip(parent_endpoint['properties'], self.parent_properties):
             prefix = prefix.replace(

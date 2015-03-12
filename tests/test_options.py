@@ -6,10 +6,6 @@ from syncano.models.fields import Field
 from syncano.models.options import Options
 
 
-class Model:
-    pass
-
-
 class Meta:
     _private_method = 1
     non_existing_method = 1
@@ -57,6 +53,10 @@ class OptionsTestCase(unittest.TestCase):
         self.assertEqual(endpoints['dummy']['properties'], ['a', 'b'])
 
     def test_contribute_to_class(self):
+
+        class Model:
+            pass
+
         self.options.plural_name = None
         self.options.related_name = None
         self.options.contribute_to_class(Model, 'please')
@@ -70,10 +70,7 @@ class OptionsTestCase(unittest.TestCase):
     def test_resolve_parent_data(self):
         self.options.parent = Instance
         self.options.resolve_parent_data()
-
         self.assertTrue(self.options.parent_resolved)
-        endpoints = self.options.endpoints
-        # TODO
 
     def test_add_field(self):
         field = Field(name='test')
