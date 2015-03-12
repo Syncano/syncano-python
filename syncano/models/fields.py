@@ -315,20 +315,32 @@ class DateTimeField(DateField):
         if isinstance(value, six.string_types):
             value = value.split('Z')[0]
 
-        try:
-            return datetime.strptime(value, self.FORMAT)
-        except (ValueError, TypeError):
-            pass
+        parsers = [
+            self.parse_from_string,
+            self.parse_from_date,
+        ]
 
-        try:
-            parsed = self.parse_date(value)
-            if parsed is not None:
-                return datetime(parsed.year, parsed.month, parsed.day)
-        except (ValueError, TypeError):
-            pass
+        for parser in parsers:
+            try:
+                value = parser(value)
+            except (ValueError, TypeError):
+                pass
+            else:
+                return value
 
         raise self.ValidationError("'{0}' value has an invalid format. It must be in "
                                    "YYYY-MM-DD HH:MM[:ss[.uuuuuu]] format.".format(value))
+
+    def parse_from_string(self, value):
+        return datetime.strptime(value, self.FORMAT)
+
+    def parse_from_date(self, value):
+        parsed = self.parse_date(value)
+
+        if not parsed:
+            raise ValueError
+
+        return datetime(parsed.year, parsed.month, parsed.day)
 
     def to_native(self, value):
         if value is None:
