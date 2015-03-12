@@ -48,7 +48,7 @@ class Options(ConnectionMixin):
                 endpoint['properties'] = properties
                 self.endpoint_fields.update(properties)
 
-    def contribute_to_class(self, cls, name):  # pragma: no cover
+    def contribute_to_class(self, cls, name):
         if not self.name:
             model_name = camelcase_to_underscore(cls.__name__)
             self.name = model_name.replace('_', ' ').capitalize()
@@ -78,7 +78,7 @@ class Options(ConnectionMixin):
         for prop in parent_endpoint.get('properties', []):
             if prop in parent_meta.field_names and prop not in parent_meta.parent_properties:
                 prop = '{0}_{1}'.format(parent_name, prop)
-            self.parent_properties.append(prop)
+                self.parent_properties.append(prop)
 
         for old, new in zip(parent_endpoint['properties'], self.parent_properties):
             prefix = prefix.replace(
@@ -110,6 +110,7 @@ class Options(ConnectionMixin):
         for field in self.fields:
             if field.name == field_name:
                 return field
+
         raise SyncanoValueError('Field "{0}" not found.'.format(field_name))
 
     def get_endpoint(self, name):
@@ -140,7 +141,7 @@ class Options(ConnectionMixin):
 
     def get_endpoint_query_params(self, name, params):
         properties = self.get_endpoint_properties(name)
-        return {k: v for k, v in params.iteritems() if k not in properties}
+        return {k: v for k, v in six.iteritems(params) if k not in properties}
 
     def get_path_properties(self, path):
         return re.findall('/{([^}]*)}', path)
