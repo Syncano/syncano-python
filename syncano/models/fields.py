@@ -217,7 +217,7 @@ class SlugField(StringField):
 
     def validate(self, value, model_instance):
         super(SlugField, self).validate(value, model_instance)
-        
+
         if not isinstance(value, six.string_types):
             raise self.ValidationError('Invalid value. Value should be a string.')
 
@@ -447,7 +447,7 @@ class JSONField(WritableField):
     def to_native(self, value):
         if value is None:
             return value
-            
+
         if not isinstance(value, six.string_types):
             value = json.dumps(value)
         return value

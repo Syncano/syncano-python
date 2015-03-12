@@ -5,7 +5,10 @@ try:
 except ImportError:
     import mock
 
-from syncano.exceptions import SyncanoValueError, SyncanoRequestError, SyncanoDoesNotExist
+from syncano.exceptions import (
+    SyncanoValueError, SyncanoRequestError,
+    SyncanoDoesNotExist
+)
 from syncano.models.base import Instance, CodeBox, Webhook, Object
 
 
@@ -137,7 +140,6 @@ class ManagerTestCase(unittest.TestCase):
 
         self.assertEqual(self.manager.method, 'DELETE')
         self.assertEqual(self.manager.endpoint, 'detail')
-
 
     @mock.patch('syncano.models.manager.Manager.request')
     @mock.patch('syncano.models.manager.Manager._filter')

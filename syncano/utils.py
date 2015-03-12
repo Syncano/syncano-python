@@ -5,7 +5,9 @@ from decimal import Decimal
 import six
 from slugify import slugify
 
-PROTECTED_TYPES = six.integer_types + (type(None), float, Decimal, datetime.datetime, datetime.date, datetime.time)
+PROTECTED_TYPES = six.integer_types + (
+    type(None), float, Decimal, datetime.datetime,
+    datetime.date, datetime.time)
 
 
 def camelcase_to_underscore(text):
@@ -30,7 +32,7 @@ def get_class_name(*args):
 def force_text(s, encoding='utf-8', strings_only=False, errors='strict'):
     if isinstance(s, six.text_type):
         return s
-    
+
     if strings_only and isinstance(s, PROTECTED_TYPES):
         return s
 
