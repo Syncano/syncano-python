@@ -186,31 +186,31 @@ class ObjectTestCase(unittest.TestCase):
     def setUp(self):
         self.model = Object()
         self.schema = [
-           {
-              'name': 'title',
-              'type': 'string',
-              'order_index': True,
-              'filter_index': True
-           },
-           {
-              'name': 'release_year',
-              'type': 'integer',
-              'order_index': True,
-              'filter_index': True
-           },
-           {
-              'name': 'price',
-              'type': 'float',
-              'order_index': True,
-              'filter_index': True
-           },
-           {
-              'name': 'author',
-              'type': 'reference',
-              'order_index': True,
-              'filter_index': True,
-              'target': 'Author'
-           }
+            {
+                'name': 'title',
+                'type': 'string',
+                'order_index': True,
+                'filter_index': True
+            },
+            {
+                'name': 'release_year',
+                'type': 'integer',
+                'order_index': True,
+                'filter_index': True
+            },
+            {
+                'name': 'price',
+                'type': 'float',
+                'order_index': True,
+                'filter_index': True
+            },
+            {
+                'name': 'author',
+                'type': 'reference',
+                'order_index': True,
+                'filter_index': True,
+                'target': 'Author'
+            }
         ]
 
     def test_create_subclass(self):
