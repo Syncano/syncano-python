@@ -29,4 +29,6 @@ deployment:
     branch: release/4.0
     commands:
       - pip install -r requirements-docs.txt
+      - git config --global user.email "ci@circleci.com"
+      - git config --global user.name "CircleCI"
       - "cd docs && make gh-pages"
