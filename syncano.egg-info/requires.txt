@@ -1,4 +1,0 @@
-requests==2.5.1
-six==1.9.0
-python-slugify==0.1.0
-validictory==1.0.0

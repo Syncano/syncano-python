@@ -1,3 +1,0 @@
-Requirement already satisfied (use --upgrade to upgrade): unittest-xml-reporting in /home/ubuntu/virtualenvs/venv-2.7.5/lib/python2.7/site-packages
-Requirement already satisfied (use --upgrade to upgrade): six>=1.4.0 in /home/ubuntu/virtualenvs/venv-2.7.5/lib/python2.7/site-packages/six-1.9.0-py2.7.egg (from unittest-xml-reporting)
-Cleaning up...

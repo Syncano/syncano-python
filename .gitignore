@@ -4,3 +4,8 @@ docs
 *.sublime-project
 *.sublime-workspace
 run_it.py
+venv
+coverage
+.coverage
+*.egg-info
+=*
