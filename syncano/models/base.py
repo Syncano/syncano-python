@@ -132,10 +132,11 @@ class Model(six.with_metaclass(ModelMetaclass)):
 
     def delete(self, **kwargs):
         """Removes the current instance."""
-        if not self.links:
+        if self.is_new():
             raise SyncanoValidationError('Method allowed only on existing model.')
 
-        endpoint = self.links['self']
+        properties = self.get_endpoint_data()
+        endpoint = self._meta.resolve_endpoint('detail', properties)
         connection = self._get_connection(**kwargs)
         connection.request('DELETE', endpoint)
         self._raw_data = {}
@@ -154,9 +155,10 @@ class Model(six.with_metaclass(ModelMetaclass)):
     def is_valid(self):
         try:
             self.validate()
-            return True
         except SyncanoValidationError:
             return False
+        else:
+            return True
 
     def is_new(self):
         if 'links' in self._meta.field_names:
@@ -477,10 +479,11 @@ class CodeBox(Model):
         }
 
     def run(self, **payload):
-        if not self.links:
+        if self.is_new():
             raise SyncanoValidationError('Method allowed only on existing model.')
 
-        endpoint = self.links['run']
+        properties = self.get_endpoint_data()
+        endpoint = self._meta.resolve_endpoint('run', properties)
         connection = self._get_connection(**payload)
         request = {
             'data': {
@@ -801,9 +804,10 @@ class Webhook(Model):
         }
 
     def run(self, **kwargs):
-        if not self.links:
+        if self.is_new():
             raise SyncanoValidationError('Method allowed only on existing model.')
 
-        endpoint = self.links['run']
+        properties = self.get_endpoint_data()
+        endpoint = self._meta.resolve_endpoint('run', properties)
         connection = self._get_connection(**kwargs)
         return connection.request('GET', endpoint)
