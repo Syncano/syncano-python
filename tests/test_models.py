@@ -6,7 +6,10 @@ except ImportError:
     import mock
 
 from syncano.exceptions import SyncanoValidationError
-from syncano.models import Instance, Webhook, CodeBox, Object
+from syncano.models import (
+    Instance, Webhook, CodeBox,
+    Object, Trace
+)
 
 
 class ModelTestCase(unittest.TestCase):
@@ -164,12 +167,14 @@ class CodeBoxTestCase(unittest.TestCase):
     def test_run(self, connection_mock):
         model = CodeBox(instance_name='test', id=10, links={'run': '/v1/instances/test/codeboxes/10/run/'})
         connection_mock.return_value = connection_mock
+        connection_mock.request.return_value = {'id': 10}
 
         self.assertFalse(connection_mock.called)
         self.assertFalse(connection_mock.request.called)
-        model.run(a=1, b=2)
+        result = model.run(a=1, b=2)
         self.assertTrue(connection_mock.called)
         self.assertTrue(connection_mock.request.called)
+        self.assertIsInstance(result, Trace)
 
         connection_mock.assert_called_once_with(a=1, b=2)
         connection_mock.request.assert_called_once_with(
@@ -268,12 +273,14 @@ class WebhookTestCase(unittest.TestCase):
     def test_run(self, connection_mock):
         model = Webhook(instance_name='test', slug='slug', links={'run': '/v1/instances/test/webhooks/slug/run/'})
         connection_mock.return_value = connection_mock
+        connection_mock.request.return_value = {'result': '1'}
 
         self.assertFalse(connection_mock.called)
         self.assertFalse(connection_mock.request.called)
-        model.run()
+        result = model.run()
         self.assertTrue(connection_mock.called)
         self.assertTrue(connection_mock.request.called)
+        self.assertIsInstance(result, dict)
 
         connection_mock.assert_called_once_with()
         connection_mock.request.assert_called_once_with('GET', '/v1/instances/test/webhooks/slug/run/')

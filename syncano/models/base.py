@@ -490,7 +490,8 @@ class CodeBox(Model):
                 'payload': json.dumps(payload)
             }
         }
-        return connection.request('POST', endpoint, **request)
+        response = connection.request('POST', endpoint, **request)
+        return Trace(**response)
 
 
 class Schedule(Model):
