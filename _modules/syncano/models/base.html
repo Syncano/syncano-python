@@ -270,6 +270,17 @@
         <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;DELETE&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span> <span class="o">=</span> <span class="p">{}</span>
 </div>
+<div class="viewcode-block" id="Model.reload"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.reload">[docs]</a>    <span class="k">def</span> <span class="nf">reload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reloads the current instance.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_new</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span><span class="s">&#39;Method allowed only on existing model.&#39;</span><span class="p">)</span>
+
+        <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_data</span><span class="p">()</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</div>
 <div class="viewcode-block" id="Model.validate"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Validates the current instance.</span>
@@ -608,6 +619,17 @@
         <span class="p">}</span>
 
 <div class="viewcode-block" id="CodeBox.run"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.CodeBox.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">payload</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Usage via ORM::</span>
+
+<span class="sd">            &gt;&gt;&gt; CodeBox.please.run(&#39;instance-name&#39;, 1234, payload={&#39;variable_one&#39;: 1, &#39;variable_two&#39;: 2})</span>
+<span class="sd">            &gt;&gt;&gt; CodeBox.please.run(&#39;instance-name&#39;, 1234, payload=&quot;{\&quot;variable_one\&quot;: 1, \&quot;variable_two\&quot;: 2}&quot;)</span>
+
+<span class="sd">        or via instance::</span>
+
+<span class="sd">            &gt;&gt;&gt; cb = CodeBox.please.get(&#39;instance-name&#39;, 1234)</span>
+<span class="sd">            &gt;&gt;&gt; cb.run(variable_one=1, variable_two=2)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_new</span><span class="p">():</span>
             <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span><span class="s">&#39;Method allowed only on existing model.&#39;</span><span class="p">)</span>
 
@@ -619,7 +641,8 @@
                 <span class="s">&#39;payload&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
             <span class="p">}</span>
         <span class="p">}</span>
-        <span class="k">return</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">request</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">request</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Trace</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)</span>
 
 </div></div>
 <div class="viewcode-block" id="Schedule"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Schedule">[docs]</a><span class="k">class</span> <span class="nc">Schedule</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
