@@ -141,6 +141,17 @@ class Model(six.with_metaclass(ModelMetaclass)):
         connection.request('DELETE', endpoint)
         self._raw_data = {}
 
+    def reload(self, **kwargs):
+        """Reloads the current instance."""
+        if self.is_new():
+            raise SyncanoValidationError('Method allowed only on existing model.')
+
+        properties = self.get_endpoint_data()
+        endpoint = self._meta.resolve_endpoint('detail', properties)
+        connection = self._get_connection(**kwargs)
+        response = connection.request('GET', endpoint)
+        self.to_python(response)
+
     def validate(self):
         """
         Validates the current instance.

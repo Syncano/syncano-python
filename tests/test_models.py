@@ -127,6 +127,31 @@ class ModelTestCase(unittest.TestCase):
         with self.assertRaises(SyncanoValidationError):
             model.delete()
 
+    @mock.patch('syncano.models.Instance._get_connection')
+    def test_reload(self, connection_mock):
+        model = Instance(name='test', links={'self': '/v1/instances/test/'})
+        connection_mock.return_value = connection_mock
+        connection_mock.request.return_value = {
+            'name': 'new_one',
+            'description': 'dummy desc'
+        }
+
+        self.assertFalse(connection_mock.called)
+        self.assertFalse(connection_mock.request.called)
+        self.assertIsNone(model.description)
+        model.reload()
+        self.assertTrue(connection_mock.called)
+        self.assertTrue(connection_mock.request.called)
+        self.assertEqual(model.name, 'new_one')
+        self.assertEqual(model.description, 'dummy desc')
+
+        connection_mock.assert_called_once_with()
+        connection_mock.request.assert_called_once_with('GET', '/v1/instances/test/')
+
+        model = Instance()
+        with self.assertRaises(SyncanoValidationError):
+            model.delete()
+
     def test_validation(self):
         # More validation tests is present in test_fields.py
         Instance(name='test').validate()
