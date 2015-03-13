@@ -9,3 +9,6 @@ coverage
 .coverage
 *.egg-info
 =*
+tests
+.DS_Store
+dist
