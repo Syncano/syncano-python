@@ -22,3 +22,11 @@ general:
   branches:
       ignore:
         - gh-pages
+
+
+deployment:
+  production:
+    branch: release/4.0
+    commands:
+      - pip install -r requirements-docs.txt
+      - "cd docs && make gh-pages"
