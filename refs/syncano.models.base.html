@@ -333,7 +333,7 @@ can be serialized to JSON and send to API.</p>
 </table>
 <dl class="attribute">
 <dt id="syncano.models.base.Instance.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'admins'}, {u'type': u'list', u'name': u'classes'}, {u'type': u'list', u'name': u'codeboxes'}, {u'type': u'list', u'name': u'invitations'}, {u'type': u'list', u'name': u'runtimes'}, {u'type': u'list', u'name': u'api_keys'}, {u'type': u'list', u'name': u'triggers'}, {u'type': u'list', u'name': u'webhooks'})</em><a class="headerlink" href="#syncano.models.base.Instance.LINKS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'admins'}, {u'type': u'list', u'name': u'classes'}, {u'type': u'list', u'name': u'codeboxes'}, {u'type': u'list', u'name': u'invitations'}, {u'type': u'list', u'name': u'runtimes'}, {u'type': u'list', u'name': u'api_keys'}, {u'type': u'list', u'name': u'triggers'}, {u'type': u'list', u'name': u'webhooks'}, {u'type': u'list', u'name': u'schedules'})</em><a class="headerlink" href="#syncano.models.base.Instance.LINKS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -456,9 +456,22 @@ can be serialized to JSON and send to API.</p>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><strong>CodeBox</strong> has special method called <tt class="docutils literal"><span class="pre">run</span></tt> which will execute attached source code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CodeBox</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;variable_one&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;variable_two&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CodeBox</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="s">&quot;{&quot;</span><span class="n">variable_one</span><span class="s">&quot;: 1, &quot;</span><span class="n">variable_two</span><span class="s">&quot;: 2}&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or via instance:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cb</span> <span class="o">=</span> <span class="n">CodeBox</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cb</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">variable_one</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">variable_two</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <dl class="attribute">
 <dt id="syncano.models.base.CodeBox.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'schedules'})</em><a class="headerlink" href="#syncano.models.base.CodeBox.LINKS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'runtimes'}, {u'type': u'detail', u'name': u'traces'})</em><a class="headerlink" href="#syncano.models.base.CodeBox.LINKS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -467,15 +480,20 @@ can be serialized to JSON and send to API.</p>
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="syncano.models.base.CodeBox.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.CodeBox.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.base.CodeBox.run">
+<tt class="descname">run</tt><big>(</big><em>**payload</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#CodeBox.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.CodeBox.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="syncano.models.base.CodeBox.DoesNotExist">
 <tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.CodeBox.DoesNotExist" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">CodeBoxDoesNotExist</span></tt></p>
 </dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.CodeBox.please">
-<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.CodeBox.please" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
@@ -504,7 +522,7 @@ can be serialized to JSON and send to API.</p>
 </table>
 <dl class="attribute">
 <dt id="syncano.models.base.Schedule.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = [{u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'traces'}]</em><a class="headerlink" href="#syncano.models.base.Schedule.LINKS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">LINKS</tt><em class="property"> = [{u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'traces'}, {u'type': u'list', u'name': u'codebox'}]</em><a class="headerlink" href="#syncano.models.base.Schedule.LINKS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -716,7 +734,7 @@ with fields defined in related <a class="reference internal" href="#syncano.mode
 </table>
 <dl class="attribute">
 <dt id="syncano.models.base.Trigger.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'},)</em><a class="headerlink" href="#syncano.models.base.Trigger.LINKS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'detail', u'name': u'codebox'}, {u'type': u'detail', u'name': u'klass'}, {u'type': u'detail', u'name': u'traces'})</em><a class="headerlink" href="#syncano.models.base.Trigger.LINKS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

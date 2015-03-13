@@ -1,0 +1,17 @@
+Metadata-Version: 1.1
+Name: syncano
+Version: 4.0.0
+Summary: Python Library for syncano.com api
+Home-page: http://syncano.com
+Author: Daniel Kopka
+Author-email: daniel.kopka@syncano.com
+License: UNKNOWN
+Description: # Syncano v4.0
+        
+        [Docs](http://syncano.github.io/syncano-python/)
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.3

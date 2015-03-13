@@ -333,6 +333,19 @@ can be serialized to JSON and send to API.</p>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><strong>CodeBox</strong> has special method called <tt class="docutils literal"><span class="pre">run</span></tt> which will execute attached source code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">CodeBox</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;variable_one&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;variable_two&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CodeBox</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="s">&quot;{&quot;</span><span class="n">variable_one</span><span class="s">&quot;: 1, &quot;</span><span class="n">variable_two</span><span class="s">&quot;: 2}&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or via instance:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cb</span> <span class="o">=</span> <span class="n">CodeBox</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cb</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">variable_one</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">variable_two</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </dd></dl>
 
 <dl class="class">
