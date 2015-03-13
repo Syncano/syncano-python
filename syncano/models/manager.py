@@ -402,8 +402,6 @@ class Manager(ConnectionMixin):
         setattr(model, name, ManagerDescriptor(self))
 
         self.model = model
-        if hasattr(model._meta, 'connection') and model._meta.connection:
-            self.connection = model._meta.connection
 
         if not self.name:
             self.name = name
