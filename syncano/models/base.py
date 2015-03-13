@@ -491,12 +491,7 @@ class CodeBox(Model):
 
     def run(self, **payload):
         """
-        Usage via ORM::
-
-            >>> CodeBox.please.run('instance-name', 1234, payload={'variable_one': 1, 'variable_two': 2})
-            >>> CodeBox.please.run('instance-name', 1234, payload="{\"variable_one\": 1, \"variable_two\": 2}")
-
-        or via instance::
+        Usage::
 
             >>> cb = CodeBox.please.get('instance-name', 1234)
             >>> cb.run(variable_one=1, variable_two=2)

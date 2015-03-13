@@ -23,7 +23,6 @@ general:
       ignore:
         - gh-pages
 
-
 deployment:
   production:
     branch: release/4.0
