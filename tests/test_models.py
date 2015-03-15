@@ -302,13 +302,17 @@ class WebhookTestCase(unittest.TestCase):
 
         self.assertFalse(connection_mock.called)
         self.assertFalse(connection_mock.request.called)
-        result = model.run()
+        result = model.run(x=1, y=2)
         self.assertTrue(connection_mock.called)
         self.assertTrue(connection_mock.request.called)
         self.assertIsInstance(result, dict)
 
-        connection_mock.assert_called_once_with()
-        connection_mock.request.assert_called_once_with('GET', '/v1/instances/test/webhooks/slug/run/')
+        connection_mock.assert_called_once_with(x=1, y=2)
+        connection_mock.request.assert_called_once_with(
+            'POST',
+            '/v1/instances/test/webhooks/slug/run/',
+            data={'payload': '{"y": 2, "x": 1}'}
+        )
 
         model = Webhook()
         with self.assertRaises(SyncanoValidationError):
