@@ -546,7 +546,10 @@ class WebhookManager(Manager):
         self.data['payload'] = payload
         self._filter(*args, **kwargs)
         self._serialize = False
-        return self.request()
+        response = self.request()
+
+        # Workaround for circular import
+        return registry.Webhook.RESULT_CLASS(**response)
 
 
 class ObjectManager(Manager):

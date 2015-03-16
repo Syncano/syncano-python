@@ -1,4 +1,5 @@
 import unittest
+from datetime import datetime
 
 try:
     from unittest import mock
@@ -11,7 +12,7 @@ from syncano.exceptions import (
 )
 from syncano.models.base import (
     Instance, CodeBox, Webhook,
-    Object, Trace
+    Object, Trace, WebhookResult
 )
 
 
@@ -425,13 +426,22 @@ class WebhookManagerTestCase(unittest.TestCase):
     @mock.patch('syncano.models.manager.WebhookManager._clone')
     def test_run(self, clone_mock, filter_mock, request_mock):
         clone_mock.return_value = self.manager
-        request_mock.return_value = request_mock
+        request_mock.return_value = {
+            'status': 'success',
+            'duration': 937,
+            'result': '1',
+            'executed_at': '2015-03-16T11:52:14.172830Z'
+        }
 
         self.assertFalse(filter_mock.called)
         self.assertFalse(request_mock.called)
 
         result = self.manager.run(1, 2, a=1, b=2, payload={'x': 1, 'y': 2})
-        self.assertEqual(request_mock, result)
+        self.assertIsInstance(result, WebhookResult)
+        self.assertEqual(result.status, 'success')
+        self.assertEqual(result.duration, 937)
+        self.assertEqual(result.result, '1')
+        self.assertIsInstance(result.executed_at, datetime)
 
         self.assertTrue(filter_mock.called)
         self.assertTrue(request_mock.called)

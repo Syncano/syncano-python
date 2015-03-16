@@ -1,4 +1,5 @@
 import unittest
+from datetime import datetime
 
 try:
     from unittest import mock
@@ -8,7 +9,7 @@ except ImportError:
 from syncano.exceptions import SyncanoValidationError
 from syncano.models import (
     Instance, Webhook, CodeBox,
-    Object, Trace
+    Object, Trace, WebhookResult
 )
 
 
@@ -298,14 +299,23 @@ class WebhookTestCase(unittest.TestCase):
     def test_run(self, connection_mock):
         model = Webhook(instance_name='test', slug='slug', links={'run': '/v1/instances/test/webhooks/slug/run/'})
         connection_mock.return_value = connection_mock
-        connection_mock.request.return_value = {'result': '1'}
+        connection_mock.request.return_value = {
+            'status': 'success',
+            'duration': 937,
+            'result': '1',
+            'executed_at': '2015-03-16T11:52:14.172830Z'
+        }
 
         self.assertFalse(connection_mock.called)
         self.assertFalse(connection_mock.request.called)
         result = model.run(x=1, y=2)
         self.assertTrue(connection_mock.called)
         self.assertTrue(connection_mock.request.called)
-        self.assertIsInstance(result, dict)
+        self.assertIsInstance(result, WebhookResult)
+        self.assertEqual(result.status, 'success')
+        self.assertEqual(result.duration, 937)
+        self.assertEqual(result.result, '1')
+        self.assertIsInstance(result.executed_at, datetime)
 
         connection_mock.assert_called_once_with(x=1, y=2)
         connection_mock.request.assert_called_once_with(
