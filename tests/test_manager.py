@@ -163,7 +163,7 @@ class ManagerTestCase(unittest.TestCase):
         filter_mock.assert_called_once_with(1, 2, a=1, b=2)
         request_mock.assert_called_once_with()
 
-        self.assertEqual(self.manager.method, 'PUT')
+        self.assertEqual(self.manager.method, 'PATCH')
         self.assertEqual(self.manager.endpoint, 'detail')
         self.assertEqual(self.manager.data, {'x': 1, 'y': 2})
 
@@ -344,6 +344,10 @@ class ManagerTestCase(unittest.TestCase):
         with self.assertRaises(SyncanoValueError):
             self.manager.request()
 
+        self.manager.method = 'dummy'
+        with self.assertRaises(SyncanoValueError):
+            self.manager.request()
+
     @mock.patch('syncano.models.manager.Manager.request')
     def test_iterator(self, request_mock):
         request_mock.side_effect = [
@@ -366,6 +370,18 @@ class ManagerTestCase(unittest.TestCase):
         self.assertTrue(request_mock.called)
         self.assertEqual(request_mock.call_count, 2)
         request_mock.assert_called_with(path='next_url')
+
+    def test_get_allowed_method(self):
+        self.manager.endpoint = 'detail'
+
+        result = self.manager.get_allowed_method('GET', 'POST')
+        self.assertEqual(result, 'GET')
+
+        result = self.manager.get_allowed_method('DELETE', 'POST')
+        self.assertEqual(result, 'DELETE')
+
+        with self.assertRaises(SyncanoValueError):
+            self.manager.get_allowed_method('dummy')
 
 
 class CodeBoxManagerTestCase(unittest.TestCase):
