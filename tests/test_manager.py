@@ -9,7 +9,10 @@ from syncano.exceptions import (
     SyncanoValueError, SyncanoRequestError,
     SyncanoDoesNotExist
 )
-from syncano.models.base import Instance, CodeBox, Webhook, Object
+from syncano.models.base import (
+    Instance, CodeBox, Webhook,
+    Object, Trace
+)
 
 
 class CloneTestCase(unittest.TestCase):
@@ -376,13 +379,13 @@ class CodeBoxManagerTestCase(unittest.TestCase):
     @mock.patch('syncano.models.manager.CodeBoxManager._clone')
     def test_run(self, clone_mock, filter_mock, request_mock):
         clone_mock.return_value = self.manager
-        request_mock.return_value = request_mock
+        request_mock.return_value = {'id': 10}
 
         self.assertFalse(filter_mock.called)
         self.assertFalse(request_mock.called)
 
         result = self.manager.run(1, 2, a=1, b=2, payload={'x': 1, 'y': 2})
-        self.assertEqual(request_mock, result)
+        self.assertIsInstance(result, Trace)
 
         self.assertTrue(filter_mock.called)
         self.assertTrue(request_mock.called)
@@ -411,7 +414,7 @@ class WebhookManagerTestCase(unittest.TestCase):
         self.assertFalse(filter_mock.called)
         self.assertFalse(request_mock.called)
 
-        result = self.manager.run(1, 2, a=1, b=2)
+        result = self.manager.run(1, 2, a=1, b=2, payload={'x': 1, 'y': 2})
         self.assertEqual(request_mock, result)
 
         self.assertTrue(filter_mock.called)
@@ -420,8 +423,9 @@ class WebhookManagerTestCase(unittest.TestCase):
         filter_mock.assert_called_once_with(1, 2, a=1, b=2)
         request_mock.assert_called_once_with()
 
-        self.assertEqual(self.manager.method, 'GET')
+        self.assertEqual(self.manager.method, 'POST')
         self.assertEqual(self.manager.endpoint, 'run')
+        self.assertEqual(self.manager.data['payload'], '{"y": 2, "x": 1}')
 
 
 class ObjectManagerTestCase(unittest.TestCase):

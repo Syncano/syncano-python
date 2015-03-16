@@ -436,12 +436,14 @@ class CodeBox(Model):
     .. note::
         **CodeBox** has special method called ``run`` which will execute attached source code::
 
+            >>> CodeBox.please.run('instance-name', 1234)
             >>> CodeBox.please.run('instance-name', 1234, payload={'variable_one': 1, 'variable_two': 2})
             >>> CodeBox.please.run('instance-name', 1234, payload="{\"variable_one\": 1, \"variable_two\": 2}")
 
         or via instance::
 
             >>> cb = CodeBox.please.get('instance-name', 1234)
+            >>> cb.run()
             >>> cb.run(variable_one=1, variable_two=2)
     """
 
@@ -494,6 +496,7 @@ class CodeBox(Model):
         Usage::
 
             >>> cb = CodeBox.please.get('instance-name', 1234)
+            >>> cb.run()
             >>> cb.run(variable_one=1, variable_two=2)
         """
         if self.is_new():
@@ -786,11 +789,16 @@ class Webhook(Model):
         **WebHook** has special method called ``run`` which will execute related codebox::
 
             >>> Webhook.please.run('instance-name', 'webhook-slug')
+            >>> Webhook.please.run('instance-name', 'webhook-slug', payload={'variable_one': 1, 'variable_two': 2})
+            >>> Webhook.please.run('instance-name', 'webhook-slug',
+                                   payload="{\"variable_one\": 1, \"variable_two\": 2}")
 
         or via instance::
 
             >>> wh = Webhook.please.get('instance-name', 'webhook-slug')
             >>> wh.run()
+            >>> wh.run(variable_one=1, variable_two=2)
+
     """
 
     LINKS = (
@@ -821,11 +829,23 @@ class Webhook(Model):
             }
         }
 
-    def run(self, **kwargs):
+    def run(self, **payload):
+        """
+        Usage::
+
+            >>> wh = Webhook.please.get('instance-name', 'webhook-slug')
+            >>> wh.run()
+            >>> wh.run(variable_one=1, variable_two=2)
+        """
         if self.is_new():
             raise SyncanoValidationError('Method allowed only on existing model.')
 
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('run', properties)
-        connection = self._get_connection(**kwargs)
-        return connection.request('GET', endpoint)
+        connection = self._get_connection(**payload)
+        request = {
+            'data': {
+                'payload': json.dumps(payload)
+            }
+        }
+        return connection.request('POST', endpoint, **request)

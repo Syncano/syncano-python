@@ -508,7 +508,8 @@ class CodeBoxManager(Manager):
         self.data['payload'] = payload
         self._filter(*args, **kwargs)
         self._serialize = False
-        return self.request()
+        response = self.request()
+        return registry.Trace(**response)
 
 
 class WebhookManager(Manager):
@@ -519,8 +520,14 @@ class WebhookManager(Manager):
 
     @clone
     def run(self, *args, **kwargs):
-        self.method = 'GET'
+        payload = kwargs.pop('payload', {})
+
+        if not isinstance(payload, six.string_types):
+            payload = json.dumps(payload)
+
+        self.method = 'POST'
         self.endpoint = 'run'
+        self.data['payload'] = payload
         self._filter(*args, **kwargs)
         self._serialize = False
         return self.request()
