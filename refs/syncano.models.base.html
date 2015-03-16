@@ -770,6 +770,13 @@ with fields defined in related <a class="reference internal" href="#syncano.mode
 </dd></dl>
 
 <dl class="class">
+<dt id="syncano.models.base.WebhookResult">
+<em class="property">class </em><tt class="descname">WebhookResult</tt><big>(</big><em>status</em>, <em>duration</em>, <em>result</em>, <em>executed_at</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#WebhookResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.WebhookResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>OO wrapper around result of <a class="reference internal" href="#syncano.models.base.Webhook.run" title="syncano.models.base.Webhook.run"><tt class="xref py py-meth docutils literal"><span class="pre">run()</span></tt></a> method.</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="syncano.models.base.Webhook">
 <em class="property">class </em><tt class="descname">Webhook</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Webhook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Webhook" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
@@ -804,6 +811,12 @@ with fields defined in related <a class="reference internal" href="#syncano.mode
 </div>
 </div>
 <dl class="attribute">
+<dt id="syncano.models.base.Webhook.RESULT_CLASS">
+<tt class="descname">RESULT_CLASS</tt><a class="headerlink" href="#syncano.models.base.Webhook.RESULT_CLASS" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#syncano.models.base.WebhookResult" title="syncano.models.base.WebhookResult"><tt class="xref py py-class docutils literal"><span class="pre">WebhookResult</span></tt></a></p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="syncano.models.base.Webhook.LINKS">
 <tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'detail', u'name': u'codebox'})</em><a class="headerlink" href="#syncano.models.base.Webhook.LINKS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -812,6 +825,12 @@ with fields defined in related <a class="reference internal" href="#syncano.mode
 <dt id="syncano.models.base.Webhook.please">
 <tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.Webhook.please" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.Webhook.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Webhook.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">WebhookDoesNotExist</span></tt></p>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.base.Webhook.run">
@@ -822,12 +841,6 @@ with fields defined in related <a class="reference internal" href="#syncano.mode
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wh</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">variable_one</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">variable_two</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="syncano.models.base.Webhook.DoesNotExist">
-<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.Webhook.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">WebhookDoesNotExist</span></tt></p>
 </dd></dl>
 
 </dd></dl>

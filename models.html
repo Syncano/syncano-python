@@ -505,6 +505,12 @@ with fields defined in related <a class="reference internal" href="refs/syncano.
 
 <dl class="class">
 <dt>
+<em class="property">class </em><tt class="descname">WebhookResult</tt><big>(</big><em>status</em>, <em>duration</em>, <em>result</em>, <em>executed_at</em><big>)</big><a class="reference internal" href="_modules/syncano/models/base.html#WebhookResult"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>OO wrapper around result of <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Webhook.run" title="syncano.models.base.Webhook.run"><tt class="xref py py-meth docutils literal"><span class="pre">run()</span></tt></a> method.</p>
+</dd></dl>
+
+<dl class="class">
+<dt>
 <em class="property">class </em><tt class="descname">Webhook</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/syncano/models/base.html#Webhook"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>OO wrapper around webhooks <a class="reference external" href="http://docs.syncano.com/v4.0/docs/webhooks-list">endpoint</a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -536,6 +542,12 @@ with fields defined in related <a class="reference internal" href="refs/syncano.
 </pre></div>
 </div>
 </div>
+<dl class="attribute">
+<dt>
+<tt class="descname">RESULT_CLASS</tt></dt>
+<dd><p>alias of <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.WebhookResult" title="syncano.models.base.WebhookResult"><tt class="xref py py-class docutils literal"><span class="pre">WebhookResult</span></tt></a></p>
+</dd></dl>
+
 <dl class="method">
 <dt>
 <tt class="descname">run</tt><big>(</big><em>**payload</em><big>)</big><a class="reference internal" href="_modules/syncano/models/base.html#Webhook.run"><span class="viewcode-link">[source]</span></a></dt>

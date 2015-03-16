@@ -131,6 +131,7 @@
 
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
 <span class="kn">import</span> <span class="nn">six</span>
 
@@ -906,6 +907,21 @@
         <span class="p">}</span>
 
 </div>
+<div class="viewcode-block" id="WebhookResult"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.WebhookResult">[docs]</a><span class="k">class</span> <span class="nc">WebhookResult</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around result of :meth:`~syncano.models.base.Webhook.run` method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">executed_at</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="n">duration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">executed_at</span> <span class="o">=</span> <span class="n">executed_at</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">executed_at</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="n">executed_at</span> <span class="o">=</span> <span class="n">executed_at</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;Z&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">executed_at</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">executed_at</span><span class="p">,</span> <span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s">T%H:%M:%S.</span><span class="si">%f</span><span class="s">&#39;</span><span class="p">)</span>
+
+</div>
 <div class="viewcode-block" id="Webhook"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Webhook">[docs]</a><span class="k">class</span> <span class="nc">Webhook</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    OO wrapper around webhooks `endpoint &lt;http://docs.syncano.com/v4.0/docs/webhooks-list&gt;`_.</span>
@@ -929,6 +945,7 @@
 <span class="sd">            &gt;&gt;&gt; wh.run(variable_one=1, variable_two=2)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">RESULT_CLASS</span> <span class="o">=</span> <span class="n">WebhookResult</span>
 
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
@@ -953,7 +970,7 @@
                 <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/webhooks/&#39;</span><span class="p">,</span>
             <span class="p">},</span>
             <span class="s">&#39;run&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">],</span>
                 <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/webhooks/{slug}/run/&#39;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span>
@@ -977,7 +994,8 @@
                 <span class="s">&#39;payload&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
             <span class="p">}</span>
         <span class="p">}</span>
-        <span class="k">return</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">request</span><span class="p">)</span></div></div>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">request</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">RESULT_CLASS</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
