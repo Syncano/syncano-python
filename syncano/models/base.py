@@ -7,6 +7,7 @@ from datetime import datetime
 import six
 
 from syncano.exceptions import SyncanoValidationError, SyncanoDoesNotExist
+from syncano.utils import get_class_name
 from . import fields
 from .options import Options
 from .manager import Manager, WebhookManager, ObjectManager, CodeBoxManager
@@ -709,9 +710,26 @@ class Object(Model):
             }
         }
 
+    @staticmethod
+    def __new__(cls, **kwargs):
+        instance_name = kwargs.get('instance_name')
+        class_name = kwargs.get('class_name')
+
+        if not instance_name:
+            raise SyncanoValidationError('Field "instance_name" is required.')
+
+        if not class_name:
+            raise SyncanoValidationError('Field "class_name" is required.')
+
+        model = cls.get_subclass_model(kwargs)
+        return model(**kwargs)
+
     @classmethod
     def create_subclass(cls, name, schema):
-        attrs = {'Meta': cls._meta}
+        attrs = {
+            'Meta': cls._meta,
+            '__new__': Model.__new__,  # We don't want to have maximum recursion depth exceeded error
+        }
 
         for field in schema:
             field_type = field.get('type')
@@ -731,6 +749,37 @@ class Object(Model):
             registry.add(name, subclass)
 
         return subclass
+
+    @classmethod
+    def get_subclass_name(cls, properties):
+        instance_name = properties.get('instance_name', '')
+        class_name = properties.get('class_name', '')
+        return get_class_name(instance_name, class_name, 'object')
+
+    @classmethod
+    def get_class_schema(cls, properties):
+        instance_name = properties.get('instance_name', '')
+        class_name = properties.get('class_name', '')
+        parent = cls._meta.parent
+        class_ = parent.please.get(instance_name, class_name)
+        return class_.schema
+
+    @classmethod
+    def get_subclass_model(cls, properties):
+        """Creates custom :class:`~syncano.models.base.Object` sub-class definition based on passed ``properties``."""
+        model_name = cls.get_subclass_name(properties)
+
+        if cls.__name__ == model_name:
+            return cls
+
+        try:
+            model = registry.get_model_by_name(model_name)
+        except LookupError:
+            schema = cls.get_class_schema(properties)
+            model = cls.create_subclass(model_name, schema)
+            registry.add(model_name, model)
+
+        return model
 
 
 class Trigger(Model):

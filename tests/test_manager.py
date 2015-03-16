@@ -460,7 +460,7 @@ class ObjectManagerTestCase(unittest.TestCase):
         self.model = Object
         self.manager = Object.please
 
-    @mock.patch('syncano.models.manager.ObjectManager.get_class_model')
+    @mock.patch('syncano.models.manager.ObjectManager.model.get_subclass_model')
     def test_create(self, get_model_mock):
         model_mock = mock.MagicMock()
         model_mock.return_value = model_mock
@@ -479,46 +479,48 @@ class ObjectManagerTestCase(unittest.TestCase):
         model_mock.save.assert_called_once_with()
         get_model_mock.assert_called_once_with({'a': 1, 'b': 2})
 
-    @mock.patch('syncano.models.manager.ObjectManager.get_class_model')
-    def test_serialize(self, get_model_mock):
+    @mock.patch('syncano.models.manager.ObjectManager.model')
+    def test_serialize(self, model_mock):
+        get_model_mock = model_mock.get_model
         get_model_mock.return_value = mock.Mock
 
         self.assertFalse(get_model_mock.called)
         self.manager.serialize({})
         self.assertTrue(get_model_mock.called)
 
-    @mock.patch('syncano.models.base.Object.create_subclass')
-    @mock.patch('syncano.models.manager.ObjectManager.get_class_schema')
-    @mock.patch('syncano.models.manager.registry.get_model_by_name')
-    @mock.patch('syncano.models.manager.get_class_name')
-    def test_get_class_model(self, get_class_name_mock, get_model_by_name_mock,
-                             get_class_schema_mock, create_subclass_mock):
+    # @mock.patch('syncano.models.base.Object.create_subclass')
+    # @mock.patch('syncano.models.base.Object.get_class_schema')
+    # @mock.patch('syncano.models.manager.registry.get_model_by_name')
+    # @mock.patch('syncano.models.base.Object.get_subclass_name')
+    # def test_model.get_subclass_model(self, get_subclass_name_mock, get_model_by_name_mock,
+    #                          get_class_schema_mock, create_subclass_mock):
 
-        create_subclass_mock.return_value = create_subclass_mock
-        get_class_name_mock.side_effect = [
-            'Object',
-            'DummyObject',
-            'DummyObject',
-        ]
+    #     create_subclass_mock.return_value = create_subclass_mock
+    #     get_subclass_name_mock.side_effect = [
+    #         'Object',
+    #         'DummyObject',
+    #         'DummyObject',
+    #     ]
 
-        get_model_by_name_mock.side_effect = [
-            self.manager.model,
-            LookupError
-        ]
+    #     get_model_by_name_mock.side_effect = [
+    #         self.manager.model,
+    #         LookupError
+    #     ]
 
-        result = self.manager.get_class_model({})
-        self.assertEqual(self.manager.model, result)
+    #     result = self.manager.model.get_subclass_model({})
+    #     self.assertEqual(self.manager.model, result)
 
-        result = self.manager.get_class_model({})
-        self.assertEqual(self.manager.model, result)
+    #     result = self.manager.model.get_subclass_model({})
+    #     self.assertEqual(self.manager.model, result)
 
-        result = self.manager.get_class_model({})
-        self.assertEqual(create_subclass_mock, result)
+    #     result = self.manager.model.get_subclass_model({})
+    #     self.assertEqual(create_subclass_mock, result)
 
     @mock.patch('syncano.models.manager.ObjectManager._clone')
-    @mock.patch('syncano.models.manager.ObjectManager.get_class_model')
-    def test_filter(self, get_class_model_mock, clone_mock):
-        get_class_model_mock.return_value = Instance
+    @mock.patch('syncano.models.manager.ObjectManager.model')
+    def test_filter(self, model_mock, clone_mock):
+        get_subclass_model_mock = model_mock.get_subclass_model
+        get_subclass_model_mock.return_value = Instance
         clone_mock.return_value = self.manager
 
         self.manager.filter(name='test')
