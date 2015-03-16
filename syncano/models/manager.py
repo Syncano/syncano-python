@@ -240,8 +240,8 @@ class Manager(ConnectionMixin):
             instance = Instance.please.update('test-one', data={'description': 'new one'})
             instance = Instance.please.update(name='test-one', data={'description': 'new one'})
         """
-        self.method = 'PUT'
         self.endpoint = 'detail'
+        self.method = self.get_allowed_method('PUT', 'PATCH', 'POST')
         self.data = kwargs.pop('data')
         self._filter(*args, **kwargs)
         return self.request()
@@ -448,7 +448,12 @@ class Manager(ConnectionMixin):
         """Internal method, which calls Syncano API and returns serialized data."""
         meta = self.model._meta
         method = method or self.method
+        allowed_methods = meta.get_endpoint_methods(self.endpoint)
         path = path or meta.resolve_endpoint(self.endpoint, self.properties)
+
+        if method.lower() not in allowed_methods:
+            methods = ', '.join(allowed_methods)
+            raise SyncanoValueError('Unsupported request method "{0}" allowed are {1}.'.format(method, methods))
 
         if 'params' not in request and self.query:
             request['params'] = self.query
@@ -467,6 +472,17 @@ class Manager(ConnectionMixin):
             return self.serialize(response)
 
         return response
+
+    def get_allowed_method(self, *methods):
+        meta = self.model._meta
+        allowed_methods = meta.get_endpoint_methods(self.endpoint)
+
+        for method in methods:
+            if method.lower() in allowed_methods:
+                return method
+
+        methods = ', '.join(methods)
+        raise SyncanoValueError('Unsupported request methods {0}.'.format(methods))
 
     def iterator(self):
         """Pagination handler"""
