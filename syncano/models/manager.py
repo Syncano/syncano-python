@@ -5,10 +5,9 @@ from functools import wraps
 import six
 
 from syncano.connection import ConnectionMixin
-from syncano.exceptions import SyncanoValueError, SyncanoRequestError
-from syncano.utils import get_class_name
-from .registry import registry
+from syncano.exceptions import SyncanoRequestError, SyncanoValueError
 
+from .registry import registry
 
 # The maximum number of items to display in a Manager.__repr__
 REPR_OUTPUT_SIZE = 20
@@ -567,40 +566,15 @@ class ObjectManager(Manager):
         attrs = kwargs.copy()
         attrs.update(self.properties)
 
-        model = self.get_class_model(kwargs)
+        model = self.model.get_subclass_model(**kwargs)
         instance = model(**attrs)
         instance.save()
 
         return instance
 
     def serialize(self, data, model=None):
-        model = self.get_class_model(self.properties)
+        model = self.model.get_subclass_model(**self.properties)
         return super(ObjectManager, self).serialize(data, model)
-
-    def get_class_model(self, properties):
-        """Creates custom :class:`~syncano.models.base.Object` sub-class definition based on passed ``properties``."""
-        instance_name = properties.get('instance_name', '')
-        class_name = properties.get('class_name', '')
-        model_name = get_class_name(instance_name, class_name, 'object')
-
-        if self.model.__name__ == model_name:
-            return self.model
-
-        try:
-            model = registry.get_model_by_name(model_name)
-        except LookupError:
-            schema = self.get_class_schema(properties)
-            model = self.model.create_subclass(model_name, schema)
-            registry.add(model_name, model)
-
-        return model
-
-    def get_class_schema(self, properties):
-        instance_name = properties.get('instance_name', '')
-        class_name = properties.get('class_name', '')
-        parent = self.model._meta.parent
-        class_ = parent.please.get(instance_name, class_name)
-        return class_.schema
 
     @clone
     def filter(self, **kwargs):
@@ -612,7 +586,7 @@ class ObjectManager(Manager):
             objects = Object.please.list('instance-name', 'class-name').filter(henryk__gte='hello')
         """
         query = {}
-        model = self.get_class_model(self.properties)
+        model = self.model.get_subclass_model(**self.properties)
 
         for field_name, value in six.iteritems(kwargs):
             lookup = 'eq'

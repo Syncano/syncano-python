@@ -1,13 +1,12 @@
 import json
-from urlparse import urljoin
 from copy import deepcopy
+from urlparse import urljoin
 
 import requests
 import six
 
 import syncano
-from syncano.exceptions import SyncanoValueError, SyncanoRequestError
-
+from syncano.exceptions import SyncanoRequestError, SyncanoValueError
 
 __all__ = ['default_connection', 'Connection', 'ConnectionMixin']
 

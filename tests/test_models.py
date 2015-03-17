@@ -1,16 +1,16 @@
 import unittest
 from datetime import datetime
 
+from syncano.exceptions import SyncanoValidationError, SyncanoValueError
+from syncano.models import (
+    CodeBox, Instance, Object, Trace,
+    Webhook, WebhookResult
+)
+
 try:
     from unittest import mock
 except ImportError:
     import mock
-
-from syncano.exceptions import SyncanoValidationError
-from syncano.models import (
-    Instance, Webhook, CodeBox,
-    Object, Trace, WebhookResult
-)
 
 
 class ModelTestCase(unittest.TestCase):
@@ -215,7 +215,6 @@ class CodeBoxTestCase(unittest.TestCase):
 class ObjectTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.model = Object()
         self.schema = [
             {
                 'name': 'title',
@@ -243,6 +242,23 @@ class ObjectTestCase(unittest.TestCase):
                 'target': 'Author'
             }
         ]
+
+    @mock.patch('syncano.models.base.Object.get_subclass_model')
+    def test_new(self, get_subclass_model_mock):
+        get_subclass_model_mock.return_value = Instance
+        self.assertFalse(get_subclass_model_mock.called)
+
+        with self.assertRaises(SyncanoValueError):
+            Object()
+
+        with self.assertRaises(SyncanoValueError):
+            Object(instance_name='dummy')
+
+        self.assertFalse(get_subclass_model_mock.called)
+        o = Object(instance_name='dummy', class_name='dummy', x=1, y=2)
+        self.assertIsInstance(o, Instance)
+        self.assertTrue(get_subclass_model_mock.called)
+        get_subclass_model_mock.assert_called_once_with('dummy', 'dummy')
 
     def test_create_subclass(self):
         SubClass = Object.create_subclass('Test', self.schema)
@@ -289,6 +305,49 @@ class ObjectTestCase(unittest.TestCase):
         self.assertEqual(registry_mock.get_model_by_name.call_count, 2)
         self.assertEqual(registry_mock.add.call_count, 1)
         self.assertEqual(create_subclass_mock.call_count, 1)
+
+    def test_get_subclass_name(self):
+        self.assertEqual(Object.get_subclass_name('', ''), 'Object')
+        self.assertEqual(Object.get_subclass_name('duMMY', ''), 'DummyObject')
+        self.assertEqual(Object.get_subclass_name('', 'ClS'), 'ClsObject')
+        self.assertEqual(Object.get_subclass_name('duMMy', 'CLS'), 'DummyClsObject')
+
+    @mock.patch('syncano.models.Manager.get')
+    def test_get_class_schema(self, get_mock):
+        get_mock.return_value = get_mock
+        self.assertFalse(get_mock.called)
+        result = Object.get_class_schema('dummy-instance', 'dummy-class')
+        self.assertTrue(get_mock.called)
+        self.assertEqual(result, get_mock.schema)
+        get_mock.assert_called_once_with('dummy-instance', 'dummy-class')
+
+    @mock.patch('syncano.models.base.Object.create_subclass')
+    @mock.patch('syncano.models.base.Object.get_class_schema')
+    @mock.patch('syncano.models.manager.registry.get_model_by_name')
+    @mock.patch('syncano.models.base.Object.get_subclass_name')
+    def test_get_subclass_model(self, get_subclass_name_mock, get_model_by_name_mock,
+                                get_class_schema_mock, create_subclass_mock):
+
+        create_subclass_mock.return_value = create_subclass_mock
+        get_subclass_name_mock.side_effect = [
+            'Object',
+            'DummyObject',
+            'DummyObject',
+        ]
+
+        get_model_by_name_mock.side_effect = [
+            Object,
+            LookupError
+        ]
+
+        result = Object.get_subclass_model('', '')
+        self.assertEqual(Object, result)
+
+        result = Object.get_subclass_model('', '')
+        self.assertEqual(Object, result)
+
+        result = Object.get_subclass_model('', '')
+        self.assertEqual(create_subclass_mock, result)
 
 
 class WebhookTestCase(unittest.TestCase):
