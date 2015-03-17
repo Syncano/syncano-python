@@ -1,16 +1,16 @@
 import unittest
 from datetime import datetime
 
+from syncano.exceptions import SyncanoValidationError, SyncanoValueError
+from syncano.models import (
+    CodeBox, Instance, Object, Trace,
+    Webhook, WebhookResult
+)
+
 try:
     from unittest import mock
 except ImportError:
     import mock
-
-from syncano.exceptions import SyncanoValidationError, SyncanoValueError
-from syncano.models import (
-    Instance, Webhook, CodeBox,
-    Object, Trace, WebhookResult
-)
 
 
 class ModelTestCase(unittest.TestCase):

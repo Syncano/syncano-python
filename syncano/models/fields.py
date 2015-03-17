@@ -8,6 +8,7 @@ import validictory
 from syncano import logger
 from syncano.exceptions import SyncanoFieldError, SyncanoValueError
 from syncano.utils import force_text
+
 from .manager import RelatedManagerDescriptor, SchemaManager
 from .registry import registry
 

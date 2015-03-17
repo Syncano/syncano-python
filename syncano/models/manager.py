@@ -5,9 +5,9 @@ from functools import wraps
 import six
 
 from syncano.connection import ConnectionMixin
-from syncano.exceptions import SyncanoValueError, SyncanoRequestError
-from .registry import registry
+from syncano.exceptions import SyncanoRequestError, SyncanoValueError
 
+from .registry import registry
 
 # The maximum number of items to display in a Manager.__repr__
 REPR_OUTPUT_SIZE = 20

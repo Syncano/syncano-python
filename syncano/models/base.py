@@ -6,11 +6,12 @@ from datetime import datetime
 
 import six
 
-from syncano.exceptions import SyncanoValidationError, SyncanoDoesNotExist
+from syncano.exceptions import SyncanoDoesNotExist, SyncanoValidationError
 from syncano.utils import get_class_name
+
 from . import fields
+from .manager import CodeBoxManager, Manager, ObjectManager, WebhookManager
 from .options import Options
-from .manager import Manager, WebhookManager, ObjectManager, CodeBoxManager
 from .registry import registry
 
 
