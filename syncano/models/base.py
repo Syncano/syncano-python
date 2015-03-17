@@ -721,7 +721,7 @@ class Object(Model):
         if not class_name:
             raise SyncanoValidationError('Field "class_name" is required.')
 
-        model = cls.get_subclass_model(kwargs)
+        model = cls.get_subclass_model(instance_name, class_name)
         return model(**kwargs)
 
     @classmethod
@@ -751,23 +751,22 @@ class Object(Model):
         return subclass
 
     @classmethod
-    def get_subclass_name(cls, properties):
-        instance_name = properties.get('instance_name', '')
-        class_name = properties.get('class_name', '')
+    def get_subclass_name(cls, instance_name, class_name):
         return get_class_name(instance_name, class_name, 'object')
 
     @classmethod
-    def get_class_schema(cls, properties):
-        instance_name = properties.get('instance_name', '')
-        class_name = properties.get('class_name', '')
+    def get_class_schema(cls, instance_name, class_name):
         parent = cls._meta.parent
         class_ = parent.please.get(instance_name, class_name)
         return class_.schema
 
     @classmethod
-    def get_subclass_model(cls, properties):
-        """Creates custom :class:`~syncano.models.base.Object` sub-class definition based on passed ``properties``."""
-        model_name = cls.get_subclass_name(properties)
+    def get_subclass_model(cls, instance_name, class_name):
+        """
+        Creates custom :class:`~syncano.models.base.Object` sub-class definition based
+        on passed **instance_name** and **class_name**.
+        """
+        model_name = cls.get_subclass_name(instance_name, class_name)
 
         if cls.__name__ == model_name:
             return cls
@@ -775,7 +774,7 @@ class Object(Model):
         try:
             model = registry.get_model_by_name(model_name)
         except LookupError:
-            schema = cls.get_class_schema(properties)
+            schema = cls.get_class_schema(instance_name, class_name)
             model = cls.create_subclass(model_name, schema)
             registry.add(model_name, model)
 
