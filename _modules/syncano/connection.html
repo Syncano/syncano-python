@@ -128,15 +128,14 @@
             
   <h1>Source code for syncano.connection</h1><div class="highlight"><pre>
 <span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">from</span> <span class="nn">urlparse</span> <span class="kn">import</span> <span class="n">urljoin</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">urlparse</span> <span class="kn">import</span> <span class="n">urljoin</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">six</span>
 
 <span class="kn">import</span> <span class="nn">syncano</span>
-<span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoValueError</span><span class="p">,</span> <span class="n">SyncanoRequestError</span>
-
+<span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoRequestError</span><span class="p">,</span> <span class="n">SyncanoValueError</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;default_connection&#39;</span><span class="p">,</span> <span class="s">&#39;Connection&#39;</span><span class="p">,</span> <span class="s">&#39;ConnectionMixin&#39;</span><span class="p">]</span>
 

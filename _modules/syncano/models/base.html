@@ -135,10 +135,12 @@
 
 <span class="kn">import</span> <span class="nn">six</span>
 
-<span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoValidationError</span><span class="p">,</span> <span class="n">SyncanoDoesNotExist</span>
+<span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoDoesNotExist</span><span class="p">,</span> <span class="n">SyncanoValidationError</span>
+<span class="kn">from</span> <span class="nn">syncano.utils</span> <span class="kn">import</span> <span class="n">get_class_name</span>
+
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">.manager</span> <span class="kn">import</span> <span class="n">CodeBoxManager</span><span class="p">,</span> <span class="n">Manager</span><span class="p">,</span> <span class="n">ObjectManager</span><span class="p">,</span> <span class="n">WebhookManager</span>
 <span class="kn">from</span> <span class="nn">.options</span> <span class="kn">import</span> <span class="n">Options</span>
-<span class="kn">from</span> <span class="nn">.manager</span> <span class="kn">import</span> <span class="n">Manager</span><span class="p">,</span> <span class="n">WebhookManager</span><span class="p">,</span> <span class="n">ObjectManager</span><span class="p">,</span> <span class="n">CodeBoxManager</span>
 <span class="kn">from</span> <span class="nn">.registry</span> <span class="kn">import</span> <span class="n">registry</span>
 
 
@@ -838,9 +840,26 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">instance_name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance_name&#39;</span><span class="p">)</span>
+        <span class="n">class_name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;class_name&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">instance_name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span><span class="s">&#39;Field &quot;instance_name&quot; is required.&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">class_name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span><span class="s">&#39;Field &quot;class_name&quot; is required.&#39;</span><span class="p">)</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">get_subclass_model</span><span class="p">(</span><span class="n">instance_name</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="Object.create_subclass"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Object.create_subclass">[docs]</a>    <span class="k">def</span> <span class="nf">create_subclass</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">schema</span><span class="p">):</span>
-        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;Meta&#39;</span><span class="p">:</span> <span class="n">cls</span><span class="o">.</span><span class="n">_meta</span><span class="p">}</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;Meta&#39;</span><span class="p">:</span> <span class="n">cls</span><span class="o">.</span><span class="n">_meta</span><span class="p">,</span>
+            <span class="s">&#39;__new__&#39;</span><span class="p">:</span> <span class="n">Model</span><span class="o">.</span><span class="n">__new__</span><span class="p">,</span>  <span class="c"># We don&#39;t want to have maximum recursion depth exceeded error</span>
+        <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">schema</span><span class="p">:</span>
             <span class="n">field_type</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;type&#39;</span><span class="p">)</span>
@@ -860,6 +879,36 @@
             <span class="n">registry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">subclass</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">subclass</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Object.get_subclass_name"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Object.get_subclass_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_subclass_name</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">instance_name</span><span class="p">,</span> <span class="n">class_name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">get_class_name</span><span class="p">(</span><span class="n">instance_name</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="s">&#39;object&#39;</span><span class="p">)</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Object.get_class_schema"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Object.get_class_schema">[docs]</a>    <span class="k">def</span> <span class="nf">get_class_schema</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">instance_name</span><span class="p">,</span> <span class="n">class_name</span><span class="p">):</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">parent</span>
+        <span class="n">class_</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">instance_name</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">class_</span><span class="o">.</span><span class="n">schema</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Object.get_subclass_model"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Object.get_subclass_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_subclass_model</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">instance_name</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates custom :class:`~syncano.models.base.Object` sub-class definition based</span>
+<span class="sd">        on passed **instance_name** and **class_name**.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">get_subclass_name</span><span class="p">(</span><span class="n">instance_name</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="n">model_name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cls</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">get_model_by_name</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">LookupError</span><span class="p">:</span>
+            <span class="n">schema</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">get_class_schema</span><span class="p">(</span><span class="n">instance_name</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">create_subclass</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
+            <span class="n">registry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">model</span>
 
 </div></div>
 <div class="viewcode-block" id="Trigger"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Trigger">[docs]</a><span class="k">class</span> <span class="nc">Trigger</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
