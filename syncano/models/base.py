@@ -762,7 +762,7 @@ class Object(Model):
         return class_.schema
 
     @classmethod
-    def get_subclass_model(cls, instance_name, class_name):
+    def get_subclass_model(cls, instance_name, class_name, **kwargs):
         """
         Creates custom :class:`~syncano.models.base.Object` sub-class definition based
         on passed **instance_name** and **class_name**.

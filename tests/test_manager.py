@@ -477,15 +477,18 @@ class ObjectManagerTestCase(unittest.TestCase):
 
         model_mock.assert_called_once_with(a=1, b=2)
         model_mock.save.assert_called_once_with()
-        get_subclass_model_mock.assert_called_once_with({'a': 1, 'b': 2})
+        get_subclass_model_mock.assert_called_once_with(a=1, b=2)
 
     @mock.patch('syncano.models.base.Object.get_subclass_model')
     def test_serialize(self, get_subclass_model_mock):
         get_subclass_model_mock.return_value = mock.Mock
+        self.manager.properties['instance_name'] = 'test'
+        self.manager.properties['class_name'] = 'test'
 
         self.assertFalse(get_subclass_model_mock.called)
         self.manager.serialize({})
         self.assertTrue(get_subclass_model_mock.called)
+        get_subclass_model_mock.assert_called_once_with(instance_name='test', class_name='test')
 
     @mock.patch('syncano.models.manager.ObjectManager._clone')
     @mock.patch('syncano.models.base.Object.get_subclass_model')

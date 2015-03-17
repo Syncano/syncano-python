@@ -566,14 +566,14 @@ class ObjectManager(Manager):
         attrs = kwargs.copy()
         attrs.update(self.properties)
 
-        model = self.model.get_subclass_model(kwargs)
+        model = self.model.get_subclass_model(**kwargs)
         instance = model(**attrs)
         instance.save()
 
         return instance
 
     def serialize(self, data, model=None):
-        model = self.model.get_subclass_model(self.properties)
+        model = self.model.get_subclass_model(**self.properties)
         return super(ObjectManager, self).serialize(data, model)
 
     @clone
@@ -586,7 +586,7 @@ class ObjectManager(Manager):
             objects = Object.please.list('instance-name', 'class-name').filter(henryk__gte='hello')
         """
         query = {}
-        model = self.model.get_subclass_model(self.properties)
+        model = self.model.get_subclass_model(**self.properties)
 
         for field_name, value in six.iteritems(kwargs):
             lookup = 'eq'
