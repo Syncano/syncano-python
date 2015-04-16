@@ -874,6 +874,8 @@ class Webhook(Model):
 
     slug = fields.SlugField(max_length=50, primary_key=True)
     codebox = fields.IntegerField(label='codebox id')
+    public = fields.BooleanField(required=False, default=False)
+    public_link = fields.ChoiceField(required=False, read_only=True)
     links = fields.HyperlinkedField(links=LINKS)
 
     please = WebhookManager()
@@ -892,6 +894,10 @@ class Webhook(Model):
             'run': {
                 'methods': ['post'],
                 'path': '/webhooks/{slug}/run/',
+            },
+            'public': {
+                'methods': ['get'],
+                'path': 'webhooks/p/{public_link}/',
             }
         }
 
