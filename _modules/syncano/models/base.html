@@ -1003,6 +1003,8 @@
 
     <span class="n">slug</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">codebox</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;codebox id&#39;</span><span class="p">)</span>
+    <span class="n">public</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">public_link</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
 
     <span class="n">please</span> <span class="o">=</span> <span class="n">WebhookManager</span><span class="p">()</span>
@@ -1021,6 +1023,10 @@
             <span class="s">&#39;run&#39;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">],</span>
                 <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/webhooks/{slug}/run/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;public&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;webhooks/p/{public_link}/&#39;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
