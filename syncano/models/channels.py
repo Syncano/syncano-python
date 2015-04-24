@@ -111,12 +111,7 @@ class Channel(Model):
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('publish', properties)
         connection = self._get_connection()
-        request = {
-            'data': {
-                'payload': json.dumps(payload),
-                'room': room,
-            }
-        }
+        request = {'data': Message(payload=payload, room=room).to_native()}
         response = connection.request('POST', endpoint, **request)
         return Message(**response)
 
@@ -129,12 +124,12 @@ class Message(Model):
         {'display_name': 'delete', 'value': 3},
     )
 
-    room = fields.StringField(max_length=50)
+    room = fields.StringField(max_length=50, required=False)
     action = fields.ChoiceField(choices=ACTION_CHOICES, read_only=True)
     author = fields.JSONField(required=False, read_only=True)
     metadata = fields.JSONField(required=False, read_only=True)
     payload = fields.JSONField()
-    created_at = fields.DateTimeField()
+    created_at = fields.DateTimeField(required=False, read_only=True)
 
     class Meta:
         parent = Channel
