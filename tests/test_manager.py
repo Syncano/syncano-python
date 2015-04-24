@@ -1,19 +1,16 @@
 import unittest
 from datetime import datetime
 
+from syncano.exceptions import (SyncanoDoesNotExist, SyncanoRequestError,
+                                SyncanoValueError)
+from syncano.models.base import (CodeBox, Instance, Object, Trace, Webhook,
+                                 WebhookResult)
+
 try:
     from unittest import mock
 except ImportError:
     import mock
 
-from syncano.exceptions import (
-    SyncanoValueError, SyncanoRequestError,
-    SyncanoDoesNotExist
-)
-from syncano.models.base import (
-    Instance, CodeBox, Webhook,
-    Object, Trace, WebhookResult
-)
 
 
 class CloneTestCase(unittest.TestCase):
