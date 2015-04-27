@@ -14,7 +14,7 @@ class PollThread(Thread):
         self.callback = callback
         self.error = error
         self.abort = False
-        self.timeout = kwargs.pop('timeout', 60)
+        self.timeout = kwargs.pop('timeout', None) or 60 * 5
         self.last_id = kwargs.pop('last_id', None)
         self.room = kwargs.pop('room', None)
         super(PollThread, self).__init__(*args, **kwargs)
@@ -54,6 +54,35 @@ class PollThread(Thread):
 
 
 class Channel(Model):
+    """
+    .. _long polling: http://en.wikipedia.org/wiki/Push_technology#Long_polling
+
+    OO wrapper around channels `endpoint <TODO>`_.
+
+    :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar type: :class:`~syncano.models.fields.ChoiceField`
+    :ivar group: :class:`~syncano.models.fields.IntegerField`
+    :ivar group_permissions: :class:`~syncano.models.fields.ChoiceField`
+    :ivar other_permissions: :class:`~syncano.models.fields.ChoiceField`
+    :ivar custom_publish: :class:`~syncano.models.fields.BooleanField`
+
+    .. note::
+        **Channel** has two special methods called ``publish`` and ``poll``.
+        First one will send message to the channel::
+
+            >>> channel = Channel.please.get('instance-name', 'channel-name')
+            >>> channel.publish({"x": 1})
+
+        second one will create `long polling`_ connection which will listen for messages::
+
+            >>> def callback(message=None):
+            ...    print message
+            ...    return True
+
+            >>> channel = Channel.please.get('instance-name', 'channel-name')
+            >>> channel.poll(callback=callback)
+    """
+
     TYPE_CHOICES = (
         {'display_name': 'Default', 'value': 0},
         {'display_name': 'Separate rooms', 'value': 1},
@@ -97,12 +126,12 @@ class Channel(Model):
             },
         }
 
-    def poll(self, room=None, last_id=None, callback=None, error=None):
+    def poll(self, room=None, last_id=None, callback=None, error=None, timeout=None):
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('poll', properties)
         connection = self._get_connection()
 
-        thread = PollThread(connection, endpoint, callback, error,
+        thread = PollThread(connection, endpoint, callback, error, timeout=timeout,
                             last_id=last_id, room=room, name='poll_%s' % self.name)
         thread.start()
         return thread.stop
@@ -117,6 +146,17 @@ class Channel(Model):
 
 
 class Message(Model):
+    """
+    OO wrapper around channel hisotry `endpoint <TODO>`_.
+
+    :ivar room: :class:`~syncano.models.fields.StringField`
+    :ivar action: :class:`~syncano.models.fields.ChoiceField`
+    :ivar author: :class:`~syncano.models.fields.JSONField`
+    :ivar metadata: :class:`~syncano.models.fields.JSONField`
+    :ivar payload: :class:`~syncano.models.fields.JSONField`
+    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
+    """
+
     ACTION_CHOICES = (
         {'display_name': 'custom', 'value': 0},
         {'display_name': 'create', 'value': 1},
