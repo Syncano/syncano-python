@@ -12,7 +12,6 @@ except ImportError:
     import mock
 
 
-
 class CloneTestCase(unittest.TestCase):
     pass
 

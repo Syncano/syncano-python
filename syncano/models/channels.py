@@ -1,14 +1,15 @@
-import json
 from threading import Thread
 
+import six
 from requests import Timeout
+
 from syncano import logger
 
 from .base import Instance, Model, fields
 
 
 class PollThread(Thread):
-    def __init__(self, connection, endpoint, callback, error, *args, **kwargs):
+    def __init__(self, connection, endpoint, callback, error=None, *args, **kwargs):
         self.connection = connection
         self.endpoint = endpoint
         self.callback = callback
@@ -20,6 +21,12 @@ class PollThread(Thread):
         super(PollThread, self).__init__(*args, **kwargs)
 
         logger.debug('PollThread: %s created.', self.getName())
+
+    def __str__(self):
+        return '<PollThread: %s>' % self.getName()
+
+    def __unicode__(self):
+        return six.u(str(self))
 
     def request(self):
         kwargs = {
@@ -33,16 +40,16 @@ class PollThread(Thread):
             try:
                 response = self.request()
             except Timeout as e:
-                logger.debug('<PollThread: %s> Timeout.', self.getName())
+                logger.debug('%s Timeout.', self)
                 if not self.callback(None):
                     self.stop()
             except Exception as e:
-                logger.error('<PollThread: %s> Error "%s"', self.getName(), e)
+                logger.error('%s Error "%s"', self, e)
                 if self.error:
                     self.error(e)
                 return
             else:
-                logger.debug('<PollThread: %s> Message "%s"', self.getName(), response['id'])
+                logger.debug('%s Message "%s"', self, response['id'])
                 self.last_id = response['id']
                 if not self.callback(Message(**response)):
                     self.stop()

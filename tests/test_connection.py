@@ -11,7 +11,6 @@ except ImportError:
     import mock
 
 
-
 class ConnectTestCase(unittest.TestCase):
 
     @mock.patch('syncano.models.registry')
