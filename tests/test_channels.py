@@ -47,10 +47,9 @@ class PollThreadTestCase(unittest.TestCase):
         request_mock.return_value = {'id': 1}
         self.assertFalse(request_mock.called)
         self.assertFalse(self.callback_mock.called)
-        self.thread.start()
+        self.thread.run()
         self.assertTrue(request_mock.called)
         self.assertTrue(self.callback_mock.called)
-        self.thread.stop()
 
     @mock.patch('syncano.models.channels.PollThread.request')
     def test_run_timeout(self, request_mock):
@@ -58,11 +57,10 @@ class PollThreadTestCase(unittest.TestCase):
         self.assertFalse(request_mock.called)
         self.assertFalse(self.callback_mock.called)
         self.assertFalse(self.error_mock.called)
-        self.thread.start()
+        self.thread.run()
         self.assertTrue(request_mock.called)
         self.assertTrue(self.callback_mock.called)
         self.assertFalse(self.error_mock.called)
-        self.thread.stop()
 
     @mock.patch('syncano.models.channels.PollThread.request')
     def test_run_error(self, request_mock):
@@ -70,11 +68,10 @@ class PollThreadTestCase(unittest.TestCase):
         self.assertFalse(request_mock.called)
         self.assertFalse(self.callback_mock.called)
         self.assertFalse(self.error_mock.called)
-        self.thread.start()
+        self.thread.run()
         self.assertTrue(request_mock.called)
         self.assertFalse(self.callback_mock.called)
         self.assertTrue(self.error_mock.called)
-        self.thread.stop()
 
 
 class ChannelTestCase(unittest.TestCase):

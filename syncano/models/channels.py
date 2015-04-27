@@ -20,7 +20,7 @@ class PollThread(Thread):
         self.room = kwargs.pop('room', None)
         super(PollThread, self).__init__(*args, **kwargs)
 
-        logger.debug('PollThread: %s created.', self.getName())
+        logger.debug('%s created.', self)
 
     def __str__(self):
         return '<PollThread: %s>' % self.getName()
@@ -43,6 +43,7 @@ class PollThread(Thread):
                 logger.debug('%s Timeout.', self)
                 if not self.callback(None):
                     self.stop()
+
             except Exception as e:
                 logger.error('%s Error "%s"', self, e)
                 if self.error:
