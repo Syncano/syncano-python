@@ -1,6 +1,6 @@
 import unittest
 
-from syncano.models.channels import PollThread, Channel, Timeout
+from syncano.models.channels import Channel, PollThread, Timeout
 
 try:
     from unittest import mock
