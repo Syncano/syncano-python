@@ -566,7 +566,7 @@ class ObjectManager(Manager):
         attrs = kwargs.copy()
         attrs.update(self.properties)
 
-        model = self.model.get_subclass_model(**kwargs)
+        model = self.model.get_subclass_model(**attrs)
         instance = model(**attrs)
         instance.save()
 
