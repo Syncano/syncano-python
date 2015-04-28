@@ -12,7 +12,7 @@ dependencies:
 test:
   override:
     - flake8 .
-    - isort --recursive --check-only .
+    - isort --recursive --check-only ./syncano/
     - coverage run -m tests
   post:
     - coverage html
