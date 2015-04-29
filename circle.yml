@@ -11,8 +11,8 @@ dependencies:
 
 test:
   override:
-    - coverage run -m tests
     - flake8 .
+    - coverage run -m tests
   post:
     - coverage html
 

@@ -1,7 +1,7 @@
 import os
 import unittest
-import xmlrunner
 
+import xmlrunner
 
 if __name__ == '__main__':
     output = os.path.join(os.getenv('CIRCLE_TEST_REPORTS', ''), 'junit')

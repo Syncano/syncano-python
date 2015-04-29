@@ -1,14 +1,14 @@
 import unittest
 from urlparse import urljoin
 
+from syncano import connect, connect_instance
+from syncano.connection import Connection, ConnectionMixin, default_connection
+from syncano.exceptions import SyncanoRequestError, SyncanoValueError
+
 try:
     from unittest import mock
 except ImportError:
     import mock
-
-from syncano import connect, connect_instance
-from syncano.connection import Connection, ConnectionMixin, default_connection
-from syncano.exceptions import SyncanoValueError, SyncanoRequestError
 
 
 class ConnectTestCase(unittest.TestCase):
