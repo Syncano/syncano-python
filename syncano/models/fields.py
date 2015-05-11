@@ -187,6 +187,19 @@ class IntegerField(WritableField):
             raise self.ValidationError('Invalid value. Value should be an integer.')
 
 
+class ReferenceField(WritableField):
+
+    def to_python(self, value):
+        if value is None:
+            return value
+
+        target_id = value['value']
+        try:
+            return int(target_id)
+        except (TypeError, ValueError):
+            raise self.ValidationError('Invalid value. Value should be an integer.')
+
+
 class FloatField(WritableField):
 
     def to_python(self, value):
@@ -543,7 +556,7 @@ MAPPING = {
     'text': StringField,
     'file': StringField,
     'ref': StringField,
-    'reference': IntegerField,
+    'reference': ReferenceField,
     'integer': IntegerField,
     'float': FloatField,
     'boolean': BooleanField,
