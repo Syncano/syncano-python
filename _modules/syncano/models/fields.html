@@ -316,6 +316,19 @@
             <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s">&#39;Invalid value. Value should be an integer.&#39;</span><span class="p">)</span>
 
 </div></div>
+<div class="viewcode-block" id="ReferenceField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.ReferenceField">[docs]</a><span class="k">class</span> <span class="nc">ReferenceField</span><span class="p">(</span><span class="n">WritableField</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ReferenceField.to_python"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.ReferenceField.to_python">[docs]</a>    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="n">target_id</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s">&#39;value&#39;</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">target_id</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s">&#39;Invalid value. Value should be an integer.&#39;</span><span class="p">)</span>
+
+</div></div>
 <div class="viewcode-block" id="FloatField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.FloatField">[docs]</a><span class="k">class</span> <span class="nc">FloatField</span><span class="p">(</span><span class="n">WritableField</span><span class="p">):</span>
 
 <div class="viewcode-block" id="FloatField.to_python"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.FloatField.to_python">[docs]</a>    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -672,7 +685,7 @@
     <span class="s">&#39;text&#39;</span><span class="p">:</span> <span class="n">StringField</span><span class="p">,</span>
     <span class="s">&#39;file&#39;</span><span class="p">:</span> <span class="n">StringField</span><span class="p">,</span>
     <span class="s">&#39;ref&#39;</span><span class="p">:</span> <span class="n">StringField</span><span class="p">,</span>
-    <span class="s">&#39;reference&#39;</span><span class="p">:</span> <span class="n">IntegerField</span><span class="p">,</span>
+    <span class="s">&#39;reference&#39;</span><span class="p">:</span> <span class="n">ReferenceField</span><span class="p">,</span>
     <span class="s">&#39;integer&#39;</span><span class="p">:</span> <span class="n">IntegerField</span><span class="p">,</span>
     <span class="s">&#39;float&#39;</span><span class="p">:</span> <span class="n">FloatField</span><span class="p">,</span>
     <span class="s">&#39;boolean&#39;</span><span class="p">:</span> <span class="n">BooleanField</span><span class="p">,</span>
