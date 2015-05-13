@@ -187,17 +187,18 @@ class IntegerField(WritableField):
             raise self.ValidationError('Invalid value. Value should be an integer.')
 
 
-class ReferenceField(WritableField):
+class ReferenceField(IntegerField):
 
     def to_python(self, value):
-        if value is None:
+        if isinstance(value, int):
             return value
 
-        target_id = value['value']
-        try:
-            return int(target_id)
-        except (TypeError, ValueError):
-            raise self.ValidationError('Invalid value. Value should be an integer.')
+        if isinstance(value, dict) and 'value' in value:
+            value = value['value']
+        elif hasattr(value, 'pk') and isinstance(value.pk, int):
+            value = value.pk
+
+        return super(ReferenceField, self).to_python(value)
 
 
 class FloatField(WritableField):
