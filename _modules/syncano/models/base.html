@@ -857,7 +857,7 @@
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="Object.create_subclass"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Object.create_subclass">[docs]</a>    <span class="k">def</span> <span class="nf">create_subclass</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">schema</span><span class="p">):</span>
         <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s">&#39;Meta&#39;</span><span class="p">:</span> <span class="n">cls</span><span class="o">.</span><span class="n">_meta</span><span class="p">,</span>
+            <span class="s">&#39;Meta&#39;</span><span class="p">:</span> <span class="n">Object</span><span class="o">.</span><span class="n">_meta</span><span class="p">,</span>
             <span class="s">&#39;__new__&#39;</span><span class="p">:</span> <span class="n">Model</span><span class="o">.</span><span class="n">__new__</span><span class="p">,</span>  <span class="c"># We don&#39;t want to have maximum recursion depth exceeded error</span>
         <span class="p">}</span>
 
@@ -868,7 +868,7 @@
             <span class="n">attrs</span><span class="p">[</span><span class="n">field</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field_class</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
                                                <span class="n">query_allowed</span><span class="o">=</span><span class="n">query_allowed</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="p">),</span> <span class="n">attrs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="p">(</span><span class="n">Object</span><span class="p">,</span> <span class="p">),</span> <span class="n">attrs</span><span class="p">)</span>
 </div>
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="Object.get_or_create_subclass"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Object.get_or_create_subclass">[docs]</a>    <span class="k">def</span> <span class="nf">get_or_create_subclass</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">schema</span><span class="p">):</span>

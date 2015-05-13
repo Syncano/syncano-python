@@ -316,17 +316,18 @@
             <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s">&#39;Invalid value. Value should be an integer.&#39;</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="ReferenceField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.ReferenceField">[docs]</a><span class="k">class</span> <span class="nc">ReferenceField</span><span class="p">(</span><span class="n">WritableField</span><span class="p">):</span>
+<div class="viewcode-block" id="ReferenceField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.ReferenceField">[docs]</a><span class="k">class</span> <span class="nc">ReferenceField</span><span class="p">(</span><span class="n">IntegerField</span><span class="p">):</span>
 
 <div class="viewcode-block" id="ReferenceField.to_python"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.ReferenceField.to_python">[docs]</a>    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">value</span>
 
-        <span class="n">target_id</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s">&#39;value&#39;</span><span class="p">]</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">target_id</span><span class="p">)</span>
-        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s">&#39;Invalid value. Value should be an integer.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s">&#39;value&#39;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s">&#39;value&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s">&#39;pk&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">pk</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">ReferenceField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
 </div></div>
 <div class="viewcode-block" id="FloatField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.FloatField">[docs]</a><span class="k">class</span> <span class="nc">FloatField</span><span class="p">(</span><span class="n">WritableField</span><span class="p">):</span>
