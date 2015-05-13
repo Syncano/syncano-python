@@ -728,7 +728,7 @@ class Object(Model):
     @classmethod
     def create_subclass(cls, name, schema):
         attrs = {
-            'Meta': cls._meta,
+            'Meta': Object._meta,
             '__new__': Model.__new__,  # We don't want to have maximum recursion depth exceeded error
         }
 
@@ -739,7 +739,7 @@ class Object(Model):
             attrs[field['name']] = field_class(required=False, read_only=False,
                                                query_allowed=query_allowed)
 
-        return type(str(name), (cls, ), attrs)
+        return type(str(name), (Object, ), attrs)
 
     @classmethod
     def get_or_create_subclass(cls, name, schema):
