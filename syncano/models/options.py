@@ -1,5 +1,6 @@
 import re
 from bisect import bisect
+from copy import deepcopy
 from urlparse import urljoin
 
 import six
@@ -31,7 +32,7 @@ class Options(ConnectionMixin):
         self.pk = None
 
         if meta:
-            meta_attrs = meta.__dict__.copy()
+            meta_attrs = deepcopy(meta.__dict__)
             for name in meta.__dict__:
                 if name.startswith('_') or not hasattr(self, name):
                     del meta_attrs[name]
