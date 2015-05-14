@@ -23,7 +23,6 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.3',
     ],
     install_requires=[
         'requests==2.5.1',
@@ -34,6 +33,5 @@ setup(
     tests_require=[
         'mock>=1.0.1',
         'coverage>=3.7.1',
-        'unittest-xml-reporting>=1.11.0',
     ],
 )
