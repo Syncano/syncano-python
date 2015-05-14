@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import inspect
 import json
+from copy import deepcopy
 from datetime import datetime
 
 import six
@@ -728,7 +729,7 @@ class Object(Model):
     @classmethod
     def create_subclass(cls, name, schema):
         attrs = {
-            'Meta': Object._meta,
+            'Meta': deepcopy(Object._meta),
             '__new__': Model.__new__,  # We don't want to have maximum recursion depth exceeded error
         }
 
