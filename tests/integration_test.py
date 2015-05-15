@@ -84,3 +84,10 @@ class InstanceIntegrationTest(IntegrationTest):
 
         with self.assertRaises(self.model.DoesNotExist):
             self.model.please.get(name=name)
+
+
+class ClassIntegrationTest(IntegrationTest):
+
+    @classmethod
+    def setUpClass(cls):
+        super(ClassIntegrationTest, cls).setUpClass()
