@@ -171,6 +171,7 @@ class Connection(object):
                 indent=2,
                 separators=(',', ': ')
             )
+            self.logger.debug('API Root: %s', self.host)
             self.logger.debug('Request: %s %s\n%s', method_name, path, formatted_params)
 
         if method is None:

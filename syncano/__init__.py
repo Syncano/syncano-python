@@ -24,7 +24,7 @@ logger.addHandler(console_handler)
 # Few global env variables
 VERSION = __version__
 DEBUG = env_loglevel.lower() == 'debug'
-API_ROOT = os.getenv('SYNCANO_APIROOT', 'https://v4.hydraengine.com/')
+API_ROOT = os.getenv('SYNCANO_APIROOT', 'https://api.syncano.io/')
 EMAIL = os.getenv('SYNCANO_EMAIL')
 PASSWORD = os.getenv('SYNCANO_PASSWORD')
 APIKEY = os.getenv('SYNCANO_APIKEY')

@@ -331,7 +331,7 @@ class Instance(Model):
     class Meta:
         endpoints = {
             'detail': {
-                'methods': ['delete', 'post', 'patch', 'get'],
+                'methods': ['delete', 'patch', 'put', 'get'],
                 'path': '/v1/instances/{name}/',
             },
             'list': {
