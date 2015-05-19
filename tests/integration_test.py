@@ -1,13 +1,13 @@
 import os
 import unittest
-from uuid import uuid4
-from hashlib import md5
 from datetime import datetime
+from hashlib import md5
 from time import sleep
+from uuid import uuid4
 
 import syncano
 from syncano.exceptions import SyncanoValueError
-from syncano.models import Instance, Class, Object, CodeBox, Webhook
+from syncano.models import Class, CodeBox, Instance, Object, Webhook
 
 
 class IntegrationTest(unittest.TestCase):

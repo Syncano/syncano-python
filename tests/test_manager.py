@@ -3,8 +3,8 @@ from datetime import datetime
 
 from syncano.exceptions import (SyncanoDoesNotExist, SyncanoRequestError,
                                 SyncanoValueError)
-from syncano.models.base import (CodeBox, Instance, Object, CodeBoxTrace, Webhook,
-                                 WebhookResult)
+from syncano.models.base import (CodeBox, CodeBoxTrace, Instance, Object,
+                                 Webhook, WebhookResult)
 
 try:
     from unittest import mock

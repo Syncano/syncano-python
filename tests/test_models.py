@@ -2,8 +2,8 @@ import unittest
 from datetime import datetime
 
 from syncano.exceptions import SyncanoValidationError, SyncanoValueError
-from syncano.models import (CodeBox, Instance, Object, Webhook,
-                            WebhookResult, CodeBoxTrace)
+from syncano.models import (CodeBox, CodeBoxTrace, Instance, Object, Webhook,
+                            WebhookResult)
 
 try:
     from unittest import mock
