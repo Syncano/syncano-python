@@ -7,7 +7,7 @@ from time import sleep
 
 import syncano
 from syncano.exceptions import SyncanoValueError
-from syncano.models import Instance, Class, Object, CodeBox
+from syncano.models import Instance, Class, Object, CodeBox, Webhook
 
 
 class IntegrationTest(unittest.TestCase):
@@ -326,3 +326,52 @@ class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
         self.assertEquals(trace.result, 'IntegrationTest')
 
         codebox.delete()
+
+
+class WebhookIntegrationTest(InstanceMixin, IntegrationTest):
+    model = Webhook
+
+    @classmethod
+    def setUpClass(cls):
+        super(WebhookIntegrationTest, cls).setUpClass()
+
+        cls.codebox = CodeBox.please.create(
+            instance_name=cls.instance.name,
+            name='cb%s' % cls.generate_hash()[:10],
+            runtime_name='python',
+            source='print "IntegrationTest"'
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.codebox.delete()
+        super(WebhookIntegrationTest, cls).tearDownClass()
+
+    def test_required_fields(self):
+        with self.assertRaises(SyncanoValueError):
+            list(self.model.please.all())
+
+    def test_list(self):
+        webhooks = self.model.please.all(self.instance.name)
+        self.assertEqual(len(list(webhooks)), 0)
+
+    def test_create(self):
+        webhook = self.model.please.create(
+            instance_name=self.instance.name,
+            codebox=self.codebox.id,
+            slug='wh%s' % self.generate_hash()[:10],
+        )
+
+        webhook.delete()
+
+    def test_codebox_run(self):
+        webhook = self.model.please.create(
+            instance_name=self.instance.name,
+            codebox=self.codebox.id,
+            slug='wh%s' % self.generate_hash()[:10],
+        )
+
+        trace = webhook.run()
+        self.assertEquals(trace.status, 'success')
+        self.assertEquals(trace.result, 'IntegrationTest')
+        webhook.delete()
