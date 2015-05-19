@@ -2,6 +2,7 @@ import os
 import unittest
 from uuid import uuid4
 from hashlib import md5
+from datetime import datetime
 
 import syncano
 from syncano.exceptions import SyncanoValueError
@@ -29,7 +30,7 @@ class IntegrationTest(unittest.TestCase):
 
     @classmethod
     def generate_hash(cls):
-        return md5(str(uuid4())).hexdigest()
+        return md5('%s%s' % (uuid4(), datetime.now())).hexdigest()
 
 
 class InstanceIntegrationTest(IntegrationTest):
@@ -181,4 +182,88 @@ class ClassIntegrationTest(IntegrationTest):
 
 
 class ObjectIntegrationTest(IntegrationTest):
-    pass
+
+    @classmethod
+    def setUpClass(cls):
+        super(ObjectIntegrationTest, cls).setUpClass()
+
+        cls.instance = cls.connection.Instance.please.create(
+            name='i%s' % cls.generate_hash()[:10],
+            description='test',
+        )
+
+        cls.author = cls.connection.Class.please.create(
+            instance_name=cls.instance.name,
+            name='author_%s' % cls.generate_hash()[:10],
+            schema=[
+                {'type': 'string', 'name': 'first_name', 'order_index': True, 'filter_index': True},
+                {'type': 'string', 'name': 'last_name', 'order_index': True, 'filter_index': True},
+            ]
+        )
+
+        cls.book = cls.connection.Class.please.create(
+            instance_name=cls.instance.name,
+            name='book_%s' % cls.generate_hash()[:10],
+            schema=[
+                {'type': 'string', 'name': 'name'},
+                {'type': 'text', 'name': 'description'},
+                {'type': 'integer', 'name': 'quantity'},
+                {'type': 'float', 'name': 'cost'},
+                {'type': 'boolean', 'name': 'available'},
+                {'type': 'datetime', 'name': 'published_at'},
+                {'type': 'file', 'name': 'cover'},
+                {'type': 'reference', 'name': 'author',
+                 'order_index': True, 'filter_index': True, 'target': cls.author.name},
+            ]
+        )
+
+        cls.model = cls.connection.Object
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.book.delete()
+        cls.author.delete()
+        cls.instance.delete()
+        super(ObjectIntegrationTest, cls).tearDownClass()
+
+    def test_required_fields(self):
+        with self.assertRaises(SyncanoValueError):
+            list(self.model.please.all())
+
+        with self.assertRaises(SyncanoValueError):
+            list(self.model.please.all(instance_name=self.instance.name))
+
+    def test_list(self):
+        objects = self.model.please.all(self.instance.name, self.author.name)
+        self.assertEqual(len(list(objects)), 0)
+
+        objects = self.model.please.all(self.instance.name, self.book.name)
+        self.assertEqual(len(list(objects)), 0)
+
+    def test_create(self):
+        author = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.author.name,
+            first_name='john', last_name='doe')
+
+        book = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.book.name,
+            name='test', description='test', quantity=10, cost=10.5,
+            published_at=datetime.now(), author=author, available=True)
+
+        book.delete()
+        author.delete()
+
+    def test_update(self):
+        author = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.author.name,
+            first_name='john', last_name='doe')
+
+        author.first_name = 'not john'
+        author.last_name = 'not doe'
+        author.save()
+
+        author2 = self.model.please.get(author.instance_name, author.class_name, author.pk)
+        self.assertEqual(author.first_name, author2.first_name)
+        self.assertEqual(author.last_name, author2.last_name)
+
+        author.delete()
