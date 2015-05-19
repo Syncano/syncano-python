@@ -414,7 +414,7 @@ class Class(Model):
         plural_name = 'Classes'
         endpoints = {
             'detail': {
-                'methods': ['delete', 'post', 'patch', 'get'],
+                'methods': ['get', 'put', 'patch', 'delete'],
                 'path': '/classes/{name}/',
             },
             'list': {

@@ -4,6 +4,7 @@ from uuid import uuid4
 from hashlib import md5
 
 import syncano
+from syncano.exceptions import SyncanoValueError
 
 
 class IntegrationTest(unittest.TestCase):
@@ -26,7 +27,8 @@ class IntegrationTest(unittest.TestCase):
     def tearDownClass(cls):
         cls.connection = None
 
-    def generate_hash(self):
+    @classmethod
+    def generate_hash(cls):
         return md5(str(uuid4())).hexdigest()
 
 
@@ -46,7 +48,7 @@ class InstanceIntegrationTest(IntegrationTest):
         self.assertEqual(len(list(instances)), 0)
 
     def test_create(self):
-        name = 'a%s' % self.generate_hash()[:10]
+        name = 'i%s' % self.generate_hash()[:10]
         description = 'test'
 
         instance = self.model.please.create(name=name, description=description)
@@ -63,7 +65,7 @@ class InstanceIntegrationTest(IntegrationTest):
         instance.delete()
 
     def test_update(self):
-        name = 'a%s' % self.generate_hash()[:10]
+        name = 'i%s' % self.generate_hash()[:10]
         description = 'test'
 
         instance = self.model.please.create(name=name, description=description)
@@ -76,7 +78,7 @@ class InstanceIntegrationTest(IntegrationTest):
         instance.delete()
 
     def test_delete(self):
-        name = 'a%s' % self.generate_hash()[:10]
+        name = 'i%s' % self.generate_hash()[:10]
         description = 'test'
 
         instance = self.model.please.create(name=name, description=description)
@@ -91,3 +93,92 @@ class ClassIntegrationTest(IntegrationTest):
     @classmethod
     def setUpClass(cls):
         super(ClassIntegrationTest, cls).setUpClass()
+
+        cls.instance = cls.connection.Instance.please.create(
+            name='i%s' % cls.generate_hash()[:10],
+            description='test',
+        )
+        cls.model = cls.connection.Class
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.instance.delete()
+        super(ClassIntegrationTest, cls).tearDownClass()
+
+    def test_instance_name_is_required(self):
+        with self.assertRaises(SyncanoValueError):
+            list(self.model.please.all())
+
+        with self.assertRaises(SyncanoValueError):
+            self.model.please.create()
+
+    def test_list(self):
+        classes = self.model.please.all(instance_name=self.instance.name)
+        self.assertEqual(len(list(classes)), 1)
+
+        cls = self.model.please.create(instance_name=self.instance.name, name='test',
+                                       schema=[{'type': 'string', 'name': 'test'}])
+        classes = self.model.please.all(instance_name=self.instance.name)
+        self.assertEqual(len(list(classes)), 2)
+
+        cls.delete()
+
+    def test_create(self):
+        cls_one = self.model.please.create(
+            instance_name=self.instance.name,
+            name='c%s' % self.generate_hash()[:10],
+            schema=[
+                {'type': 'string', 'name': 'string_test'},
+                {'type': 'text', 'name': 'text_test'},
+                {'type': 'integer', 'name': 'integer_test', 'order_index': True, 'filter_index': True},
+                {'type': 'float', 'name': 'float_test'},
+                {'type': 'boolean', 'name': 'boolean_test'},
+                {'type': 'datetime', 'name': 'datetime_test'},
+                {'type': 'file', 'name': 'file_test'},
+            ]
+        )
+
+        cls_two = self.model.please.create(
+            instance_name=self.instance.name,
+            name='c%s' % self.generate_hash()[:10],
+            schema=[
+                {'type': 'string', 'name': 'string_test'},
+                {'type': 'text', 'name': 'text_test'},
+                {'type': 'integer', 'name': 'integer_test'},
+                {'type': 'float', 'name': 'float_test'},
+                {'type': 'boolean', 'name': 'boolean_test'},
+                {'type': 'datetime', 'name': 'datetime_test'},
+                {'type': 'file', 'name': 'file_test'},
+                {'type': 'reference', 'name': 'reference_test',
+                 'order_index': True, 'filter_index': True, 'target': cls_one.name},
+            ]
+        )
+
+        cls_one.delete()
+        cls_two.delete()
+
+    def test_update(self):
+        cls = self.model.please.create(
+            instance_name=self.instance.name,
+            name='c%s' % self.generate_hash()[:10],
+            schema=[
+                {'type': 'string', 'name': 'string_test'},
+                {'type': 'text', 'name': 'text_test'},
+                {'type': 'integer', 'name': 'integer_test', 'order_index': True, 'filter_index': True},
+                {'type': 'float', 'name': 'float_test'},
+                {'type': 'boolean', 'name': 'boolean_test'},
+                {'type': 'datetime', 'name': 'datetime_test'},
+                {'type': 'file', 'name': 'file_test'},
+            ]
+        )
+        cls.description = 'dummy'
+        cls.save()
+
+        cls2 = self.model.please.get(instance_name=self.instance.name, name=cls.name)
+        self.assertEqual(cls.description, cls2.description)
+
+        cls.delete()
+
+
+class ObjectIntegrationTest(IntegrationTest):
+    pass
