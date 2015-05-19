@@ -3,9 +3,11 @@ import unittest
 from uuid import uuid4
 from hashlib import md5
 from datetime import datetime
+from time import sleep
 
 import syncano
 from syncano.exceptions import SyncanoValueError
+from syncano.models import Instance, Class, Object, CodeBox
 
 
 class IntegrationTest(unittest.TestCase):
@@ -33,10 +35,25 @@ class IntegrationTest(unittest.TestCase):
         return md5('%s%s' % (uuid4(), datetime.now())).hexdigest()
 
 
-class InstanceIntegrationTest(IntegrationTest):
+class InstanceMixin(object):
 
-    def setUp(self):
-        self.model = self.connection.Instance
+    @classmethod
+    def setUpClass(cls):
+        super(InstanceMixin, cls).setUpClass()
+
+        cls.instance = cls.connection.Instance.please.create(
+            name='i%s' % cls.generate_hash()[:10],
+            description='IntegrationTest %s' % datetime.now(),
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.instance.delete()
+        super(InstanceMixin, cls).tearDownClass()
+
+
+class InstanceIntegrationTest(IntegrationTest):
+    model = Instance
 
     @classmethod
     def tearDownClass(cls):
@@ -50,7 +67,7 @@ class InstanceIntegrationTest(IntegrationTest):
 
     def test_create(self):
         name = 'i%s' % self.generate_hash()[:10]
-        description = 'test'
+        description = 'IntegrationTest'
 
         instance = self.model.please.create(name=name, description=description)
         self.assertIsNotNone(instance.pk)
@@ -67,10 +84,10 @@ class InstanceIntegrationTest(IntegrationTest):
 
     def test_update(self):
         name = 'i%s' % self.generate_hash()[:10]
-        description = 'test'
+        description = 'IntegrationTest'
 
         instance = self.model.please.create(name=name, description=description)
-        instance.description = 'test'
+        instance.description = 'NotIntegrationTest'
         instance.save()
 
         instance2 = self.model.please.get(name=name)
@@ -80,7 +97,7 @@ class InstanceIntegrationTest(IntegrationTest):
 
     def test_delete(self):
         name = 'i%s' % self.generate_hash()[:10]
-        description = 'test'
+        description = 'IntegrationTest'
 
         instance = self.model.please.create(name=name, description=description)
         instance.delete()
@@ -89,22 +106,8 @@ class InstanceIntegrationTest(IntegrationTest):
             self.model.please.get(name=name)
 
 
-class ClassIntegrationTest(IntegrationTest):
-
-    @classmethod
-    def setUpClass(cls):
-        super(ClassIntegrationTest, cls).setUpClass()
-
-        cls.instance = cls.connection.Instance.please.create(
-            name='i%s' % cls.generate_hash()[:10],
-            description='test',
-        )
-        cls.model = cls.connection.Class
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.instance.delete()
-        super(ClassIntegrationTest, cls).tearDownClass()
+class ClassIntegrationTest(InstanceMixin, IntegrationTest):
+    model = Class
 
     def test_instance_name_is_required(self):
         with self.assertRaises(SyncanoValueError):
@@ -117,7 +120,8 @@ class ClassIntegrationTest(IntegrationTest):
         classes = self.model.please.all(instance_name=self.instance.name)
         self.assertEqual(len(list(classes)), 1)
 
-        cls = self.model.please.create(instance_name=self.instance.name, name='test',
+        cls = self.model.please.create(instance_name=self.instance.name,
+                                       name='IntegrationTest%s' % self.generate_hash()[:10],
                                        schema=[{'type': 'string', 'name': 'test'}])
         classes = self.model.please.all(instance_name=self.instance.name)
         self.assertEqual(len(list(classes)), 2)
@@ -181,16 +185,12 @@ class ClassIntegrationTest(IntegrationTest):
         cls.delete()
 
 
-class ObjectIntegrationTest(IntegrationTest):
+class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
+    model = Object
 
     @classmethod
     def setUpClass(cls):
         super(ObjectIntegrationTest, cls).setUpClass()
-
-        cls.instance = cls.connection.Instance.please.create(
-            name='i%s' % cls.generate_hash()[:10],
-            description='test',
-        )
 
         cls.author = cls.connection.Class.please.create(
             instance_name=cls.instance.name,
@@ -217,13 +217,10 @@ class ObjectIntegrationTest(IntegrationTest):
             ]
         )
 
-        cls.model = cls.connection.Object
-
     @classmethod
     def tearDownClass(cls):
         cls.book.delete()
         cls.author.delete()
-        cls.instance.delete()
         super(ObjectIntegrationTest, cls).tearDownClass()
 
     def test_required_fields(self):
@@ -267,3 +264,65 @@ class ObjectIntegrationTest(IntegrationTest):
         self.assertEqual(author.last_name, author2.last_name)
 
         author.delete()
+
+
+class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
+    model = CodeBox
+
+    @classmethod
+    def tearDownClass(cls):
+        for cb in cls.instance.codeboxes.all():
+            cb.delete()
+        super(CodeboxIntegrationTest, cls).tearDownClass()
+
+    def test_required_fields(self):
+        with self.assertRaises(SyncanoValueError):
+            list(self.model.please.all())
+
+    def test_list(self):
+        codeboxes = self.model.please.all(self.instance.name)
+        self.assertEqual(len(list(codeboxes)), 0)
+
+    def test_create(self):
+        codebox = self.model.please.create(
+            instance_name=self.instance.name,
+            name='cb%s' % self.generate_hash()[:10],
+            runtime_name='python',
+            source='print "IntegrationTest"'
+        )
+
+        codebox.delete()
+
+    def test_update(self):
+        codebox = self.model.please.create(
+            instance_name=self.instance.name,
+            name='cb%s' % self.generate_hash()[:10],
+            runtime_name='python',
+            source='print "IntegrationTest"'
+        )
+
+        codebox.source = 'print "NotIntegrationTest"'
+        codebox.save()
+
+        codebox2 = self.model.please.get(self.instance.name, codebox.pk)
+        self.assertEqual(codebox.source, codebox2.source)
+
+        codebox.delete()
+
+    def test_source_run(self):
+        codebox = self.model.please.create(
+            instance_name=self.instance.name,
+            name='cb%s' % self.generate_hash()[:10],
+            runtime_name='python',
+            source='print "IntegrationTest"'
+        )
+
+        trace = codebox.run()
+        while trace.status == 'pending':
+            sleep(1)
+            trace.reload()
+
+        self.assertEquals(trace.status, 'success')
+        self.assertEquals(trace.result, 'IntegrationTest')
+
+        codebox.delete()

@@ -524,7 +524,7 @@ class CodeBoxManager(Manager):
         self._filter(*args, **kwargs)
         self._serialize = False
         response = self.request()
-        return registry.Trace(**response)
+        return registry.CodeBoxTrace(**response)
 
 
 class WebhookManager(Manager):

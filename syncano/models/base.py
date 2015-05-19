@@ -465,12 +465,12 @@ class CodeBox(Model):
         {'display_name': 'ruby', 'value': 'ruby'},
     )
 
+    name = fields.StringField(max_length=80)
     description = fields.StringField(required=False)
-    links = fields.HyperlinkedField(links=LINKS)
     source = fields.StringField()
     runtime_name = fields.ChoiceField(choices=RUNTIME_CHOICES)
     config = fields.Field(required=False)
-    name = fields.StringField(max_length=80)
+    links = fields.HyperlinkedField(links=LINKS)
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
@@ -515,7 +515,39 @@ class CodeBox(Model):
             }
         }
         response = connection.request('POST', endpoint, **request)
-        return Trace(**response)
+        response.update({'instance_name': self.instance_name, 'codebox_id': self.id})
+        return CodeBoxTrace(**response)
+
+
+class CodeBoxTrace(Model):
+    STATUS_CHOICES = (
+        {'display_name': 'Success', 'value': 'success'},
+        {'display_name': 'Failure', 'value': 'failure'},
+        {'display_name': 'Timeout', 'value': 'timeout'},
+        {'display_name': 'Pending', 'value': 'pending'},
+    )
+    LINKS = (
+        {'type': 'detail', 'name': 'self'},
+    )
+
+    status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
+    links = fields.HyperlinkedField(links=LINKS)
+    executed_at = fields.DateTimeField(read_only=True, required=False)
+    result = fields.StringField(read_only=True, required=False)
+    duration = fields.IntegerField(read_only=True, required=False)
+
+    class Meta:
+        parent = CodeBox
+        endpoints = {
+            'detail': {
+                'methods': ['get'],
+                'path': '/traces/{id}/',
+            },
+            'list': {
+                'methods': ['get'],
+                'path': '/traces/',
+            }
+        }
 
 
 class Schedule(Model):
@@ -574,6 +606,7 @@ class Trace(Model):
         {'display_name': 'Success', 'value': 'success'},
         {'display_name': 'Failure', 'value': 'failure'},
         {'display_name': 'Timeout', 'value': 'timeout'},
+        {'display_name': 'Pending', 'value': 'pending'},
     )
     LINKS = (
         {'type': 'detail', 'name': 'self'},
