@@ -25,7 +25,8 @@ setup(
         'Programming Language :: Python :: 2.7',
     ],
     install_requires=[
-        'requests==2.5.1',
+        'requests==2.7.0',
+        'certifi',
         'six==1.9.0',
         'python-slugify==0.1.0',
         'validictory==1.0.0',
