@@ -369,6 +369,20 @@ can be serialized to JSON and send to API.</p>
 
 <dl class="class">
 <dt>
+<em class="property">class </em><tt class="descname">CodeBoxTrace</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/syncano/models/base.html#CodeBoxTrace"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>CodeBoxTrace:
+status = ChoiceField
+links = HyperlinkedField
+executed_at = DateTimeField
+result = StringField
+duration = IntegerField
+id = IntegerField
+instance_name = EndpointField
+codebox_id = EndpointField</p>
+</dd></dl>
+
+<dl class="class">
+<dt>
 <em class="property">class </em><tt class="descname">Schedule</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/syncano/models/base.html#Schedule"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>OO wrapper around codebox schedules <a class="reference external" href="http://docs.syncano.com/v4.0/docs/codebox-schedules-list">endpoint</a>.</p>
 <table class="docutils field-list" frame="void" rules="none">

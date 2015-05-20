@@ -512,6 +512,42 @@ can be serialized to JSON and send to API.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="syncano.models.base.CodeBoxTrace">
+<em class="property">class </em><tt class="descname">CodeBoxTrace</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#CodeBoxTrace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.CodeBoxTrace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
+<p>CodeBoxTrace:
+status = ChoiceField
+links = HyperlinkedField
+executed_at = DateTimeField
+result = StringField
+duration = IntegerField
+id = IntegerField
+instance_name = EndpointField
+codebox_id = EndpointField</p>
+<dl class="attribute">
+<dt id="syncano.models.base.CodeBoxTrace.STATUS_CHOICES">
+<tt class="descname">STATUS_CHOICES</tt><em class="property"> = ({u'display_name': u'Success', u'value': u'success'}, {u'display_name': u'Failure', u'value': u'failure'}, {u'display_name': u'Timeout', u'value': u'timeout'}, {u'display_name': u'Pending', u'value': u'pending'})</em><a class="headerlink" href="#syncano.models.base.CodeBoxTrace.STATUS_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.CodeBoxTrace.LINKS">
+<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'},)</em><a class="headerlink" href="#syncano.models.base.CodeBoxTrace.LINKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.CodeBoxTrace.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.CodeBoxTrace.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">CodeBoxTraceDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.CodeBoxTrace.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.CodeBoxTrace.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="syncano.models.base.Schedule">
 <em class="property">class </em><tt class="descname">Schedule</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#Schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.Schedule" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
@@ -574,7 +610,7 @@ can be serialized to JSON and send to API.</p>
 </table>
 <dl class="attribute">
 <dt id="syncano.models.base.Trace.STATUS_CHOICES">
-<tt class="descname">STATUS_CHOICES</tt><em class="property"> = ({u'display_name': u'Success', u'value': u'success'}, {u'display_name': u'Failure', u'value': u'failure'}, {u'display_name': u'Timeout', u'value': u'timeout'})</em><a class="headerlink" href="#syncano.models.base.Trace.STATUS_CHOICES" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">STATUS_CHOICES</tt><em class="property"> = ({u'display_name': u'Success', u'value': u'success'}, {u'display_name': u'Failure', u'value': u'failure'}, {u'display_name': u'Timeout', u'value': u'timeout'}, {u'display_name': u'Pending', u'value': u'pending'})</em><a class="headerlink" href="#syncano.models.base.Trace.STATUS_CHOICES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

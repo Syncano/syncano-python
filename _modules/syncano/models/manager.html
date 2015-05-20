@@ -175,7 +175,15 @@
             <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&quot;RelatedManager is accessible only via {0} instances.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">owner</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
 
         <span class="n">links</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">links</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
         <span class="n">path</span> <span class="o">=</span> <span class="n">links</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
         <span class="n">Model</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">get_model_by_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Model</span><span class="o">.</span><span class="n">please</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">Model</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
 
@@ -653,7 +661,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_serialize</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">Trace</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">CodeBoxTrace</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)</span>
 
 </div></div>
 <div class="viewcode-block" id="WebhookManager"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.WebhookManager">[docs]</a><span class="k">class</span> <span class="nc">WebhookManager</span><span class="p">(</span><span class="n">Manager</span><span class="p">):</span>
