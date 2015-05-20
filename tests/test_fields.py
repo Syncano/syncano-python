@@ -411,7 +411,7 @@ class DatetimeFieldTestCase(BaseTestCase):
     def test_to_native(self):
         now = datetime.now()
         self.assertEqual(self.field.to_native(None), None)
-        self.assertEqual(self.field.to_native(now), now.isoformat())
+        self.assertEqual(self.field.to_native(now), '%sZ' % now.isoformat())
 
 
 class HyperlinkedFieldTestCase(BaseTestCase):

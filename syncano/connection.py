@@ -83,6 +83,7 @@ class Connection(object):
         params = deepcopy(params)
         params['timeout'] = params.get('timeout') or self.timeout
         params['headers'] = params.get('headers') or {}
+        params['verify'] = True
 
         if 'content-type' not in params['headers']:
             params['headers']['content-type'] = self.CONTENT_TYPE
@@ -171,6 +172,7 @@ class Connection(object):
                 indent=2,
                 separators=(',', ': ')
             )
+            self.logger.debug('API Root: %s', self.host)
             self.logger.debug('Request: %s %s\n%s', method_name, path, formatted_params)
 
         if method is None:

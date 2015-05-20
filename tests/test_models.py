@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 
 from syncano.exceptions import SyncanoValidationError, SyncanoValueError
-from syncano.models import (CodeBox, Instance, Object, Trace, Webhook,
+from syncano.models import (CodeBox, CodeBoxTrace, Instance, Object, Webhook,
                             WebhookResult)
 
 try:
@@ -92,7 +92,7 @@ class ModelTestCase(unittest.TestCase):
         self.assertTrue(connection_mock.called)
         self.assertTrue(connection_mock.request.called)
         connection_mock.request.assert_called_with(
-            'POST',
+            'PUT',
             '/v1/instances/test/',
             data={'name': 'test'}
         )
@@ -198,7 +198,7 @@ class CodeBoxTestCase(unittest.TestCase):
         result = model.run(a=1, b=2)
         self.assertTrue(connection_mock.called)
         self.assertTrue(connection_mock.request.called)
-        self.assertIsInstance(result, Trace)
+        self.assertIsInstance(result, CodeBoxTrace)
 
         connection_mock.assert_called_once_with(a=1, b=2)
         connection_mock.request.assert_called_once_with(

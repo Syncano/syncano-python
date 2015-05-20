@@ -278,7 +278,8 @@ class ConnectionTestCase(unittest.TestCase):
             urljoin(self.connection.host, '{0}/'.format(self.connection.AUTH_SUFFIX)),
             headers={'content-type': self.connection.CONTENT_TYPE},
             data='{"password": "dummy", "email": "dummy"}',
-            timeout=30
+            timeout=30,
+            verify=True
         )
 
     @mock.patch('syncano.connection.Connection.make_request')

@@ -107,6 +107,9 @@ class Field(object):
         """
         Returns field's value prepared for usage in Python.
         """
+        if isinstance(value, dict) and 'type' in value and 'value' in value:
+            return value['value']
+
         return value
 
     def to_native(self, value):
@@ -171,6 +174,8 @@ class EndpointField(WritableField):
 class StringField(WritableField):
 
     def to_python(self, value):
+        value = super(StringField, self).to_python(value)
+
         if isinstance(value, six.string_types) or value is None:
             return value
         return force_text(value)
@@ -179,6 +184,8 @@ class StringField(WritableField):
 class IntegerField(WritableField):
 
     def to_python(self, value):
+        value = super(IntegerField, self).to_python(value)
+
         if value is None:
             return value
         try:
@@ -193,9 +200,7 @@ class ReferenceField(IntegerField):
         if isinstance(value, int):
             return value
 
-        if isinstance(value, dict) and 'value' in value:
-            value = value['value']
-        elif hasattr(value, 'pk') and isinstance(value.pk, int):
+        if hasattr(value, 'pk') and isinstance(value.pk, int):
             value = value.pk
 
         return super(ReferenceField, self).to_python(value)
@@ -204,6 +209,8 @@ class ReferenceField(IntegerField):
 class FloatField(WritableField):
 
     def to_python(self, value):
+        value = super(FloatField, self).to_python(value)
+
         if value is None:
             return value
         try:
@@ -215,6 +222,8 @@ class FloatField(WritableField):
 class BooleanField(WritableField):
 
     def to_python(self, value):
+        value = super(BooleanField, self).to_python(value)
+
         if value in (True, False):
             return bool(value)
 
@@ -276,6 +285,8 @@ class DateField(WritableField):
     )
 
     def to_python(self, value):
+        value = super(DateField, self).to_python(value)
+
         if value is None:
             return value
 
@@ -317,6 +328,9 @@ class DateTimeField(DateField):
     def to_python(self, value):
         if value is None:
             return value
+
+        if isinstance(value, dict) and 'type' in value and 'value' in value:
+            value = value['value']
 
         if isinstance(value, datetime):
             return value
@@ -363,6 +377,10 @@ class DateTimeField(DateField):
         ret = value.isoformat()
         if ret.endswith('+00:00'):
             ret = ret[:-6] + 'Z'
+
+        if not ret.endswith('Z'):
+            ret = ret + 'Z'
+
         return ret
 
 
@@ -421,6 +439,7 @@ class ModelField(Field):
             value.validate()
 
     def to_python(self, value):
+
         if value is None:
             return value
 

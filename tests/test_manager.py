@@ -3,8 +3,8 @@ from datetime import datetime
 
 from syncano.exceptions import (SyncanoDoesNotExist, SyncanoRequestError,
                                 SyncanoValueError)
-from syncano.models.base import (CodeBox, Instance, Object, Trace, Webhook,
-                                 WebhookResult)
+from syncano.models.base import (CodeBox, CodeBoxTrace, Instance, Object,
+                                 Webhook, WebhookResult)
 
 try:
     from unittest import mock
@@ -160,7 +160,7 @@ class ManagerTestCase(unittest.TestCase):
         filter_mock.assert_called_once_with(1, 2, a=1, b=2)
         request_mock.assert_called_once_with()
 
-        self.assertEqual(self.manager.method, 'PATCH')
+        self.assertEqual(self.manager.method, 'PUT')
         self.assertEqual(self.manager.endpoint, 'detail')
         self.assertEqual(self.manager.data, {'x': 1, 'y': 2})
 
@@ -398,7 +398,7 @@ class CodeBoxManagerTestCase(unittest.TestCase):
         self.assertFalse(request_mock.called)
 
         result = self.manager.run(1, 2, a=1, b=2, payload={'x': 1, 'y': 2})
-        self.assertIsInstance(result, Trace)
+        self.assertIsInstance(result, CodeBoxTrace)
 
         self.assertTrue(filter_mock.called)
         self.assertTrue(request_mock.called)
