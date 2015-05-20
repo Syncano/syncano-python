@@ -419,8 +419,8 @@ class Class(Model):
     created_at = fields.DateTimeField(read_only=True, required=False)
 
     group = fields.IntegerField(label='group id', required=False)
-    group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, required=False)
-    other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, required=False)
+    group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+    other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
 
     class Meta:
         parent = Instance
@@ -758,10 +758,10 @@ class Object(Model):
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
     owner = fields.IntegerField(label='owner id', required=False, read_only=True)
-    owner_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, required=False)
+    owner_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
     group = fields.IntegerField(label='group id', required=False)
-    group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, required=False)
-    other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, required=False)
+    group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+    other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
     channel = fields.StringField(required=False)
     channel_room = fields.StringField(required=False, max_length=64)
 

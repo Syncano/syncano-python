@@ -105,8 +105,8 @@ class Channel(Model):
     name = fields.StringField(max_length=64, primary_key=True)
     type = fields.ChoiceField(choices=TYPE_CHOICES, required=False)
     group = fields.IntegerField(label='group id', required=False)
-    group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, required=False)
-    other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, required=False)
+    group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+    other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
     custom_publish = fields.BooleanField(default=False)
 
     class Meta:
