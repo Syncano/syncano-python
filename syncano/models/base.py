@@ -384,6 +384,9 @@ class Class(Model):
     :ivar expected_revision: :class:`~syncano.models.fields.IntegerField`
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar group: :class:`~syncano.models.fields.IntegerField`
+    :ivar group_permissions: :class:`~syncano.models.fields.ChoiceField`
+    :ivar other_permissions: :class:`~syncano.models.fields.ChoiceField`
 
     .. note::
         This model is special because each related :class:`~syncano.models.base.Object` will be
@@ -394,6 +397,12 @@ class Class(Model):
         {'type': 'detail', 'name': 'self'},
         {'type': 'list', 'name': 'objects'},
     ]
+
+    PERMISSIONS_CHOICES = (
+        {'display_name': 'None', 'value': 'none'},
+        {'display_name': 'Read', 'value': 'read'},
+        {'display_name': 'Create objects', 'value': 'create_objects'},
+    )
 
     name = fields.StringField(max_length=64, primary_key=True)
     description = fields.StringField(read_only=False, required=False)
@@ -408,6 +417,10 @@ class Class(Model):
     expected_revision = fields.IntegerField(read_only=False, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
+
+    group = fields.IntegerField(label='group id', required=False)
+    group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+    other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
 
     class Meta:
         parent = Instance
@@ -720,15 +733,37 @@ class Object(Model):
     :ivar revision: :class:`~syncano.models.fields.IntegerField`
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar owner: :class:`~syncano.models.fields.IntegerField`
+    :ivar owner_permissions: :class:`~syncano.models.fields.ChoiceField`
+    :ivar group: :class:`~syncano.models.fields.IntegerField`
+    :ivar group_permissions: :class:`~syncano.models.fields.ChoiceField`
+    :ivar other_permissions: :class:`~syncano.models.fields.ChoiceField`
+    :ivar channel: :class:`~syncano.models.fields.StringField`
+    :ivar channel_room: :class:`~syncano.models.fields.StringField`
 
     .. note::
         This model is special because each instance will be **dynamically populated**
         with fields defined in related :class:`~syncano.models.base.Class` schema attribute.
     """
 
+    PERMISSIONS_CHOICES = (
+        {'display_name': 'None', 'value': 'none'},
+        {'display_name': 'Read', 'value': 'read'},
+        {'display_name': 'Write', 'value': 'write'},
+        {'display_name': 'Full', 'value': 'full'},
+    )
+
     revision = fields.IntegerField(read_only=True, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
+
+    owner = fields.IntegerField(label='owner id', required=False, read_only=True)
+    owner_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+    group = fields.IntegerField(label='group id', required=False)
+    group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+    other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+    channel = fields.StringField(required=False)
+    channel_room = fields.StringField(required=False, max_length=64)
 
     please = ObjectManager()
 

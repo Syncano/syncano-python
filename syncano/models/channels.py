@@ -92,21 +92,21 @@ class Channel(Model):
     """
 
     TYPE_CHOICES = (
-        {'display_name': 'Default', 'value': 0},
-        {'display_name': 'Separate rooms', 'value': 1},
+        {'display_name': 'Default', 'value': 'default'},
+        {'display_name': 'Separate rooms', 'value': 'separate_rooms'},
     )
 
     PERMISSIONS_CHOICES = (
-        {'display_name': 'none', 'value': 0},
-        {'display_name': 'subscribe', 'value': 1},
-        {'display_name': 'publish', 'value': 2},
+        {'display_name': 'None', 'value': 'none'},
+        {'display_name': 'Subscribe', 'value': 'subscribe'},
+        {'display_name': 'Publish', 'value': 'publish'},
     )
 
     name = fields.StringField(max_length=64, primary_key=True)
     type = fields.ChoiceField(choices=TYPE_CHOICES, required=False)
     group = fields.IntegerField(label='group id', required=False)
-    group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default=0)
-    other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default=0)
+    group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+    other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
     custom_publish = fields.BooleanField(default=False)
 
     class Meta:
