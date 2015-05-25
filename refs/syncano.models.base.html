@@ -411,6 +411,9 @@ can be serialized to JSON and send to API.</p>
 <li><strong>expected_revision</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
 <li><strong>updated_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
 <li><strong>created_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+<li><strong>group</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+<li><strong>group_permissions</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>other_permissions</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -424,6 +427,11 @@ can be serialized to JSON and send to API.</p>
 <dl class="attribute">
 <dt id="syncano.models.base.Class.LINKS">
 <tt class="descname">LINKS</tt><em class="property"> = [{u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'objects'}]</em><a class="headerlink" href="#syncano.models.base.Class.LINKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.Class.PERMISSIONS_CHOICES">
+<tt class="descname">PERMISSIONS_CHOICES</tt><em class="property"> = ({u'display_name': u'None', u'value': u'none'}, {u'display_name': u'Read', u'value': u'read'}, {u'display_name': u'Create objects', u'value': u'create_objects'})</em><a class="headerlink" href="#syncano.models.base.Class.PERMISSIONS_CHOICES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -728,6 +736,13 @@ codebox_id = EndpointField</p>
 <li><strong>revision</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
 <li><strong>created_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
 <li><strong>updated_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+<li><strong>owner</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+<li><strong>owner_permissions</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>group</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+<li><strong>group_permissions</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>other_permissions</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>channel</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>channel_room</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -738,6 +753,11 @@ codebox_id = EndpointField</p>
 <p class="last">This model is special because each instance will be <strong>dynamically populated</strong>
 with fields defined in related <a class="reference internal" href="#syncano.models.base.Class" title="syncano.models.base.Class"><tt class="xref py py-class docutils literal"><span class="pre">Class</span></tt></a> schema attribute.</p>
 </div>
+<dl class="attribute">
+<dt id="syncano.models.base.Object.PERMISSIONS_CHOICES">
+<tt class="descname">PERMISSIONS_CHOICES</tt><em class="property"> = ({u'display_name': u'None', u'value': u'none'}, {u'display_name': u'Read', u'value': u'read'}, {u'display_name': u'Write', u'value': u'write'}, {u'display_name': u'Full', u'value': u'full'})</em><a class="headerlink" href="#syncano.models.base.Object.PERMISSIONS_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="attribute">
 <dt id="syncano.models.base.Object.please">
 <tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.Object.please" title="Permalink to this definition">¶</a></dt>
