@@ -21,7 +21,7 @@ Installation
 
 ::
 
-  pip install syncano --pre
+  pip install syncano==0.6.2 --pre
 
 Examples
 ========
@@ -33,9 +33,9 @@ Creating, Modifying, Listing, Deleting Projects
 .. code:: python
 
   from syncano import client
-  
+
   SyncanoApi = client.SyncanoApi
-  
+
   with SyncanoApi(instance_name, apikey) as syncano:
       project = syncano.project_new('test', message_id=1)
       project_id = project['data']['project']['id']
@@ -49,9 +49,9 @@ or
 .. code:: python
 
   from syncano import client
-  
+
   SyncanoApi = client.SyncanoApi
-  
+
   with SyncanoApi(instance_name, apikey) as syncano:
       project = syncano.project.new('test', message_id=1)
       project_id = project['data']['project']['id']
@@ -67,9 +67,9 @@ Subscribe and listen to notifications and pings
 .. code:: python
 
   from syncano import client
-  
+
   SyncanoApi = client.SyncanoApi
-  
+
   with SyncanoAsyncApi(instance_name, apikey) as syncano:
       syncano.subscription_subscribe_project(your_project_id)
       while True:
@@ -84,9 +84,9 @@ Creating message callback that is printing all messages from server
 .. code:: python
 
   from syncano import client
-  
+
   SyncanoApi = client.SyncanoApi
-  
+
   class PrintCallback(callbacks.JsonCallback):
       def process_message(self, received):
           print (received)
@@ -103,9 +103,9 @@ Using ObjectCallback to get "object like" response with methods
 .. code:: python
 
   from syncano import client
-  
+
   SyncanoApi = client.SyncanoApi
-  
+
   with SyncanoApi(instance_name, apikey, callback_handler=callbacks.ObjectCallback) as syncano:
       project = syncano.project.new(name)
       project.update(new_name)
