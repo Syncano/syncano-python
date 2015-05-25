@@ -6,7 +6,7 @@ from time import sleep
 from uuid import uuid4
 
 import syncano
-from syncano.exceptions import SyncanoValueError
+from syncano.exceptions import SyncanoValueError, SyncanoRequestError
 from syncano.models import Class, CodeBox, Instance, Object, Webhook
 
 
@@ -177,7 +177,16 @@ class ClassIntegrationTest(InstanceMixin, IntegrationTest):
             ]
         )
         cls.description = 'dummy'
-        cls.save()
+
+        for i in xrange(3):
+            try:
+                cls.save()
+            except SyncanoRequestError as e:
+                if i == 2:
+                    raise
+
+                if e.status_code == 400 and e.reason.startswith('Cannot modify class.'):
+                    sleep(2)
 
         cls2 = self.model.please.get(instance_name=self.instance.name, name=cls.name)
         self.assertEqual(cls.description, cls2.description)
