@@ -12,3 +12,6 @@ run_it.py
 *.sublime-workspace
 .idea
 junit
+build
+dist
+syncano.egg-info
