@@ -1,0 +1,17 @@
+*.pyc
+.DS_STORE
+build
+dist
+*.egg-info
+*.pyo
+.coverage
+coverage
+reports
+run_it.py
+*.sublime-project
+*.sublime-workspace
+.idea
+junit
+build
+dist
+syncano.egg-info

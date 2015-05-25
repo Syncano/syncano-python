@@ -1,4 +1,0 @@
-
-INSTANCE = 'instance'
-APIKEY = 'api'
-HOST = 'api.syncano.com'
