@@ -416,6 +416,12 @@ class Manager(ConnectionMixin):
     def _filter(self, *args, **kwargs):
         if args and self.endpoint:
             properties = self.model._meta.get_endpoint_properties(self.endpoint)
+
+            # if 'id' occurs, it should be before 'instance_name'
+            if 'id' in properties:
+                properties.remove('id')
+                properties.insert(0, 'id')
+
             mapped_args = {k: v for k, v in zip(properties, args)}
             self.properties.update(mapped_args)
         self.properties.update(kwargs)
