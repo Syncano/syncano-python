@@ -27,8 +27,11 @@ setup(
     install_requires=[
         'requests==2.7.0',
         'certifi',
-        'six==1.9.0',
+        'ndg-httpsclient==0.4.0',
+        'pyasn1==0.1.7',
+        'pyOpenSSL==0.15.1',
         'python-slugify==0.1.0',
+        'six==1.9.0',
         'validictory==1.0.0',
     ],
     tests_require=[
