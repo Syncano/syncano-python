@@ -532,10 +532,8 @@ class CodeBox(Model):
         return CodeBoxTrace(**response)
 
 
-class Trace(Model):
+class CodeBoxTrace(Model):
     """
-    Base class for traces.
-
     :ivar status: :class:`~syncano.models.fields.ChoiceField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     :ivar executed_at: :class:`~syncano.models.fields.DateTimeField`
@@ -559,8 +557,6 @@ class Trace(Model):
     result = fields.StringField(read_only=True, required=False)
     duration = fields.IntegerField(read_only=True, required=False)
 
-
-class CodeBoxTrace(Trace):
     class Meta:
         parent = CodeBox
         endpoints = {
@@ -616,7 +612,31 @@ class Schedule(Model):
         }
 
 
-class ScheduleTrace(Trace):
+class ScheduleTrace(Model):
+    """
+    :ivar status: :class:`~syncano.models.fields.ChoiceField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar executed_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar result: :class:`~syncano.models.fields.StringField`
+    :ivar duration: :class:`~syncano.models.fields.IntegerField`
+    """
+
+    STATUS_CHOICES = (
+        {'display_name': 'Success', 'value': 'success'},
+        {'display_name': 'Failure', 'value': 'failure'},
+        {'display_name': 'Timeout', 'value': 'timeout'},
+        {'display_name': 'Pending', 'value': 'pending'},
+    )
+    LINKS = (
+        {'type': 'detail', 'name': 'self'},
+    )
+
+    status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
+    links = fields.HyperlinkedField(links=LINKS)
+    executed_at = fields.DateTimeField(read_only=True, required=False)
+    result = fields.StringField(read_only=True, required=False)
+    duration = fields.IntegerField(read_only=True, required=False)
+
     class Meta:
         parent = Schedule
         endpoints = {
@@ -882,7 +902,31 @@ class Trigger(Model):
         }
 
 
-class TriggerTrace(Trace):
+class TriggerTrace(Model):
+    """
+    :ivar status: :class:`~syncano.models.fields.ChoiceField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar executed_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar result: :class:`~syncano.models.fields.StringField`
+    :ivar duration: :class:`~syncano.models.fields.IntegerField`
+    """
+
+    STATUS_CHOICES = (
+        {'display_name': 'Success', 'value': 'success'},
+        {'display_name': 'Failure', 'value': 'failure'},
+        {'display_name': 'Timeout', 'value': 'timeout'},
+        {'display_name': 'Pending', 'value': 'pending'},
+    )
+    LINKS = (
+        {'type': 'detail', 'name': 'self'},
+    )
+
+    status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
+    links = fields.HyperlinkedField(links=LINKS)
+    executed_at = fields.DateTimeField(read_only=True, required=False)
+    result = fields.StringField(read_only=True, required=False)
+    duration = fields.IntegerField(read_only=True, required=False)
+
     class Meta:
         parent = Trigger
         endpoints = {
@@ -994,7 +1038,31 @@ class Webhook(Model):
         return self.RESULT_CLASS(**response)
 
 
-class WebhookTrace(Trace):
+class WebhookTrace(Model):
+    """
+    :ivar status: :class:`~syncano.models.fields.ChoiceField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar executed_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar result: :class:`~syncano.models.fields.StringField`
+    :ivar duration: :class:`~syncano.models.fields.IntegerField`
+    """
+
+    STATUS_CHOICES = (
+        {'display_name': 'Success', 'value': 'success'},
+        {'display_name': 'Failure', 'value': 'failure'},
+        {'display_name': 'Timeout', 'value': 'timeout'},
+        {'display_name': 'Pending', 'value': 'pending'},
+    )
+    LINKS = (
+        {'type': 'detail', 'name': 'self'},
+    )
+
+    status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
+    links = fields.HyperlinkedField(links=LINKS)
+    executed_at = fields.DateTimeField(read_only=True, required=False)
+    result = fields.StringField(read_only=True, required=False)
+    duration = fields.IntegerField(read_only=True, required=False)
+
     class Meta:
         parent = Webhook
         endpoints = {
