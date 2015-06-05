@@ -74,7 +74,8 @@ class Field(object):
         return six.u(repr(self))
 
     def __get__(self, instance, owner):
-        return instance._raw_data.get(self.name, self.default)
+        if instance is not None:
+            return instance._raw_data.get(self.name, self.default)
 
     def __set__(self, instance, value):
         if self.read_only and value and instance._raw_data.get(self.name):

@@ -91,6 +91,10 @@ class Channel(Model):
             >>> channel.poll(callback=callback)
     """
 
+    LINKS = (
+        {'type': 'detail', 'name': 'self'},
+    )
+
     TYPE_CHOICES = (
         {'display_name': 'Default', 'value': 'default'},
         {'display_name': 'Separate rooms', 'value': 'separate_rooms'},
@@ -103,11 +107,12 @@ class Channel(Model):
     )
 
     name = fields.StringField(max_length=64, primary_key=True)
-    type = fields.ChoiceField(choices=TYPE_CHOICES, required=False)
+    type = fields.ChoiceField(choices=TYPE_CHOICES, required=False, default='default')
     group = fields.IntegerField(label='group id', required=False)
     group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
     other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
-    custom_publish = fields.BooleanField(default=False)
+    custom_publish = fields.BooleanField(default=False, required=False)
+    links = fields.HyperlinkedField(links=LINKS)
 
     class Meta:
         parent = Instance

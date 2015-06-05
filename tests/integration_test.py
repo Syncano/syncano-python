@@ -332,7 +332,7 @@ class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
             trace.reload()
 
         self.assertEquals(trace.status, 'success')
-        self.assertEquals(trace.result, 'IntegrationTest')
+        self.assertEquals(trace.result, '{"stderror": "", "stdout": "IntegrationTest"}')
 
         codebox.delete()
 
@@ -382,5 +382,5 @@ class WebhookIntegrationTest(InstanceMixin, IntegrationTest):
 
         trace = webhook.run()
         self.assertEquals(trace.status, 'success')
-        self.assertEquals(trace.result, 'IntegrationTest')
+        self.assertEquals(trace.result, '{"stderror": "", "stdout": "IntegrationTest"}')
         webhook.delete()
