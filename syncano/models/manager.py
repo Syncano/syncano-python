@@ -249,7 +249,11 @@ class Manager(ConnectionMixin):
         """
         self.endpoint = 'detail'
         self.method = self.get_allowed_method('PUT', 'PATCH', 'POST')
-        self.data = kwargs.pop('data')
+        self.data = kwargs.pop('data', None)
+
+        if self.data is None:
+            self.data = kwargs
+
         self._filter(*args, **kwargs)
         return self.request()
 
