@@ -441,12 +441,12 @@ class CodeBox(Model):
     """
     OO wrapper around codeboxes `endpoint <http://docs.syncano.com/v4.0/docs/codebox-list-codeboxes>`_.
 
+    :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`
-    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     :ivar source: :class:`~syncano.models.fields.StringField`
     :ivar runtime_name: :class:`~syncano.models.fields.ChoiceField`
     :ivar config: :class:`~syncano.models.fields.Field`
-    :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
 
@@ -567,14 +567,13 @@ class Schedule(Model):
     """
     OO wrapper around codebox schedules `endpoint <http://docs.syncano.com/v4.0/docs/codebox-schedules-list>`_.
 
-    :ivar description: :class:`~syncano.models.fields.StringField`
-    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
-    :ivar source: :class:`~syncano.models.fields.StringField`
-    :ivar runtime_name: :class:`~syncano.models.fields.ChoiceField`
-    :ivar config: :class:`~syncano.models.fields.Field`
     :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar interval_sec: :class:`~syncano.models.fields.IntegerField`
+    :ivar crontab: :class:`~syncano.models.fields.StringField`
+    :ivar payload: :class:`~syncano.models.fields.HyperliStringFieldnkedField`
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
-    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar scheduled_next: :class:`~syncano.models.fields.DateTimeField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     """
 
     LINKS = [
@@ -856,6 +855,7 @@ class Trigger(Model):
     """
     OO wrapper around triggers `endpoint <http://docs.syncano.com/v4.0/docs/triggers-list>`_.
 
+    :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar codebox: :class:`~syncano.models.fields.IntegerField`
     :ivar klass: :class:`~syncano.models.fields.StringField`
     :ivar signal: :class:`~syncano.models.fields.ChoiceField`
