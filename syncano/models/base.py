@@ -583,6 +583,7 @@ class Schedule(Model):
         {'type': 'list', 'name': 'codebox'},
     ]
 
+    name = fields.StringField(max_length=80)
     interval_sec = fields.IntegerField(read_only=False, required=False)
     crontab = fields.StringField(max_length=40, required=False)
     payload = fields.StringField(required=False)
@@ -875,6 +876,7 @@ class Trigger(Model):
         {'display_name': 'post_delete', 'value': 'post_delete'},
     )
 
+    name = fields.StringField(max_length=80)
     codebox = fields.IntegerField(label='codebox id')
     klass = fields.StringField(label='class name')
     signal = fields.ChoiceField(choices=SIGNAL_CHOICES)
