@@ -556,7 +556,7 @@ class WebhookManager(Manager):
         response = self.request()
 
         # Workaround for circular import
-        return registry.Webhook.RESULT_CLASS(**response)
+        return registry.WebhookTrace(**response)
 
 
 class ObjectManager(Manager):
