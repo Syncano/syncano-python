@@ -3,7 +3,7 @@ from datetime import datetime
 
 from syncano.exceptions import SyncanoValidationError, SyncanoValueError
 from syncano.models import (CodeBox, CodeBoxTrace, Instance, Object, Webhook,
-                            WebhookResult)
+                            WebhookTrace)
 
 try:
     from unittest import mock
@@ -368,7 +368,7 @@ class WebhookTestCase(unittest.TestCase):
         result = model.run(x=1, y=2)
         self.assertTrue(connection_mock.called)
         self.assertTrue(connection_mock.request.called)
-        self.assertIsInstance(result, WebhookResult)
+        self.assertIsInstance(result, WebhookTrace)
         self.assertEqual(result.status, 'success')
         self.assertEqual(result.duration, 937)
         self.assertEqual(result.result, '1')

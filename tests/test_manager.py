@@ -4,7 +4,7 @@ from datetime import datetime
 from syncano.exceptions import (SyncanoDoesNotExist, SyncanoRequestError,
                                 SyncanoValueError)
 from syncano.models.base import (CodeBox, CodeBoxTrace, Instance, Object,
-                                 Webhook, WebhookResult)
+                                 Webhook, WebhookTrace)
 
 try:
     from unittest import mock
@@ -433,7 +433,7 @@ class WebhookManagerTestCase(unittest.TestCase):
         self.assertFalse(request_mock.called)
 
         result = self.manager.run(1, 2, a=1, b=2, payload={'x': 1, 'y': 2})
-        self.assertIsInstance(result, WebhookResult)
+        self.assertIsInstance(result, WebhookTrace)
         self.assertEqual(result.status, 'success')
         self.assertEqual(result.duration, 937)
         self.assertEqual(result.result, '1')
