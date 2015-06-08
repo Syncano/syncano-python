@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 import inspect
 import json
 from copy import deepcopy
-from datetime import datetime
 
 import six
 
@@ -947,21 +946,21 @@ class Webhook(Model):
     """
     OO wrapper around webhooks `endpoint <http://docs.syncano.com/v4.0/docs/webhooks-list>`_.
 
-    :ivar slug: :class:`~syncano.models.fields.SlugField`
+    :ivar name: :class:`~syncano.models.fields.SlugField`
     :ivar codebox: :class:`~syncano.models.fields.IntegerField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
 
     .. note::
         **WebHook** has special method called ``run`` which will execute related codebox::
 
-            >>> Webhook.please.run('instance-name', 'webhook-slug')
-            >>> Webhook.please.run('instance-name', 'webhook-slug', payload={'variable_one': 1, 'variable_two': 2})
-            >>> Webhook.please.run('instance-name', 'webhook-slug',
+            >>> Webhook.please.run('instance-name', 'webhook-name')
+            >>> Webhook.please.run('instance-name', 'webhook-name', payload={'variable_one': 1, 'variable_two': 2})
+            >>> Webhook.please.run('instance-name', 'webhook-name',
                                    payload="{\"variable_one\": 1, \"variable_two\": 2}")
 
         or via instance::
 
-            >>> wh = Webhook.please.get('instance-name', 'webhook-slug')
+            >>> wh = Webhook.please.get('instance-name', 'webhook-name')
             >>> wh.run()
             >>> wh.run(variable_one=1, variable_two=2)
 
@@ -971,7 +970,7 @@ class Webhook(Model):
         {'type': 'detail', 'name': 'codebox'},
     )
 
-    slug = fields.SlugField(max_length=50, primary_key=True)
+    name = fields.SlugField(max_length=50, primary_key=True)
     codebox = fields.IntegerField(label='codebox id')
     public = fields.BooleanField(required=False, default=False)
     public_link = fields.ChoiceField(required=False, read_only=True)
@@ -984,7 +983,7 @@ class Webhook(Model):
         endpoints = {
             'detail': {
                 'methods': ['put', 'get', 'patch', 'delete'],
-                'path': '/webhooks/{slug}/',
+                'path': '/webhooks/{name}/',
             },
             'list': {
                 'methods': ['post', 'get'],
@@ -992,7 +991,7 @@ class Webhook(Model):
             },
             'run': {
                 'methods': ['post'],
-                'path': '/webhooks/{slug}/run/',
+                'path': '/webhooks/{name}/run/',
             },
             'public': {
                 'methods': ['get'],
@@ -1004,7 +1003,7 @@ class Webhook(Model):
         """
         Usage::
 
-            >>> wh = Webhook.please.get('instance-name', 'webhook-slug')
+            >>> wh = Webhook.please.get('instance-name', 'webhook-name')
             >>> wh.run()
             >>> wh.run(variable_one=1, variable_two=2)
         """
@@ -1020,7 +1019,7 @@ class Webhook(Model):
             }
         }
         response = connection.request('POST', endpoint, **request)
-        response.update({'instance_name': self.instance_name, 'webhook_slug': self.slug})
+        response.update({'instance_name': self.instance_name, 'webhook_name': self.name})
         return WebhookTrace(**response)
 
 
