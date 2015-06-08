@@ -581,7 +581,7 @@ MAPPING = {
     'integer': IntegerField,
     'float': FloatField,
     'boolean': BooleanField,
-    'slug': SlugField,
+    'name': SlugField,
     'email': EmailField,
     'choice': ChoiceField,
     'date': DateField,

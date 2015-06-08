@@ -368,7 +368,7 @@ class WebhookIntegrationTest(InstanceMixin, IntegrationTest):
         webhook = self.model.please.create(
             instance_name=self.instance.name,
             codebox=self.codebox.id,
-            slug='wh%s' % self.generate_hash()[:10],
+            name='wh%s' % self.generate_hash()[:10],
         )
 
         webhook.delete()
@@ -377,7 +377,7 @@ class WebhookIntegrationTest(InstanceMixin, IntegrationTest):
         webhook = self.model.please.create(
             instance_name=self.instance.name,
             codebox=self.codebox.id,
-            slug='wh%s' % self.generate_hash()[:10],
+            name='wh%s' % self.generate_hash()[:10],
         )
 
         trace = webhook.run()

@@ -354,7 +354,7 @@ class WebhookTestCase(unittest.TestCase):
 
     @mock.patch('syncano.models.Webhook._get_connection')
     def test_run(self, connection_mock):
-        model = Webhook(instance_name='test', slug='slug', links={'run': '/v1/instances/test/webhooks/slug/run/'})
+        model = Webhook(instance_name='test', name='name', links={'run': '/v1/instances/test/webhooks/name/run/'})
         connection_mock.return_value = connection_mock
         connection_mock.request.return_value = {
             'status': 'success',
@@ -377,7 +377,7 @@ class WebhookTestCase(unittest.TestCase):
         connection_mock.assert_called_once_with(x=1, y=2)
         connection_mock.request.assert_called_once_with(
             'POST',
-            '/v1/instances/test/webhooks/slug/run/',
+            '/v1/instances/test/webhooks/name/run/',
             data={'payload': '{"y": 2, "x": 1}'}
         )
 
