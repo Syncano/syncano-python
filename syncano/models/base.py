@@ -941,21 +941,6 @@ class TriggerTrace(Model):
         }
 
 
-class WebhookResult(object):
-    """
-    OO wrapper around result of :meth:`~syncano.models.base.Webhook.run` method.
-    """
-    def __init__(self, status, duration, result, executed_at):
-        self.status = status
-        self.duration = duration
-        self.result = result
-        self.executed_at = executed_at
-
-        if isinstance(executed_at, six.string_types):
-            executed_at = executed_at.split('Z')[0]
-            self.executed_at = datetime.strptime(executed_at, '%Y-%m-%dT%H:%M:%S.%f')
-
-
 class Webhook(Model):
     """
     OO wrapper around webhooks `endpoint <http://docs.syncano.com/v4.0/docs/webhooks-list>`_.
@@ -979,8 +964,6 @@ class Webhook(Model):
             >>> wh.run(variable_one=1, variable_two=2)
 
     """
-    RESULT_CLASS = WebhookResult
-
     LINKS = (
         {'type': 'detail', 'name': 'self'},
         {'type': 'detail', 'name': 'codebox'},
@@ -1035,7 +1018,7 @@ class Webhook(Model):
             }
         }
         response = connection.request('POST', endpoint, **request)
-        return self.RESULT_CLASS(**response)
+        return WebhookTrace(**response)
 
 
 class WebhookTrace(Model):
