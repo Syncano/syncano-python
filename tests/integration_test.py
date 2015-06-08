@@ -332,7 +332,7 @@ class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
             trace.reload()
 
         self.assertEquals(trace.status, 'success')
-        self.assertEquals(trace.result, 'IntegrationTest')
+        self.assertEquals(trace.result, '{"stderror": "", "stdout": "IntegrationTest"}')
 
         codebox.delete()
 
@@ -368,7 +368,7 @@ class WebhookIntegrationTest(InstanceMixin, IntegrationTest):
         webhook = self.model.please.create(
             instance_name=self.instance.name,
             codebox=self.codebox.id,
-            slug='wh%s' % self.generate_hash()[:10],
+            name='wh%s' % self.generate_hash()[:10],
         )
 
         webhook.delete()
@@ -377,10 +377,10 @@ class WebhookIntegrationTest(InstanceMixin, IntegrationTest):
         webhook = self.model.please.create(
             instance_name=self.instance.name,
             codebox=self.codebox.id,
-            slug='wh%s' % self.generate_hash()[:10],
+            name='wh%s' % self.generate_hash()[:10],
         )
 
         trace = webhook.run()
         self.assertEquals(trace.status, 'success')
-        self.assertEquals(trace.result, 'IntegrationTest')
+        self.assertEquals(trace.result, '{"stderror": "", "stdout": "IntegrationTest"}')
         webhook.delete()

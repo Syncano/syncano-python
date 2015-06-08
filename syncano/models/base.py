@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 import inspect
 import json
 from copy import deepcopy
-from datetime import datetime
 
 import six
 
@@ -441,12 +440,12 @@ class CodeBox(Model):
     """
     OO wrapper around codeboxes `endpoint <http://docs.syncano.com/v4.0/docs/codebox-list-codeboxes>`_.
 
+    :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`
-    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     :ivar source: :class:`~syncano.models.fields.StringField`
     :ivar runtime_name: :class:`~syncano.models.fields.ChoiceField`
     :ivar config: :class:`~syncano.models.fields.Field`
-    :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
 
@@ -533,6 +532,14 @@ class CodeBox(Model):
 
 
 class CodeBoxTrace(Model):
+    """
+    :ivar status: :class:`~syncano.models.fields.ChoiceField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar executed_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar result: :class:`~syncano.models.fields.StringField`
+    :ivar duration: :class:`~syncano.models.fields.IntegerField`
+    """
+
     STATUS_CHOICES = (
         {'display_name': 'Success', 'value': 'success'},
         {'display_name': 'Failure', 'value': 'failure'},
@@ -567,14 +574,13 @@ class Schedule(Model):
     """
     OO wrapper around codebox schedules `endpoint <http://docs.syncano.com/v4.0/docs/codebox-schedules-list>`_.
 
-    :ivar description: :class:`~syncano.models.fields.StringField`
-    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
-    :ivar source: :class:`~syncano.models.fields.StringField`
-    :ivar runtime_name: :class:`~syncano.models.fields.ChoiceField`
-    :ivar config: :class:`~syncano.models.fields.Field`
     :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar interval_sec: :class:`~syncano.models.fields.IntegerField`
+    :ivar crontab: :class:`~syncano.models.fields.StringField`
+    :ivar payload: :class:`~syncano.models.fields.HyperliStringFieldnkedField`
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
-    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar scheduled_next: :class:`~syncano.models.fields.DateTimeField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     """
 
     LINKS = [
@@ -583,6 +589,7 @@ class Schedule(Model):
         {'type': 'list', 'name': 'codebox'},
     ]
 
+    name = fields.StringField(max_length=80)
     interval_sec = fields.IntegerField(read_only=False, required=False)
     crontab = fields.StringField(max_length=40, required=False)
     payload = fields.StringField(required=False)
@@ -604,10 +611,8 @@ class Schedule(Model):
         }
 
 
-class Trace(Model):
+class ScheduleTrace(Model):
     """
-    OO wrapper around codebox schedules traces `endpoint <http://docs.syncano.com/v4.0/docs/codebox-schedules-traces>`_.
-
     :ivar status: :class:`~syncano.models.fields.ChoiceField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     :ivar executed_at: :class:`~syncano.models.fields.DateTimeField`
@@ -855,6 +860,7 @@ class Trigger(Model):
     """
     OO wrapper around triggers `endpoint <http://docs.syncano.com/v4.0/docs/triggers-list>`_.
 
+    :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar codebox: :class:`~syncano.models.fields.IntegerField`
     :ivar klass: :class:`~syncano.models.fields.StringField`
     :ivar signal: :class:`~syncano.models.fields.ChoiceField`
@@ -875,6 +881,7 @@ class Trigger(Model):
         {'display_name': 'post_delete', 'value': 'post_delete'},
     )
 
+    name = fields.StringField(max_length=80)
     codebox = fields.IntegerField(label='codebox id')
     klass = fields.StringField(label='class name')
     signal = fields.ChoiceField(choices=SIGNAL_CHOICES)
@@ -896,52 +903,74 @@ class Trigger(Model):
         }
 
 
-class WebhookResult(object):
+class TriggerTrace(Model):
     """
-    OO wrapper around result of :meth:`~syncano.models.base.Webhook.run` method.
+    :ivar status: :class:`~syncano.models.fields.ChoiceField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar executed_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar result: :class:`~syncano.models.fields.StringField`
+    :ivar duration: :class:`~syncano.models.fields.IntegerField`
     """
-    def __init__(self, status, duration, result, executed_at):
-        self.status = status
-        self.duration = duration
-        self.result = result
-        self.executed_at = executed_at
 
-        if isinstance(executed_at, six.string_types):
-            executed_at = executed_at.split('Z')[0]
-            self.executed_at = datetime.strptime(executed_at, '%Y-%m-%dT%H:%M:%S.%f')
+    STATUS_CHOICES = (
+        {'display_name': 'Success', 'value': 'success'},
+        {'display_name': 'Failure', 'value': 'failure'},
+        {'display_name': 'Timeout', 'value': 'timeout'},
+        {'display_name': 'Pending', 'value': 'pending'},
+    )
+    LINKS = (
+        {'type': 'detail', 'name': 'self'},
+    )
+
+    status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
+    links = fields.HyperlinkedField(links=LINKS)
+    executed_at = fields.DateTimeField(read_only=True, required=False)
+    result = fields.StringField(read_only=True, required=False)
+    duration = fields.IntegerField(read_only=True, required=False)
+
+    class Meta:
+        parent = Trigger
+        endpoints = {
+            'detail': {
+                'methods': ['get'],
+                'path': '/traces/{id}/',
+            },
+            'list': {
+                'methods': ['get'],
+                'path': '/traces/',
+            }
+        }
 
 
 class Webhook(Model):
     """
     OO wrapper around webhooks `endpoint <http://docs.syncano.com/v4.0/docs/webhooks-list>`_.
 
-    :ivar slug: :class:`~syncano.models.fields.SlugField`
+    :ivar name: :class:`~syncano.models.fields.SlugField`
     :ivar codebox: :class:`~syncano.models.fields.IntegerField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
 
     .. note::
         **WebHook** has special method called ``run`` which will execute related codebox::
 
-            >>> Webhook.please.run('instance-name', 'webhook-slug')
-            >>> Webhook.please.run('instance-name', 'webhook-slug', payload={'variable_one': 1, 'variable_two': 2})
-            >>> Webhook.please.run('instance-name', 'webhook-slug',
+            >>> Webhook.please.run('instance-name', 'webhook-name')
+            >>> Webhook.please.run('instance-name', 'webhook-name', payload={'variable_one': 1, 'variable_two': 2})
+            >>> Webhook.please.run('instance-name', 'webhook-name',
                                    payload="{\"variable_one\": 1, \"variable_two\": 2}")
 
         or via instance::
 
-            >>> wh = Webhook.please.get('instance-name', 'webhook-slug')
+            >>> wh = Webhook.please.get('instance-name', 'webhook-name')
             >>> wh.run()
             >>> wh.run(variable_one=1, variable_two=2)
 
     """
-    RESULT_CLASS = WebhookResult
-
     LINKS = (
         {'type': 'detail', 'name': 'self'},
         {'type': 'detail', 'name': 'codebox'},
     )
 
-    slug = fields.SlugField(max_length=50, primary_key=True)
+    name = fields.SlugField(max_length=50, primary_key=True)
     codebox = fields.IntegerField(label='codebox id')
     public = fields.BooleanField(required=False, default=False)
     public_link = fields.ChoiceField(required=False, read_only=True)
@@ -954,7 +983,7 @@ class Webhook(Model):
         endpoints = {
             'detail': {
                 'methods': ['put', 'get', 'patch', 'delete'],
-                'path': '/webhooks/{slug}/',
+                'path': '/webhooks/{name}/',
             },
             'list': {
                 'methods': ['post', 'get'],
@@ -962,7 +991,7 @@ class Webhook(Model):
             },
             'run': {
                 'methods': ['post'],
-                'path': '/webhooks/{slug}/run/',
+                'path': '/webhooks/{name}/run/',
             },
             'public': {
                 'methods': ['get'],
@@ -974,7 +1003,7 @@ class Webhook(Model):
         """
         Usage::
 
-            >>> wh = Webhook.please.get('instance-name', 'webhook-slug')
+            >>> wh = Webhook.please.get('instance-name', 'webhook-name')
             >>> wh.run()
             >>> wh.run(variable_one=1, variable_two=2)
         """
@@ -990,4 +1019,44 @@ class Webhook(Model):
             }
         }
         response = connection.request('POST', endpoint, **request)
-        return self.RESULT_CLASS(**response)
+        response.update({'instance_name': self.instance_name, 'webhook_name': self.name})
+        return WebhookTrace(**response)
+
+
+class WebhookTrace(Model):
+    """
+    :ivar status: :class:`~syncano.models.fields.ChoiceField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar executed_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar result: :class:`~syncano.models.fields.StringField`
+    :ivar duration: :class:`~syncano.models.fields.IntegerField`
+    """
+
+    STATUS_CHOICES = (
+        {'display_name': 'Success', 'value': 'success'},
+        {'display_name': 'Failure', 'value': 'failure'},
+        {'display_name': 'Timeout', 'value': 'timeout'},
+        {'display_name': 'Pending', 'value': 'pending'},
+    )
+    LINKS = (
+        {'type': 'detail', 'name': 'self'},
+    )
+
+    status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
+    links = fields.HyperlinkedField(links=LINKS)
+    executed_at = fields.DateTimeField(read_only=True, required=False)
+    result = fields.StringField(read_only=True, required=False)
+    duration = fields.IntegerField(read_only=True, required=False)
+
+    class Meta:
+        parent = Webhook
+        endpoints = {
+            'detail': {
+                'methods': ['get'],
+                'path': '/traces/{id}/',
+            },
+            'list': {
+                'methods': ['get'],
+                'path': '/traces/',
+            }
+        }
