@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 import inspect
 import json
 from copy import deepcopy
-from datetime import datetime
 
 import six
 
