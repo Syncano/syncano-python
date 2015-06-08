@@ -423,6 +423,14 @@ class Manager(ConnectionMixin):
     def _filter(self, *args, **kwargs):
         if args and self.endpoint:
             properties = self.model._meta.get_endpoint_properties(self.endpoint)
+
+            # let user get object by 'id'
+            too_much_properties = len(args) < len(properties)
+            id_specified = 'id' in properties
+
+            if too_much_properties and id_specified:
+                properties = ['id']
+
             mapped_args = {k: v for k, v in zip(properties, args)}
             self.properties.update(mapped_args)
         self.properties.update(kwargs)
