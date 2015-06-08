@@ -1018,6 +1018,7 @@ class Webhook(Model):
             }
         }
         response = connection.request('POST', endpoint, **request)
+        response.update({'instance_name': self.instance_name, 'webhook_slug': self.slug})
         return WebhookTrace(**response)
 
 
