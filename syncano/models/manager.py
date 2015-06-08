@@ -427,9 +427,8 @@ class Manager(ConnectionMixin):
             # let user get object by 'id'
             too_much_properties = len(args) < len(properties)
             id_specified = 'id' in properties
-            instance_specified = self.model.instance_name
 
-            if too_much_properties and id_specified and instance_specified:
+            if too_much_properties and id_specified:
                 properties = ['id']
 
             mapped_args = {k: v for k, v in zip(properties, args)}
