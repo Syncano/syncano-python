@@ -164,6 +164,13 @@ class ManagerTestCase(unittest.TestCase):
         self.assertEqual(self.manager.endpoint, 'detail')
         self.assertEqual(self.manager.data, {'x': 1, 'y': 2})
 
+        result = self.manager.update(1, 2, a=1, b=2, x=3, y=2)
+        self.assertEqual(request_mock, result)
+
+        self.assertEqual(self.manager.method, 'PUT')
+        self.assertEqual(self.manager.endpoint, 'detail')
+        self.assertEqual(self.manager.data, {'x': 3, 'y': 2, 'a': 1, 'b': 2})
+
     @mock.patch('syncano.models.manager.Manager.update')
     @mock.patch('syncano.models.manager.Manager.create')
     def test_update_or_create(self, create_mock, update_mock):
