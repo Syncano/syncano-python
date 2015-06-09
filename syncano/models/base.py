@@ -575,6 +575,7 @@ class Schedule(Model):
     OO wrapper around codebox schedules `endpoint <http://docs.syncano.com/v4.0/docs/codebox-schedules-list>`_.
 
     :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar codebox: :class:`~syncano.models.fields.IntegerField`
     :ivar interval_sec: :class:`~syncano.models.fields.IntegerField`
     :ivar crontab: :class:`~syncano.models.fields.StringField`
     :ivar payload: :class:`~syncano.models.fields.HyperliStringFieldnkedField`
@@ -590,6 +591,7 @@ class Schedule(Model):
     ]
 
     name = fields.StringField(max_length=80)
+    codebox = fields.IntegerField(label='codebox id')
     interval_sec = fields.IntegerField(read_only=False, required=False)
     crontab = fields.StringField(max_length=40, required=False)
     payload = fields.StringField(required=False)
