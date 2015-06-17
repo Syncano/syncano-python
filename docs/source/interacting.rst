@@ -268,4 +268,4 @@ Some settings can be overwritten via environmental variables e.g:
     $ export SYNCANO_INSTANCE=test
 
 .. warning::
-    **DEBUG** loglevel will **disbale** SSL cert check.
+    **DEBUG** loglevel will **disable** SSL cert check.
