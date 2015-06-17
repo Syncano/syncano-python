@@ -440,7 +440,7 @@ class CodeBox(Model):
     """
     OO wrapper around codeboxes `endpoint <http://docs.syncano.com/v4.0/docs/codebox-list-codeboxes>`_.
 
-    :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar label: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`
     :ivar source: :class:`~syncano.models.fields.StringField`
     :ivar runtime_name: :class:`~syncano.models.fields.ChoiceField`
@@ -477,7 +477,7 @@ class CodeBox(Model):
         {'display_name': 'ruby', 'value': 'ruby'},
     )
 
-    name = fields.StringField(max_length=80)
+    label = fields.StringField(max_length=80)
     description = fields.StringField(required=False)
     source = fields.StringField()
     runtime_name = fields.ChoiceField(choices=RUNTIME_CHOICES)
@@ -574,7 +574,7 @@ class Schedule(Model):
     """
     OO wrapper around codebox schedules `endpoint <http://docs.syncano.com/v4.0/docs/codebox-schedules-list>`_.
 
-    :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar label: :class:`~syncano.models.fields.StringField`
     :ivar codebox: :class:`~syncano.models.fields.IntegerField`
     :ivar interval_sec: :class:`~syncano.models.fields.IntegerField`
     :ivar crontab: :class:`~syncano.models.fields.StringField`
@@ -590,7 +590,7 @@ class Schedule(Model):
         {'type': 'list', 'name': 'codebox'},
     ]
 
-    name = fields.StringField(max_length=80)
+    label = fields.StringField(max_length=80)
     codebox = fields.IntegerField(label='codebox id')
     interval_sec = fields.IntegerField(read_only=False, required=False)
     crontab = fields.StringField(max_length=40, required=False)
@@ -862,7 +862,7 @@ class Trigger(Model):
     """
     OO wrapper around triggers `endpoint <http://docs.syncano.com/v4.0/docs/triggers-list>`_.
 
-    :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar label: :class:`~syncano.models.fields.StringField`
     :ivar codebox: :class:`~syncano.models.fields.IntegerField`
     :ivar klass: :class:`~syncano.models.fields.StringField`
     :ivar signal: :class:`~syncano.models.fields.ChoiceField`
@@ -883,7 +883,7 @@ class Trigger(Model):
         {'display_name': 'post_delete', 'value': 'post_delete'},
     )
 
-    name = fields.StringField(max_length=80)
+    label = fields.StringField(max_length=80)
     codebox = fields.IntegerField(label='codebox id')
     klass = fields.StringField(label='class name')
     signal = fields.ChoiceField(choices=SIGNAL_CHOICES)
