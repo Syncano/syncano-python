@@ -3,7 +3,7 @@
 ## Python QuickStart Guide
 ---
 
-You can find quick start on installing and using Syncano's Python library (for both Obj-C and Swift) in our [documentation](http://docs.syncano.com/v4.0/docs/python).
+You can find quick start on installing and using Syncano's Python library in our [documentation](http://docs.syncano.com/v4.0/docs/python).
 
 For more detailed information on how to use Syncano and its features - our [Developer Manual](http://docs.syncano.com/v4.0/docs/getting-stared-with-syncano) should be very helpful.
 
