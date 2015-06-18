@@ -603,7 +603,7 @@ class Schedule(Model):
         parent = Instance
         endpoints = {
             'detail': {
-                'methods': ['get', 'delete'],
+                'methods': ['put', 'get', 'patch', 'delete'],
                 'path': '/schedules/{id}/',
             },
             'list': {
