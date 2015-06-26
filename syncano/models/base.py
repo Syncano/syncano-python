@@ -206,9 +206,11 @@ class Model(six.with_metaclass(ModelMetaclass)):
                 if not value and field.blank:
                     continue
 
-                param_name = getattr(field, 'param_name', field.name)
-                data[param_name] = field.to_native(value)
-
+                if field.mapping:
+                    data[field.mapping] = field.to_native(value)
+                else:
+                    param_name = getattr(field, 'param_name', field.name)
+                    data[param_name] = field.to_native(value)
         return data
 
     def get_endpoint_data(self):
@@ -889,7 +891,7 @@ class Trigger(Model):
 
     label = fields.StringField(max_length=80)
     codebox = fields.IntegerField(label='codebox id')
-    klass = fields.StringField(label='class name')
+    klass = fields.StringField(label='class name', mapping='class')
     signal = fields.ChoiceField(choices=SIGNAL_CHOICES)
     links = fields.HyperlinkedField(links=LINKS)
     created_at = fields.DateTimeField(read_only=True, required=False)

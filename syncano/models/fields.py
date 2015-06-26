@@ -37,6 +37,7 @@ class Field(object):
         self.read_only = kwargs.pop('read_only', self.read_only)
         self.blank = kwargs.pop('blank', self.blank)
         self.label = kwargs.pop('label', None)
+        self.mapping = kwargs.pop('mapping', None)
         self.max_length = kwargs.pop('max_length', None)
         self.min_length = kwargs.pop('min_length', None)
         self.query_allowed = kwargs.pop('query_allowed', self.query_allowed)
