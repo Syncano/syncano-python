@@ -187,6 +187,7 @@ class Connection(object):
         content = self.get_response_content(url, response)
 
         if files:
+            # remove 'data' and 'content-type' to avoid "ValueError: Data must not be a string."
             params.pop('data')
             params['headers'].pop('content-type')
             params['files'] = files
@@ -195,8 +196,8 @@ class Connection(object):
                 url = '{}{}/'.format(url, content['id'])
 
             patch = getattr(self.session, 'patch')
+            # second request is needed to upload a file
             response = patch(url, **params)
-
             content = self.get_response_content(url, response)
 
         return content
