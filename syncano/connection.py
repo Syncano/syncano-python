@@ -161,6 +161,7 @@ class Connection(object):
         :raises SyncanoValueError: if invalid request method was chosen
         :raises SyncanoRequestError: if something went wrong during the request
         """
+        files = kwargs.get('data', {}).pop('files', None)
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)
 
@@ -181,7 +182,6 @@ class Connection(object):
         # Encode request payload
         if 'data' in params and not isinstance(params['data'], six.string_types):
             params['data'] = json.dumps(params['data'])
-
         url = self.build_url(path)
         response = method(url, **params)
 
@@ -196,6 +196,14 @@ class Connection(object):
         # Validation error
         if is_client_error(response.status_code):
             raise SyncanoRequestError(response.status_code, content)
+
+        if files:
+            method = getattr(self.session, 'patch')
+            params.pop('data')
+            params['headers'].pop('content-type')
+            params['files'] = files
+            response = method(url + '{}/'.format(content['id']), **params)
+            content = response.json()
 
         # Other errors
         if not is_success(response.status_code):
