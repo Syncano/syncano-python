@@ -184,7 +184,24 @@ class Connection(object):
             params['data'] = json.dumps(params['data'])
         url = self.build_url(path)
         response = method(url, **params)
+        content = self.get_response_content(url, response)
 
+        if files:
+            params.pop('data')
+            params['headers'].pop('content-type')
+            params['files'] = files
+
+            if response.status_code == 201:
+                url = '{}{}/'.format(url, content['id'])
+
+            patch = getattr(self.session, 'patch')
+            response = patch(url, **params)
+
+            content = self.get_response_content(url, response)
+
+        return content
+
+    def get_response_content(self, url, response):
         try:
             content = response.json()
         except ValueError:
@@ -196,14 +213,6 @@ class Connection(object):
         # Validation error
         if is_client_error(response.status_code):
             raise SyncanoRequestError(response.status_code, content)
-
-        if files:
-            method = getattr(self.session, 'patch')
-            params.pop('data')
-            params['headers'].pop('content-type')
-            params['files'] = files
-            response = method(url + '{}/'.format(content['id']), **params)
-            content = response.json()
 
         # Other errors
         if not is_success(response.status_code):
