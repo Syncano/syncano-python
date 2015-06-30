@@ -348,6 +348,8 @@ class ApiKey(Model):
     OO wrapper around instance api keys `endpoint <TODO>`_.
 
     :ivar api_key: :class:`~syncano.models.fields.StringField`
+    :ivar allow_user_create: :class:`~syncano.models.fields.StringField`
+    :ivar ignore_acl: :class:`~syncano.models.fields.StringField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     """
     LINKS = [
@@ -355,6 +357,8 @@ class ApiKey(Model):
     ]
 
     api_key = fields.StringField(read_only=True, required=False)
+    allow_user_create = fields.BooleanField(required=False, default=False)
+    ignore_acl = fields.BooleanField(required=False, default=False)
     links = fields.HyperlinkedField(links=LINKS)
 
     class Meta:
