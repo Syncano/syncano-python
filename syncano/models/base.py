@@ -867,7 +867,7 @@ class Trigger(Model):
 
     :ivar label: :class:`~syncano.models.fields.StringField`
     :ivar codebox: :class:`~syncano.models.fields.IntegerField`
-    :ivar klass: :class:`~syncano.models.fields.StringField`
+    :ivar class_name: :class:`~syncano.models.fields.StringField`
     :ivar signal: :class:`~syncano.models.fields.ChoiceField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
@@ -888,7 +888,7 @@ class Trigger(Model):
 
     label = fields.StringField(max_length=80)
     codebox = fields.IntegerField(label='codebox id')
-    klass = fields.StringField(label='class name', mapping='class')
+    class_name = fields.StringField(label='class name', mapping='class')
     signal = fields.ChoiceField(choices=SIGNAL_CHOICES)
     links = fields.HyperlinkedField(links=LINKS)
     created_at = fields.DateTimeField(read_only=True, required=False)
