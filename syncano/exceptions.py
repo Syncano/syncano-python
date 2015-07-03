@@ -32,7 +32,9 @@ class SyncanoRequestError(SyncanoException):
         self.status_code = status_code
 
         if isinstance(reason, dict):
-            message = ''.join(reason.get(k, '') for k in ['detail', 'error', '__all__'])
+            joined_details = (''.join(reason.get(k, '')) for k in ['detail', 'error', '__all__'])
+            message = ''.join(joined_details)
+
             if not message:
                 for name, value in six.iteritems(reason):
                     if isinstance(value, (list, dict)):

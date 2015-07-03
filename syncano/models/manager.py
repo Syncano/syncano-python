@@ -239,17 +239,24 @@ class Manager(ConnectionMixin):
     @clone
     def update(self, *args, **kwargs):
         """
-        Updates single instance based on provided arguments.
+        Updates single instance based on provided arguments. There to ways to do so:
+
+            1. Django-style update.
+            2. By specifying **data** argument.
+
         The **data** is a dictionary of (field, value) pairs used to update the object.
 
         Usage::
+
+            instance = Instance.please.update('test-one', description='new one')
+            instance = Instance.please.update(name='test-one', description='new one')
 
             instance = Instance.please.update('test-one', data={'description': 'new one'})
             instance = Instance.please.update(name='test-one', data={'description': 'new one'})
         """
         self.endpoint = 'detail'
         self.method = self.get_allowed_method('PUT', 'PATCH', 'POST')
-        self.data = kwargs.pop('data')
+        self.data = kwargs.pop('data', kwargs)
         self._filter(*args, **kwargs)
         return self.request()
 
@@ -416,6 +423,14 @@ class Manager(ConnectionMixin):
     def _filter(self, *args, **kwargs):
         if args and self.endpoint:
             properties = self.model._meta.get_endpoint_properties(self.endpoint)
+
+            # let user get object by 'id'
+            too_much_properties = len(args) < len(properties)
+            id_specified = 'id' in properties
+
+            if too_much_properties and id_specified:
+                properties = ['id']
+
             mapped_args = {k: v for k, v in zip(properties, args)}
             self.properties.update(mapped_args)
         self.properties.update(kwargs)
@@ -556,7 +571,7 @@ class WebhookManager(Manager):
         response = self.request()
 
         # Workaround for circular import
-        return registry.Webhook.RESULT_CLASS(**response)
+        return registry.WebhookTrace(**response)
 
 
 class ObjectManager(Manager):

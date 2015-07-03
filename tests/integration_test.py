@@ -295,7 +295,7 @@ class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
     def test_create(self):
         codebox = self.model.please.create(
             instance_name=self.instance.name,
-            name='cb%s' % self.generate_hash()[:10],
+            label='cb%s' % self.generate_hash()[:10],
             runtime_name='python',
             source='print "IntegrationTest"'
         )
@@ -305,7 +305,7 @@ class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
     def test_update(self):
         codebox = self.model.please.create(
             instance_name=self.instance.name,
-            name='cb%s' % self.generate_hash()[:10],
+            label='cb%s' % self.generate_hash()[:10],
             runtime_name='python',
             source='print "IntegrationTest"'
         )
@@ -321,7 +321,7 @@ class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
     def test_source_run(self):
         codebox = self.model.please.create(
             instance_name=self.instance.name,
-            name='cb%s' % self.generate_hash()[:10],
+            label='cb%s' % self.generate_hash()[:10],
             runtime_name='python',
             source='print "IntegrationTest"'
         )
@@ -332,7 +332,7 @@ class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
             trace.reload()
 
         self.assertEquals(trace.status, 'success')
-        self.assertEquals(trace.result, 'IntegrationTest')
+        self.assertEquals(trace.result, u'{u\'stderr\': u\'\', u\'stdout\': u\'IntegrationTest\'}')
 
         codebox.delete()
 
@@ -346,7 +346,7 @@ class WebhookIntegrationTest(InstanceMixin, IntegrationTest):
 
         cls.codebox = CodeBox.please.create(
             instance_name=cls.instance.name,
-            name='cb%s' % cls.generate_hash()[:10],
+            label='cb%s' % cls.generate_hash()[:10],
             runtime_name='python',
             source='print "IntegrationTest"'
         )
@@ -368,7 +368,7 @@ class WebhookIntegrationTest(InstanceMixin, IntegrationTest):
         webhook = self.model.please.create(
             instance_name=self.instance.name,
             codebox=self.codebox.id,
-            slug='wh%s' % self.generate_hash()[:10],
+            name='wh%s' % self.generate_hash()[:10],
         )
 
         webhook.delete()
@@ -377,10 +377,10 @@ class WebhookIntegrationTest(InstanceMixin, IntegrationTest):
         webhook = self.model.please.create(
             instance_name=self.instance.name,
             codebox=self.codebox.id,
-            slug='wh%s' % self.generate_hash()[:10],
+            name='wh%s' % self.generate_hash()[:10],
         )
 
         trace = webhook.run()
         self.assertEquals(trace.status, 'success')
-        self.assertEquals(trace.result, 'IntegrationTest')
+        self.assertEquals(trace.result, u'{u\'stderr\': u\'\', u\'stdout\': u\'IntegrationTest\'}')
         webhook.delete()

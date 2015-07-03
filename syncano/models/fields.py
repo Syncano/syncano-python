@@ -37,6 +37,7 @@ class Field(object):
         self.read_only = kwargs.pop('read_only', self.read_only)
         self.blank = kwargs.pop('blank', self.blank)
         self.label = kwargs.pop('label', None)
+        self.mapping = kwargs.pop('mapping', None)
         self.max_length = kwargs.pop('max_length', None)
         self.min_length = kwargs.pop('min_length', None)
         self.query_allowed = kwargs.pop('query_allowed', self.query_allowed)
@@ -74,7 +75,8 @@ class Field(object):
         return six.u(repr(self))
 
     def __get__(self, instance, owner):
-        return instance._raw_data.get(self.name, self.default)
+        if instance is not None:
+            return instance._raw_data.get(self.name, self.default)
 
     def __set__(self, instance, value):
         if self.read_only and value and instance._raw_data.get(self.name):
@@ -580,7 +582,7 @@ MAPPING = {
     'integer': IntegerField,
     'float': FloatField,
     'boolean': BooleanField,
-    'slug': SlugField,
+    'name': SlugField,
     'email': EmailField,
     'choice': ChoiceField,
     'date': DateField,
