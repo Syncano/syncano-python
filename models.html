@@ -329,12 +329,12 @@ can be serialized to JSON and send to API.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>label</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
 <li><strong>description</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
-<li><strong>links</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.HyperlinkedField" title="syncano.models.fields.HyperlinkedField"><tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></a></li>
 <li><strong>source</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
 <li><strong>runtime_name</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
 <li><strong>config</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.Field" title="syncano.models.fields.Field"><tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt></a></li>
-<li><strong>name</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>links</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.HyperlinkedField" title="syncano.models.fields.HyperlinkedField"><tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></a></li>
 <li><strong>created_at</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
 <li><strong>updated_at</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
 </ul>
@@ -373,15 +373,21 @@ can be serialized to JSON and send to API.</p>
 <dl class="class">
 <dt>
 <em class="property">class </em><tt class="descname">CodeBoxTrace</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/syncano/models/base.html#CodeBoxTrace"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>CodeBoxTrace:
-status = ChoiceField
-links = HyperlinkedField
-executed_at = DateTimeField
-result = StringField
-duration = IntegerField
-id = IntegerField
-instance_name = EndpointField
-codebox_id = EndpointField</p>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>status</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>links</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.HyperlinkedField" title="syncano.models.fields.HyperlinkedField"><tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></a></li>
+<li><strong>executed_at</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+<li><strong>result</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>duration</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -393,14 +399,14 @@ codebox_id = EndpointField</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>description</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
-<li><strong>links</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.HyperlinkedField" title="syncano.models.fields.HyperlinkedField"><tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></a></li>
-<li><strong>source</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
-<li><strong>runtime_name</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
-<li><strong>config</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.Field" title="syncano.models.fields.Field"><tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt></a></li>
-<li><strong>name</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>label</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>codebox</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+<li><strong>interval_sec</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+<li><strong>crontab</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>payload</strong> &#8211; <tt class="xref py py-class docutils literal"><span class="pre">HyperliStringFieldnkedField</span></tt></li>
 <li><strong>created_at</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
-<li><strong>updated_at</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+<li><strong>scheduled_next</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+<li><strong>links</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.HyperlinkedField" title="syncano.models.fields.HyperlinkedField"><tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></a></li>
 </ul>
 </td>
 </tr>
@@ -410,9 +416,8 @@ codebox_id = EndpointField</p>
 
 <dl class="class">
 <dt>
-<em class="property">class </em><tt class="descname">Trace</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/syncano/models/base.html#Trace"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>OO wrapper around codebox schedules traces <a class="reference external" href="http://docs.syncano.com/v4.0/docs/codebox-schedules-traces">endpoint</a>.</p>
-<table class="docutils field-list" frame="void" rules="none">
+<em class="property">class </em><tt class="descname">ScheduleTrace</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/syncano/models/base.html#ScheduleTrace"><span class="viewcode-link">[source]</span></a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -521,8 +526,9 @@ on passed <strong>instance_name</strong> and <strong>class_name</strong>.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>label</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
 <li><strong>codebox</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
-<li><strong>klass</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>class_name</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
 <li><strong>signal</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
 <li><strong>links</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.HyperlinkedField" title="syncano.models.fields.HyperlinkedField"><tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></a></li>
 <li><strong>created_at</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
@@ -536,8 +542,22 @@ on passed <strong>instance_name</strong> and <strong>class_name</strong>.</p>
 
 <dl class="class">
 <dt>
-<em class="property">class </em><tt class="descname">WebhookResult</tt><big>(</big><em>status</em>, <em>duration</em>, <em>result</em>, <em>executed_at</em><big>)</big><a class="reference internal" href="_modules/syncano/models/base.html#WebhookResult"><span class="viewcode-link">[source]</span></a></dt>
-<dd><p>OO wrapper around result of <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Webhook.run" title="syncano.models.base.Webhook.run"><tt class="xref py py-meth docutils literal"><span class="pre">run()</span></tt></a> method.</p>
+<em class="property">class </em><tt class="descname">TriggerTrace</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/syncano/models/base.html#TriggerTrace"><span class="viewcode-link">[source]</span></a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>status</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>links</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.HyperlinkedField" title="syncano.models.fields.HyperlinkedField"><tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></a></li>
+<li><strong>executed_at</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+<li><strong>result</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>duration</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -549,7 +569,7 @@ on passed <strong>instance_name</strong> and <strong>class_name</strong>.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
-<li><strong>slug</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.SlugField" title="syncano.models.fields.SlugField"><tt class="xref py py-class docutils literal"><span class="pre">SlugField</span></tt></a></li>
+<li><strong>name</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.SlugField" title="syncano.models.fields.SlugField"><tt class="xref py py-class docutils literal"><span class="pre">SlugField</span></tt></a></li>
 <li><strong>codebox</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
 <li><strong>links</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.HyperlinkedField" title="syncano.models.fields.HyperlinkedField"><tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></a></li>
 </ul>
@@ -560,36 +580,50 @@ on passed <strong>instance_name</strong> and <strong>class_name</strong>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p><strong>WebHook</strong> has special method called <tt class="docutils literal"><span class="pre">run</span></tt> which will execute related codebox:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Webhook</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;webhook-slug&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Webhook</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;webhook-slug&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;variable_one&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;variable_two&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Webhook</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;webhook-slug&#39;</span><span class="p">,</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Webhook</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;webhook-name&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Webhook</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;webhook-name&#39;</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;variable_one&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;variable_two&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Webhook</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;webhook-name&#39;</span><span class="p">,</span>
 <span class="go">                       payload=&quot;{&quot;variable_one&quot;: 1, &quot;variable_two&quot;: 2}&quot;)</span>
 </pre></div>
 </div>
 <p>or via instance:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wh</span> <span class="o">=</span> <span class="n">Webhook</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;webhook-slug&#39;</span><span class="p">)</span>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wh</span> <span class="o">=</span> <span class="n">Webhook</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;webhook-name&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wh</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wh</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">variable_one</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">variable_two</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<dl class="attribute">
-<dt>
-<tt class="descname">RESULT_CLASS</tt></dt>
-<dd><p>alias of <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.WebhookResult" title="syncano.models.base.WebhookResult"><tt class="xref py py-class docutils literal"><span class="pre">WebhookResult</span></tt></a></p>
-</dd></dl>
-
 <dl class="method">
 <dt>
 <tt class="descname">run</tt><big>(</big><em>**payload</em><big>)</big><a class="reference internal" href="_modules/syncano/models/base.html#Webhook.run"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wh</span> <span class="o">=</span> <span class="n">Webhook</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;webhook-slug&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wh</span> <span class="o">=</span> <span class="n">Webhook</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;webhook-name&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wh</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wh</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">variable_one</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">variable_two</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt>
+<em class="property">class </em><tt class="descname">WebhookTrace</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/syncano/models/base.html#WebhookTrace"><span class="viewcode-link">[source]</span></a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>status</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>links</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.HyperlinkedField" title="syncano.models.fields.HyperlinkedField"><tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></a></li>
+<li><strong>executed_at</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+<li><strong>result</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>duration</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

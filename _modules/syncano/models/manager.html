@@ -368,17 +368,24 @@
     <span class="nd">@clone</span>
 <div class="viewcode-block" id="Manager.update"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Updates single instance based on provided arguments.</span>
+<span class="sd">        Updates single instance based on provided arguments. There to ways to do so:</span>
+
+<span class="sd">            1. Django-style update.</span>
+<span class="sd">            2. By specifying **data** argument.</span>
+
 <span class="sd">        The **data** is a dictionary of (field, value) pairs used to update the object.</span>
 
 <span class="sd">        Usage::</span>
+
+<span class="sd">            instance = Instance.please.update(&#39;test-one&#39;, description=&#39;new one&#39;)</span>
+<span class="sd">            instance = Instance.please.update(name=&#39;test-one&#39;, description=&#39;new one&#39;)</span>
 
 <span class="sd">            instance = Instance.please.update(&#39;test-one&#39;, data={&#39;description&#39;: &#39;new one&#39;})</span>
 <span class="sd">            instance = Instance.please.update(name=&#39;test-one&#39;, data={&#39;description&#39;: &#39;new one&#39;})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#39;detail&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_allowed_method</span><span class="p">(</span><span class="s">&#39;PUT&#39;</span><span class="p">,</span> <span class="s">&#39;PATCH&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;data&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
 </div>
@@ -545,6 +552,14 @@
     <span class="k">def</span> <span class="nf">_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">args</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">:</span>
             <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_endpoint_properties</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">)</span>
+
+            <span class="c"># let user get object by &#39;id&#39;</span>
+            <span class="n">too_much_properties</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
+            <span class="n">id_specified</span> <span class="o">=</span> <span class="s">&#39;id&#39;</span> <span class="ow">in</span> <span class="n">properties</span>
+
+            <span class="k">if</span> <span class="n">too_much_properties</span> <span class="ow">and</span> <span class="n">id_specified</span><span class="p">:</span>
+                <span class="n">properties</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
+
             <span class="n">mapped_args</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="n">args</span><span class="p">)}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mapped_args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
@@ -685,7 +700,7 @@
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
 
         <span class="c"># Workaround for circular import</span>
-        <span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">Webhook</span><span class="o">.</span><span class="n">RESULT_CLASS</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">WebhookTrace</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)</span>
 
 </div></div>
 <div class="viewcode-block" id="ObjectManager"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager">[docs]</a><span class="k">class</span> <span class="nc">ObjectManager</span><span class="p">(</span><span class="n">Manager</span><span class="p">):</span>

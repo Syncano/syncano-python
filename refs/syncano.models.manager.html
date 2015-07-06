@@ -242,10 +242,19 @@ lookup parameters, creating one if necessary.</p>
 <dl class="method">
 <dt id="syncano.models.manager.Manager.update">
 <tt class="descname">update</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates single instance based on provided arguments.
-The <strong>data</strong> is a dictionary of (field, value) pairs used to update the object.</p>
+<dd><p>Updates single instance based on provided arguments. There to ways to do so:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Django-style update.</li>
+<li>By specifying <strong>data</strong> argument.</li>
+</ol>
+</div></blockquote>
+<p>The <strong>data</strong> is a dictionary of (field, value) pairs used to update the object.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;new one&#39;</span><span class="p">})</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;new one&#39;</span><span class="p">)</span>
+<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;new one&#39;</span><span class="p">)</span>
+
+<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;new one&#39;</span><span class="p">})</span>
 <span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;new one&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
