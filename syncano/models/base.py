@@ -128,6 +128,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
 
         endpoint = self._meta.resolve_endpoint(endpoint_name, properties)
         request = {'data': data}
+
         response = connection.request(method, endpoint, **request)
 
         self.to_python(response)
@@ -204,10 +205,12 @@ class Model(six.with_metaclass(ModelMetaclass)):
                 value = getattr(self, field.name)
                 if not value and field.blank:
                     continue
+
                 if field.mapping:
                     data[field.mapping] = field.to_native(value)
                 else:
-                    data[field.name] = field.to_native(value)
+                    param_name = getattr(field, 'param_name', field.name)
+                    data[param_name] = field.to_native(value)
         return data
 
     def get_endpoint_data(self):
