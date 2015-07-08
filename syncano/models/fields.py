@@ -468,6 +468,13 @@ class ModelField(Field):
         return value
 
 
+class FileField(WritableField):
+    param_name = 'files'
+
+    def to_native(self, value):
+        return {self.name: value}
+
+
 class JSONField(WritableField):
     query_allowed = False
     schema = None
@@ -576,7 +583,7 @@ class SchemaField(JSONField):
 MAPPING = {
     'string': StringField,
     'text': StringField,
-    'file': StringField,
+    'file': FileField,
     'ref': StringField,
     'reference': ReferenceField,
     'integer': IntegerField,

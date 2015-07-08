@@ -128,6 +128,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
 
         endpoint = self._meta.resolve_endpoint(endpoint_name, properties)
         request = {'data': data}
+
         response = connection.request(method, endpoint, **request)
 
         self.to_python(response)
@@ -204,10 +205,12 @@ class Model(six.with_metaclass(ModelMetaclass)):
                 value = getattr(self, field.name)
                 if not value and field.blank:
                     continue
+
                 if field.mapping:
                     data[field.mapping] = field.to_native(value)
                 else:
-                    data[field.name] = field.to_native(value)
+                    param_name = getattr(field, 'param_name', field.name)
+                    data[param_name] = field.to_native(value)
         return data
 
     def get_endpoint_data(self):
@@ -348,6 +351,8 @@ class ApiKey(Model):
     OO wrapper around instance api keys `endpoint <TODO>`_.
 
     :ivar api_key: :class:`~syncano.models.fields.StringField`
+    :ivar allow_user_create: :class:`~syncano.models.fields.BooleanField`
+    :ivar ignore_acl: :class:`~syncano.models.fields.BooleanField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     """
     LINKS = [
@@ -355,6 +360,8 @@ class ApiKey(Model):
     ]
 
     api_key = fields.StringField(read_only=True, required=False)
+    allow_user_create = fields.BooleanField(required=False, default=False)
+    ignore_acl = fields.BooleanField(required=False, default=False)
     links = fields.HyperlinkedField(links=LINKS)
 
     class Meta:
@@ -998,6 +1005,10 @@ class Webhook(Model):
                 'methods': ['post'],
                 'path': '/webhooks/{name}/run/',
             },
+            'reset': {
+                'methods': ['post'],
+                'path': '/webhooks/{name}/reset_link/',
+            },
             'public': {
                 'methods': ['get'],
                 'path': 'webhooks/p/{public_link}/',
@@ -1026,6 +1037,18 @@ class Webhook(Model):
         response = connection.request('POST', endpoint, **request)
         response.update({'instance_name': self.instance_name, 'webhook_name': self.name})
         return WebhookTrace(**response)
+
+    def reset(self, **payload):
+        """
+        Usage::
+
+            >>> wh = Webhook.please.get('instance-name', 'webhook-name')
+            >>> wh.reset()
+        """
+        properties = self.get_endpoint_data()
+        endpoint = self._meta.resolve_endpoint('reset', properties)
+        connection = self._get_connection(**payload)
+        return connection.request('POST', endpoint)
 
 
 class WebhookTrace(Model):

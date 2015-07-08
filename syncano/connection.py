@@ -161,6 +161,7 @@ class Connection(object):
         :raises SyncanoValueError: if invalid request method was chosen
         :raises SyncanoRequestError: if something went wrong during the request
         """
+        files = kwargs.get('data', {}).pop('files', None)
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)
 
@@ -181,10 +182,27 @@ class Connection(object):
         # Encode request payload
         if 'data' in params and not isinstance(params['data'], six.string_types):
             params['data'] = json.dumps(params['data'])
-
         url = self.build_url(path)
         response = method(url, **params)
+        content = self.get_response_content(url, response)
 
+        if files:
+            # remove 'data' and 'content-type' to avoid "ValueError: Data must not be a string."
+            params.pop('data')
+            params['headers'].pop('content-type')
+            params['files'] = files
+
+            if response.status_code == 201:
+                url = '{}{}/'.format(url, content['id'])
+
+            patch = getattr(self.session, 'patch')
+            # second request is needed to upload a file
+            response = patch(url, **params)
+            content = self.get_response_content(url, response)
+
+        return content
+
+    def get_response_content(self, url, response):
         try:
             content = response.json()
         except ValueError:
