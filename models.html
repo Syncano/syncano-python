@@ -277,6 +277,8 @@ can be serialized to JSON and send to API.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
 <li><strong>api_key</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>allow_user_create</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.BooleanField" title="syncano.models.fields.BooleanField"><tt class="xref py py-class docutils literal"><span class="pre">BooleanField</span></tt></a></li>
+<li><strong>ignore_acl</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.BooleanField" title="syncano.models.fields.BooleanField"><tt class="xref py py-class docutils literal"><span class="pre">BooleanField</span></tt></a></li>
 <li><strong>links</strong> &#8211; <a class="reference internal" href="refs/syncano.models.fields.html#syncano.models.fields.HyperlinkedField" title="syncano.models.fields.HyperlinkedField"><tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></a></li>
 </ul>
 </td>
@@ -600,6 +602,16 @@ on passed <strong>instance_name</strong> and <strong>class_name</strong>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wh</span> <span class="o">=</span> <span class="n">Webhook</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;webhook-name&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wh</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">wh</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">variable_one</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">variable_two</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">reset</tt><big>(</big><em>**payload</em><big>)</big><a class="reference internal" href="_modules/syncano/models/base.html#Webhook.reset"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">wh</span> <span class="o">=</span> <span class="n">Webhook</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;webhook-name&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wh</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
