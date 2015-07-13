@@ -248,7 +248,8 @@ class Connection(object):
         :rtype: boolean
         :return: Session authentication state
         """
-
+        if self.instance_name:
+            return self.user_key is not None
         return self.api_key is not None
 
     def authenticate(self, email=None, password=None):
