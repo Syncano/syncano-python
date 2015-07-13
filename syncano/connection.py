@@ -60,13 +60,23 @@ class Connection(object):
     """
 
     AUTH_SUFFIX = 'v1/account/auth'
+    USER_AUTH_SUFFIX = 'v1/instances/{name}/user/auth/'
     CONTENT_TYPE = 'application/json'
 
     def __init__(self, host=None, email=None, password=None, api_key=None, **kwargs):
         self.host = host or syncano.API_ROOT
         self.email = email or syncano.EMAIL
         self.password = password or syncano.PASSWORD
+
         self.api_key = api_key or syncano.APIKEY
+
+        # instance indicates if we want to connect User or Admin
+        self.instance_name = kwargs.get('instance_name')
+        self.user_key = kwargs.get('user_key')
+
+        if self.api_key and self.instance_name:
+            self.AUTH_SUFFIX = self.USER_AUTH_SUFFIX.format(name=self.instance_name)
+
         self.logger = kwargs.get('logger') or syncano.logger
         self.timeout = kwargs.get('timeout') or 30
         self.session = requests.Session()
@@ -88,7 +98,12 @@ class Connection(object):
         if 'content-type' not in params['headers']:
             params['headers']['content-type'] = self.CONTENT_TYPE
 
-        if self.api_key and 'Authorization' not in params['headers']:
+        if self.user_key:
+            params['headers'].update({
+                'X-USER-KEY': self.user_key,
+                'X-API-KEY': self.api_key
+            })
+        elif self.api_key and 'Authorization' not in params['headers']:
             params['headers']['Authorization'] = 'ApiKey %s' % self.api_key
 
         # We don't need to check SSL cert in DEBUG mode
@@ -143,7 +158,10 @@ class Connection(object):
         """
 
         if not self.is_authenticated():
-            self.authenticate()
+            if self.instance_name:
+                self.authenticate()
+            else:
+                self.authenticate_user()
 
         return self.make_request(method_name, path, **kwargs)
 
@@ -262,11 +280,59 @@ class Connection(object):
 
         data = {'email': email, 'password': password}
         response = self.make_request('POST', self.AUTH_SUFFIX, data=data)
+
         account_key = response.get('account_key')
         self.api_key = account_key
 
         self.logger.debug('Authentication successful: %s', account_key)
         return account_key
+
+    def authenticate_user(self, email=None, password=None, api_key=None):
+        """
+        :type email: string
+        :param email: Your Syncano account email address
+
+        :type password: string
+        :param password: Your Syncano password
+
+        :type api_key: string
+        :param api_key: Your Syncano api_key for instance
+
+        :rtype: string
+        :return: Your ``User Key``
+        """
+
+        if self.is_authenticated():
+            self.logger.debug('Connection already authenticated: %s', self.user_key)
+            return self.user_key
+
+        email = email or self.email
+        password = password or self.password
+        api_key = api_key or self.api_key
+
+        if not email:
+            raise SyncanoValueError('"email" is required.')
+
+        if not password:
+            raise SyncanoValueError('"password" is required.')
+
+        if not api_key:
+            raise SyncanoValueError('"api_key" is required.')
+
+        self.logger.debug('Authenticating: %s', email)
+
+        headers = {
+            'content-type': self.CONTENT_TYPE,
+            'X-API-KEY': api_key
+        }
+
+        data = {'email': email, 'password': password}
+        response = self.make_request('POST', self.AUTH_SUFFIX, data=data, headers=headers)
+
+        user_key = response.get('user_key')
+        self.user_key = user_key
+        self.logger.debug('Authentication successful: %s', user_key)
+        return user_key
 
 
 class ConnectionMixin(object):
