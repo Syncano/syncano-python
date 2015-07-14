@@ -255,7 +255,7 @@ class Manager(ConnectionMixin):
             instance = Instance.please.update(name='test-one', data={'description': 'new one'})
         """
         self.endpoint = 'detail'
-        self.method = self.get_allowed_method('PUT', 'PATCH', 'POST')
+        self.method = self.get_allowed_method('PATCH', 'PUT', 'POST')
         self.data = kwargs.pop('data', kwargs)
         self._filter(*args, **kwargs)
         return self.request()
