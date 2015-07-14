@@ -156,13 +156,9 @@ class Connection(object):
         :rtype: dict
         :return: JSON response
         """
-
-        if not self.is_authenticated():
-            if self.instance_name:
-                self.authenticate()
-            else:
-                self.authenticate_user()
-
+        is_auth, _ = self.is_authenticated()
+        if not is_auth:
+            self.authenticate()
         return self.make_request(method_name, path, **kwargs)
 
     def make_request(self, method_name, path, **kwargs):
@@ -248,47 +244,11 @@ class Connection(object):
         :rtype: boolean
         :return: Session authentication state
         """
-        if self.instance_name:
-            return self.user_key is not None
-        return self.api_key is not None
+        if self.user_key and self.api_key:
+            return True, 'user'
+        return self.api_key is not None, 'admin'
 
-    def authenticate(self, email=None, password=None):
-        """
-        :type email: string
-        :param email: Your Syncano account email address
-
-        :type password: string
-        :param password: Your Syncano password
-
-        :rtype: string
-        :return: Your ``Account Key``
-        """
-
-        if self.is_authenticated():
-            self.logger.debug('Connection already authenticated: %s', self.api_key)
-            return self.api_key
-
-        email = email or self.email
-        password = password or self.password
-
-        if not email:
-            raise SyncanoValueError('"email" is required.')
-
-        if not password:
-            raise SyncanoValueError('"password" is required.')
-
-        self.logger.debug('Authenticating: %s', email)
-
-        data = {'email': email, 'password': password}
-        response = self.make_request('POST', self.AUTH_SUFFIX, data=data)
-
-        account_key = response.get('account_key')
-        self.api_key = account_key
-
-        self.logger.debug('Authentication successful: %s', account_key)
-        return account_key
-
-    def authenticate_user(self, email=None, password=None, api_key=None):
+    def authenticate(self, email=None, password=None, api_key=None):
         """
         :type email: string
         :param email: Your Syncano account email address
@@ -300,40 +260,53 @@ class Connection(object):
         :param api_key: Your Syncano api_key for instance
 
         :rtype: string
-        :return: Your ``User Key``
+        :return: Your ``Account Key``
         """
+        is_auth, who = self.is_authenticated()
 
-        if self.is_authenticated():
-            self.logger.debug('Connection already authenticated: %s', self.user_key)
-            return self.user_key
+        if is_auth:
+            msg = 'Connection already authenticated for {0}: {1}'
+            key = self.api_key
 
-        email = email or self.email
-        password = password or self.password
-        api_key = api_key or self.api_key
+            if who == 'user':
+                key = self.user_key
 
-        if not email:
-            raise SyncanoValueError('"email" is required.')
-
-        if not password:
-            raise SyncanoValueError('"password" is required.')
-
-        if not api_key:
-            raise SyncanoValueError('"api_key" is required.')
+            self.logger.debug(msg.format(who, key))
+            return key
 
         self.logger.debug('Authenticating: %s', email)
 
+        if who == 'user':
+            key = self.authenticate_user(email=email, password=password, api_key=api_key)
+        else:
+            key = self.authenticate_admin(email=email, password=password)
+
+        self.logger.debug('Authentication successful for {0}: {1}'.format(who, key))
+        return key
+
+    def validate_params(self, kwargs):
+        for k, v in kwargs.iteritems():
+            kwargs[k] = v or getattr(self, k)
+
+            if kwargs[k] is None:
+                raise SyncanoValueError('"{}" is required.'.format(k))
+        return kwargs
+
+    def authenticate_admin(self, **kwargs):
+        request_args = self.validate_params(kwargs)
+        response = self.make_request('POST', self.AUTH_SUFFIX, data=request_args)
+        self.api_key = response.get('account_key')
+        return self.api_key
+
+    def authenticate_user(self, **kwargs):
+        request_args = self.validate_params(kwargs)
         headers = {
             'content-type': self.CONTENT_TYPE,
-            'X-API-KEY': api_key
+            'X-API-KEY': request_args.pop('api_key')
         }
-
-        data = {'email': email, 'password': password}
-        response = self.make_request('POST', self.AUTH_SUFFIX, data=data, headers=headers)
-
-        user_key = response.get('user_key')
-        self.user_key = user_key
-        self.logger.debug('Authentication successful: %s', user_key)
-        return user_key
+        response = self.make_request('POST', self.AUTH_SUFFIX, data=request_args, headers=headers)
+        self.user_key = response.get('user_key')
+        return self.user_key
 
 
 class ConnectionMixin(object):

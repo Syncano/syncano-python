@@ -227,9 +227,13 @@ class ConnectionTestCase(unittest.TestCase):
         self.assertTrue(post_mock.called)
 
     def test_is_authenticated(self):
-        self.assertFalse(self.connection.is_authenticated())
+        is_auth, who = self.connection.is_authenticated()
+        self.assertFalse(is_auth)
+        self.assertEqual(who, 'admin')
         self.connection.api_key = 'xxxx'
-        self.assertTrue(self.connection.is_authenticated())
+        is_auth, who = self.connection.is_authenticated()
+        self.assertTrue(is_auth)
+        self.assertEqual(who, 'admin')
 
     @mock.patch('syncano.connection.Connection.make_request')
     def test_already_authenticated(self, make_request_mock):
