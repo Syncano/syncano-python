@@ -192,8 +192,13 @@ class Model(six.with_metaclass(ModelMetaclass)):
         :param data: Raw data
         """
         for field in self._meta.fields:
-            if field.name in data:
-                value = data[field.name]
+            field_name = field.name
+
+            if field.mapping is not None:
+                field_name = field.mapping
+
+            if field_name in data:
+                value = data[field_name]
                 setattr(self, field.name, value)
 
     def to_native(self):
@@ -884,7 +889,7 @@ class Trigger(Model):
     LINKS = (
         {'type': 'detail', 'name': 'self'},
         {'type': 'detail', 'name': 'codebox'},
-        {'type': 'detail', 'name': 'klass'},
+        {'type': 'detail', 'name': 'class_name'},
         {'type': 'detail', 'name': 'traces'},
     )
     SIGNAL_CHOICES = (
