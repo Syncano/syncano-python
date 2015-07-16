@@ -72,6 +72,7 @@ class Connection(object):
 
         # instance indicates if we want to connect User or Admin
         self.instance_name = kwargs.get('instance_name')
+        self.username = kwargs.get('username')
         self.user_key = kwargs.get('user_key')
 
         if self.api_key and self.instance_name:
@@ -244,11 +245,11 @@ class Connection(object):
         :rtype: boolean
         :return: Session authentication state
         """
-        if self.user_key and self.api_key:
-            return True, 'user'
+        if self.username and self.api_key:
+            return self.user_key is not None, 'user'
         return self.api_key is not None, 'admin'
 
-    def authenticate(self, email=None, password=None, api_key=None):
+    def authenticate(self, email=None, username=None, password=None, api_key=None):
         """
         :type email: string
         :param email: Your Syncano account email address
@@ -277,7 +278,7 @@ class Connection(object):
         self.logger.debug('Authenticating: %s', email)
 
         if who == 'user':
-            key = self.authenticate_user(email=email, password=password, api_key=api_key)
+            key = self.authenticate_user(username=username, password=password, api_key=api_key)
         else:
             key = self.authenticate_admin(email=email, password=password)
 
