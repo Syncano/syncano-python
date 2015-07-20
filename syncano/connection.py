@@ -59,29 +59,49 @@ class Connection(object):
     :ivar verify_ssl: Verify SSL certificate
     """
 
-    AUTH_SUFFIX = 'v1/account/auth'
-    USER_AUTH_SUFFIX = 'v1/instances/{name}/user/auth/'
     CONTENT_TYPE = 'application/json'
 
-    def __init__(self, host=None, email=None, password=None, api_key=None, **kwargs):
+    AUTH_SUFFIX = 'v1/account/auth'
+    USER_AUTH_SUFFIX = 'v1/instances/{name}/user/auth/'
+
+    ADMIN_LOGIN_PARAMS = ('email', 'password', 'api_key')
+    USER_LOGIN_PARAMS = ('username', 'password', 'api_key', 'instance_name')
+
+    def __init__(self, host=None, **kwargs):
         self.host = host or syncano.API_ROOT
-        self.email = email or syncano.EMAIL
-        self.password = password or syncano.PASSWORD
-
-        self.api_key = api_key or syncano.APIKEY
-
-        # instance indicates if we want to connect User or Admin
-        self.instance_name = kwargs.get('instance_name')
-        self.username = kwargs.get('username')
-        self.user_key = kwargs.get('user_key')
-
-        if self.api_key and self.instance_name:
-            self.AUTH_SUFFIX = self.USER_AUTH_SUFFIX.format(name=self.instance_name)
-
-        self.logger = kwargs.get('logger') or syncano.logger
-        self.timeout = kwargs.get('timeout') or 30
-        self.session = requests.Session()
+        self.logger = kwargs.get('logger', syncano.logger)
+        self.timeout = kwargs.get('timeout', 30)
+        # We don't need to check SSL cert in DEBUG mode
         self.verify_ssl = kwargs.pop('verify_ssl', True)
+
+        self._init_login_params(kwargs)
+
+        if self.is_user:
+            self.AUTH_SUFFIX = self.USER_AUTH_SUFFIX.format(name=self.instance_name)
+            self.auth_method = self.authenticate_user
+        else:
+            self.auth_method = self.authenticate_admin
+
+        self.session = requests.Session()
+
+    def _init_login_params(self, login_kwargs):
+        for param in self.ADMIN_LOGIN_PARAMS + self.USER_LOGIN_PARAMS:
+            if param in self.ADMIN_LOGIN_PARAMS:
+                param_lib_default_name = ''.join(param.split('_')).upper()
+                value = login_kwargs.get(param, getattr(syncano, param_lib_default_name))
+            else:
+                value = login_kwargs.get(param)
+            setattr(self, param, value)
+
+    @property
+    def is_user(self):
+        return all(getattr(self, param, None) for param in self.USER_LOGIN_PARAMS)
+
+    @property
+    def auth_key(self):
+        if self.is_user:
+            return self.user_key
+        return self.api_key
 
     def build_params(self, params):
         """
@@ -92,14 +112,14 @@ class Connection(object):
         :return: Request params
         """
         params = deepcopy(params)
-        params['timeout'] = params.get('timeout') or self.timeout
-        params['headers'] = params.get('headers') or {}
-        params['verify'] = True
+        params['timeout'] = params.get('timeout', self.timeout)
+        params['headers'] = params.get('headers', {})
+        params['verify'] = self.verify_ssl
 
         if 'content-type' not in params['headers']:
             params['headers']['content-type'] = self.CONTENT_TYPE
 
-        if self.user_key:
+        if self.is_user:
             params['headers'].update({
                 'X-USER-KEY': self.user_key,
                 'X-API-KEY': self.api_key
@@ -157,7 +177,7 @@ class Connection(object):
         :rtype: dict
         :return: JSON response
         """
-        is_auth, _ = self.is_authenticated()
+        is_auth = self.is_authenticated()
         if not is_auth:
             self.authenticate()
         return self.make_request(method_name, path, **kwargs)
@@ -245,11 +265,11 @@ class Connection(object):
         :rtype: boolean
         :return: Session authentication state
         """
-        if self.username and self.api_key:
-            return self.user_key is not None, 'user'
-        return self.api_key is not None, 'admin'
+        if self.is_user:
+            return self.user_key is not None
+        return self.api_key is not None
 
-    def authenticate(self, email=None, username=None, password=None, api_key=None):
+    def authenticate(self, **kwargs):
         """
         :type email: string
         :param email: Your Syncano account email address
@@ -263,44 +283,34 @@ class Connection(object):
         :rtype: string
         :return: Your ``Account Key``
         """
-        is_auth, who = self.is_authenticated()
+        is_auth = self.is_authenticated()
 
         if is_auth:
-            msg = 'Connection already authenticated for {0}: {1}'
-            key = self.api_key
-
-            if who == 'user':
-                key = self.user_key
-
-            self.logger.debug(msg.format(who, key))
-            return key
-
-        self.logger.debug('Authenticating: %s', email)
-
-        if who == 'user':
-            key = self.authenticate_user(username=username, password=password, api_key=api_key)
+            msg = 'Connection already authenticated: {}'
         else:
-            key = self.authenticate_admin(email=email, password=password)
-
-        self.logger.debug('Authentication successful for {0}: {1}'.format(who, key))
+            msg = 'Authentication successful: {}'
+            self.logger.debug('Authenticating')
+            self.auth_method(**kwargs)
+        key = self.auth_key
+        self.logger.debug(msg.format(key))
         return key
 
-    def validate_params(self, kwargs):
-        for k, v in kwargs.iteritems():
-            kwargs[k] = v or getattr(self, k)
+    def validate_params(self, kwargs, login_params):
+        for k in login_params:
+            kwargs[k] = kwargs.get(k, getattr(self, k))
 
             if kwargs[k] is None:
                 raise SyncanoValueError('"{}" is required.'.format(k))
         return kwargs
 
     def authenticate_admin(self, **kwargs):
-        request_args = self.validate_params(kwargs)
+        request_args = self.validate_params(kwargs, self.ADMIN_LOGIN_PARAMS)
         response = self.make_request('POST', self.AUTH_SUFFIX, data=request_args)
         self.api_key = response.get('account_key')
         return self.api_key
 
     def authenticate_user(self, **kwargs):
-        request_args = self.validate_params(kwargs)
+        request_args = self.validate_params(kwargs, self.USER_LOGIN_PARAMS)
         headers = {
             'content-type': self.CONTENT_TYPE,
             'X-API-KEY': request_args.pop('api_key')
