@@ -53,7 +53,9 @@ class Connection(object):
     :ivar host: Syncano API host
     :ivar email: Your Syncano email address
     :ivar password: Your Syncano password
-    :ivar api_key: Your Syncano ``Account Key``
+    :ivar api_key: Your Syncano ``Account Key`` or instance ``Api Key``
+    :ivar user_key: Your Syncano ``User Key``
+    :ivar instance_name: Your Syncano ``Instance Name``
     :ivar logger: Python logger instance
     :ivar timeout: Default request timeout
     :ivar verify_ssl: Verify SSL certificate
