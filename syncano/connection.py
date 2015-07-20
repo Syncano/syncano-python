@@ -64,7 +64,7 @@ class Connection(object):
     AUTH_SUFFIX = 'v1/account/auth'
     USER_AUTH_SUFFIX = 'v1/instances/{name}/user/auth/'
 
-    ADMIN_LOGIN_PARAMS = ('email', 'password', 'api_key')
+    ADMIN_LOGIN_PARAMS = ('email', 'password')
     USER_LOGIN_PARAMS = ('username', 'password', 'api_key', 'instance_name')
 
     def __init__(self, host=None, **kwargs):
