@@ -63,7 +63,7 @@ def connect(*args, **kwargs):
         connection = syncano.connect(api_key='')
 
         # User login
-        connection = syncano.connect(username='', api_key='', instance_name='')
+        connection = syncano.connect(username='', password='', api_key='', instance_name='')
     """
     from syncano.connection import default_connection
     from syncano.models import registry
@@ -110,7 +110,7 @@ def connect_instance(name=None, *args, **kwargs):
         my_instance = syncano.connect_instance('my_instance_name', api_key='')
 
         # For User
-        my_instance = syncano.connect_instance(username='', api_key='', instance_name='')
+        my_instance = syncano.connect_instance(username='', password='', api_key='', instance_name='')
     """
     name = name or kwargs.get('instance_name') or INSTANCE
     connection = connect(*args, **kwargs)
