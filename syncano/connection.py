@@ -81,6 +81,7 @@ class Connection(object):
         if self.is_user:
             self.AUTH_SUFFIX = self.USER_AUTH_SUFFIX.format(name=self.instance_name)
             self.auth_method = self.authenticate_user
+            self.user_key = None
         else:
             self.auth_method = self.authenticate_admin
 
