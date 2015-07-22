@@ -194,7 +194,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
         for field in self._meta.fields:
             field_name = field.name
 
-            if field.mapping is not None:
+            if field.mapping is not None and self.pk:
                 field_name = field.mapping
 
             if field_name in data:

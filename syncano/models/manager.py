@@ -144,7 +144,6 @@ class Manager(ConnectionMixin):
         """
         attrs = kwargs.copy()
         attrs.update(self.properties)
-
         instance = self.model(**attrs)
         instance.save()
 
@@ -225,11 +224,12 @@ class Manager(ConnectionMixin):
     def delete(self, *args, **kwargs):
         """
         Removes single instance based on provided arguments.
+        Returns None if deletion went fine.
 
         Usage::
 
-            instance = Instance.please.delete('test-one')
-            instance = Instance.please.delete(name='test-one')
+            Instance.please.delete('test-one')
+            Instance.please.delete(name='test-one')
         """
         self.method = 'DELETE'
         self.endpoint = 'detail'
@@ -454,6 +454,9 @@ class Manager(ConnectionMixin):
     def serialize(self, data, model=None):
         """Serializes passed data to related :class:`~syncano.models.base.Model` class."""
         model = model or self.model
+
+        if data == '':
+            return
 
         if isinstance(data, model):
             return data
