@@ -414,7 +414,7 @@ can be serialized to JSON and send to API.</p>
 </table>
 <dl class="attribute">
 <dt id="syncano.models.base.Instance.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'admins'}, {u'type': u'list', u'name': u'classes'}, {u'type': u'list', u'name': u'codeboxes'}, {u'type': u'list', u'name': u'invitations'}, {u'type': u'list', u'name': u'runtimes'}, {u'type': u'list', u'name': u'api_keys'}, {u'type': u'list', u'name': u'triggers'}, {u'type': u'list', u'name': u'webhooks'}, {u'type': u'list', u'name': u'schedules'})</em><a class="headerlink" href="#syncano.models.base.Instance.LINKS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'list', u'name': u'admins'}, {u'type': u'list', u'name': u'classes'}, {u'type': u'list', u'name': u'codeboxes'}, {u'type': u'list', u'name': u'invitations'}, {u'type': u'list', u'name': u'runtimes'}, {u'type': u'list', u'name': u'api_keys'}, {u'type': u'list', u'name': u'triggers'}, {u'type': u'list', u'name': u'users'}, {u'type': u'list', u'name': u'webhooks'}, {u'type': u'list', u'name': u'schedules'})</em><a class="headerlink" href="#syncano.models.base.Instance.LINKS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1419,7 +1419,7 @@ on passed <strong>instance_name</strong> and <strong>class_name</strong>.</p>
 </table>
 <dl class="attribute">
 <dt id="syncano.models.base.Trigger.LINKS">
-<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'detail', u'name': u'codebox'}, {u'type': u'detail', u'name': u'klass'}, {u'type': u'detail', u'name': u'traces'})</em><a class="headerlink" href="#syncano.models.base.Trigger.LINKS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'}, {u'type': u'detail', u'name': u'codebox'}, {u'type': u'detail', u'name': u'class_name'}, {u'type': u'detail', u'name': u'traces'})</em><a class="headerlink" href="#syncano.models.base.Trigger.LINKS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1758,6 +1758,95 @@ on passed <strong>instance_name</strong> and <strong>class_name</strong>.</p>
 <dl class="attribute">
 <dt id="syncano.models.base.WebhookTrace.webhook_name">
 <tt class="descname">webhook_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.base.WebhookTrace.webhook_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.base.User">
+<em class="property">class </em><tt class="descname">User</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.base.Model" title="syncano.models.base.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.base.Model</span></tt></a></p>
+<p>OO wrapper around instances <a class="reference external" href="http://docs.syncano.com/v4.0/docs/user-management">endpoint</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>username</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>password</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>user_key</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>links</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.HyperlinkedField" title="syncano.models.fields.HyperlinkedField"><tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></a></li>
+<li><strong>created_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+<li><strong>updated_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="syncano.models.base.User.LINKS">
+<tt class="descname">LINKS</tt><em class="property"> = ({u'type': u'detail', u'name': u'self'},)</em><a class="headerlink" href="#syncano.models.base.User.LINKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.User.username">
+<tt class="descname">username</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.base.User.username" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.User.password">
+<tt class="descname">password</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.base.User.password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.User.user_key">
+<tt class="descname">user_key</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.base.User.user_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.User.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.base.User.links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.User.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.base.User.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.User.updated_at">
+<tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.base.User.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.base.User.reset_key">
+<tt class="descname">reset_key</tt><big>(</big><em>**payload</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/base.html#User.reset_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.base.User.reset_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.User.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.base.User.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">UserDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.User.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.base.User.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.User.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.base.User.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.User.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.base.User.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.base.User.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.base.User.please" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

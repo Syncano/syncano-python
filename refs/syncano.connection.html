@@ -132,7 +132,7 @@
 <span id="syncano-connection"></span><h1>syncano.connection<a class="headerlink" href="#module-syncano.connection" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="syncano.connection.Connection">
-<em class="property">class </em><tt class="descname">Connection</tt><big>(</big><em>host=None</em>, <em>email=None</em>, <em>password=None</em>, <em>api_key=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Connection</tt><big>(</big><em>host=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Base connection class.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -143,7 +143,9 @@
 <li><strong>host</strong> &#8211; Syncano API host</li>
 <li><strong>email</strong> &#8211; Your Syncano email address</li>
 <li><strong>password</strong> &#8211; Your Syncano password</li>
-<li><strong>api_key</strong> &#8211; Your Syncano <tt class="docutils literal"><span class="pre">Account</span> <span class="pre">Key</span></tt></li>
+<li><strong>api_key</strong> &#8211; Your Syncano <tt class="docutils literal"><span class="pre">Account</span> <span class="pre">Key</span></tt> or instance <tt class="docutils literal"><span class="pre">Api</span> <span class="pre">Key</span></tt></li>
+<li><strong>user_key</strong> &#8211; Your Syncano <tt class="docutils literal"><span class="pre">User</span> <span class="pre">Key</span></tt></li>
+<li><strong>instance_name</strong> &#8211; Your Syncano <tt class="docutils literal"><span class="pre">Instance</span> <span class="pre">Name</span></tt></li>
 <li><strong>logger</strong> &#8211; Python logger instance</li>
 <li><strong>timeout</strong> &#8211; Default request timeout</li>
 <li><strong>verify_ssl</strong> &#8211; Verify SSL certificate</li>
@@ -153,13 +155,53 @@
 </tbody>
 </table>
 <dl class="attribute">
+<dt id="syncano.connection.Connection.CONTENT_TYPE">
+<tt class="descname">CONTENT_TYPE</tt><em class="property"> = 'application/json'</em><a class="headerlink" href="#syncano.connection.Connection.CONTENT_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.connection.Connection.USER_AUTH_SUFFIX">
+<tt class="descname">USER_AUTH_SUFFIX</tt><em class="property"> = 'v1/instances/{name}/user/auth/'</em><a class="headerlink" href="#syncano.connection.Connection.USER_AUTH_SUFFIX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.connection.Connection.ADMIN_LOGIN_PARAMS">
+<tt class="descname">ADMIN_LOGIN_PARAMS</tt><em class="property"> = set(['password', 'email'])</em><a class="headerlink" href="#syncano.connection.Connection.ADMIN_LOGIN_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.connection.Connection.ADMIN_ALT_LOGIN_PARAMS">
+<tt class="descname">ADMIN_ALT_LOGIN_PARAMS</tt><em class="property"> = set(['api_key'])</em><a class="headerlink" href="#syncano.connection.Connection.ADMIN_ALT_LOGIN_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.connection.Connection.USER_LOGIN_PARAMS">
+<tt class="descname">USER_LOGIN_PARAMS</tt><em class="property"> = set(['instance_name', 'username', 'password', 'api_key'])</em><a class="headerlink" href="#syncano.connection.Connection.USER_LOGIN_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.connection.Connection.USER_ALT_LOGIN_PARAMS">
+<tt class="descname">USER_ALT_LOGIN_PARAMS</tt><em class="property"> = set(['instance_name', 'user_key', 'api_key'])</em><a class="headerlink" href="#syncano.connection.Connection.USER_ALT_LOGIN_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="syncano.connection.Connection.AUTH_SUFFIX">
 <tt class="descname">AUTH_SUFFIX</tt><em class="property"> = 'v1/account/auth'</em><a class="headerlink" href="#syncano.connection.Connection.AUTH_SUFFIX" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.connection.Connection.CONTENT_TYPE">
-<tt class="descname">CONTENT_TYPE</tt><em class="property"> = 'application/json'</em><a class="headerlink" href="#syncano.connection.Connection.CONTENT_TYPE" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.connection.Connection.is_user">
+<tt class="descname">is_user</tt><a class="reference internal" href="../_modules/syncano/connection.html#Connection.is_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.is_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.connection.Connection.is_alt_login">
+<tt class="descname">is_alt_login</tt><a class="reference internal" href="../_modules/syncano/connection.html#Connection.is_alt_login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.is_alt_login" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.connection.Connection.auth_key">
+<tt class="descname">auth_key</tt><a class="reference internal" href="../_modules/syncano/connection.html#Connection.auth_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.auth_key" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -274,7 +316,7 @@ will ensure that request is authenticated.</p>
 
 <dl class="method">
 <dt id="syncano.connection.Connection.authenticate">
-<tt class="descname">authenticate</tt><big>(</big><em>email=None</em>, <em>password=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.authenticate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.authenticate" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">authenticate</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.authenticate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.authenticate" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -282,6 +324,7 @@ will ensure that request is authenticated.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>email</strong> (<em>string</em>) &#8211; Your Syncano account email address</li>
 <li><strong>password</strong> (<em>string</em>) &#8211; Your Syncano password</li>
+<li><strong>api_key</strong> (<em>string</em>) &#8211; Your Syncano api_key for instance</li>
 </ul>
 </td>
 </tr>
@@ -294,6 +337,21 @@ will ensure that request is authenticated.</p>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="method">
+<dt id="syncano.connection.Connection.validate_params">
+<tt class="descname">validate_params</tt><big>(</big><em>kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.validate_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.validate_params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.connection.Connection.authenticate_admin">
+<tt class="descname">authenticate_admin</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.authenticate_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.authenticate_admin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.connection.Connection.authenticate_user">
+<tt class="descname">authenticate_user</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.authenticate_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.authenticate_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

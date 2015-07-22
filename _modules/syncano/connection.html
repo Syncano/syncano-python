@@ -182,25 +182,73 @@
 <span class="sd">    :ivar host: Syncano API host</span>
 <span class="sd">    :ivar email: Your Syncano email address</span>
 <span class="sd">    :ivar password: Your Syncano password</span>
-<span class="sd">    :ivar api_key: Your Syncano ``Account Key``</span>
+<span class="sd">    :ivar api_key: Your Syncano ``Account Key`` or instance ``Api Key``</span>
+<span class="sd">    :ivar user_key: Your Syncano ``User Key``</span>
+<span class="sd">    :ivar instance_name: Your Syncano ``Instance Name``</span>
 <span class="sd">    :ivar logger: Python logger instance</span>
 <span class="sd">    :ivar timeout: Default request timeout</span>
 <span class="sd">    :ivar verify_ssl: Verify SSL certificate</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">AUTH_SUFFIX</span> <span class="o">=</span> <span class="s">&#39;v1/account/auth&#39;</span>
     <span class="n">CONTENT_TYPE</span> <span class="o">=</span> <span class="s">&#39;application/json&#39;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">AUTH_SUFFIX</span> <span class="o">=</span> <span class="s">&#39;v1/account/auth&#39;</span>
+    <span class="n">USER_AUTH_SUFFIX</span> <span class="o">=</span> <span class="s">&#39;v1/instances/{name}/user/auth/&#39;</span>
+
+    <span class="n">ADMIN_LOGIN_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;email&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">}</span>
+    <span class="n">ADMIN_ALT_LOGIN_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;api_key&#39;</span><span class="p">}</span>
+    <span class="n">USER_LOGIN_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">,</span> <span class="s">&#39;api_key&#39;</span><span class="p">,</span> <span class="s">&#39;instance_name&#39;</span><span class="p">}</span>
+    <span class="n">USER_ALT_LOGIN_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;user_key&#39;</span><span class="p">,</span> <span class="s">&#39;api_key&#39;</span><span class="p">,</span> <span class="s">&#39;instance_name&#39;</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span> <span class="ow">or</span> <span class="n">syncano</span><span class="o">.</span><span class="n">API_ROOT</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span> <span class="ow">or</span> <span class="n">syncano</span><span class="o">.</span><span class="n">EMAIL</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span> <span class="ow">or</span> <span class="n">syncano</span><span class="o">.</span><span class="n">PASSWORD</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">api_key</span> <span class="ow">or</span> <span class="n">syncano</span><span class="o">.</span><span class="n">APIKEY</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;logger&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">syncano</span><span class="o">.</span><span class="n">logger</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;timeout&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">30</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;logger&#39;</span><span class="p">,</span> <span class="n">syncano</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;timeout&#39;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+        <span class="c"># We don&#39;t need to check SSL cert in DEBUG mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;verify_ssl&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_login_params</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_user</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">AUTH_SUFFIX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">USER_AUTH_SUFFIX</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">authenticate_user</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">authenticate_admin</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_init_login_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">login_kwargs</span><span class="p">):</span>
+
+        <span class="k">def</span> <span class="nf">_set_value_or_default</span><span class="p">(</span><span class="n">param</span><span class="p">):</span>
+            <span class="n">param_lib_default_name</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">login_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">syncano</span><span class="p">,</span> <span class="n">param_lib_default_name</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="nb">map</span><span class="p">(</span><span class="n">_set_value_or_default</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ADMIN_LOGIN_PARAMS</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ADMIN_ALT_LOGIN_PARAMS</span><span class="p">,</span>
+                                                                 <span class="bp">self</span><span class="o">.</span><span class="n">USER_LOGIN_PARAMS</span><span class="p">,</span>
+                                                                 <span class="bp">self</span><span class="o">.</span><span class="n">USER_ALT_LOGIN_PARAMS</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_are_params_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Connection.is_user"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection.is_user">[docs]</a>    <span class="k">def</span> <span class="nf">is_user</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">login_params_ok</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_are_params_ok</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">USER_LOGIN_PARAMS</span><span class="p">)</span>
+        <span class="n">alt_login_params_ok</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_are_params_ok</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">USER_ALT_LOGIN_PARAMS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">login_params_ok</span> <span class="ow">or</span> <span class="n">alt_login_params_ok</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Connection.is_alt_login"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection.is_alt_login">[docs]</a>    <span class="k">def</span> <span class="nf">is_alt_login</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_user</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_are_params_ok</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">USER_ALT_LOGIN_PARAMS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_are_params_ok</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ADMIN_ALT_LOGIN_PARAMS</span><span class="p">)</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Connection.auth_key"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection.auth_key">[docs]</a>    <span class="k">def</span> <span class="nf">auth_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_user</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span>
+</div>
 <div class="viewcode-block" id="Connection.build_params"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection.build_params">[docs]</a>    <span class="k">def</span> <span class="nf">build_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :type params: dict</span>
@@ -210,14 +258,19 @@
 <span class="sd">        :return: Request params</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-        <span class="n">params</span><span class="p">[</span><span class="s">&#39;timeout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;timeout&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span>
-        <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;headers&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
-        <span class="n">params</span><span class="p">[</span><span class="s">&#39;verify&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">params</span><span class="p">[</span><span class="s">&#39;timeout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;timeout&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;headers&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">params</span><span class="p">[</span><span class="s">&#39;verify&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span>
 
         <span class="k">if</span> <span class="s">&#39;content-type&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">]:</span>
             <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">][</span><span class="s">&#39;content-type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CONTENT_TYPE</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="ow">and</span> <span class="s">&#39;Authorization&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_user</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="s">&#39;X-USER-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span><span class="p">,</span>
+                <span class="s">&#39;X-API-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span>
+            <span class="p">})</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="ow">and</span> <span class="s">&#39;Authorization&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">]:</span>
             <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">][</span><span class="s">&#39;Authorization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;ApiKey </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span>
 
         <span class="c"># We don&#39;t need to check SSL cert in DEBUG mode</span>
@@ -270,10 +323,9 @@
 <span class="sd">        :rtype: dict</span>
 <span class="sd">        :return: JSON response</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+        <span class="n">is_auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_auth</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">authenticate</span><span class="p">()</span>
-
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="n">method_name</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Connection.make_request"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection.make_request">[docs]</a>    <span class="k">def</span> <span class="nf">make_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -359,10 +411,11 @@
 <span class="sd">        :rtype: boolean</span>
 <span class="sd">        :return: Session authentication state</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_user</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
 </div>
-<div class="viewcode-block" id="Connection.authenticate"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection.authenticate">[docs]</a>    <span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Connection.authenticate"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection.authenticate">[docs]</a>    <span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :type email: string</span>
 <span class="sd">        :param email: Your Syncano account email address</span>
@@ -370,32 +423,54 @@
 <span class="sd">        :type password: string</span>
 <span class="sd">        :param password: Your Syncano password</span>
 
+<span class="sd">        :type api_key: string</span>
+<span class="sd">        :param api_key: Your Syncano api_key for instance</span>
+
 <span class="sd">        :rtype: string</span>
 <span class="sd">        :return: Your ``Account Key``</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">is_auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Connection already authenticated: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span>
+        <span class="k">if</span> <span class="n">is_auth</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Connection already authenticated: {}&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Authentication successful: {}&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Authenticating&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">auth_method</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">key</span>
+</div>
+<div class="viewcode-block" id="Connection.validate_params"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection.validate_params">[docs]</a>    <span class="k">def</span> <span class="nf">validate_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">map_login_params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">ADMIN_LOGIN_PARAMS</span><span class="p">,</span>
+            <span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">ADMIN_ALT_LOGIN_PARAMS</span><span class="p">,</span>
+            <span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="bp">True</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">USER_LOGIN_PARAMS</span><span class="p">,</span>
+            <span class="p">(</span><span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">USER_ALT_LOGIN_PARAMS</span>
+        <span class="p">}</span>
 
-        <span class="n">email</span> <span class="o">=</span> <span class="n">email</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">email</span>
-        <span class="n">password</span> <span class="o">=</span> <span class="n">password</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">map_login_params</span><span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_alt_login</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_user</span><span class="p">)]:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">email</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;&quot;email&quot; is required.&#39;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">password</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;&quot;password&quot; is required.&#39;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Authenticating: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">email</span><span class="p">)</span>
-
-        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;email&#39;</span><span class="p">:</span> <span class="n">email</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">:</span> <span class="n">password</span><span class="p">}</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AUTH_SUFFIX</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">account_key</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;account_key&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">account_key</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Authentication successful: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">account_key</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">account_key</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;&quot;{}&quot; is required.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">kwargs</span>
+</div>
+<div class="viewcode-block" id="Connection.authenticate_admin"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection.authenticate_admin">[docs]</a>    <span class="k">def</span> <span class="nf">authenticate_admin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">request_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_params</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AUTH_SUFFIX</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">request_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;account_key&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span>
+</div>
+<div class="viewcode-block" id="Connection.authenticate_user"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection.authenticate_user">[docs]</a>    <span class="k">def</span> <span class="nf">authenticate_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">request_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_params</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;content-type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">CONTENT_TYPE</span><span class="p">,</span>
+            <span class="s">&#39;X-API-KEY&#39;</span><span class="p">:</span> <span class="n">request_args</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;api_key&#39;</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AUTH_SUFFIX</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">request_args</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;user_key&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span>
 
 </div></div>
 <div class="viewcode-block" id="ConnectionMixin"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.ConnectionMixin">[docs]</a><span class="k">class</span> <span class="nc">ConnectionMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>

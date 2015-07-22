@@ -321,8 +321,13 @@
 <span class="sd">        :param data: Raw data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+            <span class="n">field_name</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span>
+
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">mapping</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">:</span>
+                <span class="n">field_name</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">mapping</span>
+
+            <span class="k">if</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Model.to_native"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.Model.to_native">[docs]</a>    <span class="k">def</span> <span class="nf">to_native</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -449,6 +454,7 @@
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;runtimes&#39;</span><span class="p">},</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;api_keys&#39;</span><span class="p">},</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;triggers&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;users&#39;</span><span class="p">},</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;webhooks&#39;</span><span class="p">},</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;list&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;schedules&#39;</span><span class="p">},</span>
     <span class="p">)</span>
@@ -1013,7 +1019,7 @@
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;codebox&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;klass&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;class_name&#39;</span><span class="p">},</span>
         <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;traces&#39;</span><span class="p">},</span>
     <span class="p">)</span>
     <span class="n">SIGNAL_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
@@ -1140,7 +1146,7 @@
             <span class="p">},</span>
             <span class="s">&#39;public&#39;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;webhooks/p/{public_link}/&#39;</span><span class="p">,</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/webhooks/p/{public_link}/&#39;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
@@ -1216,7 +1222,55 @@
                 <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
                 <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/traces/&#39;</span><span class="p">,</span>
             <span class="p">}</span>
-        <span class="p">}</span></div>
+        <span class="p">}</span>
+
+</div>
+<div class="viewcode-block" id="User"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.User">[docs]</a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around instances `endpoint &lt;http://docs.syncano.com/v4.0/docs/user-management&gt;`_.</span>
+
+<span class="sd">    :ivar username: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar password: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar user_key: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">username</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">user_key</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">HyperlinkedField</span><span class="p">(</span><span class="n">links</span><span class="o">=</span><span class="n">LINKS</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;delete&#39;</span><span class="p">,</span> <span class="s">&#39;patch&#39;</span><span class="p">,</span> <span class="s">&#39;put&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/users/{id}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;reset_key&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/users/{id}/reset_key/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/users/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="User.reset_key"><a class="viewcode-back" href="../../../refs/syncano.models.base.html#syncano.models.base.User.reset_key">[docs]</a>    <span class="k">def</span> <span class="nf">reset_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">payload</span><span class="p">):</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_data</span><span class="p">()</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s">&#39;reset_key&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">(</span><span class="o">**</span><span class="n">payload</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>

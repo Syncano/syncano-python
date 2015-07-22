@@ -231,10 +231,11 @@ lookup parameters, creating one if necessary.</p>
 <dl class="method">
 <dt id="syncano.models.manager.Manager.delete">
 <tt class="descname">delete</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes single instance based on provided arguments.</p>
+<dd><p>Removes single instance based on provided arguments.
+Returns None if deletion went fine.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
-<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
