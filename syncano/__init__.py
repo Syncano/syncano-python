@@ -42,7 +42,13 @@ def connect(*args, **kwargs):
     :param password: Your Syncano password
 
     :type api_key: string
-    :param api_key: Your Syncano account key
+    :param api_key: Your Syncano account key or instance api_key
+
+    :type username: string
+    :param username: Your Syncano username
+
+    :type instance_name: string
+    :param instance_name: Your Syncano instance_name
 
     :type verify_ssl: boolean
     :param verify_ssl: Verify SSL certificate
@@ -51,16 +57,24 @@ def connect(*args, **kwargs):
     :return: A models registry
 
     Usage::
-
+        # Admin login
         connection = syncano.connect(email='', password='')
+        # OR
         connection = syncano.connect(api_key='')
+
+        # User login
+        connection = syncano.connect(username='', password='', api_key='', instance_name='')
     """
     from syncano.connection import default_connection
     from syncano.models import registry
 
     default_connection.open(*args, **kwargs)
+    instance = kwargs.get('instance_name')
+
     if INSTANCE:
         registry.set_default_instance(INSTANCE)
+    elif instance:
+        registry.set_default_instance(instance)
     return registry
 
 
@@ -78,7 +92,13 @@ def connect_instance(name=None, *args, **kwargs):
     :param password: Your Syncano password
 
     :type api_key: string
-    :param api_key: Your Syncano account key
+    :param api_key: Your Syncano account key or instance api_key
+
+    :type username: string
+    :param username: Your Syncano username
+
+    :type instance_name: string
+    :param instance_name: Your Syncano instance_name
 
     :type verify_ssl: boolean
     :param verify_ssl: Verify SSL certificate
@@ -88,9 +108,14 @@ def connect_instance(name=None, *args, **kwargs):
 
     Usage::
 
+        # For Admin
         my_instance = syncano.connect_instance('my_instance_name', email='', password='')
+        # OR
         my_instance = syncano.connect_instance('my_instance_name', api_key='')
+
+        # For User
+        my_instance = syncano.connect_instance(username='', password='', api_key='', instance_name='')
     """
-    name = name or INSTANCE
+    name = name or kwargs.get('instance_name') or INSTANCE
     connection = connect(*args, **kwargs)
     return connection.Instance.please.get(name)

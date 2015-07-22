@@ -160,14 +160,14 @@ class ManagerTestCase(unittest.TestCase):
         filter_mock.assert_called_once_with(1, 2, a=1, b=2)
         request_mock.assert_called_once_with()
 
-        self.assertEqual(self.manager.method, 'PUT')
+        self.assertEqual(self.manager.method, 'PATCH')
         self.assertEqual(self.manager.endpoint, 'detail')
         self.assertEqual(self.manager.data, {'x': 1, 'y': 2})
 
         result = self.manager.update(1, 2, a=1, b=2, x=3, y=2)
         self.assertEqual(request_mock, result)
 
-        self.assertEqual(self.manager.method, 'PUT')
+        self.assertEqual(self.manager.method, 'PATCH')
         self.assertEqual(self.manager.endpoint, 'detail')
         self.assertEqual(self.manager.data, {'x': 3, 'y': 2, 'a': 1, 'b': 2})
 

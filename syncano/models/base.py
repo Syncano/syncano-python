@@ -192,8 +192,13 @@ class Model(six.with_metaclass(ModelMetaclass)):
         :param data: Raw data
         """
         for field in self._meta.fields:
-            if field.name in data:
-                value = data[field.name]
+            field_name = field.name
+
+            if field.mapping is not None and self.pk:
+                field_name = field.mapping
+
+            if field_name in data:
+                value = data[field_name]
                 setattr(self, field.name, value)
 
     def to_native(self):
@@ -320,6 +325,7 @@ class Instance(Model):
         {'type': 'list', 'name': 'runtimes'},
         {'type': 'list', 'name': 'api_keys'},
         {'type': 'list', 'name': 'triggers'},
+        {'type': 'list', 'name': 'users'},
         {'type': 'list', 'name': 'webhooks'},
         {'type': 'list', 'name': 'schedules'},
     )
@@ -884,7 +890,7 @@ class Trigger(Model):
     LINKS = (
         {'type': 'detail', 'name': 'self'},
         {'type': 'detail', 'name': 'codebox'},
-        {'type': 'detail', 'name': 'klass'},
+        {'type': 'detail', 'name': 'class_name'},
         {'type': 'detail', 'name': 'traces'},
     )
     SIGNAL_CHOICES = (
@@ -1011,7 +1017,7 @@ class Webhook(Model):
             },
             'public': {
                 'methods': ['get'],
-                'path': 'webhooks/p/{public_link}/',
+                'path': '/webhooks/p/{public_link}/',
             }
         }
 
@@ -1088,3 +1094,51 @@ class WebhookTrace(Model):
                 'path': '/traces/',
             }
         }
+
+
+class User(Model):
+    """
+    OO wrapper around instances `endpoint <http://docs.syncano.com/v4.0/docs/user-management>`_.
+
+    :ivar username: :class:`~syncano.models.fields.StringField`
+    :ivar password: :class:`~syncano.models.fields.StringField`
+    :ivar user_key: :class:`~syncano.models.fields.StringField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+    """
+
+    LINKS = (
+        {'type': 'detail', 'name': 'self'},
+    )
+
+    username = fields.StringField(max_length=64, required=True)
+    password = fields.StringField(read_only=False, required=True)
+    user_key = fields.StringField(read_only=True, required=False)
+
+    links = fields.HyperlinkedField(links=LINKS)
+    created_at = fields.DateTimeField(read_only=True, required=False)
+    updated_at = fields.DateTimeField(read_only=True, required=False)
+
+    class Meta:
+        parent = Instance
+        endpoints = {
+            'detail': {
+                'methods': ['delete', 'patch', 'put', 'get'],
+                'path': '/users/{id}/',
+            },
+            'reset_key': {
+                'methods': ['post'],
+                'path': '/users/{id}/reset_key/',
+            },
+            'list': {
+                'methods': ['get'],
+                'path': '/users/',
+            }
+        }
+
+    def reset_key(self, **payload):
+        properties = self.get_endpoint_data()
+        endpoint = self._meta.resolve_endpoint('reset_key', properties)
+        connection = self._get_connection(**payload)
+        return connection.request('POST', endpoint)
