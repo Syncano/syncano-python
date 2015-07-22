@@ -66,8 +66,10 @@ class Connection(object):
     AUTH_SUFFIX = 'v1/account/auth'
     USER_AUTH_SUFFIX = 'v1/instances/{name}/user/auth/'
 
-    ADMIN_LOGIN_PARAMS = ('email', 'password')
-    USER_LOGIN_PARAMS = ('username', 'password', 'api_key', 'instance_name')
+    ADMIN_LOGIN_PARAMS = {'email', 'password'}
+    ADMIN_ALT_LOGIN_PARAMS = {'api_key'}
+    USER_LOGIN_PARAMS = {'username', 'password', 'api_key', 'instance_name'}
+    USER_ALT_LOGIN_PARAMS = {'user_key', 'api_key', 'instance_name'}
 
     def __init__(self, host=None, **kwargs):
         self.host = host or syncano.API_ROOT
@@ -81,24 +83,36 @@ class Connection(object):
         if self.is_user:
             self.AUTH_SUFFIX = self.USER_AUTH_SUFFIX.format(name=self.instance_name)
             self.auth_method = self.authenticate_user
-            self.user_key = None
         else:
             self.auth_method = self.authenticate_admin
 
         self.session = requests.Session()
 
     def _init_login_params(self, login_kwargs):
-        for param in self.ADMIN_LOGIN_PARAMS + self.USER_LOGIN_PARAMS:
-            if param in self.ADMIN_LOGIN_PARAMS:
-                param_lib_default_name = ''.join(param.split('_')).upper()
-                value = login_kwargs.get(param, getattr(syncano, param_lib_default_name))
-            else:
-                value = login_kwargs.get(param)
+
+        def _set_value_or_default(param):
+            param_lib_default_name = ''.join(param.split('_')).upper()
+            value = login_kwargs.get(param, getattr(syncano, param_lib_default_name, None))
             setattr(self, param, value)
+
+        map(_set_value_or_default, self.ADMIN_LOGIN_PARAMS.union(self.ADMIN_ALT_LOGIN_PARAMS,
+                                                                 self.USER_LOGIN_PARAMS,
+                                                                 self.USER_ALT_LOGIN_PARAMS))
+
+    def _are_params_ok(self, params):
+        return all(getattr(self, p) for p in params)
 
     @property
     def is_user(self):
-        return all(getattr(self, param, None) for param in self.USER_LOGIN_PARAMS)
+        login_params_ok = self._are_params_ok(self.USER_LOGIN_PARAMS)
+        alt_login_params_ok = self._are_params_ok(self.USER_ALT_LOGIN_PARAMS)
+        return login_params_ok or alt_login_params_ok
+
+    @property
+    def is_alt_login(self):
+        if self.is_user:
+            return self._are_params_ok(self.USER_ALT_LOGIN_PARAMS)
+        return self._are_params_ok(self.ADMIN_ALT_LOGIN_PARAMS)
 
     @property
     def auth_key(self):
@@ -298,8 +312,16 @@ class Connection(object):
         self.logger.debug(msg.format(key))
         return key
 
-    def validate_params(self, kwargs, login_params):
-        for k in login_params:
+    def validate_params(self, kwargs):
+        map_login_params = {
+            (False, False): self.ADMIN_LOGIN_PARAMS,
+            (True, False): self.ADMIN_ALT_LOGIN_PARAMS,
+            (False, True): self.USER_LOGIN_PARAMS,
+            (True, True): self.USER_ALT_LOGIN_PARAMS
+        }
+        import ipdb; ipdb.set_trace()  # breakpoint 69e19052 //
+
+        for k in map_login_params[(self.is_alt_login, self.is_user)]:
             kwargs[k] = kwargs.get(k, getattr(self, k))
 
             if kwargs[k] is None:
@@ -307,13 +329,13 @@ class Connection(object):
         return kwargs
 
     def authenticate_admin(self, **kwargs):
-        request_args = self.validate_params(kwargs, self.ADMIN_LOGIN_PARAMS)
+        request_args = self.validate_params(kwargs)
         response = self.make_request('POST', self.AUTH_SUFFIX, data=request_args)
         self.api_key = response.get('account_key')
         return self.api_key
 
     def authenticate_user(self, **kwargs):
-        request_args = self.validate_params(kwargs, self.USER_LOGIN_PARAMS)
+        request_args = self.validate_params(kwargs)
         headers = {
             'content-type': self.CONTENT_TYPE,
             'X-API-KEY': request_args.pop('api_key')
