@@ -319,7 +319,6 @@ class Connection(object):
             (False, True): self.USER_LOGIN_PARAMS,
             (True, True): self.USER_ALT_LOGIN_PARAMS
         }
-        import ipdb; ipdb.set_trace()  # breakpoint 69e19052 //
 
         for k in map_login_params[(self.is_alt_login, self.is_user)]:
             kwargs[k] = kwargs.get(k, getattr(self, k))
