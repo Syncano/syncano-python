@@ -4,7 +4,6 @@ from datetime import date, datetime
 
 import six
 import validictory
-
 from syncano import logger
 from syncano.exceptions import SyncanoFieldError, SyncanoValueError
 from syncano.utils import force_text

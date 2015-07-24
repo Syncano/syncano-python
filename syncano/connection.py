@@ -4,7 +4,6 @@ from urlparse import urljoin
 
 import requests
 import six
-
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
 

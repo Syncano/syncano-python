@@ -3,13 +3,12 @@ from __future__ import unicode_literals
 import re
 
 import six
-
 from syncano import logger
 
 
 class Registry(object):
-    """Models registry."""
-
+    """Models registry.
+    """
     def __init__(self, models=None):
         self.models = models or {}
         self.patterns = []

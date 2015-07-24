@@ -241,7 +241,7 @@ class ObjectTestCase(unittest.TestCase):
             }
         ]
 
-    @mock.patch('syncano.models.base.Object.get_subclass_model')
+    @mock.patch('syncano.models.Object.get_subclass_model')
     def test_new(self, get_subclass_model_mock):
         get_subclass_model_mock.return_value = Instance
         self.assertFalse(get_subclass_model_mock.called)
@@ -271,8 +271,8 @@ class ObjectTestCase(unittest.TestCase):
             self.assertFalse(field.required)
             self.assertFalse(field.read_only)
 
-    @mock.patch('syncano.models.base.registry')
-    @mock.patch('syncano.models.base.Object.create_subclass')
+    @mock.patch('syncano.models.classes.registry')
+    @mock.patch('syncano.models.Object.create_subclass')
     def test_get_or_create_subclass(self, create_subclass_mock, registry_mock):
         create_subclass_mock.return_value = 1
         registry_mock.get_model_by_name.side_effect = [2, LookupError]
@@ -319,10 +319,10 @@ class ObjectTestCase(unittest.TestCase):
         self.assertEqual(result, get_mock.schema)
         get_mock.assert_called_once_with('dummy-instance', 'dummy-class')
 
-    @mock.patch('syncano.models.base.Object.create_subclass')
-    @mock.patch('syncano.models.base.Object.get_class_schema')
+    @mock.patch('syncano.models.Object.create_subclass')
+    @mock.patch('syncano.models.Object.get_class_schema')
     @mock.patch('syncano.models.manager.registry.get_model_by_name')
-    @mock.patch('syncano.models.base.Object.get_subclass_name')
+    @mock.patch('syncano.models.Object.get_subclass_name')
     def test_get_subclass_model(self, get_subclass_name_mock, get_model_by_name_mock,
                                 get_class_schema_mock, create_subclass_mock):
 

@@ -1,10 +1,19 @@
 import unittest
 from datetime import datetime
 
-from syncano.exceptions import (SyncanoDoesNotExist, SyncanoRequestError,
-                                SyncanoValueError)
-from syncano.models.base import (CodeBox, CodeBoxTrace, Instance, Object,
-                                 Webhook, WebhookTrace)
+from syncano.exceptions import (
+    SyncanoDoesNotExist,
+    SyncanoRequestError,
+    SyncanoValueError
+)
+from syncano.models import (
+    CodeBox,
+    CodeBoxTrace,
+    Instance,
+    Object,
+    Webhook,
+    WebhookTrace
+)
 
 try:
     from unittest import mock
@@ -379,6 +388,7 @@ class ManagerTestCase(unittest.TestCase):
         self.manager.endpoint = 'detail'
 
         result = self.manager.get_allowed_method('GET', 'POST')
+
         self.assertEqual(result, 'GET')
 
         result = self.manager.get_allowed_method('DELETE', 'POST')
@@ -463,7 +473,7 @@ class ObjectManagerTestCase(unittest.TestCase):
         self.model = Object
         self.manager = Object.please
 
-    @mock.patch('syncano.models.base.Object.get_subclass_model')
+    @mock.patch('syncano.models.Object.get_subclass_model')
     def test_create(self, get_subclass_model_mock):
         model_mock = mock.MagicMock()
         model_mock.return_value = model_mock
@@ -482,7 +492,7 @@ class ObjectManagerTestCase(unittest.TestCase):
         model_mock.save.assert_called_once_with()
         get_subclass_model_mock.assert_called_once_with(a=1, b=2)
 
-    @mock.patch('syncano.models.base.Object.get_subclass_model')
+    @mock.patch('syncano.models.Object.get_subclass_model')
     def test_serialize(self, get_subclass_model_mock):
         get_subclass_model_mock.return_value = mock.Mock
         self.manager.properties['instance_name'] = 'test'
@@ -494,7 +504,7 @@ class ObjectManagerTestCase(unittest.TestCase):
         get_subclass_model_mock.assert_called_once_with(instance_name='test', class_name='test')
 
     @mock.patch('syncano.models.manager.ObjectManager._clone')
-    @mock.patch('syncano.models.base.Object.get_subclass_model')
+    @mock.patch('syncano.models.Object.get_subclass_model')
     def test_filter(self, get_subclass_model_mock, clone_mock):
         get_subclass_model_mock.return_value = Instance
         clone_mock.return_value = self.manager

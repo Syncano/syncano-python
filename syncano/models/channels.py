@@ -2,10 +2,11 @@ from threading import Thread
 
 import six
 from requests import Timeout
-
 from syncano import logger
 
-from .base import Instance, Model, fields
+from . import fields
+from .base import Model
+from .instances import Instance
 
 
 class PollThread(Thread):
