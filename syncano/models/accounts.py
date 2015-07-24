@@ -44,6 +44,51 @@ class Admin(Model):
         }
 
 
+class Profile(Model):
+    """
+    """
+    LINKS = (
+        {'type': 'detail', 'name': 'self'},
+    )
+
+    PERMISSIONS_CHOICES = (
+        {'display_name': 'None', 'value': 'none'},
+        {'display_name': 'Read', 'value': 'read'},
+        {'display_name': 'Create users', 'value': 'create_users'},
+    )
+
+    owner = fields.IntegerField(label='owner id', required=False, read_only=True)
+    owner_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+    group = fields.IntegerField(label='group id', required=False)
+    group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+    other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+    channel = fields.StringField(required=False)
+    channel_room = fields.StringField(required=False, max_length=64)
+
+    schema = fields.SchemaField(read_only=False, required=True)
+
+    links = fields.HyperlinkedField(links=LINKS)
+    created_at = fields.DateTimeField(read_only=True, required=False)
+    updated_at = fields.DateTimeField(read_only=True, required=False)
+
+    class Meta:
+        parent = Instance
+        endpoints = {
+            'detail': {
+                'methods': ['delete', 'patch', 'put', 'get'],
+                'path': '/users/{id}/',
+            },
+            'reset_key': {
+                'methods': ['post'],
+                'path': '/users/{id}/reset_key/',
+            },
+            'list': {
+                'methods': ['get'],
+                'path': '/users/',
+            }
+        }
+
+
 class User(Model):
     """
     OO wrapper around users `endpoint <http://docs.syncano.com/v4.0/docs/user-management>`_.
@@ -62,6 +107,8 @@ class User(Model):
     username = fields.StringField(max_length=64, required=True)
     password = fields.StringField(read_only=False, required=True)
     user_key = fields.StringField(read_only=True, required=False)
+
+    profile = fields.ModelField('Profile')
 
     links = fields.HyperlinkedField(links=LINKS)
     created_at = fields.DateTimeField(read_only=True, required=False)
