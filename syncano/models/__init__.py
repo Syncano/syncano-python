@@ -6,3 +6,4 @@ from .billing import *  # NOQA
 from .channels import *  # NOQA
 from .classes import *  # NOQA
 from .incentives import *  # NOQA
+from .traces import *  # NOQA

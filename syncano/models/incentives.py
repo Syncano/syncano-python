@@ -88,6 +88,8 @@ class CodeBox(Model):
             >>> cb.run()
             >>> cb.run(variable_one=1, variable_two=2)
         """
+        from .traces import CodeBoxTrace
+
         if self.is_new():
             raise SyncanoValidationError('Method allowed only on existing model.')
 
@@ -102,44 +104,6 @@ class CodeBox(Model):
         response = connection.request('POST', endpoint, **request)
         response.update({'instance_name': self.instance_name, 'codebox_id': self.id})
         return CodeBoxTrace(**response)
-
-
-class CodeBoxTrace(Model):
-    """
-    :ivar status: :class:`~syncano.models.fields.ChoiceField`
-    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
-    :ivar executed_at: :class:`~syncano.models.fields.DateTimeField`
-    :ivar result: :class:`~syncano.models.fields.StringField`
-    :ivar duration: :class:`~syncano.models.fields.IntegerField`
-    """
-    STATUS_CHOICES = (
-        {'display_name': 'Success', 'value': 'success'},
-        {'display_name': 'Failure', 'value': 'failure'},
-        {'display_name': 'Timeout', 'value': 'timeout'},
-        {'display_name': 'Pending', 'value': 'pending'},
-    )
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-
-    status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
-    executed_at = fields.DateTimeField(read_only=True, required=False)
-    result = fields.StringField(read_only=True, required=False)
-    duration = fields.IntegerField(read_only=True, required=False)
-
-    class Meta:
-        parent = CodeBox
-        endpoints = {
-            'detail': {
-                'methods': ['get'],
-                'path': '/traces/{id}/',
-            },
-            'list': {
-                'methods': ['get'],
-                'path': '/traces/',
-            }
-        }
 
 
 class Schedule(Model):
@@ -180,44 +144,6 @@ class Schedule(Model):
             'list': {
                 'methods': ['post', 'get'],
                 'path': '/schedules/',
-            }
-        }
-
-
-class ScheduleTrace(Model):
-    """
-    :ivar status: :class:`~syncano.models.fields.ChoiceField`
-    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
-    :ivar executed_at: :class:`~syncano.models.fields.DateTimeField`
-    :ivar result: :class:`~syncano.models.fields.StringField`
-    :ivar duration: :class:`~syncano.models.fields.IntegerField`
-    """
-    STATUS_CHOICES = (
-        {'display_name': 'Success', 'value': 'success'},
-        {'display_name': 'Failure', 'value': 'failure'},
-        {'display_name': 'Timeout', 'value': 'timeout'},
-        {'display_name': 'Pending', 'value': 'pending'},
-    )
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-
-    status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
-    executed_at = fields.DateTimeField(read_only=True, required=False)
-    result = fields.StringField(read_only=True, required=False)
-    duration = fields.IntegerField(read_only=True, required=False)
-
-    class Meta:
-        parent = Schedule
-        endpoints = {
-            'detail': {
-                'methods': ['get'],
-                'path': '/traces/{id}/',
-            },
-            'list': {
-                'methods': ['get'],
-                'path': '/traces/',
             }
         }
 
@@ -264,44 +190,6 @@ class Trigger(Model):
             'list': {
                 'methods': ['post', 'get'],
                 'path': '/triggers/',
-            }
-        }
-
-
-class TriggerTrace(Model):
-    """
-    :ivar status: :class:`~syncano.models.fields.ChoiceField`
-    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
-    :ivar executed_at: :class:`~syncano.models.fields.DateTimeField`
-    :ivar result: :class:`~syncano.models.fields.StringField`
-    :ivar duration: :class:`~syncano.models.fields.IntegerField`
-    """
-    STATUS_CHOICES = (
-        {'display_name': 'Success', 'value': 'success'},
-        {'display_name': 'Failure', 'value': 'failure'},
-        {'display_name': 'Timeout', 'value': 'timeout'},
-        {'display_name': 'Pending', 'value': 'pending'},
-    )
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-
-    status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
-    executed_at = fields.DateTimeField(read_only=True, required=False)
-    result = fields.StringField(read_only=True, required=False)
-    duration = fields.IntegerField(read_only=True, required=False)
-
-    class Meta:
-        parent = Trigger
-        endpoints = {
-            'detail': {
-                'methods': ['get'],
-                'path': '/traces/{id}/',
-            },
-            'list': {
-                'methods': ['get'],
-                'path': '/traces/',
             }
         }
 
@@ -375,6 +263,8 @@ class Webhook(Model):
             >>> wh.run()
             >>> wh.run(variable_one=1, variable_two=2)
         """
+        from .traces import WebhookTrace
+
         if self.is_new():
             raise SyncanoValidationError('Method allowed only on existing model.')
 
@@ -401,41 +291,3 @@ class Webhook(Model):
         endpoint = self._meta.resolve_endpoint('reset', properties)
         connection = self._get_connection(**payload)
         return connection.request('POST', endpoint)
-
-
-class WebhookTrace(Model):
-    """
-    :ivar status: :class:`~syncano.models.fields.ChoiceField`
-    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
-    :ivar executed_at: :class:`~syncano.models.fields.DateTimeField`
-    :ivar result: :class:`~syncano.models.fields.StringField`
-    :ivar duration: :class:`~syncano.models.fields.IntegerField`
-    """
-    STATUS_CHOICES = (
-        {'display_name': 'Success', 'value': 'success'},
-        {'display_name': 'Failure', 'value': 'failure'},
-        {'display_name': 'Timeout', 'value': 'timeout'},
-        {'display_name': 'Pending', 'value': 'pending'},
-    )
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-
-    status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
-    executed_at = fields.DateTimeField(read_only=True, required=False)
-    result = fields.StringField(read_only=True, required=False)
-    duration = fields.IntegerField(read_only=True, required=False)
-
-    class Meta:
-        parent = Webhook
-        endpoints = {
-            'detail': {
-                'methods': ['get'],
-                'path': '/traces/{id}/',
-            },
-            'list': {
-                'methods': ['get'],
-                'path': '/traces/',
-            }
-        }
