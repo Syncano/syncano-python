@@ -1,15 +1,12 @@
 from __future__ import unicode_literals
 
 import inspect
-import json
-from copy import deepcopy
 
 import six
 from syncano.exceptions import SyncanoDoesNotExist, SyncanoValidationError
-from syncano.utils import get_class_name
 
 from . import fields
-from .manager import CodeBoxManager, Manager, ObjectManager, WebhookManager
+from .manager import Manager
 from .options import Options
 from .registry import registry
 

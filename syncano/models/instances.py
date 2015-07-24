@@ -102,7 +102,7 @@ class InstanceInvitation(Model):
     LINKS = (
         {'type': 'detail', 'name': 'self'},
     )
-    from .users import Admin
+    from .accounts import Admin
 
     email = fields.EmailField(max_length=254)
     role = fields.ChoiceField(choices=Admin.ROLE_CHOICES)
