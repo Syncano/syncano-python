@@ -46,7 +46,7 @@ class Admin(Model):
 
 class User(Model):
     """
-    OO wrapper around instances `endpoint <http://docs.syncano.com/v4.0/docs/user-management>`_.
+    OO wrapper around users `endpoint <http://docs.syncano.com/v4.0/docs/user-management>`_.
 
     :ivar username: :class:`~syncano.models.fields.StringField`
     :ivar password: :class:`~syncano.models.fields.StringField`
@@ -84,8 +84,67 @@ class User(Model):
             }
         }
 
-    def reset_key(self, **payload):
+    def reset_key(self):
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('reset_key', properties)
-        connection = self._get_connection(**payload)
+        connection = self._get_connection()
         return connection.request('POST', endpoint)
+
+
+class Group(Model):
+    """
+    OO wrapper around users `endpoint <http://docs.syncano.com/v4.0/docs/groups>`_.
+
+    :ivar label: :class:`~syncano.models.fields.StringField`
+    :ivar description: :class:`~syncano.models.fields.StringField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+    """
+    LINKS = (
+        {'type': 'detail', 'name': 'self'},
+    )
+
+    label = fields.StringField(max_length=64, required=True)
+    description = fields.StringField(read_only=False, required=False)
+
+    links = fields.HyperlinkedField(links=LINKS)
+    created_at = fields.DateTimeField(read_only=True, required=False)
+    updated_at = fields.DateTimeField(read_only=True, required=False)
+
+    class Meta:
+        parent = Instance
+        endpoints = {
+            'detail': {
+                'methods': ['delete', 'patch', 'put', 'get'],
+                'path': '/groups/{id}/',
+            },
+            'list': {
+                'methods': ['get'],
+                'path': '/groups/',
+            },
+            'users': {
+                'methods': ['get', 'post', 'delete'],
+                'path': '/groups/{id}/users/',
+            }
+        }
+
+    def group_users_method(self, user_id=None, method='GET'):
+        properties = self.get_endpoint_data()
+        endpoint = self._meta.resolve_endpoint('reset_key', properties)
+        if user_id is not None:
+            endpoint += '{}/'.format(user_id)
+        connection = self._get_connection()
+        return connection.request(method, endpoint)
+
+    def list_users(self):
+        return self.group_users_method()
+
+    def add_user(self, user_id):
+        return self.group_users_method(user_id, method='POST')
+
+    def get_user_details(self, user_id):
+        return self.group_users_method(user_id)
+
+    def delete_user(self, user_id):
+        return self.group_users_method(user_id, method='DELETE')
