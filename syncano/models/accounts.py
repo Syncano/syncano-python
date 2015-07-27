@@ -65,8 +65,6 @@ class Profile(Model):
     channel = fields.StringField(required=False)
     channel_room = fields.StringField(required=False, max_length=64)
 
-    schema = fields.SchemaField(read_only=False, required=True)
-
     links = fields.HyperlinkedField(links=LINKS)
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
@@ -76,15 +74,11 @@ class Profile(Model):
         endpoints = {
             'detail': {
                 'methods': ['delete', 'patch', 'put', 'get'],
-                'path': '/users/{id}/',
-            },
-            'reset_key': {
-                'methods': ['post'],
-                'path': '/users/{id}/reset_key/',
+                'path': '/user_profile/objects/{id}/',
             },
             'list': {
                 'methods': ['get'],
-                'path': '/users/',
+                'path': '/user_profile/objects/',
             }
         }
 
@@ -128,6 +122,10 @@ class User(Model):
             'list': {
                 'methods': ['get'],
                 'path': '/users/',
+            },
+            'groups': {
+                'methods': ['get', 'post'],
+                'path': '/users/{id}/groups/',
             }
         }
 
@@ -136,6 +134,20 @@ class User(Model):
         endpoint = self._meta.resolve_endpoint('reset_key', properties)
         connection = self._get_connection()
         return connection.request('POST', endpoint)
+
+    def user_groups_method(self, group_id=None, method='GET'):
+        properties = self.get_endpoint_data()
+        endpoint = self._meta.resolve_endpoint('groups', properties)
+        if group_id is not None:
+            endpoint += '{}/'.format(group_id)
+        connection = self._get_connection()
+        return connection.request(method, endpoint)
+
+    def list_groups(self):
+        return self.user_groups_method()
+
+    def group_details(self, group_id):
+        return self.user_groups_method(group_id)
 
 
 class Group(Model):
@@ -178,7 +190,7 @@ class Group(Model):
 
     def group_users_method(self, user_id=None, method='GET'):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('reset_key', properties)
+        endpoint = self._meta.resolve_endpoint('users', properties)
         if user_id is not None:
             endpoint += '{}/'.format(user_id)
         connection = self._get_connection()
@@ -190,7 +202,7 @@ class Group(Model):
     def add_user(self, user_id):
         return self.group_users_method(user_id, method='POST')
 
-    def get_user_details(self, user_id):
+    def user_details(self, user_id):
         return self.group_users_method(user_id)
 
     def delete_user(self, user_id):
