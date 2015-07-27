@@ -152,7 +152,7 @@ class User(Model):
 
 class Group(Model):
     """
-    OO wrapper around users `endpoint <http://docs.syncano.com/v4.0/docs/groups>`_.
+    OO wrapper around groups `endpoint <http://docs.syncano.com/v4.0/docs/groups>`_.
 
     :ivar label: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`
