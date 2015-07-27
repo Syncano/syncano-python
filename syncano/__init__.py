@@ -69,11 +69,9 @@ def connect(*args, **kwargs):
     from syncano.models import registry
 
     default_connection.open(*args, **kwargs)
-    instance = kwargs.get('instance_name')
+    instance = INSTANCE or kwargs.get('instance_name')
 
-    if INSTANCE:
-        registry.set_default_instance(INSTANCE)
-    elif instance:
+    if instance is not None:
         registry.set_default_instance(instance)
     return registry
 
