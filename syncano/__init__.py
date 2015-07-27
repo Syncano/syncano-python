@@ -64,16 +64,16 @@ def connect(*args, **kwargs):
 
         # User login
         connection = syncano.connect(username='', password='', api_key='', instance_name='')
+        # OR
+        connection = syncano.connect(user_key='', api_key='', instance_name='')
     """
     from syncano.connection import default_connection
     from syncano.models import registry
 
     default_connection.open(*args, **kwargs)
-    instance = kwargs.get('instance_name')
+    instance = kwargs.get('instance_name', INSTANCE)
 
-    if INSTANCE:
-        registry.set_default_instance(INSTANCE)
-    elif instance:
+    if instance is not None:
         registry.set_default_instance(instance)
     return registry
 
@@ -115,7 +115,9 @@ def connect_instance(name=None, *args, **kwargs):
 
         # For User
         my_instance = syncano.connect_instance(username='', password='', api_key='', instance_name='')
+        # OR
+        my_instance = syncano.connect_instance(user_key='', api_key='', instance_name='')
     """
-    name = name or kwargs.get('instance_name') or INSTANCE
+    name = name or kwargs.get('instance_name', INSTANCE)
     connection = connect(*args, **kwargs)
     return connection.Instance.please.get(name)

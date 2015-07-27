@@ -3,7 +3,6 @@ from bisect import bisect
 from urlparse import urljoin
 
 import six
-
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoValueError
 from syncano.models.registry import registry

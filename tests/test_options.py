@@ -1,8 +1,7 @@
 import unittest
 
 from syncano.exceptions import SyncanoValueError
-from syncano.models.base import Instance
-from syncano.models.fields import Field
+from syncano.models import Field, Instance
 from syncano.models.options import Options
 
 

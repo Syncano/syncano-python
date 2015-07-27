@@ -6,7 +6,7 @@ from time import sleep
 from uuid import uuid4
 
 import syncano
-from syncano.exceptions import SyncanoValueError, SyncanoRequestError
+from syncano.exceptions import SyncanoRequestError, SyncanoValueError
 from syncano.models import Class, CodeBox, Instance, Object, Webhook
 
 

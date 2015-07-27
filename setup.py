@@ -1,5 +1,4 @@
 from setuptools import find_packages, setup
-
 from syncano import __version__
 
 
