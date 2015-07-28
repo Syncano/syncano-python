@@ -42,7 +42,7 @@ class CodeBox(Model):
         # This will cause name collision between model run method
         # and HyperlinkedField dynamic methods.
         # {'type': 'detail', 'name': 'run'},
-        {'type': 'detail', 'name': 'traces'},
+        {'type': 'list', 'name': 'traces'},
     )
     RUNTIME_CHOICES = (
         {'display_name': 'nodejs', 'value': 'nodejs'},
@@ -121,8 +121,8 @@ class Schedule(Model):
     """
     LINKS = [
         {'type': 'detail', 'name': 'self'},
+        {'type': 'detail', 'name': 'codebox'},
         {'type': 'list', 'name': 'traces'},
-        {'type': 'list', 'name': 'codebox'},
     ]
 
     label = fields.StringField(max_length=80)
@@ -164,7 +164,7 @@ class Trigger(Model):
         {'type': 'detail', 'name': 'self'},
         {'type': 'detail', 'name': 'codebox'},
         {'type': 'detail', 'name': 'class_name'},
-        {'type': 'detail', 'name': 'traces'},
+        {'type': 'list', 'name': 'traces'},
     )
     SIGNAL_CHOICES = (
         {'display_name': 'post_update', 'value': 'post_update'},
@@ -220,6 +220,7 @@ class Webhook(Model):
     LINKS = (
         {'type': 'detail', 'name': 'self'},
         {'type': 'detail', 'name': 'codebox'},
+        {'type': 'list', 'name': 'traces'},
     )
 
     name = fields.SlugField(max_length=50, primary_key=True)
