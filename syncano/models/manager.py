@@ -473,7 +473,12 @@ class Manager(ConnectionMixin):
         meta = self.model._meta
         method = method or self.method
         allowed_methods = meta.get_endpoint_methods(self.endpoint)
-        path = path or meta.resolve_endpoint(self.endpoint, self.properties)
+
+        if not path:
+            defaults = {f.name: f.default for f in self.model._meta.fields
+                        if f.default is not None}
+            defaults.update(self.properties)
+            path = meta.resolve_endpoint(self.endpoint, defaults)
 
         if method.lower() not in allowed_methods:
             methods = ', '.join(allowed_methods)
