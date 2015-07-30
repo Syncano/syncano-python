@@ -13,8 +13,8 @@ REPR_OUTPUT_SIZE = 20
 
 
 def clone(func):
-    """Decorator which will ensure that we are working on copy of ``self``."""
-
+    """Decorator which will ensure that we are working on copy of ``self``.
+    """
     @wraps(func)
     def inner(self, *args, **kwargs):
         self = self._clone()
@@ -489,7 +489,8 @@ class Manager(ConnectionMixin):
             response = self.connection.request(method, path, **request)
         except SyncanoRequestError as e:
             if e.status_code == 404:
-                raise self.model.DoesNotExist
+                obj_id = path.rsplit('/')[-2]
+                raise self.model.DoesNotExist("{} not found.".format(obj_id))
             raise
 
         if 'next' not in response:
