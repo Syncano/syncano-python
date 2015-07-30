@@ -188,7 +188,7 @@ class IntegerField(WritableField):
         value = super(IntegerField, self).to_python(value)
 
         if value is None:
-            return value
+            return
         try:
             return int(value)
         except (TypeError, ValueError):
@@ -213,7 +213,7 @@ class FloatField(WritableField):
         value = super(FloatField, self).to_python(value)
 
         if value is None:
-            return value
+            return
         try:
             return float(value)
         except (TypeError, ValueError):
@@ -225,13 +225,13 @@ class BooleanField(WritableField):
     def to_python(self, value):
         value = super(BooleanField, self).to_python(value)
 
-        if value in (True, False):
-            return bool(value)
+        if value is None:
+            return
 
-        if value in ('t', 'True', '1'):
+        if value in (True, 't', 'true', 'True', '1'):
             return True
 
-        if value in ('f', 'False', '0'):
+        if value in (False, 'f', 'false', 'False', '0'):
             return False
 
         raise self.ValidationError('Invalid value. Value should be a boolean.')
@@ -289,7 +289,7 @@ class DateField(WritableField):
         value = super(DateField, self).to_python(value)
 
         if value is None:
-            return value
+            return
 
         if isinstance(value, datetime):
             return value.date()
@@ -328,7 +328,7 @@ class DateTimeField(DateField):
 
     def to_python(self, value):
         if value is None:
-            return value
+            return
 
         if isinstance(value, dict) and 'type' in value and 'value' in value:
             value = value['value']
@@ -374,7 +374,7 @@ class DateTimeField(DateField):
 
     def to_native(self, value):
         if value is None:
-            return value
+            return
         ret = value.isoformat()
         if ret.endswith('+00:00'):
             ret = ret[:-6] + 'Z'
@@ -442,7 +442,7 @@ class ModelField(Field):
     def to_python(self, value):
 
         if value is None:
-            return value
+            return
 
         if isinstance(value, self.rel):
             return value
@@ -454,7 +454,7 @@ class ModelField(Field):
 
     def to_native(self, value):
         if value is None:
-            return value
+            return
 
         if isinstance(value, self.rel):
             if not self.just_pk:
@@ -492,7 +492,7 @@ class JSONField(WritableField):
 
     def to_python(self, value):
         if value is None:
-            return value
+            return
 
         if isinstance(value, six.string_types):
             value = json.loads(value)
@@ -500,7 +500,7 @@ class JSONField(WritableField):
 
     def to_native(self, value):
         if value is None:
-            return value
+            return
 
         if not isinstance(value, six.string_types):
             value = json.dumps(value)
