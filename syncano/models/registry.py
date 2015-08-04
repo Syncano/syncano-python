@@ -3,13 +3,12 @@ from __future__ import unicode_literals
 import re
 
 import six
-
 from syncano import logger
 
 
 class Registry(object):
-    """Models registry."""
-
+    """Models registry.
+    """
     def __init__(self, models=None):
         self.models = models or {}
         self.patterns = []
@@ -65,14 +64,12 @@ class Registry(object):
 
     def set_default_property(self, name, value):
         for model in self:
-            if name in model.__dict__:
+            if name not in model.__dict__:
+                continue
 
-                if name not in model.please.properties:
-                    model.please.properties[name] = value
-
-                for field in model._meta.fields:
-                    if field.name == name:
-                        field.default = value
+            for field in model._meta.fields:
+                if field.name == name:
+                    field.default = value
 
     def set_default_instance(self, value):
         self.set_default_property('instance_name', value)

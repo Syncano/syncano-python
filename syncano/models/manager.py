@@ -3,7 +3,6 @@ from copy import deepcopy
 from functools import wraps
 
 import six
-
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
 
@@ -14,8 +13,8 @@ REPR_OUTPUT_SIZE = 20
 
 
 def clone(func):
-    """Decorator which will ensure that we are working on copy of ``self``."""
-
+    """Decorator which will ensure that we are working on copy of ``self``.
+    """
     @wraps(func)
     def inner(self, *args, **kwargs):
         self = self._clone()
@@ -474,7 +473,12 @@ class Manager(ConnectionMixin):
         meta = self.model._meta
         method = method or self.method
         allowed_methods = meta.get_endpoint_methods(self.endpoint)
-        path = path or meta.resolve_endpoint(self.endpoint, self.properties)
+
+        if not path:
+            defaults = {f.name: f.default for f in self.model._meta.fields
+                        if f.default is not None}
+            defaults.update(self.properties)
+            path = meta.resolve_endpoint(self.endpoint, defaults)
 
         if method.lower() not in allowed_methods:
             methods = ', '.join(allowed_methods)
@@ -490,7 +494,8 @@ class Manager(ConnectionMixin):
             response = self.connection.request(method, path, **request)
         except SyncanoRequestError as e:
             if e.status_code == 404:
-                raise self.model.DoesNotExist
+                obj_id = path.rsplit('/')[-2]
+                raise self.model.DoesNotExist("{} not found.".format(obj_id))
             raise
 
         if 'next' not in response:
