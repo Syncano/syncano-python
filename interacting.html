@@ -293,7 +293,7 @@ is a special manager method  called <a class="reference internal" href="refs/syn
 <h2>Lookups that span relationships<a class="headerlink" href="#lookups-that-span-relationships" title="Permalink to this headline">¶</a></h2>
 <p><tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> has nested architecture so in some cases there will be a need to provide
 a few additional arguments to resolve endpoint URL.</p>
-<p>For example <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.ApiKey" title="syncano.models.base.ApiKey"><tt class="xref py py-class docutils literal"><span class="pre">ApiKey</span></tt></a> is related to <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Instance" title="syncano.models.base.Instance"><tt class="xref py py-class docutils literal"><span class="pre">Instance</span></tt></a> and
+<p>For example <tt class="xref py py-class docutils literal"><span class="pre">ApiKey</span></tt> is related to <tt class="xref py py-class docutils literal"><span class="pre">Instance</span></tt> and
 its URL patter looks like this:</p>
 <div class="highlight-python"><div class="highlight"><pre>/v1/instances/{instance_name}/api_keys/{id}
 </pre></div>
@@ -323,8 +323,8 @@ method can be invoked like any other Python function i.e <tt class="docutils lit
 </div>
 <div class="section" id="backward-relations">
 <h2>Backward relations<a class="headerlink" href="#backward-relations" title="Permalink to this headline">¶</a></h2>
-<p>For example <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Instance" title="syncano.models.base.Instance"><tt class="xref py py-class docutils literal"><span class="pre">Instance</span></tt></a> has related <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.ApiKey" title="syncano.models.base.ApiKey"><tt class="xref py py-class docutils literal"><span class="pre">ApiKey</span></tt></a> model so
-all <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Instance" title="syncano.models.base.Instance"><tt class="xref py py-class docutils literal"><span class="pre">Instance</span></tt></a> objects will have backward relation to list of <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.ApiKey" title="syncano.models.base.ApiKey"><tt class="xref py py-class docutils literal"><span class="pre">ApiKey</span></tt></a>&#8216;s:</p>
+<p>For example <tt class="xref py py-class docutils literal"><span class="pre">Instance</span></tt> has related <tt class="xref py py-class docutils literal"><span class="pre">ApiKey</span></tt> model so
+all <tt class="xref py py-class docutils literal"><span class="pre">Instance</span></tt> objects will have backward relation to list of <tt class="xref py py-class docutils literal"><span class="pre">ApiKey</span></tt>&#8216;s:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">api_keys</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 <span class="go">[&lt;ApiKey 1&gt;...]</span>

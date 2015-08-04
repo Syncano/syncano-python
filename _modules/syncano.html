@@ -191,16 +191,16 @@
 
 <span class="sd">        # User login</span>
 <span class="sd">        connection = syncano.connect(username=&#39;&#39;, password=&#39;&#39;, api_key=&#39;&#39;, instance_name=&#39;&#39;)</span>
+<span class="sd">        # OR</span>
+<span class="sd">        connection = syncano.connect(user_key=&#39;&#39;, api_key=&#39;&#39;, instance_name=&#39;&#39;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">syncano.connection</span> <span class="kn">import</span> <span class="n">default_connection</span>
     <span class="kn">from</span> <span class="nn">syncano.models</span> <span class="kn">import</span> <span class="n">registry</span>
 
     <span class="n">default_connection</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">instance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance_name&#39;</span><span class="p">)</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">INSTANCE</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">INSTANCE</span><span class="p">:</span>
-        <span class="n">registry</span><span class="o">.</span><span class="n">set_default_instance</span><span class="p">(</span><span class="n">INSTANCE</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">instance</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
         <span class="n">registry</span><span class="o">.</span><span class="n">set_default_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">registry</span>
 
@@ -242,8 +242,10 @@
 
 <span class="sd">        # For User</span>
 <span class="sd">        my_instance = syncano.connect_instance(username=&#39;&#39;, password=&#39;&#39;, api_key=&#39;&#39;, instance_name=&#39;&#39;)</span>
+<span class="sd">        # OR</span>
+<span class="sd">        my_instance = syncano.connect_instance(user_key=&#39;&#39;, api_key=&#39;&#39;, instance_name=&#39;&#39;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">or</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance_name&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">INSTANCE</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">or</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">INSTANCE</span><span class="p">)</span>
     <span class="n">connection</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">connection</span><span class="o">.</span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
 </pre></div>
