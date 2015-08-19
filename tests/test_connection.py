@@ -55,7 +55,7 @@ class ConnectInstanceTestCase(unittest.TestCase):
         self.assertTrue(connect_mock.called)
         self.assertTrue(get_mock.called)
 
-        connect_mock.assert_called_once_with(a=1, b=2)
+        connect_mock.assert_called_once_with(a=1, b=2, instance_name='test-name')
         get_mock.assert_called_once_with('test-name')
         self.assertEqual(instance, get_mock)
 
@@ -74,7 +74,7 @@ class ConnectInstanceTestCase(unittest.TestCase):
         self.assertTrue(connect_mock.called)
         self.assertTrue(get_mock.called)
 
-        connect_mock.assert_called_once_with(a=1, b=2)
+        connect_mock.assert_called_once_with(a=1, b=2, instance_name=instance_mock)
         get_mock.assert_called_once_with(instance_mock)
         self.assertEqual(instance, get_mock)
 
