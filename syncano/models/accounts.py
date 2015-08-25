@@ -152,6 +152,9 @@ class User(Model):
     def group_details(self, group_id):
         return self._user_groups_method(group_id)
 
+    def remove_from_group(self, group_id):
+        return self._user_groups_method(group_id, method='DELETE')
+
 
 class Group(Model):
     """
