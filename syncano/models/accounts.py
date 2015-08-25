@@ -135,7 +135,7 @@ class User(Model):
         connection = self._get_connection()
         return connection.request('POST', endpoint)
 
-    def user_groups_method(self, group_id=None, method='GET'):
+    def _user_groups_method(self, group_id=None, method='GET'):
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('groups', properties)
         if group_id is not None:
@@ -143,11 +143,14 @@ class User(Model):
         connection = self._get_connection()
         return connection.request(method, endpoint)
 
+    def add_to_group(self, group_id):
+        return self._user_groups_method(group_id, method='POST')
+
     def list_groups(self):
-        return self.user_groups_method()
+        return self._user_groups_method()
 
     def group_details(self, group_id):
-        return self.user_groups_method(group_id)
+        return self._user_groups_method(group_id)
 
 
 class Group(Model):
@@ -188,7 +191,7 @@ class Group(Model):
             }
         }
 
-    def group_users_method(self, user_id=None, method='GET'):
+    def _group_users_method(self, user_id=None, method='GET'):
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('users', properties)
         if user_id is not None:
@@ -197,13 +200,13 @@ class Group(Model):
         return connection.request(method, endpoint)
 
     def list_users(self):
-        return self.group_users_method()
+        return self._group_users_method()
 
     def add_user(self, user_id):
-        return self.group_users_method(user_id, method='POST')
+        return self._group_users_method(user_id, method='POST')
 
     def user_details(self, user_id):
-        return self.group_users_method(user_id)
+        return self._group_users_method(user_id)
 
     def delete_user(self, user_id):
-        return self.group_users_method(user_id, method='DELETE')
+        return self._group_users_method(user_id, method='DELETE')
