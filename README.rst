@@ -1,7 +1,8 @@
-# Syncano
+Syncano
+=======
 
-## Python QuickStart Guide
----
+Python QuickStart Guide
+-----------------------
 
 You can find quick start on installing and using Syncano's Python library in our [documentation](http://docs.syncano.com/v1.0/docs/python).
 
@@ -11,8 +12,8 @@ In case you need help working with the library - email us at libraries@syncano.c
 
 You can also find library reference hosted on GitHub pages [here](http://syncano.github.io/syncano-python/).
 
-## Backwards incompatible changes
----
+Backwards incompatible changes
+------------------------------
 
 Version 4.0 is designed for new release of Syncano platform and
 it's **not compatible** with any previous releases.
@@ -20,6 +21,4 @@ it's **not compatible** with any previous releases.
 Code from `0.6.x` release is avalable on [stable/0.6.x](https://github.com/Syncano/syncano-python/tree/stable/0.6.x) branch
 and it can be installed directly from pip via:
 
-```
-pip install syncano==0.6.2 --pre
-```
+``pip install syncano==0.6.2 --pre``
