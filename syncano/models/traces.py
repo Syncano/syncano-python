@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-
 from . import fields
 from .base import Model
 from .incentives import CodeBox, Schedule, Trigger, Webhook

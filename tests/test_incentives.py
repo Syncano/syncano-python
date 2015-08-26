@@ -4,7 +4,6 @@ from datetime import datetime
 from syncano.exceptions import SyncanoValidationError
 from syncano.models import CodeBox, CodeBoxTrace, Webhook, WebhookTrace
 
-
 try:
     from unittest import mock
 except ImportError:

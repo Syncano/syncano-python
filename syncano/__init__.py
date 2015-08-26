@@ -2,7 +2,7 @@ import logging
 import os
 
 __title__ = 'Syncano Python'
-__version__ = '4.0.0'
+__version__ = '4.0.1'
 __author__ = 'Daniel Kopka'
 __license__ = 'MIT'
 __copyright__ = 'Copyright 2015 Syncano'
@@ -119,5 +119,6 @@ def connect_instance(name=None, *args, **kwargs):
         my_instance = syncano.connect_instance(user_key='', api_key='', instance_name='')
     """
     name = name or kwargs.get('instance_name', INSTANCE)
+    kwargs['instance_name'] = name
     connection = connect(*args, **kwargs)
     return connection.Instance.please.get(name)
