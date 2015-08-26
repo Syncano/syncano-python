@@ -154,14 +154,14 @@ by attaching all of them directly to <tt class="docutils literal"><span class="p
 <p>A model class represents a single <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> endpoint,
 and an instance of that class represents a particular record in this endpoint.</p>
 <p>To create an object, instantiate it using <strong>keyword arguments</strong> to the model class,
-then call <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Model.save" title="syncano.models.base.Model.save"><tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt></a> to save it to the <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt>.</p>
+then call <tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt> to save it to the <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt>.</p>
 <p>Here’s an example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>This performs a <strong>POST</strong> request to <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> behind the scenes.
-Syncano doesn’t hit the API until you explicitly call <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Model.save" title="syncano.models.base.Model.save"><tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt></a>.</p>
+Syncano doesn’t hit the API until you explicitly call <tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">To create and save <strong>an object</strong> in a single step, use the <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.create" title="syncano.models.manager.Manager.create"><tt class="xref py py-meth docutils literal"><span class="pre">create()</span></tt></a> method.
@@ -170,7 +170,7 @@ To create and save <strong>multiple objects</strong> in a single step, use the <
 </div>
 <div class="section" id="saving-changes-to-objects">
 <h2>Saving changes to objects<a class="headerlink" href="#saving-changes-to-objects" title="Permalink to this headline">¶</a></h2>
-<p>To save changes to an object that’s already in the <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt>, use <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Model.save" title="syncano.models.base.Model.save"><tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt></a>.
+<p>To save changes to an object that’s already in the <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt>, use <tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt>.
 Regarding our <strong>instance</strong> from previous example,
 this example changes its description and updates its record in the <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s">&#39;new description&#39;</span>
@@ -178,7 +178,7 @@ this example changes its description and updates its record in the <tt class="do
 </pre></div>
 </div>
 <p>This performs a <strong>PUT</strong> request to <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> behind the scenes.
-Syncano doesn’t hit the API until you explicitly call <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Model.save" title="syncano.models.base.Model.save"><tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt></a>.</p>
+Syncano doesn’t hit the API until you explicitly call <tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">To change and save <strong>an object</strong> in a single step, use the <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.update" title="syncano.models.manager.Manager.update"><tt class="xref py py-meth docutils literal"><span class="pre">update()</span></tt></a> method.</p>
@@ -256,7 +256,7 @@ alias for <a class="reference internal" href="refs/syncano.models.manager.html#s
 </div>
 <div class="section" id="removing-a-single-object">
 <h2>Removing a single object<a class="headerlink" href="#removing-a-single-object" title="Permalink to this headline">¶</a></h2>
-<p>The delete method, conveniently, is named <a class="reference internal" href="refs/syncano.models.base.html#syncano.models.base.Model.delete" title="syncano.models.base.Model.delete"><tt class="xref py py-meth docutils literal"><span class="pre">delete()</span></tt></a>.
+<p>The delete method, conveniently, is named <tt class="xref py py-meth docutils literal"><span class="pre">delete()</span></tt>.
 This method immediately deletes the object and has no return value.
 Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
