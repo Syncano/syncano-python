@@ -3,7 +3,7 @@ from syncano import __version__
 
 
 def readme():
-    with open('README.md') as f:
+    with open('README.rst') as f:
         return f.read()
 
 setup(
@@ -14,8 +14,7 @@ setup(
     author='Daniel Kopka',
     author_email='daniel.kopka@syncano.com',
     url='http://syncano.com',
-    packages=find_packages(),
-    test_suite='tests',
+    packages=find_packages(exclude=['tests']),
     zip_safe=False,
     classifiers=[
         'Development Status :: 4 - Beta',
