@@ -645,6 +645,42 @@ class ObjectManager(Manager):
         self.endpoint = 'list'
         return self
 
+    @clone
+    def fields(self, *args):
+        """
+        Special method just for data object :class:`~syncano.models.base.Object` model.
+
+        Usage::
+
+            objects = Object.please.list('instance-name', 'class-name').fields('name', 'id')
+        """
+        self.query['fields'] = ','.join(args)
+        self.method = 'GET'
+        self.endpoint = 'list'
+        return self
+
+    @clone
+    def exclude(self, *args):
+        """
+        Special method just for data object :class:`~syncano.models.base.Object` model.
+
+        Usage::
+
+            objects = Object.please.list('instance-name', 'class-name').exclude('avatar')
+        """
+        default_fields = ['id', 'created_at', 'updated_at',
+                          'revision', 'owner', 'group']
+
+        schema = self.model.get_class_schema(**self.properties)
+        fields = default_fields + [i['name'] for i in schema.schema]
+
+        fields = [f for f in fields if f not in args]
+
+        self.query['fields'] = ','.join(fields)
+        self.method = 'GET'
+        self.endpoint = 'list'
+        return self
+
 
 class SchemaManager(object):
     """
