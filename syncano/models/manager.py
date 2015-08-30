@@ -4,7 +4,7 @@ from functools import wraps
 
 import six
 from syncano.connection import ConnectionMixin
-from syncano.exceptions import SyncanoRequestError, SyncanoValueError
+from syncano.exceptions import SyncanoRequestError, SyncanoValidationError, SyncanoValueError
 
 from .registry import registry
 
@@ -645,6 +645,19 @@ class ObjectManager(Manager):
         self.endpoint = 'list'
         return self
 
+    def _get_model_field_names(self):
+        object_fields = [f.name for f in self.model._meta.fields]
+        schema = self.model.get_class_schema(**self.properties)
+
+        return object_fields + [i['name'] for i in schema.schema]
+
+    def _validate_fields(self, model_fields, args):
+        for arg in args:
+            if arg not in model_fields:
+                msg = 'Field "{0}" does not exist in class {1}.'
+                raise SyncanoValidationError(
+                    msg.format(arg, self.properties['class_name']))
+
     @clone
     def fields(self, *args):
         """
@@ -654,6 +667,8 @@ class ObjectManager(Manager):
 
             objects = Object.please.list('instance-name', 'class-name').fields('name', 'id')
         """
+        model_fields = self._get_model_field_names()
+        self._validate_fields(model_fields, args)
         self.query['fields'] = ','.join(args)
         self.method = 'GET'
         self.endpoint = 'list'
@@ -668,13 +683,10 @@ class ObjectManager(Manager):
 
             objects = Object.please.list('instance-name', 'class-name').exclude('avatar')
         """
-        default_fields = ['id', 'created_at', 'updated_at',
-                          'revision', 'owner', 'group']
+        model_fields = self._get_model_field_names()
+        self._validate_fields(model_fields, args)
 
-        schema = self.model.get_class_schema(**self.properties)
-        fields = default_fields + [i['name'] for i in schema.schema]
-
-        fields = [f for f in fields if f not in args]
+        fields = [f for f in model_fields if f not in args]
 
         self.query['fields'] = ','.join(fields)
         self.method = 'GET'
