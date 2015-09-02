@@ -126,8 +126,16 @@ class Manager(ConnectionMixin):
         manager.limit(k + 1)
         return list(manager)[k]
 
-    # Object actions
+    def _set_default_properties(self, endpoint_properties):
+        for field in self.model._meta.fields:
 
+            is_demanded = field.name in endpoint_properties
+            has_default = field.default is not None
+
+            if is_demanded and has_default:
+                self.properties[field.name] = field.default
+
+    # Object actions
     def create(self, **kwargs):
         """
         A convenience method for creating an object and saving it all in one step. Thus::
@@ -420,9 +428,11 @@ class Manager(ConnectionMixin):
             self.name = name
 
     def _filter(self, *args, **kwargs):
-        if args and self.endpoint:
-            properties = self.model._meta.get_endpoint_properties(self.endpoint)
+        properties = self.model._meta.get_endpoint_properties(self.endpoint)
 
+        self._set_default_properties(properties)
+
+        if args and self.endpoint:
             # let user get object by 'id'
             too_much_properties = len(args) < len(properties)
             id_specified = 'id' in properties
