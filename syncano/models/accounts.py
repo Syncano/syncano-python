@@ -57,7 +57,7 @@ class Profile(Model):
         {'display_name': 'Create users', 'value': 'create_users'},
     )
 
-    owner = fields.IntegerField(label='owner id', required=False, read_only=True)
+    owner = fields.IntegerField(label='owner id', required=False, read_only=False)
     owner_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
     group = fields.IntegerField(label='group id', required=False)
     group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
