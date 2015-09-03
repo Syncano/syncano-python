@@ -4,7 +4,7 @@ from functools import wraps
 
 import six
 from syncano.connection import ConnectionMixin
-from syncano.exceptions import SyncanoRequestError, SyncanoValueError
+from syncano.exceptions import SyncanoRequestError, SyncanoValidationError, SyncanoValueError
 
 from .registry import registry
 
@@ -641,6 +641,54 @@ class ObjectManager(Manager):
             query[field_name]['_{0}'.format(lookup)] = field.to_query(value, lookup)
 
         self.query['query'] = json.dumps(query)
+        self.method = 'GET'
+        self.endpoint = 'list'
+        return self
+
+    def _get_model_field_names(self):
+        object_fields = [f.name for f in self.model._meta.fields]
+        schema = self.model.get_class_schema(**self.properties)
+
+        return object_fields + [i['name'] for i in schema.schema]
+
+    def _validate_fields(self, model_fields, args):
+        for arg in args:
+            if arg not in model_fields:
+                msg = 'Field "{0}" does not exist in class {1}.'
+                raise SyncanoValidationError(
+                    msg.format(arg, self.properties['class_name']))
+
+    @clone
+    def fields(self, *args):
+        """
+        Special method just for data object :class:`~syncano.models.base.Object` model.
+
+        Usage::
+
+            objects = Object.please.list('instance-name', 'class-name').fields('name', 'id')
+        """
+        model_fields = self._get_model_field_names()
+        self._validate_fields(model_fields, args)
+        self.query['fields'] = ','.join(args)
+        self.method = 'GET'
+        self.endpoint = 'list'
+        return self
+
+    @clone
+    def exclude(self, *args):
+        """
+        Special method just for data object :class:`~syncano.models.base.Object` model.
+
+        Usage::
+
+            objects = Object.please.list('instance-name', 'class-name').exclude('avatar')
+        """
+        model_fields = self._get_model_field_names()
+        self._validate_fields(model_fields, args)
+
+        fields = [f for f in model_fields if f not in args]
+
+        self.query['fields'] = ','.join(fields)
         self.method = 'GET'
         self.endpoint = 'list'
         return self
