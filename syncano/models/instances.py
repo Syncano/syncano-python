@@ -35,7 +35,7 @@ class Instance(Model):
     name = fields.StringField(max_length=64, primary_key=True)
     description = fields.StringField(read_only=False, required=False)
     role = fields.Field(read_only=True, required=False)
-    owner = fields.ModelField('Admin', read_only=False)
+    owner = fields.ModelField('Admin', read_only=True)
     links = fields.HyperlinkedField(links=LINKS)
     metadata = fields.JSONField(read_only=False, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
