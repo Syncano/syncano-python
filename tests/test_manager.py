@@ -236,6 +236,19 @@ class ManagerTestCase(unittest.TestCase):
         self.assertEqual(self.manager.method, 'GET')
         self.assertEqual(self.manager.endpoint, 'list')
 
+    @mock.patch('syncano.models.options.Options.get_endpoint_properties')
+    @mock.patch('syncano.models.manager.Manager._clone')
+    def test_set_default_properties(self, get_endpoint_mock, clone_mock):
+        get_endpoint_mock.return_value = ['a', 'b', 'name']
+        clone_mock.return_value = self.manager
+
+        instance_name = [f for f in self.model._meta.fields
+                         if f.name == 'name'][0]
+        instance_name.default = 'test'
+
+        self.manager._set_default_properties(get_endpoint_mock())
+        self.assertDictEqual(self.manager.properties, {'name': 'test'})
+
     @mock.patch('syncano.models.manager.Manager.list')
     def test_first(self, list_mock):
         list_mock.__getitem__.return_value = 1
