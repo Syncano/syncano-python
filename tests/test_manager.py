@@ -28,6 +28,10 @@ class ManagerTestCase(unittest.TestCase):
         self.model = Instance
         self.manager = Instance.please
 
+    def tearDown(self):
+        self.model = None
+        self.manager = None
+
     def test_create(self):
         model_mock = mock.MagicMock()
         model_mock.return_value = model_mock
