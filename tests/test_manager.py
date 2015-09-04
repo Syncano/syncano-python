@@ -28,6 +28,21 @@ class ManagerTestCase(unittest.TestCase):
         self.model = Instance
         self.manager = Instance.please
 
+    def tearDown(self):
+        field_name = self.get_name_from_fields()
+        if field_name is not None:
+            field_name.default = None
+
+        self.model = None
+        self.manager = None
+
+    def get_name_from_fields(self):
+        names = [f for f in self.model._meta.fields
+                 if f.name == 'name']
+        if len(names) > 0:
+            return names[0]
+        return
+
     def test_create(self):
         model_mock = mock.MagicMock()
         model_mock.return_value = model_mock
@@ -235,6 +250,19 @@ class ManagerTestCase(unittest.TestCase):
 
         self.assertEqual(self.manager.method, 'GET')
         self.assertEqual(self.manager.endpoint, 'list')
+
+    @mock.patch('syncano.models.options.Options.get_endpoint_properties')
+    @mock.patch('syncano.models.manager.Manager._clone')
+    def test_set_default_properties(self, get_endpoint_mock, clone_mock):
+        get_endpoint_mock.return_value = ['a', 'b', 'name']
+        clone_mock.return_value = self.manager
+
+        instance_name = self.get_name_from_fields()
+        instance_name.default = 'test_original'
+
+        self.manager._set_default_properties(get_endpoint_mock())
+        self.assertDictEqual(self.manager.properties,
+                             {'name': 'test_original'})
 
     @mock.patch('syncano.models.manager.Manager.list')
     def test_first(self, list_mock):
