@@ -252,7 +252,7 @@ class Webhook(Model):
             },
             'public': {
                 'methods': ['get'],
-                'path': '/webhooks/p/{public_link}/',
+                'path': '/webhooks/p/{public_link}/{name}/',
             }
         }
 
@@ -278,7 +278,8 @@ class Webhook(Model):
             }
         }
         response = connection.request('POST', endpoint, **request)
-        response.update({'instance_name': self.instance_name, 'webhook_name': self.name})
+        response.update({'instance_name': self.instance_name,
+                         'webhook_name': self.name})
         return WebhookTrace(**response)
 
     def reset(self, **payload):
