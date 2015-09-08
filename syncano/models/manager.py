@@ -4,7 +4,7 @@ from functools import wraps
 
 import six
 from syncano.connection import ConnectionMixin
-from syncano.exceptions import SyncanoRequestError, SyncanoValueError
+from syncano.exceptions import SyncanoRequestError, SyncanoValidationError, SyncanoValueError
 
 from .registry import registry
 
@@ -126,8 +126,16 @@ class Manager(ConnectionMixin):
         manager.limit(k + 1)
         return list(manager)[k]
 
-    # Object actions
+    def _set_default_properties(self, endpoint_properties):
+        for field in self.model._meta.fields:
 
+            is_demanded = field.name in endpoint_properties
+            has_default = field.default is not None
+
+            if is_demanded and has_default:
+                self.properties[field.name] = field.default
+
+    # Object actions
     def create(self, **kwargs):
         """
         A convenience method for creating an object and saving it all in one step. Thus::
@@ -420,9 +428,11 @@ class Manager(ConnectionMixin):
             self.name = name
 
     def _filter(self, *args, **kwargs):
-        if args and self.endpoint:
-            properties = self.model._meta.get_endpoint_properties(self.endpoint)
+        properties = self.model._meta.get_endpoint_properties(self.endpoint)
 
+        self._set_default_properties(properties)
+
+        if args and self.endpoint:
             # let user get object by 'id'
             too_much_properties = len(args) < len(properties)
             id_specified = 'id' in properties
@@ -641,6 +651,54 @@ class ObjectManager(Manager):
             query[field_name]['_{0}'.format(lookup)] = field.to_query(value, lookup)
 
         self.query['query'] = json.dumps(query)
+        self.method = 'GET'
+        self.endpoint = 'list'
+        return self
+
+    def _get_model_field_names(self):
+        object_fields = [f.name for f in self.model._meta.fields]
+        schema = self.model.get_class_schema(**self.properties)
+
+        return object_fields + [i['name'] for i in schema.schema]
+
+    def _validate_fields(self, model_fields, args):
+        for arg in args:
+            if arg not in model_fields:
+                msg = 'Field "{0}" does not exist in class {1}.'
+                raise SyncanoValidationError(
+                    msg.format(arg, self.properties['class_name']))
+
+    @clone
+    def fields(self, *args):
+        """
+        Special method just for data object :class:`~syncano.models.base.Object` model.
+
+        Usage::
+
+            objects = Object.please.list('instance-name', 'class-name').fields('name', 'id')
+        """
+        model_fields = self._get_model_field_names()
+        self._validate_fields(model_fields, args)
+        self.query['fields'] = ','.join(args)
+        self.method = 'GET'
+        self.endpoint = 'list'
+        return self
+
+    @clone
+    def exclude(self, *args):
+        """
+        Special method just for data object :class:`~syncano.models.base.Object` model.
+
+        Usage::
+
+            objects = Object.please.list('instance-name', 'class-name').exclude('avatar')
+        """
+        model_fields = self._get_model_field_names()
+        self._validate_fields(model_fields, args)
+
+        fields = [f for f in model_fields if f not in args]
+
+        self.query['fields'] = ','.join(fields)
         self.method = 'GET'
         self.endpoint = 'list'
         return self
