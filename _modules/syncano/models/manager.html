@@ -133,7 +133,7 @@
 
 <span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">from</span> <span class="nn">syncano.connection</span> <span class="kn">import</span> <span class="n">ConnectionMixin</span>
-<span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoRequestError</span><span class="p">,</span> <span class="n">SyncanoValueError</span>
+<span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoRequestError</span><span class="p">,</span> <span class="n">SyncanoValidationError</span><span class="p">,</span> <span class="n">SyncanoValueError</span>
 
 <span class="kn">from</span> <span class="nn">.registry</span> <span class="kn">import</span> <span class="n">registry</span>
 
@@ -255,8 +255,16 @@
         <span class="n">manager</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">manager</span><span class="p">)[</span><span class="n">k</span><span class="p">]</span>
 
-    <span class="c"># Object actions</span>
+    <span class="k">def</span> <span class="nf">_set_default_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint_properties</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
 
+            <span class="n">is_demanded</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">endpoint_properties</span>
+            <span class="n">has_default</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+
+            <span class="k">if</span> <span class="n">is_demanded</span> <span class="ow">and</span> <span class="n">has_default</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">default</span>
+
+    <span class="c"># Object actions</span>
 <div class="viewcode-block" id="Manager.create"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A convenience method for creating an object and saving it all in one step. Thus::</span>
@@ -549,9 +557,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 </div>
     <span class="k">def</span> <span class="nf">_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">args</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">:</span>
-            <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_endpoint_properties</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">)</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_endpoint_properties</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_default_properties</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">args</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">:</span>
             <span class="c"># let user get object by &#39;id&#39;</span>
             <span class="n">too_much_properties</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
             <span class="n">id_specified</span> <span class="o">=</span> <span class="s">&#39;id&#39;</span> <span class="ow">in</span> <span class="n">properties</span>
@@ -770,6 +780,54 @@
             <span class="n">query</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s">&#39;_{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookup</span><span class="p">)]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">to_query</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">lookup</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;GET&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#39;list&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+    <span class="k">def</span> <span class="nf">_get_model_field_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">object_fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">]</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_class_schema</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">object_fields</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">schema</span><span class="o">.</span><span class="n">schema</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_validate_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_fields</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">arg</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_fields</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Field &quot;{0}&quot; does not exist in class {1}.&#39;</span>
+                <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span>
+                    <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s">&#39;class_name&#39;</span><span class="p">]))</span>
+
+    <span class="nd">@clone</span>
+<div class="viewcode-block" id="ObjectManager.fields"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.fields">[docs]</a>    <span class="k">def</span> <span class="nf">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Special method just for data object :class:`~syncano.models.base.Object` model.</span>
+
+<span class="sd">        Usage::</span>
+
+<span class="sd">            objects = Object.please.list(&#39;instance-name&#39;, &#39;class-name&#39;).fields(&#39;name&#39;, &#39;id&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_model_field_names</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_fields</span><span class="p">(</span><span class="n">model_fields</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s">&#39;fields&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;GET&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#39;list&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+    <span class="nd">@clone</span>
+<div class="viewcode-block" id="ObjectManager.exclude"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.exclude">[docs]</a>    <span class="k">def</span> <span class="nf">exclude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Special method just for data object :class:`~syncano.models.base.Object` model.</span>
+
+<span class="sd">        Usage::</span>
+
+<span class="sd">            objects = Object.please.list(&#39;instance-name&#39;, &#39;class-name&#39;).exclude(&#39;avatar&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_model_field_names</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_fields</span><span class="p">(</span><span class="n">model_fields</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">model_fields</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s">&#39;fields&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;GET&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#39;list&#39;</span>
         <span class="k">return</span> <span class="bp">self</span>
