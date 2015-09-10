@@ -9,11 +9,21 @@ from .base import Model
 from .instances import Instance
 
 
+def handle_exceptions(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            class_name = func.__name__
+            logger.error('Error in function "%s": "%s".', class_name, e)
+    return wrapper
+
+
 class PollThread(Thread):
     def __init__(self, connection, endpoint, callback, error=None, *args, **kwargs):
         self.connection = connection
         self.endpoint = endpoint
-        self.callback = callback
+        self.callback = handle_exceptions(callback)
         self.error = error
         self.abort = False
         self.timeout = kwargs.pop('timeout', None) or 60 * 5
