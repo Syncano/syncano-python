@@ -232,25 +232,6 @@ class Connection(object):
 
         # Encode request payload
         if 'data' in params and not isinstance(params['data'], six.string_types):
-            # TODO(mk): quickfix - need to
-            from datetime import datetime
-
-            def to_native(value):
-                if value is None:
-                    return
-                ret = value.isoformat()
-                if ret.endswith('+00:00'):
-                    ret = ret[:-6] + 'Z'
-
-                if not ret.endswith('Z'):
-                    ret = ret + 'Z'
-
-                return ret
-
-            for k, v in params['data'].iteritems():
-                if isinstance(v, datetime):
-                    params['data'][k] = to_native(v)
-            #
             params['data'] = json.dumps(params['data'])
         url = self.build_url(path)
         response = method(url, **params)
