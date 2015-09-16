@@ -2,7 +2,7 @@
 
 set -e
 
-#flake8 .
+flake8 .
 isort --recursive --check-only .
 
 coverage run -m unittest discover -p 'test*.py'

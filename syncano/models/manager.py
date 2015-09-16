@@ -264,6 +264,14 @@ class Manager(ConnectionMixin):
         self.endpoint = 'detail'
         self.method = self.get_allowed_method('PATCH', 'PUT', 'POST')
         self.data = kwargs.pop('data', kwargs)
+
+        model = self.serialize(self.data, self.model)
+        serialized = model.to_native()
+
+        serialized = {k: v for k, v in serialized.iteritems()
+                      if k in self.data}
+
+        self.data.update(serialized)
         self._filter(*args, **kwargs)
         return self.request()
 
@@ -614,7 +622,7 @@ class ObjectManager(Manager):
         return instance
 
     def serialize(self, data, model=None):
-        model = self.model.get_subclass_model(**self.properties)
+        model = model or self.model.get_subclass_model(**self.properties)
         return super(ObjectManager, self).serialize(data, model)
 
     @clone
