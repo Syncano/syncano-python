@@ -1,11 +1,18 @@
 import json
+import sys
 from copy import deepcopy
-from urlparse import urljoin
 
 import requests
 import six
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
+
+
+if sys.version_info < (3,):
+    from urlparse import urljoin
+else:
+    from urllib.parse import urljoin
+
 
 __all__ = ['default_connection', 'Connection', 'ConnectionMixin']
 
