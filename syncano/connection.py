@@ -1,5 +1,4 @@
 import json
-import sys
 from copy import deepcopy
 
 import requests
@@ -8,10 +7,10 @@ import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
 
 
-if sys.version_info < (3,):
-    from urlparse import urljoin
-else:
+if six.PY3:
     from urllib.parse import urljoin
+else:
+    from urlparse import urljoin
 
 
 __all__ = ['default_connection', 'Connection', 'ConnectionMixin']

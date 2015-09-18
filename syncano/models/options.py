@@ -1,5 +1,4 @@
 import re
-import sys
 from bisect import bisect
 
 import six
@@ -9,10 +8,10 @@ from syncano.models.registry import registry
 from syncano.utils import camelcase_to_underscore
 
 
-if sys.version_info < (3,):
-    from urlparse import urljoin
-else:
+if six.PY3:
     from urllib.parse import urljoin
+else:
+    from urlparse import urljoin
 
 
 class Options(ConnectionMixin):
