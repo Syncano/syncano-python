@@ -6,7 +6,6 @@ import six
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
 
-
 if six.PY3:
     from urllib.parse import urljoin
 else:

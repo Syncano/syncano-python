@@ -7,7 +7,6 @@ from syncano.exceptions import SyncanoValueError
 from syncano.models.registry import registry
 from syncano.utils import camelcase_to_underscore
 
-
 if six.PY3:
     from urllib.parse import urljoin
 else:
