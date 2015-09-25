@@ -125,6 +125,12 @@ class Model(six.with_metaclass(ModelMetaclass)):
             methods = self._meta.get_endpoint_methods(endpoint_name)
             if 'put' in methods:
                 method = 'PUT'
+        elif hasattr(self, 'get_class_schema'):
+            schema = self.get_class_schema(self.instance_name,
+                                           self.class_name)
+            for field in schema.schema:
+                if field['name'] not in data:
+                    data[field['name']] = None
 
         endpoint = self._meta.resolve_endpoint(endpoint_name, properties)
         request = {'data': data}
