@@ -1,15 +1,8 @@
 from __future__ import unicode_literals
 
-from copy import deepcopy
-
-from syncano.exceptions import SyncanoValidationError
-from syncano.utils import get_class_name
-
 from . import fields
 from .base import Model
 from .instances import Instance
-from .manager import ObjectManager
-from .registry import registry
 
 
 class DataView(Model):
@@ -22,7 +15,8 @@ class DataView(Model):
     PERMISSIONS_CHOICES = (
         {'display_name': 'None', 'value': 'none'},
         {'display_name': 'Read', 'value': 'read'},
-        {'display_name': 'Create objects', 'value': 'create_objects'},
+        {'display_name': 'Write', 'value': 'write'},
+        {'display_name': 'Full', 'value': 'full'},
     )
 
     name = fields.StringField(max_length=64, primary_key=True)
