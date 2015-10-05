@@ -33,7 +33,7 @@ class DataView(Model):
     name = fields.StringField(max_length=64, primary_key=True)
     description = fields.StringField(required=False)
 
-    query = fields.SchemaField(read_only=False, required=True)
+    query = fields.JSONField(read_only=False, required=True)
 
     class_name = fields.StringField(label='class name', mapping='class')
 
