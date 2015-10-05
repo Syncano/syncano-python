@@ -5,5 +5,6 @@ from .accounts import *  # NOQA
 from .billing import *  # NOQA
 from .channels import *  # NOQA
 from .classes import *  # NOQA
+from .data_views import *  # NOQA
 from .incentives import *  # NOQA
 from .traces import *  # NOQA
