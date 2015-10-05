@@ -6,6 +6,17 @@ from .instances import Instance
 
 
 class DataView(Model):
+    """
+    :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar description: :class:`~syncano.models.fields.StringField`
+    :ivar query: :class:`~syncano.models.fields.SchemaField`
+    :ivar class_name: :class:`~syncano.models.fields.StringField`
+    :ivar excluded_fields: :class:`~syncano.models.fields.StringField`
+    :ivar expand: :class:`~syncano.models.fields.StringField`
+    :ivar order_by: :class:`~syncano.models.fields.StringField`
+    :ivar page_size: :class:`~syncano.models.fields.IntegerField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    """
 
     LINKS = [
         {'type': 'detail', 'name': 'self'},
@@ -69,6 +80,6 @@ class DataView(Model):
         connection = self._get_connection()
         while endpoint is not None:
             response = connection.request('GET', endpoint)
-            endpoint = response['next']
+            endpoint = response.get('next')
             for obj in response['objects']:
                 yield obj
