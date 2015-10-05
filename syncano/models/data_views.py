@@ -67,4 +67,8 @@ class DataView(Model):
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('get_api', properties)
         connection = self._get_connection()
-        return connection.request('GET', endpoint)
+        while endpoint is not None:
+            response = connection.request('GET', endpoint)
+            endpoint = response['next']
+            for obj in response['objects']:
+                yield obj
