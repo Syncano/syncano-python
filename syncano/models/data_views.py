@@ -63,6 +63,10 @@ class DataView(Model):
             'rename': {
                 'methods': ['post'],
                 'path': '/api/objects/{name}/rename/',
+            },
+            'clear_cache': {
+                'methods': ['post'],
+                'path': '/api/objects/{name}/clear_cache/',
             }
         }
 
@@ -73,6 +77,12 @@ class DataView(Model):
         return connection.request('POST',
                                   endpoint,
                                   data={'new_name': new_name})
+
+    def clear_cache(self):
+        properties = self.get_endpoint_data()
+        endpoint = self._meta.resolve_endpoint('clear_cache', properties)
+        connection = self._get_connection()
+        return connection.request('POST', endpoint)
 
     def get_api(self):
         properties = self.get_endpoint_data()
