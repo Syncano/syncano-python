@@ -56,9 +56,9 @@ class DataView(Model):
                 'methods': ['post', 'get'],
                 'path': '/api/objects/',
             },
-            'get_api': {
+            'get': {
                 'methods': ['get'],
-                'path': '/api/objects/{name}/get_api/',
+                'path': '/api/objects/{name}/get/',
             },
             'rename': {
                 'methods': ['post'],
@@ -84,9 +84,9 @@ class DataView(Model):
         connection = self._get_connection()
         return connection.request('POST', endpoint)
 
-    def get_api(self):
+    def get(self):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('get_api', properties)
+        endpoint = self._meta.resolve_endpoint('get', properties)
         connection = self._get_connection()
         while endpoint is not None:
             response = connection.request('GET', endpoint)
