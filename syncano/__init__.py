@@ -45,7 +45,10 @@ def connect(*args, **kwargs):
     :param api_key: Your Syncano account key or instance api_key
 
     :type username: string
-    :param username: Your Syncano username
+    :param username: Instance user name
+
+    :type user_key: string
+    :param user_key: Instance user key
 
     :type instance_name: string
     :param instance_name: Your Syncano instance_name
@@ -61,6 +64,9 @@ def connect(*args, **kwargs):
         connection = syncano.connect(email='', password='')
         # OR
         connection = syncano.connect(api_key='')
+        # OR
+        connection = syncano.connect(social_backend='github',
+                                     token='sfdsdfsdf')
 
         # User login
         connection = syncano.connect(username='', password='', api_key='', instance_name='')
@@ -122,10 +128,3 @@ def connect_instance(name=None, *args, **kwargs):
     kwargs['instance_name'] = name
     connection = connect(*args, **kwargs)
     return connection.Instance.please.get(name)
-
-
-def social_connect():
-    # curl -X POST \
-    # -H "Authorization: token BACKEND_PROVIDER_TOKEN" \
-    # -H "X-API-KEY: API_KEY" \
-    # "https://api.syncano.io/v1/instances/instance/user/auth/backend_name/"
