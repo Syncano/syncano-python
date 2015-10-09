@@ -122,3 +122,10 @@ def connect_instance(name=None, *args, **kwargs):
     kwargs['instance_name'] = name
     connection = connect(*args, **kwargs)
     return connection.Instance.please.get(name)
+
+
+def social_connect():
+    # curl -X POST \
+    # -H "Authorization: token BACKEND_PROVIDER_TOKEN" \
+    # -H "X-API-KEY: API_KEY" \
+    # "https://api.syncano.io/v1/instances/instance/user/auth/backend_name/"
