@@ -100,7 +100,7 @@ class Manager(ConnectionMixin):
         return iter(self.iterator())
 
     def __bool__(self):  # pragma: no cover
-        return bool(self.iterator())
+        return bool(list(self.iterator()))
 
     def __nonzero__(self):  # pragma: no cover
         return type(self).__bool__(self)
