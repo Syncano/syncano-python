@@ -403,7 +403,7 @@ class Manager(ConnectionMixin):
         return self
 
     @clone
-    def order_by(self, field):
+    def order_by(self, field, order='asc'):
         """
         Sets ordering field of returned objects.
 
@@ -415,7 +415,7 @@ class Manager(ConnectionMixin):
             raise SyncanoValueError('Order by field needs to be a string.')
 
         self.query['order_by'] = field
-        return self
+        return self.ordering(order)
 
     @clone
     def raw(self):
