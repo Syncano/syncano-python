@@ -388,9 +388,24 @@ class Manager(ConnectionMixin):
         return self
 
     @clone
-    def order_by(self, field):
+    def ordering(self, order='asc'):
         """
         Sets order of returned objects.
+
+        Usage::
+
+            instances = Instance.please.ordering()
+        """
+        if order not in ('asc', 'desc'):
+            raise SyncanoValueError('Invalid order value.')
+
+        self.query['ordering'] = order
+        return self
+
+    @clone
+    def order_by(self, field):
+        """
+        Sets ordering field of returned objects.
 
         Usage::
 
