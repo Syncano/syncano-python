@@ -403,21 +403,6 @@ class Manager(ConnectionMixin):
         return self
 
     @clone
-    def order_by(self, field, order='asc'):
-        """
-        Sets ordering field of returned objects.
-
-        Usage::
-
-            instances = Instance.please.order_by('name')
-        """
-        if not field or not isinstance(field, six.string_types):
-            raise SyncanoValueError('Order by field needs to be a string.')
-
-        self.query['order_by'] = field
-        return self.ordering(order)
-
-    @clone
     def raw(self):
         """
         Disables serialization. ``request`` method will return raw Python types.
@@ -724,6 +709,28 @@ class ObjectManager(Manager):
         self.query['fields'] = ','.join(fields)
         self.method = 'GET'
         self.endpoint = 'list'
+        return self
+
+    def ordering(self, order=None):
+        pass
+
+    @clone
+    def order_by(self, field):
+        """
+        Sets ordering field of returned objects.
+
+        Usage::
+
+            # ASC order
+            instances = Object.please.order_by('name')
+
+            # DESC order
+            instances = Object.please.order_by('-name')
+        """
+        if not field or not isinstance(field, six.string_types):
+            raise SyncanoValueError('Order by field needs to be a string.')
+
+        self.query['order_by'] = field
         return self
 
 
