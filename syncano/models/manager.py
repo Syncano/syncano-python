@@ -712,7 +712,7 @@ class ObjectManager(Manager):
         return self
 
     def ordering(self, order=None):
-        pass
+        raise AttributeError('Ordering not implemented. Use order_by instead.')
 
     @clone
     def order_by(self, field):
