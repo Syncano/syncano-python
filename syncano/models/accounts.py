@@ -54,7 +54,8 @@ class Profile(Model):
     PERMISSIONS_CHOICES = (
         {'display_name': 'None', 'value': 'none'},
         {'display_name': 'Read', 'value': 'read'},
-        {'display_name': 'Create users', 'value': 'create_users'},
+        {'display_name': 'Write', 'value': 'write'},
+        {'display_name': 'Full', 'value': 'full'},
     )
 
     owner = fields.IntegerField(label='owner id', required=False, read_only=True)
