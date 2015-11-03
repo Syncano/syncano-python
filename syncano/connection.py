@@ -166,10 +166,7 @@ class Connection(object):
                 'X-API-KEY': self.api_key
             })
         elif self.api_key and 'Authorization' not in params['headers']:
-            if self.is_social:
-                params['headers']['Authorization'] = 'token %s' % self.token
-            else:
-                params['headers']['Authorization'] = 'ApiKey %s' % self.api_key
+            params['headers']['Authorization'] = 'token %s' % (self.token if self.is_social else self.api_key)
 
         # We don't need to check SSL cert in DEBUG mode
         if syncano.DEBUG or not self.verify_ssl:
@@ -286,7 +283,6 @@ class Connection(object):
             content = response.json()
         except ValueError:
             content = response.text
-
         if is_server_error(response.status_code):
             raise SyncanoRequestError(response.status_code, 'Server error.')
 
