@@ -1,8 +1,11 @@
 from __future__ import unicode_literals
 
+
 from . import fields
 from .base import Model
 from .instances import Instance
+from .classes import Class, Object
+from .manager import ObjectManager
 
 
 class Admin(Model):
@@ -44,44 +47,34 @@ class Admin(Model):
         }
 
 
-class Profile(Model):
+class Profile(Object):
     """
     """
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-
-    PERMISSIONS_CHOICES = (
-        {'display_name': 'None', 'value': 'none'},
-        {'display_name': 'Read', 'value': 'read'},
-        {'display_name': 'Write', 'value': 'write'},
-        {'display_name': 'Full', 'value': 'full'},
-    )
-
-    owner = fields.IntegerField(label='owner id', required=False, read_only=True)
-    owner_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
-    group = fields.IntegerField(label='group id', required=False)
-    group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
-    other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
-    channel = fields.StringField(required=False)
-    channel_room = fields.StringField(required=False, max_length=64)
-
-    links = fields.HyperlinkedField(links=LINKS)
-    created_at = fields.DateTimeField(read_only=True, required=False)
-    updated_at = fields.DateTimeField(read_only=True, required=False)
 
     class Meta:
-        parent = Instance
+        parent = Class
         endpoints = {
             'detail': {
-                'methods': ['delete', 'patch', 'put', 'get'],
-                'path': '/user_profile/objects/{id}/',
+                'methods': ['delete', 'post', 'patch', 'get'],
+                'path': '/objects/{id}/',
             },
             'list': {
                 'methods': ['get'],
-                'path': '/user_profile/objects/',
+                'path': '/objects/',
             }
         }
+
+    @staticmethod
+    def __new__(cls, **kwargs):
+        kwargs.update(
+            {
+                'instance_name': cls._meta.get_field('instance_name').default,
+                'class_name': 'user_profile'
+            }
+        )
+        return super(Profile, cls).__new__(cls, **kwargs)
+
+    please = ObjectManager()
 
 
 class User(Model):
