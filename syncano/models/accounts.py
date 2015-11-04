@@ -3,8 +3,8 @@ from __future__ import unicode_literals
 
 from . import fields
 from .base import Model
-from .instances import Instance
 from .classes import Class, Object
+from .instances import Instance
 from .manager import ObjectManager
 
 
