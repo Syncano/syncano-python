@@ -170,7 +170,8 @@
 <li><strong>email</strong> (<em>string</em>) &#8211; Your Syncano account email address</li>
 <li><strong>password</strong> (<em>string</em>) &#8211; Your Syncano password</li>
 <li><strong>api_key</strong> (<em>string</em>) &#8211; Your Syncano account key or instance api_key</li>
-<li><strong>username</strong> (<em>string</em>) &#8211; Your Syncano username</li>
+<li><strong>username</strong> (<em>string</em>) &#8211; Instance user name</li>
+<li><strong>user_key</strong> (<em>string</em>) &#8211; Instance user key</li>
 <li><strong>instance_name</strong> (<em>string</em>) &#8211; Your Syncano instance_name</li>
 <li><strong>verify_ssl</strong> (<em>boolean</em>) &#8211; Verify SSL certificate</li>
 </ul>
@@ -189,7 +190,11 @@
 <dd><p class="first"># Admin login
 connection = syncano.connect(email=&#8217;&#8216;, password=&#8217;&#8216;)
 # OR
-connection = syncano.connect(api_key=&#8217;&#8216;)</p>
+connection = syncano.connect(api_key=&#8217;&#8216;)
+# OR
+connection = syncano.connect(social_backend=&#8217;github&#8217;,</p>
+<blockquote>
+<div>token=&#8217;sfdsdfsdf&#8217;)</div></blockquote>
 <p class="last"># User login
 connection = syncano.connect(username=&#8217;&#8216;, password=&#8217;&#8216;, api_key=&#8217;&#8216;, instance_name=&#8217;&#8216;)
 # OR

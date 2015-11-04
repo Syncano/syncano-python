@@ -160,18 +160,23 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="syncano.connection.Connection.SOCIAL_AUTH_SUFFIX">
+<tt class="descname">SOCIAL_AUTH_SUFFIX</tt><em class="property"> = 'v1/account/auth{social_backend}/'</em><a class="headerlink" href="#syncano.connection.Connection.SOCIAL_AUTH_SUFFIX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="syncano.connection.Connection.USER_AUTH_SUFFIX">
 <tt class="descname">USER_AUTH_SUFFIX</tt><em class="property"> = 'v1/instances/{name}/user/auth/'</em><a class="headerlink" href="#syncano.connection.Connection.USER_AUTH_SUFFIX" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.connection.Connection.ADMIN_LOGIN_PARAMS">
-<tt class="descname">ADMIN_LOGIN_PARAMS</tt><em class="property"> = set(['password', 'email'])</em><a class="headerlink" href="#syncano.connection.Connection.ADMIN_LOGIN_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.connection.Connection.LOGIN_PARAMS">
+<tt class="descname">LOGIN_PARAMS</tt><em class="property"> = set(['password', 'email'])</em><a class="headerlink" href="#syncano.connection.Connection.LOGIN_PARAMS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.connection.Connection.ADMIN_ALT_LOGIN_PARAMS">
-<tt class="descname">ADMIN_ALT_LOGIN_PARAMS</tt><em class="property"> = set(['api_key'])</em><a class="headerlink" href="#syncano.connection.Connection.ADMIN_ALT_LOGIN_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.connection.Connection.ALT_LOGIN_PARAMS">
+<tt class="descname">ALT_LOGIN_PARAMS</tt><em class="property"> = set(['api_key'])</em><a class="headerlink" href="#syncano.connection.Connection.ALT_LOGIN_PARAMS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -185,6 +190,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="syncano.connection.Connection.SOCIAL_LOGIN_PARAMS">
+<tt class="descname">SOCIAL_LOGIN_PARAMS</tt><em class="property"> = set(['social_backend', 'token'])</em><a class="headerlink" href="#syncano.connection.Connection.SOCIAL_LOGIN_PARAMS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="syncano.connection.Connection.AUTH_SUFFIX">
 <tt class="descname">AUTH_SUFFIX</tt><em class="property"> = 'v1/account/auth'</em><a class="headerlink" href="#syncano.connection.Connection.AUTH_SUFFIX" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -192,6 +202,11 @@
 <dl class="attribute">
 <dt id="syncano.connection.Connection.is_user">
 <tt class="descname">is_user</tt><a class="reference internal" href="../_modules/syncano/connection.html#Connection.is_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.is_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.connection.Connection.is_social">
+<tt class="descname">is_social</tt><a class="reference internal" href="../_modules/syncano/connection.html#Connection.is_social"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.is_social" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -340,7 +355,7 @@ will ensure that request is authenticated.</p>
 
 <dl class="method">
 <dt id="syncano.connection.Connection.validate_params">
-<tt class="descname">validate_params</tt><big>(</big><em>kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.validate_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.validate_params" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">validate_params</tt><big>(</big><em>kwargs</em>, <em>params</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.validate_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.validate_params" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

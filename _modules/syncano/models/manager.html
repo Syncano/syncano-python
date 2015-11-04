@@ -229,7 +229,11 @@
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">())</span>
 
     <span class="k">def</span> <span class="nf">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">())</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
 
     <span class="k">def</span> <span class="nf">__nonzero__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -517,18 +521,18 @@
         <span class="k">return</span> <span class="bp">self</span>
 </div>
     <span class="nd">@clone</span>
-<div class="viewcode-block" id="Manager.order_by"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.order_by">[docs]</a>    <span class="k">def</span> <span class="nf">order_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+<div class="viewcode-block" id="Manager.ordering"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.ordering">[docs]</a>    <span class="k">def</span> <span class="nf">ordering</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">&#39;asc&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets order of returned objects.</span>
 
 <span class="sd">        Usage::</span>
 
-<span class="sd">            instances = Instance.please.order_by(&#39;name&#39;)</span>
+<span class="sd">            instances = Instance.please.ordering()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;Order by field needs to be a string.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">order</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;asc&#39;</span><span class="p">,</span> <span class="s">&#39;desc&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;Invalid order value.&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s">&#39;order_by&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s">&#39;ordering&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">order</span>
         <span class="k">return</span> <span class="bp">self</span>
 </div>
     <span class="nd">@clone</span>
@@ -838,6 +842,28 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s">&#39;fields&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;GET&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#39;list&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="ObjectManager.ordering"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.ordering">[docs]</a>    <span class="k">def</span> <span class="nf">ordering</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;Ordering not implemented. Use order_by instead.&#39;</span><span class="p">)</span>
+</div>
+    <span class="nd">@clone</span>
+<div class="viewcode-block" id="ObjectManager.order_by"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.order_by">[docs]</a>    <span class="k">def</span> <span class="nf">order_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets ordering field of returned objects.</span>
+
+<span class="sd">        Usage::</span>
+
+<span class="sd">            # ASC order</span>
+<span class="sd">            instances = Object.please.order_by(&#39;name&#39;)</span>
+
+<span class="sd">            # DESC order</span>
+<span class="sd">            instances = Object.please.order_by(&#39;-name&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;Order by field needs to be a string.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s">&#39;order_by&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span>
         <span class="k">return</span> <span class="bp">self</span>
 
 </div></div>

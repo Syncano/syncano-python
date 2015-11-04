@@ -129,7 +129,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="n">__title__</span> <span class="o">=</span> <span class="s">&#39;Syncano Python&#39;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;4.0.5&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;4.0.6&#39;</span>
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Daniel Kopka&#39;</span>
 <span class="n">__license__</span> <span class="o">=</span> <span class="s">&#39;MIT&#39;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s">&#39;Copyright 2015 Syncano&#39;</span>
@@ -172,7 +172,10 @@
 <span class="sd">    :param api_key: Your Syncano account key or instance api_key</span>
 
 <span class="sd">    :type username: string</span>
-<span class="sd">    :param username: Your Syncano username</span>
+<span class="sd">    :param username: Instance user name</span>
+
+<span class="sd">    :type user_key: string</span>
+<span class="sd">    :param user_key: Instance user key</span>
 
 <span class="sd">    :type instance_name: string</span>
 <span class="sd">    :param instance_name: Your Syncano instance_name</span>
@@ -188,6 +191,9 @@
 <span class="sd">        connection = syncano.connect(email=&#39;&#39;, password=&#39;&#39;)</span>
 <span class="sd">        # OR</span>
 <span class="sd">        connection = syncano.connect(api_key=&#39;&#39;)</span>
+<span class="sd">        # OR</span>
+<span class="sd">        connection = syncano.connect(social_backend=&#39;github&#39;,</span>
+<span class="sd">                                     token=&#39;sfdsdfsdf&#39;)</span>
 
 <span class="sd">        # User login</span>
 <span class="sd">        connection = syncano.connect(username=&#39;&#39;, password=&#39;&#39;, api_key=&#39;&#39;, instance_name=&#39;&#39;)</span>

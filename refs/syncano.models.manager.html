@@ -341,11 +341,11 @@ classes = Class.please.list(instance_name=&#8217;test-one&#8217;)</dd>
 </dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.manager.Manager.order_by">
-<tt class="descname">order_by</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.order_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.order_by" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.manager.Manager.ordering">
+<tt class="descname">ordering</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.ordering"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.ordering" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets order of returned objects.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">ordering</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -476,6 +476,25 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Object
 <dd><p>Special method just for data object <tt class="xref py py-class docutils literal"><span class="pre">Object</span></tt> model.</p>
 <p>Usage:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">objects</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;class-name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="s">&#39;avatar&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.ObjectManager.ordering">
+<tt class="descname">ordering</tt><big>(</big><em>order=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.ordering"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.ordering" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.manager.ObjectManager.order_by">
+<tt class="descname">order_by</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.order_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.order_by" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets ordering field of returned objects.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># ASC order</span>
+<span class="n">instances</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)</span>
+
+<span class="c"># DESC order</span>
+<span class="n">instances</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-name&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
