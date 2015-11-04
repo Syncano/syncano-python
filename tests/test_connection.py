@@ -160,7 +160,7 @@ class ConnectionTestCase(unittest.TestCase):
         self.assertTrue('headers' in params)
 
         self.assertTrue('Authorization' in params['headers'])
-        self.assertEqual(params['headers']['Authorization'], 'ApiKey {0}'.format(self.connection.api_key))
+        self.assertEqual(params['headers']['Authorization'], 'token {0}'.format(self.connection.api_key))
 
         self.assertTrue('content-type' in params['headers'])
         self.assertEqual(params['headers']['content-type'], self.connection.CONTENT_TYPE)

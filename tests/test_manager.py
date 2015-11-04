@@ -305,16 +305,6 @@ class ManagerTestCase(unittest.TestCase):
             self.manager.limit('invalid value')
 
     @mock.patch('syncano.models.manager.Manager._clone')
-    def test_order_by(self, clone_mock):
-        clone_mock.return_value = self.manager
-
-        self.manager.order_by('field')
-        self.assertEqual(self.manager.query['order_by'], 'field')
-
-        with self.assertRaises(SyncanoValueError):
-            self.manager.order_by(10)
-
-    @mock.patch('syncano.models.manager.Manager._clone')
     def test_raw(self, clone_mock):
         clone_mock.return_value = self.manager
 
@@ -543,6 +533,16 @@ class ObjectManagerTestCase(unittest.TestCase):
 
         with self.assertRaises(SyncanoValueError):
             self.manager.filter(name__xx=4)
+
+    @mock.patch('syncano.models.manager.Manager._clone')
+    def test_order_by(self, clone_mock):
+        clone_mock.return_value = self.manager
+
+        self.manager.order_by('field')
+        self.assertEqual(self.manager.query['order_by'], 'field')
+
+        with self.assertRaises(SyncanoValueError):
+            self.manager.order_by(10)
 
 
 # TODO

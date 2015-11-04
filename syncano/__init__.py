@@ -2,7 +2,7 @@ import logging
 import os
 
 __title__ = 'Syncano Python'
-__version__ = '4.0.5'
+__version__ = '4.0.6'
 __author__ = 'Daniel Kopka'
 __license__ = 'MIT'
 __copyright__ = 'Copyright 2015 Syncano'
@@ -45,7 +45,10 @@ def connect(*args, **kwargs):
     :param api_key: Your Syncano account key or instance api_key
 
     :type username: string
-    :param username: Your Syncano username
+    :param username: Instance user name
+
+    :type user_key: string
+    :param user_key: Instance user key
 
     :type instance_name: string
     :param instance_name: Your Syncano instance_name
@@ -61,6 +64,9 @@ def connect(*args, **kwargs):
         connection = syncano.connect(email='', password='')
         # OR
         connection = syncano.connect(api_key='')
+        # OR
+        connection = syncano.connect(social_backend='github',
+                                     token='sfdsdfsdf')
 
         # User login
         connection = syncano.connect(username='', password='', api_key='', instance_name='')

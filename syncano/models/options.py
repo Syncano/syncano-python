@@ -1,12 +1,16 @@
 import re
 from bisect import bisect
-from urlparse import urljoin
 
 import six
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoValueError
 from syncano.models.registry import registry
 from syncano.utils import camelcase_to_underscore
+
+if six.PY3:
+    from urllib.parse import urljoin
+else:
+    from urlparse import urljoin
 
 
 class Options(ConnectionMixin):

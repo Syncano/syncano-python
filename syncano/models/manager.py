@@ -100,7 +100,11 @@ class Manager(ConnectionMixin):
         return iter(self.iterator())
 
     def __bool__(self):  # pragma: no cover
-        return bool(self.iterator())
+        try:
+            self[0]
+            return True
+        except IndexError:
+            return False
 
     def __nonzero__(self):  # pragma: no cover
         return type(self).__bool__(self)
@@ -388,18 +392,18 @@ class Manager(ConnectionMixin):
         return self
 
     @clone
-    def order_by(self, field):
+    def ordering(self, order='asc'):
         """
         Sets order of returned objects.
 
         Usage::
 
-            instances = Instance.please.order_by('name')
+            instances = Instance.please.ordering()
         """
-        if not field or not isinstance(field, six.string_types):
-            raise SyncanoValueError('Order by field needs to be a string.')
+        if order not in ('asc', 'desc'):
+            raise SyncanoValueError('Invalid order value.')
 
-        self.query['order_by'] = field
+        self.query['ordering'] = order
         return self
 
     @clone
@@ -709,6 +713,28 @@ class ObjectManager(Manager):
         self.query['fields'] = ','.join(fields)
         self.method = 'GET'
         self.endpoint = 'list'
+        return self
+
+    def ordering(self, order=None):
+        raise AttributeError('Ordering not implemented. Use order_by instead.')
+
+    @clone
+    def order_by(self, field):
+        """
+        Sets ordering field of returned objects.
+
+        Usage::
+
+            # ASC order
+            instances = Object.please.order_by('name')
+
+            # DESC order
+            instances = Object.please.order_by('-name')
+        """
+        if not field or not isinstance(field, six.string_types):
+            raise SyncanoValueError('Order by field needs to be a string.')
+
+        self.query['order_by'] = field
         return self
 
 

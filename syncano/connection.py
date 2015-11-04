@@ -1,11 +1,16 @@
 import json
 from copy import deepcopy
-from urlparse import urljoin
 
 import requests
 import six
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
+
+if six.PY3:
+    from urllib.parse import urljoin
+else:
+    from urlparse import urljoin
+
 
 __all__ = ['default_connection', 'Connection', 'ConnectionMixin']
 
@@ -63,12 +68,24 @@ class Connection(object):
     CONTENT_TYPE = 'application/json'
 
     AUTH_SUFFIX = 'v1/account/auth'
+    SOCIAL_AUTH_SUFFIX = AUTH_SUFFIX + '{social_backend}/'
+
     USER_AUTH_SUFFIX = 'v1/instances/{name}/user/auth/'
 
-    ADMIN_LOGIN_PARAMS = {'email', 'password'}
-    ADMIN_ALT_LOGIN_PARAMS = {'api_key'}
-    USER_LOGIN_PARAMS = {'username', 'password', 'api_key', 'instance_name'}
-    USER_ALT_LOGIN_PARAMS = {'user_key', 'api_key', 'instance_name'}
+    LOGIN_PARAMS = {'email',
+                    'password'}
+    ALT_LOGIN_PARAMS = {'api_key'}
+
+    USER_LOGIN_PARAMS = {'username',
+                         'password',
+                         'api_key',
+                         'instance_name'}
+    USER_ALT_LOGIN_PARAMS = {'user_key',
+                             'api_key',
+                             'instance_name'}
+
+    SOCIAL_LOGIN_PARAMS = {'token',
+                           'social_backend'}
 
     def __init__(self, host=None, **kwargs):
         self.host = host or syncano.API_ROOT
@@ -83,6 +100,8 @@ class Connection(object):
             self.AUTH_SUFFIX = self.USER_AUTH_SUFFIX.format(name=self.instance_name)
             self.auth_method = self.authenticate_user
         else:
+            if self.is_social:
+                self.AUTH_SUFFIX = self.SOCIAL_AUTH_SUFFIX.format(social_backend=self.social_backend)
             self.auth_method = self.authenticate_admin
 
         self.session = requests.Session()
@@ -94,9 +113,11 @@ class Connection(object):
             value = login_kwargs.get(param, getattr(syncano, param_lib_default_name, None))
             setattr(self, param, value)
 
-        map(_set_value_or_default, self.ADMIN_LOGIN_PARAMS.union(self.ADMIN_ALT_LOGIN_PARAMS,
-                                                                 self.USER_LOGIN_PARAMS,
-                                                                 self.USER_ALT_LOGIN_PARAMS))
+        map(_set_value_or_default,
+            self.LOGIN_PARAMS.union(self.ALT_LOGIN_PARAMS,
+                                    self.USER_LOGIN_PARAMS,
+                                    self.USER_ALT_LOGIN_PARAMS,
+                                    self.SOCIAL_LOGIN_PARAMS))
 
     def _are_params_ok(self, params):
         return all(getattr(self, p) for p in params)
@@ -108,10 +129,14 @@ class Connection(object):
         return login_params_ok or alt_login_params_ok
 
     @property
+    def is_social(self):
+        return self._are_params_ok(self.SOCIAL_LOGIN_PARAMS)
+
+    @property
     def is_alt_login(self):
         if self.is_user:
             return self._are_params_ok(self.USER_ALT_LOGIN_PARAMS)
-        return self._are_params_ok(self.ADMIN_ALT_LOGIN_PARAMS)
+        return self._are_params_ok(self.ALT_LOGIN_PARAMS)
 
     @property
     def auth_key(self):
@@ -141,7 +166,7 @@ class Connection(object):
                 'X-API-KEY': self.api_key
             })
         elif self.api_key and 'Authorization' not in params['headers']:
-            params['headers']['Authorization'] = 'ApiKey %s' % self.api_key
+            params['headers']['Authorization'] = 'token {}'.format(self.token if self.is_social else self.api_key)
 
         # We don't need to check SSL cert in DEBUG mode
         if syncano.DEBUG or not self.verify_ssl:
@@ -258,7 +283,6 @@ class Connection(object):
             content = response.json()
         except ValueError:
             content = response.text
-
         if is_server_error(response.status_code):
             raise SyncanoRequestError(response.status_code, 'Server error.')
 
@@ -311,15 +335,8 @@ class Connection(object):
         self.logger.debug(msg.format(key))
         return key
 
-    def validate_params(self, kwargs):
-        map_login_params = {
-            (False, False): self.ADMIN_LOGIN_PARAMS,
-            (True, False): self.ADMIN_ALT_LOGIN_PARAMS,
-            (False, True): self.USER_LOGIN_PARAMS,
-            (True, True): self.USER_ALT_LOGIN_PARAMS
-        }
-
-        for k in map_login_params[(self.is_alt_login, self.is_user)]:
+    def validate_params(self, kwargs, params):
+        for k in params:
             kwargs[k] = kwargs.get(k, getattr(self, k))
 
             if kwargs[k] is None:
@@ -327,13 +344,28 @@ class Connection(object):
         return kwargs
 
     def authenticate_admin(self, **kwargs):
-        request_args = self.validate_params(kwargs)
+        if self.is_alt_login:
+            request_args = self.validate_params(kwargs,
+                                                self.ALT_LOGIN_PARAMS)
+        else:
+            if self.is_social:
+                request_args = self.validate_params(kwargs,
+                                                    self.SOCIAL_LOGIN_PARAMS)
+            else:
+                request_args = self.validate_params(kwargs,
+                                                    self.LOGIN_PARAMS)
+
         response = self.make_request('POST', self.AUTH_SUFFIX, data=request_args)
         self.api_key = response.get('account_key')
         return self.api_key
 
     def authenticate_user(self, **kwargs):
-        request_args = self.validate_params(kwargs)
+        if self.is_alt_login:
+            request_args = self.validate_params(kwargs,
+                                                self.USER_ALT_LOGIN_PARAMS)
+        else:
+            request_args = self.validate_params(kwargs,
+                                                self.USER_LOGIN_PARAMS)
         headers = {
             'content-type': self.CONTENT_TYPE,
             'X-API-KEY': request_args.pop('api_key')
