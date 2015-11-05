@@ -106,11 +106,6 @@ class Object(Model):
         {'display_name': 'Full', 'value': 'full'},
     )
 
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-    links = fields.HyperlinkedField(links=LINKS)
-
     revision = fields.IntegerField(read_only=True, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
