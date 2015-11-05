@@ -47,6 +47,7 @@ class Admin(Model):
 class Profile(Model):
     """
     """
+
     LINKS = (
         {'type': 'detail', 'name': 'self'},
     )
@@ -74,12 +75,12 @@ class Profile(Model):
         parent = Instance
         endpoints = {
             'detail': {
-                'methods': ['delete', 'patch', 'put', 'get'],
-                'path': '/user_profile/objects/{id}/',
+                'methods': ['delete', 'post', 'patch', 'get'],
+                'path': '/classes/user_profile/objects/{id}/',
             },
             'list': {
                 'methods': ['get'],
-                'path': '/user_profile/objects/',
+                'path': '/classes/user_profile/objects/',
             }
         }
 
