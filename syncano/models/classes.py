@@ -135,9 +135,8 @@ class Object(Model):
 
     @staticmethod
     def __new__(cls, **kwargs):
-        instance_name = kwargs.get('instance_name')
-        class_name = kwargs.get('class_name')
-
+        instance_name = cls._get_instance_name(kwargs)
+        class_name = cls._get_class_name(kwargs)
         if not instance_name:
             raise SyncanoValidationError('Field "instance_name" is required.')
 
@@ -145,7 +144,19 @@ class Object(Model):
             raise SyncanoValidationError('Field "class_name" is required.')
 
         model = cls.get_subclass_model(instance_name, class_name)
+
+        for field in model._meta.fields:
+            if field.has_endpoint_data and field.name == 'class_name':
+                setattr(model, field.name, getattr(cls, 'PREDEFINED_CLASS_NAME', None))  # TODO: think of refactor;
         return model(**kwargs)
+
+    @classmethod
+    def _get_instance_name(cls, kwargs):
+        return kwargs.get('instance_name')
+
+    @classmethod
+    def _get_class_name(cls, kwargs):
+        return kwargs.get('class_name')
 
     @classmethod
     def create_subclass(cls, name, schema):
@@ -202,3 +213,14 @@ class Object(Model):
             registry.add(model_name, model)
 
         return model
+
+
+class DataObjectMixin(object):
+
+    @classmethod
+    def _get_instance_name(cls, kwargs):
+        return cls.please.properties.get('instance_name')
+
+    @classmethod
+    def _get_class_name(cls, kwargs):
+        return cls.PREDEFINED_CLASS_NAME

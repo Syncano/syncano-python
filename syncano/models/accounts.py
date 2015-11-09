@@ -2,7 +2,9 @@ from __future__ import unicode_literals
 
 from . import fields
 from .base import Model
+from .classes import Class, Object, DataObjectMixin
 from .instances import Instance
+from .manager import ObjectManager
 
 
 class Admin(Model):
@@ -44,9 +46,11 @@ class Admin(Model):
         }
 
 
-class Profile(Model):
+class Profile(DataObjectMixin, Object):
     """
     """
+
+    PREDEFINED_CLASS_NAME = 'user_profile'
 
     LINKS = (
         {'type': 'detail', 'name': 'self'},
@@ -72,17 +76,19 @@ class Profile(Model):
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
     class Meta:
-        parent = Instance
+        parent = Class
         endpoints = {
             'detail': {
                 'methods': ['delete', 'post', 'patch', 'get'],
-                'path': '/classes/user_profile/objects/{id}/',
+                'path': '/objects/{id}/',
             },
             'list': {
                 'methods': ['get'],
-                'path': '/classes/user_profile/objects/',
+                'path': '/objects/',
             }
         }
+
+    please = ObjectManager()
 
 
 class User(Model):
