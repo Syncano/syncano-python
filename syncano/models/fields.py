@@ -276,7 +276,7 @@ class ChoiceField(WritableField):
 
     def validate(self, value, model_instance):
         super(ChoiceField, self).validate(value, model_instance)
-        if self.choices and value and value not in self.allowed_values:
+        if self.choices and value is not None and value not in self.allowed_values:
             raise self.ValidationError("Value '{0}' is not a valid choice.".format(value))
 
 
