@@ -69,7 +69,7 @@ class InstanceIntegrationTest(IntegrationTest):
         name = 'i%s' % self.generate_hash()[:10]
         description = 'IntegrationTest'
 
-        self.assertFalse(bool(self.model.please.list()))
+        self.assertEqual(len(self.model.please.list()), 1)  # auto create first instance;
 
         instance = self.model.please.create(name=name, description=description)
         self.assertIsNotNone(instance.pk)
