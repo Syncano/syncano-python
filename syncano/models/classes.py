@@ -237,3 +237,5 @@ class DataObjectMixin(object):
                 if not getattr(model, field.name, None):
                     setattr(model, field.name, getattr(cls, 'PREDEFINED_CLASS_NAME', None))
         setattr(model, 'get_class_object', cls.get_class_object)
+        setattr(model, '_get_instance_name', cls._get_instance_name)
+        setattr(model, '_get_class_name', cls._get_class_name)
