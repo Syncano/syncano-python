@@ -220,7 +220,7 @@ class DataObjectMixin(object):
 
     @classmethod
     def _get_instance_name(cls, kwargs):
-        return cls.please.properties.get('instance_name')
+        return cls.please.properties.get('instance_name') or kwargs.get('instance_name')
 
     @classmethod
     def _get_class_name(cls, kwargs):
