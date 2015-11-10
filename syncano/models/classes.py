@@ -171,8 +171,9 @@ class Object(Model):
             query_allowed = ('order_index' in field or 'filter_index' in field)
             attrs[field['name']] = field_class(required=False, read_only=False,
                                                query_allowed=query_allowed)
-
-        return type(str(name), (Object, ), attrs)
+        model = type(str(name), (Object, ), attrs)
+        cls._set_up_object_class(model)
+        return model
 
     @classmethod
     def get_or_create_subclass(cls, name, schema):
@@ -210,7 +211,6 @@ class Object(Model):
         except LookupError:
             schema = cls.get_class_schema(instance_name, class_name)
             model = cls.create_subclass(model_name, schema)
-            cls._set_up_object_class(model)
             registry.add(model_name, model)
 
         return model
