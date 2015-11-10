@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from . import fields
 from .base import Model
-from .classes import Class, Object, DataObjectMixin
+from .classes import Class, DataObjectMixin, Object
 from .instances import Instance
 from .manager import ObjectManager
 

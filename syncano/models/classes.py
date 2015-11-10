@@ -144,11 +144,12 @@ class Object(Model):
             raise SyncanoValidationError('Field "class_name" is required.')
 
         model = cls.get_subclass_model(instance_name, class_name)
-
-        for field in model._meta.fields:
-            if field.has_endpoint_data and field.name == 'class_name':
-                setattr(model, field.name, getattr(cls, 'PREDEFINED_CLASS_NAME', None))  # TODO: think of refactor;
+        cls._set_up_object_class(model)
         return model(**kwargs)
+
+    @classmethod
+    def _set_up_object_class(cls, model):
+        pass
 
     @classmethod
     def _get_instance_name(cls, kwargs):
@@ -224,3 +225,15 @@ class DataObjectMixin(object):
     @classmethod
     def _get_class_name(cls, kwargs):
         return cls.PREDEFINED_CLASS_NAME
+
+    @classmethod
+    def get_class(cls):
+        return Class.please.get(name=cls.PREDEFINED_CLASS_NAME)
+
+    @classmethod
+    def _set_up_object_class(cls, model):
+        for field in model._meta.fields:
+            if field.has_endpoint_data and field.name == 'class_name':
+                if not getattr(model, field.name, None):
+                    setattr(model, field.name, getattr(cls, 'PREDEFINED_CLASS_NAME', None))
+        setattr(model, 'get_class', cls.get_class)
