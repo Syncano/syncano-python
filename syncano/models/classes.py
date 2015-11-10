@@ -144,7 +144,6 @@ class Object(Model):
             raise SyncanoValidationError('Field "class_name" is required.')
 
         model = cls.get_subclass_model(instance_name, class_name)
-        cls._set_up_object_class(model)
         return model(**kwargs)
 
     @classmethod
@@ -211,6 +210,7 @@ class Object(Model):
         except LookupError:
             schema = cls.get_class_schema(instance_name, class_name)
             model = cls.create_subclass(model_name, schema)
+            cls._set_up_object_class(model)
             registry.add(model_name, model)
 
         return model
@@ -227,7 +227,7 @@ class DataObjectMixin(object):
         return cls.PREDEFINED_CLASS_NAME
 
     @classmethod
-    def get_class(cls):
+    def get_class_object(cls):
         return Class.please.get(name=cls.PREDEFINED_CLASS_NAME)
 
     @classmethod
@@ -236,4 +236,4 @@ class DataObjectMixin(object):
             if field.has_endpoint_data and field.name == 'class_name':
                 if not getattr(model, field.name, None):
                     setattr(model, field.name, getattr(cls, 'PREDEFINED_CLASS_NAME', None))
-        setattr(model, 'get_class', cls.get_class)
+        setattr(model, 'get_class_object', cls.get_class_object)
