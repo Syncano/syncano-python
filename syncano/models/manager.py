@@ -3,6 +3,7 @@ from copy import deepcopy
 from functools import wraps
 
 import six
+
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoRequestError, SyncanoValidationError, SyncanoValueError
 
@@ -58,8 +59,7 @@ class RelatedManagerDescriptor(object):
         method = getattr(Model.please, self.endpoint, Model.please.all)
 
         properties = instance._meta.get_endpoint_properties('detail')
-        if 'name' in properties:  # instance name here;
-            registry.set_default_instance(getattr(instance, 'name'))  # update the registry with last used instance;
+        registry.set_last_used_instance(getattr(instance, 'name', None))
         properties = [getattr(instance, prop) for prop in properties]
 
         return method(*properties)
@@ -158,6 +158,8 @@ class Manager(ConnectionMixin):
         attrs = kwargs.copy()
         attrs.update(self.properties)
         instance = self.model(**attrs)
+        if instance.__class__.__name__ == 'Instance':  # avoid circular import;
+            registry.set_last_used_instance(instance.name)
         instance.save()
 
         return instance
