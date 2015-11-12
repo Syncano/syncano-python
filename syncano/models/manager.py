@@ -3,7 +3,6 @@ from copy import deepcopy
 from functools import wraps
 
 import six
-
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoRequestError, SyncanoValidationError, SyncanoValueError
 
