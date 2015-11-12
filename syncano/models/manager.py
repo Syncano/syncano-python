@@ -157,8 +157,6 @@ class Manager(ConnectionMixin):
         attrs = kwargs.copy()
         attrs.update(self.properties)
         instance = self.model(**attrs)
-        if instance.__class__.__name__ == 'Instance':  # avoid circular import;
-            registry.set_last_used_instance(instance.name)
         instance.save()
 
         return instance
