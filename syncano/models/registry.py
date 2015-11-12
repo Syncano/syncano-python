@@ -43,18 +43,21 @@ class Registry(object):
     def get_model_by_name(self, name):
         return self.models[name]
 
+    def update(self, name, cls):
+        self.models[name] = cls
+        related_name = cls._meta.related_name
+        patterns = self.get_model_patterns(cls)
+        self.patterns.extend(patterns)
+
+        setattr(self, str(name), cls)
+        setattr(self, str(related_name), cls.please.all())
+
+        logger.debug('New model: %s, %s', name, related_name)
+
     def add(self, name, cls):
 
         if name not in self.models:
-            self.models[name] = cls
-            related_name = cls._meta.related_name
-            patterns = self.get_model_patterns(cls)
-            self.patterns.extend(patterns)
-
-            setattr(self, str(name), cls)
-            setattr(self, str(related_name), cls.please.all())
-
-            logger.debug('New model: %s, %s', name, related_name)
+            self.update(name, cls)
 
         if name in self._pending_lookups:
             lookups = self._pending_lookups.pop(name)

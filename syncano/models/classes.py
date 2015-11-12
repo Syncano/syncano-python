@@ -182,7 +182,6 @@ class Object(Model):
         except LookupError:
             subclass = cls.create_subclass(name, schema)
             registry.add(name, subclass)
-
         return subclass
 
     @classmethod
@@ -212,6 +211,21 @@ class Object(Model):
             schema = cls.get_class_schema(instance_name, class_name)
             model = cls.create_subclass(model_name, schema)
             registry.add(model_name, model)
+
+        schema = cls.get_class_schema(instance_name, class_name)
+
+        schema_changed = False
+        for field in schema:
+            try:
+                getattr(model, field['name'])
+            except AttributeError:
+                # schema changed, update the registry;
+                schema_changed = True
+
+        if schema_changed:
+            schema = cls.get_class_schema(instance_name, class_name)
+            model = cls.create_subclass(model_name, schema)
+            registry.update(model_name, model)
 
         return model
 
