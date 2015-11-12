@@ -58,6 +58,8 @@ class RelatedManagerDescriptor(object):
         method = getattr(Model.please, self.endpoint, Model.please.all)
 
         properties = instance._meta.get_endpoint_properties('detail')
+        if 'name' in properties:  # instance name here;
+            registry.set_default_instance(getattr(instance, 'name'))  # update the registry with last used instance;
         properties = [getattr(instance, prop) for prop in properties]
 
         return method(*properties)
