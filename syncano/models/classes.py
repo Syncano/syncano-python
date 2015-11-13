@@ -135,9 +135,8 @@ class Object(Model):
 
     @staticmethod
     def __new__(cls, **kwargs):
-        instance_name = kwargs.get('instance_name')
-        class_name = kwargs.get('class_name')
-
+        instance_name = cls._get_instance_name(kwargs)
+        class_name = cls._get_class_name(kwargs)
         if not instance_name:
             raise SyncanoValidationError('Field "instance_name" is required.')
 
@@ -146,6 +145,18 @@ class Object(Model):
 
         model = cls.get_subclass_model(instance_name, class_name)
         return model(**kwargs)
+
+    @classmethod
+    def _set_up_object_class(cls, model):
+        pass
+
+    @classmethod
+    def _get_instance_name(cls, kwargs):
+        return kwargs.get('instance_name')
+
+    @classmethod
+    def _get_class_name(cls, kwargs):
+        return kwargs.get('class_name')
 
     @classmethod
     def create_subclass(cls, name, schema):
@@ -160,8 +171,9 @@ class Object(Model):
             query_allowed = ('order_index' in field or 'filter_index' in field)
             attrs[field['name']] = field_class(required=False, read_only=False,
                                                query_allowed=query_allowed)
-
-        return type(str(name), (Object, ), attrs)
+        model = type(str(name), (Object, ), attrs)
+        cls._set_up_object_class(model)
+        return model
 
     @classmethod
     def get_or_create_subclass(cls, name, schema):
@@ -170,7 +182,6 @@ class Object(Model):
         except LookupError:
             subclass = cls.create_subclass(name, schema)
             registry.add(name, subclass)
-
         return subclass
 
     @classmethod
@@ -194,11 +205,50 @@ class Object(Model):
         if cls.__name__ == model_name:
             return cls
 
+        schema = cls.get_class_schema(instance_name, class_name)
+
         try:
             model = registry.get_model_by_name(model_name)
         except LookupError:
-            schema = cls.get_class_schema(instance_name, class_name)
             model = cls.create_subclass(model_name, schema)
             registry.add(model_name, model)
 
+        schema_changed = False
+        for field in schema:
+            try:
+                getattr(model, field['name'])
+            except AttributeError:
+                # schema changed, update the registry;
+                schema_changed = True
+                break
+
+        if schema_changed:
+            model = cls.create_subclass(model_name, schema)
+            registry.update(model_name, model)
+
         return model
+
+
+class DataObjectMixin(object):
+
+    @classmethod
+    def _get_instance_name(cls, kwargs):
+        return cls.please.properties.get('instance_name') or kwargs.get('instance_name')
+
+    @classmethod
+    def _get_class_name(cls, kwargs):
+        return cls.PREDEFINED_CLASS_NAME
+
+    @classmethod
+    def get_class_object(cls):
+        return Class.please.get(name=cls.PREDEFINED_CLASS_NAME)
+
+    @classmethod
+    def _set_up_object_class(cls, model):
+        for field in model._meta.fields:
+            if field.has_endpoint_data and field.name == 'class_name':
+                if not getattr(model, field.name, None):
+                    setattr(model, field.name, getattr(cls, 'PREDEFINED_CLASS_NAME', None))
+        setattr(model, 'get_class_object', cls.get_class_object)
+        setattr(model, '_get_instance_name', cls._get_instance_name)
+        setattr(model, '_get_class_name', cls._get_class_name)
