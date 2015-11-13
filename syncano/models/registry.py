@@ -84,6 +84,7 @@ class Registry(object):
             self.last_used_instance = instance
 
     def clear_instance_name(self):
+        self.last_used_instance = None
         self.set_default_instance(None)
 
 registry = Registry()

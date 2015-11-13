@@ -205,14 +205,13 @@ class Object(Model):
         if cls.__name__ == model_name:
             return cls
 
+        schema = cls.get_class_schema(instance_name, class_name)
+
         try:
             model = registry.get_model_by_name(model_name)
         except LookupError:
-            schema = cls.get_class_schema(instance_name, class_name)
             model = cls.create_subclass(model_name, schema)
             registry.add(model_name, model)
-
-        schema = cls.get_class_schema(instance_name, class_name)
 
         schema_changed = False
         for field in schema:
@@ -221,9 +220,9 @@ class Object(Model):
             except AttributeError:
                 # schema changed, update the registry;
                 schema_changed = True
+                break
 
         if schema_changed:
-            schema = cls.get_class_schema(instance_name, class_name)
             model = cls.create_subclass(model_name, schema)
             registry.update(model_name, model)
 
