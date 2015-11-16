@@ -121,12 +121,17 @@ class Model(six.with_metaclass(ModelMetaclass)):
         try:
             yield
         finally:
-            response = cls._meta.connection.request(
+            cls._meta.connection.request(
                 'POST',
                 cls.BULK_URI.format(name=instance.name),
                 data={'requests': cls.BULK_OPERATIONS}
             )
+            registry.clear_class_schema()
             cls.BULK_OPERATIONS = None
+
+    @property
+    def is_bulk_on(self):
+        return self.BULK_OPERATIONS is not None and isinstance(self.BULK_OPERATIONS, list)
 
     def _get_connection(self, **kwargs):
         connection = kwargs.pop('connection', None)
@@ -153,8 +158,8 @@ class Model(six.with_metaclass(ModelMetaclass)):
         endpoint = self._meta.resolve_endpoint(endpoint_name, properties)
         request = {'data': data}
 
-        if self.BULK_OPERATIONS is not None and isinstance(self.BULK_OPERATIONS, list):
-            if len(self.BULK_OPERATIONS) > self.BULK_LIMIT:
+        if self.is_bulk_on:
+            if len(self.BULK_OPERATIONS) >= self.BULK_LIMIT:
                 raise SyncanoValidationError('Bulk limit exceed.')
             self.BULK_OPERATIONS.append(
                 {

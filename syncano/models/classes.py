@@ -191,8 +191,14 @@ class Object(Model):
     @classmethod
     def get_class_schema(cls, instance_name, class_name):
         parent = cls._meta.parent
-        class_ = parent.please.get(instance_name, class_name)
-        return class_.schema
+        if cls.is_bulk_on:
+            schema = registry.get_schema_by_class_name(class_name)
+            if not schema:
+                schema = parent.please.get(instance_name, class_name).schema
+                registry.add_schema(class_name, schema)
+        else:
+            schema = parent.please.get(instance_name, class_name).schema
+        return schema
 
     @classmethod
     def get_subclass_model(cls, instance_name, class_name, **kwargs):
