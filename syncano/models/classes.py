@@ -191,7 +191,7 @@ class Object(Model):
     @classmethod
     def get_class_schema(cls, instance_name, class_name):
         parent = cls._meta.parent
-        if cls.is_bulk_on:
+        if cls.is_bulk_on():
             schema = registry.get_schema_by_class_name(class_name)
             if not schema:
                 schema = parent.please.get(instance_name, class_name).schema

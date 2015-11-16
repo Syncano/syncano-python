@@ -288,7 +288,7 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
 
     def test_bulk_create(self):
 
-        with Object.bulk(self.instance):
+        with Object.bulk():
             for bulk_test in range(5):
                 self.model.please.create(
                     instance_name=self.instance.name,
@@ -296,17 +296,13 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
                     bulk=bulk_test,
                 )
 
-        bulk_created = self.model.please.get(
-            instance_name=self.instance.name,
-            class_name=self.simple_bulk_class.name,
-            bulk=4,
-        )
-        self.assertTrue(bulk_created.bulk)
+        bulks_created = self.model.please.list(instance_name=self.instance.name, class_name=self.simple_bulk_class.name)
+        self.assertEqual(len(list(bulks_created)), 5)
 
     def test_bulk_create_limit_exceed(self):
 
         with self.assertRaises(SyncanoValidationError):
-            with Object.bulk(self.instance):
+            with Object.bulk():
                 for bulk_test in range(55):
                     self.model.please.create(
                         instance_name=self.instance.name,
