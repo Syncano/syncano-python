@@ -38,7 +38,7 @@ class SyncanoRequestError(SyncanoException):
             if not message:
                 for name, value in six.iteritems(reason):
                     if isinstance(value, (list, dict)):
-                        value = ', '.join(value)
+                        value = ', '.join(map(str, value))
                     message += '{0}: {1}\n'.format(name, value)
             reason = message
 

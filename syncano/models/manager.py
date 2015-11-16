@@ -156,7 +156,7 @@ class Manager(ConnectionMixin):
         """
         attrs = kwargs.copy()
         attrs.update(self.properties)
-        instance = self.model(**attrs)
+        instance = self._get_instance(attrs)
         instance.save()
 
         return instance
@@ -440,6 +440,9 @@ class Manager(ConnectionMixin):
         if not self.name:
             self.name = name
 
+    def _get_instance(self, attrs):
+        return self.model(**attrs)
+
     def _filter(self, *args, **kwargs):
         properties = self.model._meta.get_endpoint_properties(self.endpoint)
 
@@ -616,16 +619,6 @@ class ObjectManager(Manager):
         'eq', 'neq', 'exists', 'in',
     ]
 
-    def create(self, **kwargs):
-        attrs = kwargs.copy()
-        attrs.update(self.properties)
-
-        model = self.model.get_subclass_model(**attrs)
-        instance = model(**attrs)
-        instance.save()
-
-        return instance
-
     def serialize(self, data, model=None):
         model = model or self.model.get_subclass_model(**self.properties)
         return super(ObjectManager, self).serialize(data, model)
@@ -667,6 +660,10 @@ class ObjectManager(Manager):
         self.method = 'GET'
         self.endpoint = 'list'
         return self
+
+    def _get_instance(self, attrs):
+        model = self.model.get_subclass_model(**attrs)
+        return model(**attrs)
 
     def _get_model_field_names(self):
         object_fields = [f.name for f in self.model._meta.fields]
