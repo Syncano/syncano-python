@@ -240,7 +240,6 @@ class Connection(object):
         files = kwargs.get('data', {}).pop('files', None)
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)
-
         # JSON dump can be expensive
         if syncano.DEBUG:
             formatted_params = json.dumps(
@@ -281,7 +280,7 @@ class Connection(object):
     def get_response_content(self, url, response):
         try:
             content = response.json()
-        except ValueError:
+        except (ValueError, TypeError):
             content = response.text
         if is_server_error(response.status_code):
             raise SyncanoRequestError(response.status_code, 'Server error.')

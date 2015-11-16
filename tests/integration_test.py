@@ -6,7 +6,7 @@ from time import sleep
 from uuid import uuid4
 
 import syncano
-from syncano.exceptions import SyncanoRequestError, SyncanoValueError
+from syncano.exceptions import SyncanoRequestError, SyncanoValidationError, SyncanoValueError
 from syncano.models import Class, CodeBox, Instance, Object, Webhook
 
 
@@ -230,6 +230,14 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
             ]
         )
 
+        cls.simple_bulk_class = cls.connection.Class.please.create(
+            instance_name=cls.instance.name,
+            name='bulk_test',
+            schema=[
+                {'name': 'bulk', 'type': 'integer'}
+            ]
+        )
+
     @classmethod
     def tearDownClass(cls):
         cls.book.delete()
@@ -277,6 +285,30 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
         self.assertEqual(author.last_name, author2.last_name)
 
         author.delete()
+
+    def test_bulk_create(self):
+
+        with Object.bulk():
+            for bulk_test in range(5):
+                self.model.please.create(
+                    instance_name=self.instance.name,
+                    class_name=self.simple_bulk_class.name,
+                    bulk=bulk_test,
+                )
+
+        bulks_created = self.model.please.list(instance_name=self.instance.name, class_name=self.simple_bulk_class.name)
+        self.assertEqual(len(list(bulks_created)), 5)
+
+    def test_bulk_create_limit_exceed(self):
+
+        with self.assertRaises(SyncanoValidationError):
+            with Object.bulk():
+                for bulk_test in range(55):
+                    self.model.please.create(
+                        instance_name=self.instance.name,
+                        class_name=self.simple_bulk_class.name,
+                        bulk=bulk_test,
+                    )
 
 
 class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):

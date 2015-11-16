@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import inspect
+from contextlib import contextmanager
 
 import six
 from syncano.exceptions import SyncanoDoesNotExist, SyncanoValidationError
@@ -77,6 +78,11 @@ class ModelMetaclass(type):
 class Model(six.with_metaclass(ModelMetaclass)):
     """Base class for all models.
     """
+
+    BULK_OPERATIONS = None
+    BULK_URI = '/v1/instances/{name}/batch/'
+    BULK_LIMIT = 50
+
     def __init__(self, **kwargs):
         self._raw_data = {}
         self.to_python(kwargs)
@@ -104,6 +110,29 @@ class Model(six.with_metaclass(ModelMetaclass)):
             return self.pk == other.pk
         return NotImplemented
 
+    @classmethod
+    @contextmanager
+    def bulk(cls):
+        if cls.BULK_OPERATIONS is None:
+            cls.BULK_OPERATIONS = []
+        else:
+            raise Exception('Context already used')
+
+        try:
+            yield
+        finally:
+            cls._meta.connection.request(
+                'POST',
+                cls.BULK_URI.format(name=registry.last_used_instance),
+                data={'requests': cls.BULK_OPERATIONS}
+            )
+            registry.clear_class_schema()
+            cls.BULK_OPERATIONS = None
+
+    @classmethod
+    def is_bulk_on(cls):
+        return cls.BULK_OPERATIONS is not None and isinstance(cls.BULK_OPERATIONS, list)
+
     def _get_connection(self, **kwargs):
         connection = kwargs.pop('connection', None)
         return connection or self._meta.connection
@@ -129,9 +158,20 @@ class Model(six.with_metaclass(ModelMetaclass)):
         endpoint = self._meta.resolve_endpoint(endpoint_name, properties)
         request = {'data': data}
 
-        response = connection.request(method, endpoint, **request)
-
-        self.to_python(response)
+        if self.is_bulk_on():
+            if len(self.BULK_OPERATIONS) >= self.BULK_LIMIT:
+                raise SyncanoValidationError('Bulk limit exceed.')
+            self.BULK_OPERATIONS.append(
+                {
+                    'method': method,
+                    'path': endpoint,
+                    'body': data
+                }
+            )
+        else:
+            # outside the context -> behave normally;
+            response = connection.request(method, endpoint, **request)
+            self.to_python(response)
         return self
 
     def delete(self, **kwargs):
