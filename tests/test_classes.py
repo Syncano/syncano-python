@@ -122,7 +122,6 @@ class ObjectTestCase(unittest.TestCase):
     @mock.patch('syncano.models.Object.get_class_schema')
     @mock.patch('syncano.models.manager.registry.get_model_by_name')
     @mock.patch('syncano.models.Object.get_subclass_name')
-    @mock.patch('syncano.models.Object.fetch_schema')
     def test_get_subclass_model(self, get_subclass_name_mock, get_model_by_name_mock,
                                 get_class_schema_mock, create_subclass_mock):
 

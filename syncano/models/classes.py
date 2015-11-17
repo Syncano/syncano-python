@@ -194,14 +194,11 @@ class Object(Model):
         return get_class_name(instance_name, class_name, 'object')
 
     @classmethod
-    def fetch_schema(cls, instance_name, class_name):
-        return cls._meta.parent.please.get(instance_name, class_name).schema
-
-    @classmethod
     def get_class_schema(cls, instance_name, class_name):
         schema = registry.get_schema(class_name)
         if not schema:
-            schema = cls.fetch_schema(instance_name, class_name)
+            parent = cls._meta.parent
+            schema = parent.please.get(instance_name, class_name).schema
             if schema:  # do not allow to add to registry empty schema;
                 registry.set_schema(class_name, schema)
         return schema
@@ -220,7 +217,8 @@ class Object(Model):
         try:
             model = registry.get_model_by_name(model_name)
         except LookupError:
-            schema = cls.fetch_schema(instance_name, class_name)
+            parent = cls._meta.parent
+            schema = parent.please.get(instance_name, class_name).schema
             model = cls.create_subclass(model_name, schema)
             registry.add(model_name, model)
 
