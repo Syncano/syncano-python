@@ -661,7 +661,6 @@ class ObjectManager(Manager):
         'eq', 'neq', 'exists', 'in',
     ]
 
-
     def serialize(self, data, model=None):
         model = model or self.model.get_subclass_model(**self.properties)
         return super(ObjectManager, self).serialize(data, model)
