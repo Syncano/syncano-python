@@ -56,7 +56,7 @@ class ManagerTestCase(unittest.TestCase):
         self.assertTrue(model_mock.save.called)
         self.assertEqual(instance, model_mock)
 
-        model_mock.assert_called_once_with(a=1, b=2)
+        model_mock.assert_called_once_with(a=1, b=2, is_lazy=False)
         model_mock.save.assert_called_once_with()
 
     @mock.patch('syncano.models.manager.Manager.create')
@@ -489,15 +489,14 @@ class ObjectManagerTestCase(unittest.TestCase):
         self.assertFalse(model_mock.called)
         self.assertFalse(get_subclass_model_mock.called)
         instance = self.manager.create(a=1, b=2)
-
         self.assertTrue(model_mock.called)
         self.assertTrue(model_mock.save.called)
         self.assertTrue(get_subclass_model_mock.called)
         self.assertEqual(instance, model_mock)
 
-        model_mock.assert_called_once_with(a=1, b=2)
+        model_mock.assert_called_once_with(a=1, b=2, is_lazy=False)
         model_mock.save.assert_called_once_with()
-        get_subclass_model_mock.assert_called_once_with(a=1, b=2)
+        get_subclass_model_mock.assert_called_once_with(a=1, b=2, is_lazy=False)
 
     @mock.patch('syncano.models.Object.get_subclass_model')
     def test_serialize(self, get_subclass_model_mock):

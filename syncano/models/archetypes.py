@@ -135,8 +135,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
             self.to_python(response)
             return self
 
-        else:
-            return self.batch_object(method=method, path=endpoint, body=request['data'])
+        return self.batch_object(method=method, path=endpoint, body=request['data'])
 
     def batch_object(self, method, path, body):
         return {

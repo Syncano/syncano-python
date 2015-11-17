@@ -220,18 +220,13 @@ class Object(Model):
             model = cls.create_subclass(model_name, schema)
             registry.add(model_name, model)
 
-        schema_changed = False
         for field in schema:
             try:
                 getattr(model, field['name'])
             except AttributeError:
                 # schema changed, update the registry;
-                schema_changed = True
+                registry.update(model_name, model)
                 break
-
-        if schema_changed:
-            model = cls.create_subclass(model_name, schema)
-            registry.update(model_name, model)
 
         return model
 
