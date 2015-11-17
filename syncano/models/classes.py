@@ -80,7 +80,10 @@ class Class(Model):
         }
 
     def save(self, **kwargs):
-        registry.set_schema(self.name, self.schema.schema)  # update the registry schema here;
+        print(self.schema)
+        print(200*'#')
+        if self.schema:  # do not allow add empty schema to registry;
+            registry.set_schema(self.name, self.schema)  # update the registry schema here;
         return super(Class, self).save(**kwargs)
 
 
@@ -193,12 +196,16 @@ class Object(Model):
         return get_class_name(instance_name, class_name, 'object')
 
     @classmethod
+    def fetch_schema(cls, instance_name, class_name):
+        return cls._meta.parent.please.get(instance_name, class_name).schema
+
+    @classmethod
     def get_class_schema(cls, instance_name, class_name):
-        parent = cls._meta.parent
         schema = registry.get_schema(class_name)
         if not schema:
-            schema = parent.please.get(instance_name, class_name).schema
-            registry.set_schema(class_name, schema)
+            schema = cls.fetch_schema(instance_name, class_name)
+            if schema:  # do not allow to add to registry empty schema;
+                registry.set_schema(class_name, schema)
         return schema
 
     @classmethod
@@ -212,19 +219,21 @@ class Object(Model):
         if cls.__name__ == model_name:
             return cls
 
-        schema = cls.get_class_schema(instance_name, class_name)
-
         try:
             model = registry.get_model_by_name(model_name)
         except LookupError:
+            schema = cls.fetch_schema(instance_name, class_name)
             model = cls.create_subclass(model_name, schema)
             registry.add(model_name, model)
+
+        schema = cls.get_class_schema(instance_name, class_name)
 
         for field in schema:
             try:
                 getattr(model, field['name'])
             except AttributeError:
                 # schema changed, update the registry;
+                model = cls.create_subclass(model_name, schema)
                 registry.update(model_name, model)
                 break
 
