@@ -79,6 +79,10 @@ class Class(Model):
             }
         }
 
+    def save(self, **kwargs):
+        registry.set_schema(self.name, self.schema.schema)  # update the registry schema here;
+        return super(Class, self).save(**kwargs)
+
 
 class Object(Model):
     """
@@ -191,8 +195,11 @@ class Object(Model):
     @classmethod
     def get_class_schema(cls, instance_name, class_name):
         parent = cls._meta.parent
-        class_ = parent.please.get(instance_name, class_name)
-        return class_.schema
+        schema = registry.get_schema(class_name)
+        if not schema:
+            schema = parent.please.get(instance_name, class_name).schema
+            registry.set_schema(class_name, schema)
+        return schema
 
     @classmethod
     def get_subclass_model(cls, instance_name, class_name, **kwargs):

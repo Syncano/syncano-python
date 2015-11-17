@@ -11,6 +11,7 @@ class Registry(object):
     """
     def __init__(self, models=None):
         self.models = models or {}
+        self.schemas = {}
         self.patterns = []
         self._pending_lookups = {}
         self.last_used_instance = None
@@ -86,5 +87,14 @@ class Registry(object):
     def clear_instance_name(self):
         self.last_used_instance = None
         self.set_default_instance(None)
+
+    def get_schema(self, class_name):
+        return self.schemas.get(class_name)
+
+    def set_schema(self, class_name, schema):
+        self.schemas[class_name] = schema
+
+    def clear_schemas(self):
+        self.schemas = {}
 
 registry = Registry()

@@ -67,6 +67,8 @@ class RelatedManagerDescriptor(object):
 class Manager(ConnectionMixin):
     """Base class responsible for all ORM (``please``) actions."""
 
+    BATCH_URI = '/v1/instances/{name}/batch/'
+
     def __init__(self):
         self.name = None
         self.model = None
@@ -77,6 +79,7 @@ class Manager(ConnectionMixin):
         self.method = None
         self.query = {}
         self.data = {}
+        self.is_lazy = False
 
         self._limit = None
         self._serialize = True
@@ -140,6 +143,21 @@ class Manager(ConnectionMixin):
             if is_demanded and has_default:
                 self.properties[field.name] = field.default
 
+    def as_batch(self):
+        self.is_lazy = True
+        return self
+
+    def batch(self, *args):
+        # firstly turn off lazy mode:
+        self.is_lazy = False
+        response = self.connection.request(
+            'POST',
+            self.BATCH_URI.format(name=self.properties.get('instance_name')),
+            **{'data': {'requests': args}}
+        )
+
+        return response
+
     # Object actions
     def create(self, **kwargs):
         """
@@ -156,8 +174,9 @@ class Manager(ConnectionMixin):
         """
         attrs = kwargs.copy()
         attrs.update(self.properties)
-        instance = self.model(**attrs)
-        instance.save()
+        attrs.update({'is_lazy': self.is_lazy})
+        instance = self._get_instance(attrs)
+        instance = instance.save()
 
         return instance
 
@@ -173,7 +192,30 @@ class Manager(ConnectionMixin):
         .. warning::
             This method is not meant to be used with large data sets.
         """
-        return [self.create(**o) for o in objects]
+
+        if len(objects) > 50:
+            raise SyncanoValueError('Only 50 objects can be created at once.')
+
+        class_name = objects[0].get('class_name')
+        for o in objects[1:]:
+            next_class_name = o.get('class_name')
+            if o.get('class_name') != class_name:
+                raise SyncanoValidationError('Bulk create can handle only objects of the same type.')
+            class_name = next_class_name
+
+        response = self.batch(*[self.as_batch().create(**o) for o in objects])
+
+        instances = []
+        for res in response:
+            if res['code'] == 201:
+                content_res = res['content']
+                content_res.update(self.properties)
+                if class_name:
+                    content_res.update({'class_name': class_name})
+                model = self.model(**content_res)
+                model.to_python(content_res)
+                instances.append(model)
+        return instances
 
     @clone
     def get(self, *args, **kwargs):
@@ -558,6 +600,9 @@ class Manager(ConnectionMixin):
 
             response = self.request(path=next_url)
 
+    def _get_instance(self, attrs):
+        return self.model(**attrs)
+
 
 class CodeBoxManager(Manager):
     """
@@ -616,15 +661,6 @@ class ObjectManager(Manager):
         'eq', 'neq', 'exists', 'in',
     ]
 
-    def create(self, **kwargs):
-        attrs = kwargs.copy()
-        attrs.update(self.properties)
-
-        model = self.model.get_subclass_model(**attrs)
-        instance = model(**attrs)
-        instance.save()
-
-        return instance
 
     def serialize(self, data, model=None):
         model = model or self.model.get_subclass_model(**self.properties)
@@ -667,6 +703,9 @@ class ObjectManager(Manager):
         self.method = 'GET'
         self.endpoint = 'list'
         return self
+
+    def _get_instance(self, attrs):
+        return self.model.get_subclass_model(**attrs)(**attrs)
 
     def _get_model_field_names(self):
         object_fields = [f.name for f in self.model._meta.fields]
