@@ -69,6 +69,44 @@ class ManagerTestCase(unittest.TestCase):
         self.assertTrue(create_mock.called)
         self.assertEqual(create_mock.call_count, 1)
 
+    @mock.patch('syncano.models.manager.Manager.create')
+    @mock.patch('syncano.models.manager.Manager.update')
+    @mock.patch('syncano.models.manager.Manager.delete')
+    def test_batch(self, delete_mock, update_mock, create_mock):
+        self.assertFalse(delete_mock.called)
+        self.assertFalse(update_mock.called)
+        self.assertFalse(create_mock.called)
+        self.assertFalse(self.manager.is_lazy)
+        self.manager.batch(
+            self.manager.as_batch().update(id=2, a=1, b=3, name='Nabuchodonozor'),
+            self.manager.as_batch().create(a=2, b=3, name='Nabuchodonozor'),
+            self.manager.as_batch().delete(id=3, name='Nabuchodonozor'),
+        )
+        self.assertFalse(self.manager.is_lazy)
+        self.assertEqual(delete_mock.call_count, 1)
+        self.assertEqual(update_mock.call_count, 1)
+        self.assertEqual(create_mock.call_count, 1)
+
+    @mock.patch('syncano.models.archetypes.Model.batch_object')
+    def test_batch_object(self, batch_mock):
+        self.assertFalse(batch_mock.called)
+        self.manager.batch(
+            self.manager.as_batch().create(a=2, b=3, name='Nabuchodonozor'),
+        )
+        self.assertTrue(batch_mock.called)
+        self.assertEqual(batch_mock.call_count, 1)
+
+    @mock.patch('syncano.models.manager.Manager.request')
+    def test_batch_request(self, request_mock):
+        self.assertFalse(request_mock.called)
+        self.manager.batch(
+            self.manager.as_batch().update(a=2, b=3, name='Nabuchodonozor'),
+        )
+        self.assertFalse(request_mock.called)  # shouldn't be called when batch mode is on;
+        self.manager.update(a=2, b=3, name='Nabuchodonozor')
+        self.assertTrue(request_mock.called)
+        self.assertEqual(request_mock.call_count, 1)
+
     @mock.patch('syncano.models.manager.Manager.request')
     @mock.patch('syncano.models.manager.Manager._filter')
     @mock.patch('syncano.models.manager.Manager._clone')
