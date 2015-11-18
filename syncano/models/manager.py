@@ -150,6 +150,58 @@ class Manager(ConnectionMixin):
         return self
 
     def batch(self, *args):
+        """
+        A convenience method for making a batch request. Only create, update and delete manager method are supported.
+        Batch request are limited to 50. So the args length should be equal or less than 50.
+
+        Usage::
+
+            klass = instance.classes.get(name='some_class')
+
+            Object.please.batch(
+                klass.objects.as_batch().delete(id=652),
+                klass.objects.as_batch().delete(id=653),
+                ...
+            )
+
+            and::
+
+            Object.please.batch(
+                klass.objects.as_batch().update(id=652, arg='some_b'),
+                klass.objects.as_batch().update(id=653, arg='some_b'),
+                ...
+            )
+
+            and::
+            Object.please.batch(
+                klass.objects.as_batch().create(arg='some_c'),
+                klass.objects.as_batch().create(arg='some_c'),
+                ...
+            )
+            and::
+
+            Object.please.batch(
+                klass.objects.as_batch().delete(id=653),
+                klass.objects.as_batch().update(id=652, arg='some_a'),
+                klass.objects.as_batch().create(arg='some_c'),
+                ...
+            )
+
+            are posible.
+
+            But::
+            Object.please.batch(
+                klass.objects.as_batch().get_or_create(id=653, arg='some_a')
+            )
+
+            will not work as expected.
+
+        :param args: a arg is on of the: klass.objects.as_batch().create(...), klass.objects.as_batch().update(...),
+         klass.objects.as_batch().delete(...)
+        :return: a list with objects corresponding to batch arguments; update and create will return a populated Object,
+         when delete return a raw response from server (usually a dict: {'code': 204}, sometimes information about not
+         found resource to delete);
+        """
         # firstly turn off lazy mode:
         meta = [arg['meta'] for arg in args]
 
