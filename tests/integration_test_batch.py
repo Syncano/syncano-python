@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from syncano.models import User, Object
+from syncano.models import Object, User
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 

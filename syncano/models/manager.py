@@ -5,7 +5,8 @@ from functools import wraps
 import six
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoRequestError, SyncanoValidationError, SyncanoValueError
-from syncano.models.bulk import ObjectBulkCreate, ModelBulkCreate, BaseBulkCreate
+from syncano.models.bulk import ModelBulkCreate, ObjectBulkCreate
+
 from .registry import registry
 
 # The maximum number of items to display in a Manager.__repr__
@@ -677,8 +678,7 @@ class Manager(ConnectionMixin):
         return self.model(**attrs)
 
     def _get_endpoint_properties(self):
-        defaults = {f.name: f.default for f in self.model._meta.fields
-                if f.default is not None}
+        defaults = {f.name: f.default for f in self.model._meta.fields if f.default is not None}
         defaults.update(self.properties)
         if defaults.get('instance_name'):
             registry.set_last_used_instance(defaults['instance_name'])

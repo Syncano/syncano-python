@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 
-from syncano.exceptions import SyncanoValueError, SyncanoValidationError
+from syncano.exceptions import SyncanoValidationError, SyncanoValueError
 
 
 class BaseBulkCreate(object):
@@ -41,10 +41,10 @@ class BaseBulkCreate(object):
 
 
 class ObjectBulkCreate(BaseBulkCreate):
-    
+
     def __init__(self, objects, manager):
         super(ObjectBulkCreate, self).__init__(objects, manager)
-    
+
     def validate(self):
         super(ObjectBulkCreate, self).validate()
 
