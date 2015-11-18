@@ -196,6 +196,20 @@ class Manager(ConnectionMixin):
 
             will not work as expected.
 
+        Some snippet for working with instance users:
+
+        instance = Instance.please.get(name='Nabuchodonozor')
+
+        model_users = instance.users.batch(
+            instance.users.as_batch().delete(id=7),
+            instance.users.as_batch().update(id=9, username='username_a'),
+            instance.users.as_batch().create(username='username_b', password='5432'),
+            ...
+        )
+
+        And sample response will be:
+        [{u'code': 204}, <User: 9>, <User: 11>, ...]
+
         :param args: a arg is on of the: klass.objects.as_batch().create(...), klass.objects.as_batch().update(...),
          klass.objects.as_batch().delete(...)
         :return: a list with objects corresponding to batch arguments; update and create will return a populated Object,
