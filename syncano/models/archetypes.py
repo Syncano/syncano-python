@@ -135,14 +135,25 @@ class Model(six.with_metaclass(ModelMetaclass)):
             self.to_python(response)
             return self
 
-        return self.batch_object(method=method, path=endpoint, body=request['data'])
+        return self.batch_object(method=method, path=endpoint, body=request['data'], properties=data)
 
-    def batch_object(self, method, path, body):
+    @classmethod
+    def batch_object(cls, method, path, body, properties=None):
+        properties = properties if properties else {}
         return {
-            'method': method,
-            'path': path,
-            'body': body,
+            'body': {
+                'method': method,
+                'path': path,
+                'body': body,
+            },
+            'meta': {
+                'model': cls,
+                'properties': properties
+            }
         }
+
+    def mark_for_batch(self):
+        self.is_lazy = True
 
     def delete(self, **kwargs):
         """Removes the current instance.

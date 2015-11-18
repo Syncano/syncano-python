@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 
 from syncano.exceptions import SyncanoDoesNotExist, SyncanoRequestError, SyncanoValueError
-from syncano.models import CodeBox, CodeBoxTrace, Instance, Object, Webhook, WebhookTrace
+from syncano.models import CodeBox, CodeBoxTrace, Instance, Object, Webhook, WebhookTrace, User
 
 try:
     from unittest import mock
@@ -59,12 +59,15 @@ class ManagerTestCase(unittest.TestCase):
         model_mock.assert_called_once_with(a=1, b=2, is_lazy=False)
         model_mock.save.assert_called_once_with()
 
-    @mock.patch('syncano.models.manager.Manager.create')
+    @mock.patch('syncano.models.bulk.ModelBulkCreate.make_batch_request')
     def test_bulk_create(self, create_mock):
         self.assertFalse(create_mock.called)
-        self.manager.bulk_create({'a': 1}, {'a': 2})
+        self.manager.bulk_create(
+            User(instance_name='A', username='a', password='a'),
+            User(instance_name='A', username='b', password='b')
+        )
         self.assertTrue(create_mock.called)
-        self.assertEqual(create_mock.call_count, 2)
+        self.assertEqual(create_mock.call_count, 1)
 
     @mock.patch('syncano.models.manager.Manager.request')
     @mock.patch('syncano.models.manager.Manager._filter')
