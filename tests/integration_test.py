@@ -7,7 +7,7 @@ from uuid import uuid4
 
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
-from syncano.models import Class, CodeBox, Instance, Object, Webhook
+from syncano.models import Class, CodeBox, Instance, Object, Webhook, registry
 
 
 class IntegrationTest(unittest.TestCase):
@@ -290,6 +290,7 @@ class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
 
     def test_required_fields(self):
         with self.assertRaises(SyncanoValueError):
+            registry.clear_instance_name()
             list(self.model.please.all())
 
     def test_list(self):
@@ -362,6 +363,7 @@ class WebhookIntegrationTest(InstanceMixin, IntegrationTest):
 
     def test_required_fields(self):
         with self.assertRaises(SyncanoValueError):
+            registry.clear_instance_name()
             list(self.model.please.all())
 
     def test_list(self):
