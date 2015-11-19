@@ -68,6 +68,7 @@ class ApiKey(Model):
     ]
 
     api_key = fields.StringField(read_only=True, required=False)
+    description = fields.StringField(required=False)
     allow_user_create = fields.BooleanField(required=False, default=False)
     ignore_acl = fields.BooleanField(required=False, default=False)
     links = fields.HyperlinkedField(links=LINKS)
