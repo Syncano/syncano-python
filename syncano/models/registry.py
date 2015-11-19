@@ -14,6 +14,7 @@ class Registry(object):
         self.patterns = []
         self._pending_lookups = {}
         self.last_used_instance = None
+        self._default_connection = None
 
     def __str__(self):
         return 'Registry: {0}'.format(', '.join(self.models))
@@ -86,5 +87,14 @@ class Registry(object):
     def clear_instance_name(self):
         self.last_used_instance = None
         self.set_default_instance(None)
+
+    def set_default_connection(self, default_connection):
+        self._default_connection = default_connection
+
+    @property
+    def connection(self):
+        if not self._default_connection:
+            raise Exception('Set the default connection first.')
+        return self._default_connection
 
 registry = Registry()

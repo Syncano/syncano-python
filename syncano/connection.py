@@ -5,6 +5,7 @@ import requests
 import six
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
+from syncano.models.registry import registry
 
 if six.PY3:
     from urllib.parse import urljoin
@@ -12,7 +13,7 @@ else:
     from urlparse import urljoin
 
 
-__all__ = ['default_connection', 'Connection', 'ConnectionMixin']
+__all__ = ['Connection', 'ConnectionMixin']
 
 
 def is_success(code):
@@ -46,9 +47,6 @@ class DefaultConnection(object):
         if not self._connection:
             self._connection = connection
         return connection
-
-
-default_connection = DefaultConnection()
 
 
 class Connection(object):
@@ -385,7 +383,7 @@ class ConnectionMixin(object):
     @property
     def connection(self):
         # Sometimes someone will not use super
-        return getattr(self, '_connection', None) or default_connection()
+        return getattr(self, '_connection', None) or registry.connection()
 
     @connection.setter
     def connection(self, value):
