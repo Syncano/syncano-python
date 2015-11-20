@@ -352,7 +352,7 @@ class Connection(object):
             else:
                 request_args = self.validate_params(kwargs,
                                                     self.LOGIN_PARAMS)
-        print(request_args)
+
         response = self.make_request('POST', self.AUTH_SUFFIX, data=request_args)
         self.api_key = response.get('account_key')
         return self.api_key
