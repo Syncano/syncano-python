@@ -68,7 +68,7 @@ class WebhookTestCase(unittest.TestCase):
         connection_mock.request.assert_called_once_with(
             'POST',
             '/v1/instances/test/webhooks/name/run/',
-            data={'payload': '{"y": 2, "x": 1}'}
+            data={"y": 2, "x": 1}
         )
 
         model = Webhook()
