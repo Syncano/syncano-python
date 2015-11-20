@@ -65,7 +65,7 @@ class Connection(object):
 
     CONTENT_TYPE = 'application/json'
 
-    AUTH_SUFFIX = 'v1/account/auth'
+    AUTH_SUFFIX = 'v1/account/auth/'
     SOCIAL_AUTH_SUFFIX = AUTH_SUFFIX + '{social_backend}/'
 
     USER_AUTH_SUFFIX = 'v1/instances/{name}/user/auth/'
@@ -164,7 +164,7 @@ class Connection(object):
                 'X-API-KEY': self.api_key
             })
         elif self.api_key and 'Authorization' not in params['headers']:
-            params['headers']['Authorization'] = 'token {}'.format(self.token if self.is_social else self.api_key)
+            params['headers']['Authorization'] = 'token {}'.format(self.api_key)
 
         # We don't need to check SSL cert in DEBUG mode
         if syncano.DEBUG or not self.verify_ssl:
@@ -349,6 +349,7 @@ class Connection(object):
             if self.is_social:
                 request_args = self.validate_params(kwargs,
                                                     self.SOCIAL_LOGIN_PARAMS)
+                request_args['access_token'] = request_args.pop('token')  # core expects a access_token field;
             else:
                 request_args = self.validate_params(kwargs,
                                                     self.LOGIN_PARAMS)
