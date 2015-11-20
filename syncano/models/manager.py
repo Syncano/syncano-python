@@ -5,6 +5,7 @@ from functools import wraps
 import six
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoRequestError, SyncanoValidationError, SyncanoValueError
+from syncano.models.bulk import ModelBulkCreate, ObjectBulkCreate
 
 from .registry import registry
 
@@ -58,7 +59,9 @@ class RelatedManagerDescriptor(object):
         method = getattr(Model.please, self.endpoint, Model.please.all)
 
         properties = instance._meta.get_endpoint_properties('detail')
-        registry.set_last_used_instance(getattr(instance, 'name', None))
+
+        if instance.__class__.__name__ == 'Instance':
+            registry.set_last_used_instance(getattr(instance, 'name', None))
         properties = [getattr(instance, prop) for prop in properties]
 
         return method(*properties)
@@ -66,6 +69,8 @@ class RelatedManagerDescriptor(object):
 
 class Manager(ConnectionMixin):
     """Base class responsible for all ORM (``please``) actions."""
+
+    BATCH_URI = '/v1/instances/{name}/batch/'
 
     def __init__(self):
         self.name = None
@@ -77,6 +82,7 @@ class Manager(ConnectionMixin):
         self.method = None
         self.query = {}
         self.data = {}
+        self.is_lazy = False
 
         self._limit = None
         self._serialize = True
@@ -140,6 +146,101 @@ class Manager(ConnectionMixin):
             if is_demanded and has_default:
                 self.properties[field.name] = field.default
 
+    def as_batch(self):
+        self.is_lazy = True
+        return self
+
+    def batch(self, *args):
+        """
+        A convenience method for making a batch request. Only create, update and delete manager method are supported.
+        Batch request are limited to 50. So the args length should be equal or less than 50.
+
+        Usage::
+
+            klass = instance.classes.get(name='some_class')
+
+            Object.please.batch(
+                klass.objects.as_batch().delete(id=652),
+                klass.objects.as_batch().delete(id=653),
+                ...
+            )
+
+            and::
+
+            Object.please.batch(
+                klass.objects.as_batch().update(id=652, arg='some_b'),
+                klass.objects.as_batch().update(id=653, arg='some_b'),
+                ...
+            )
+
+            and::
+            Object.please.batch(
+                klass.objects.as_batch().create(arg='some_c'),
+                klass.objects.as_batch().create(arg='some_c'),
+                ...
+            )
+            and::
+
+            Object.please.batch(
+                klass.objects.as_batch().delete(id=653),
+                klass.objects.as_batch().update(id=652, arg='some_a'),
+                klass.objects.as_batch().create(arg='some_c'),
+                ...
+            )
+
+            are posible.
+
+            But::
+            Object.please.batch(
+                klass.objects.as_batch().get_or_create(id=653, arg='some_a')
+            )
+
+            will not work as expected.
+
+        Some snippet for working with instance users:
+
+        instance = Instance.please.get(name='Nabuchodonozor')
+
+        model_users = instance.users.batch(
+            instance.users.as_batch().delete(id=7),
+            instance.users.as_batch().update(id=9, username='username_a'),
+            instance.users.as_batch().create(username='username_b', password='5432'),
+            ...
+        )
+
+        And sample response will be:
+        [{u'code': 204}, <User: 9>, <User: 11>, ...]
+
+        :param args: a arg is on of the: klass.objects.as_batch().create(...), klass.objects.as_batch().update(...),
+         klass.objects.as_batch().delete(...)
+        :return: a list with objects corresponding to batch arguments; update and create will return a populated Object,
+         when delete return a raw response from server (usually a dict: {'code': 204}, sometimes information about not
+         found resource to delete);
+        """
+        # firstly turn off lazy mode:
+        meta = [arg['meta'] for arg in args]
+
+        self.is_lazy = False
+        response = self.connection.request(
+            'POST',
+            self.BATCH_URI.format(name=registry.last_used_instance),
+            **{'data': {'requests': [arg['body'] for arg in args]}}
+        )
+
+        populated_response = []
+
+        for meta, res in zip(meta, response):
+            if res['code'] in [200, 201]:  # success response: update or create;
+                content = res['content']
+                model = meta['model']
+                properties = meta['properties']
+                content.update(properties)
+                populated_response.append(model(**content))
+            else:
+                populated_response.append(res)
+
+        return populated_response
+
     # Object actions
     def create(self, **kwargs):
         """
@@ -156,24 +257,29 @@ class Manager(ConnectionMixin):
         """
         attrs = kwargs.copy()
         attrs.update(self.properties)
-        instance = self.model(**attrs)
-        instance.save()
-
-        return instance
+        attrs.update({'is_lazy': self.is_lazy})
+        instance = self._get_instance(attrs)
+        saved_instance = instance.save()
+        if not self.is_lazy:
+            return instance
+        return saved_instance
 
     def bulk_create(self, *objects):
         """
         Creates many new instances based on provided list of objects.
 
         Usage::
+            instance = Instance.please.get(name='instance_a')
 
-            objects = [{'name': 'test-one'}, {'name': 'test-two'}]
-            instances = Instance.please.bulk_create(objects)
+            instances = instance.users.bulk_create(
+                User(username='user_a', password='1234'),
+                User(username='user_b', password='4321')
+            )
 
         .. warning::
-            This method is not meant to be used with large data sets.
+            This method is restricted to handle 50 objects at once.
         """
-        return [self.create(**o) for o in objects]
+        return ModelBulkCreate(objects, self).process()
 
     @clone
     def get(self, *args, **kwargs):
@@ -246,7 +352,12 @@ class Manager(ConnectionMixin):
         self.method = 'DELETE'
         self.endpoint = 'detail'
         self._filter(*args, **kwargs)
-        return self.request()
+        if not self.is_lazy:
+            return self.request()
+
+        path, defaults = self._get_endpoint_properties()
+
+        return self.model.batch_object(method=self.method, path=path, body=self.data, properties=defaults)
 
     @clone
     def update(self, *args, **kwargs):
@@ -271,6 +382,7 @@ class Manager(ConnectionMixin):
         self.data = kwargs.pop('data', kwargs)
 
         model = self.serialize(self.data, self.model)
+
         serialized = model.to_native()
 
         serialized = {k: v for k, v in serialized.iteritems()
@@ -278,7 +390,13 @@ class Manager(ConnectionMixin):
 
         self.data.update(serialized)
         self._filter(*args, **kwargs)
-        return self.request()
+
+        if not self.is_lazy:
+            return self.request()
+
+        path, defaults = self._get_endpoint_properties()
+
+        return self.model.batch_object(method=self.method, path=path, body=self.data, properties=defaults)
 
     def update_or_create(self, defaults=None, **kwargs):
         """
@@ -470,6 +588,7 @@ class Manager(ConnectionMixin):
         manager.query = deepcopy(self.query)
         manager.data = deepcopy(self.data)
         manager._serialize = self._serialize
+        manager.is_lazy = self.is_lazy
 
         return manager
 
@@ -498,10 +617,7 @@ class Manager(ConnectionMixin):
         allowed_methods = meta.get_endpoint_methods(self.endpoint)
 
         if not path:
-            defaults = {f.name: f.default for f in self.model._meta.fields
-                        if f.default is not None}
-            defaults.update(self.properties)
-            path = meta.resolve_endpoint(self.endpoint, defaults)
+            path, defaults = self._get_endpoint_properties()
 
         if method.lower() not in allowed_methods:
             methods = ', '.join(allowed_methods)
@@ -557,6 +673,16 @@ class Manager(ConnectionMixin):
                 break
 
             response = self.request(path=next_url)
+
+    def _get_instance(self, attrs):
+        return self.model(**attrs)
+
+    def _get_endpoint_properties(self):
+        defaults = {f.name: f.default for f in self.model._meta.fields if f.default is not None}
+        defaults.update(self.properties)
+        if defaults.get('instance_name'):
+            registry.set_last_used_instance(defaults['instance_name'])
+        return self.model._meta.resolve_endpoint(self.endpoint, defaults), defaults
 
 
 class CodeBoxManager(Manager):
@@ -616,16 +742,6 @@ class ObjectManager(Manager):
         'eq', 'neq', 'exists', 'in',
     ]
 
-    def create(self, **kwargs):
-        attrs = kwargs.copy()
-        attrs.update(self.properties)
-
-        model = self.model.get_subclass_model(**attrs)
-        instance = model(**attrs)
-        instance.save()
-
-        return instance
-
     def serialize(self, data, model=None):
         model = model or self.model.get_subclass_model(**self.properties)
         return super(ObjectManager, self).serialize(data, model)
@@ -667,6 +783,23 @@ class ObjectManager(Manager):
         self.method = 'GET'
         self.endpoint = 'list'
         return self
+
+    def bulk_create(self, *objects):
+        """
+        Creates many new objects.
+        Usage:
+        created_objects = Object.please.bulk_create(
+            Object(instance_name='instance_a', class_name='some_class', title='one'),
+            Object(instance_name='instance_a', class_name='some_class', title='two'),
+            Object(instance_name='instance_a', class_name='some_class', title='three')
+        )
+        :param objects: a list of the instances of data objects to be created;
+        :return: a created and populated list of objects; When error occurs a plain dict is returned in that place;
+        """
+        return ObjectBulkCreate(objects, self).process()
+
+    def _get_instance(self, attrs):
+        return self.model.get_subclass_model(**attrs)(**attrs)
 
     def _get_model_field_names(self):
         object_fields = [f.name for f in self.model._meta.fields]

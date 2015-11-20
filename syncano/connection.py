@@ -383,7 +383,7 @@ class ConnectionMixin(object):
     @property
     def connection(self):
         # Sometimes someone will not use super
-        from syncano.models.registry import registry
+        from syncano.models.registry import registry  # TODO: refactor this;
         return getattr(self, '_connection', None) or registry.connection()
 
     @connection.setter

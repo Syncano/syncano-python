@@ -78,6 +78,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
     """Base class for all models.
     """
     def __init__(self, **kwargs):
+        self.is_lazy = kwargs.pop('is_lazy', False)
         self._raw_data = {}
         self.to_python(kwargs)
 
@@ -129,10 +130,30 @@ class Model(six.with_metaclass(ModelMetaclass)):
         endpoint = self._meta.resolve_endpoint(endpoint_name, properties)
         request = {'data': data}
 
-        response = connection.request(method, endpoint, **request)
+        if not self.is_lazy:
+            response = connection.request(method, endpoint, **request)
+            self.to_python(response)
+            return self
 
-        self.to_python(response)
-        return self
+        return self.batch_object(method=method, path=endpoint, body=request['data'], properties=data)
+
+    @classmethod
+    def batch_object(cls, method, path, body, properties=None):
+        properties = properties if properties else {}
+        return {
+            'body': {
+                'method': method,
+                'path': path,
+                'body': body,
+            },
+            'meta': {
+                'model': cls,
+                'properties': properties
+            }
+        }
+
+    def mark_for_batch(self):
+        self.is_lazy = True
 
     def delete(self, **kwargs):
         """Removes the current instance.

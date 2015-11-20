@@ -79,6 +79,11 @@ class Class(Model):
             }
         }
 
+    def save(self, **kwargs):
+        if self.schema:  # do not allow add empty schema to registry;
+            registry.set_schema(self.name, self.schema)  # update the registry schema here;
+        return super(Class, self).save(**kwargs)
+
 
 class Object(Model):
     """
@@ -190,9 +195,13 @@ class Object(Model):
 
     @classmethod
     def get_class_schema(cls, instance_name, class_name):
-        parent = cls._meta.parent
-        class_ = parent.please.get(instance_name, class_name)
-        return class_.schema
+        schema = registry.get_schema(class_name)
+        if not schema:
+            parent = cls._meta.parent
+            schema = parent.please.get(instance_name, class_name).schema
+            if schema:  # do not allow to add to registry empty schema;
+                registry.set_schema(class_name, schema)
+        return schema
 
     @classmethod
     def get_subclass_model(cls, instance_name, class_name, **kwargs):
@@ -205,26 +214,24 @@ class Object(Model):
         if cls.__name__ == model_name:
             return cls
 
-        schema = cls.get_class_schema(instance_name, class_name)
-
         try:
             model = registry.get_model_by_name(model_name)
         except LookupError:
+            parent = cls._meta.parent
+            schema = parent.please.get(instance_name, class_name).schema
             model = cls.create_subclass(model_name, schema)
             registry.add(model_name, model)
 
-        schema_changed = False
+        schema = cls.get_class_schema(instance_name, class_name)
+
         for field in schema:
             try:
                 getattr(model, field['name'])
             except AttributeError:
                 # schema changed, update the registry;
-                schema_changed = True
+                model = cls.create_subclass(model_name, schema)
+                registry.update(model_name, model)
                 break
-
-        if schema_changed:
-            model = cls.create_subclass(model_name, schema)
-            registry.update(model_name, model)
 
         return model
 
