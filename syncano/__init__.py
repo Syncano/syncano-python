@@ -73,10 +73,11 @@ def connect(*args, **kwargs):
         # OR
         connection = syncano.connect(user_key='', api_key='', instance_name='')
     """
-    from syncano.connection import default_connection
+    from syncano.connection import DefaultConnection
     from syncano.models import registry
 
-    default_connection.open(*args, **kwargs)
+    registry.set_default_connection(DefaultConnection())
+    registry.connection.open(*args, **kwargs)
     instance = kwargs.get('instance_name', INSTANCE)
 
     if instance is not None:
