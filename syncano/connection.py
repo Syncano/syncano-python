@@ -5,7 +5,6 @@ import requests
 import six
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
-from syncano.models.registry import registry
 
 if six.PY3:
     from urllib.parse import urljoin
@@ -65,8 +64,8 @@ class Connection(object):
 
     CONTENT_TYPE = 'application/json'
 
-    AUTH_SUFFIX = 'v1/account/auth/'
-    SOCIAL_AUTH_SUFFIX = AUTH_SUFFIX + '{social_backend}/'
+    AUTH_SUFFIX = 'v1/account/auth'
+    SOCIAL_AUTH_SUFFIX = AUTH_SUFFIX + '/{social_backend}/'
 
     USER_AUTH_SUFFIX = 'v1/instances/{name}/user/auth/'
 
@@ -353,7 +352,7 @@ class Connection(object):
             else:
                 request_args = self.validate_params(kwargs,
                                                     self.LOGIN_PARAMS)
-
+        print(request_args)
         response = self.make_request('POST', self.AUTH_SUFFIX, data=request_args)
         self.api_key = response.get('account_key')
         return self.api_key
@@ -384,6 +383,7 @@ class ConnectionMixin(object):
     @property
     def connection(self):
         # Sometimes someone will not use super
+        from syncano.models.registry import registry
         return getattr(self, '_connection', None) or registry.connection()
 
     @connection.setter
