@@ -5,7 +5,6 @@ import requests
 import six
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
-from syncano.models.registry import registry
 
 if six.PY3:
     from urllib.parse import urljoin
@@ -383,6 +382,7 @@ class ConnectionMixin(object):
     @property
     def connection(self):
         # Sometimes someone will not use super
+        from syncano.models.registry import registry  # TODO: refactor this;
         return getattr(self, '_connection', None) or registry.connection()
 
     @connection.setter
