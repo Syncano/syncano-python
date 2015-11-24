@@ -742,9 +742,31 @@ class ObjectManager(Manager):
         'eq', 'neq', 'exists', 'in',
     ]
 
+    def __init__(self):
+        super(ObjectManager, self).__init__()
+        self.query = {
+            'include_count': True,
+        }
+
     def serialize(self, data, model=None):
         model = model or self.model.get_subclass_model(**self.properties)
         return super(ObjectManager, self).serialize(data, model)
+
+    @clone
+    def count(self):
+        """
+        Return the queryset count;
+
+        Usage::
+            Object.please.list(instance_name='raptor', class_name='some_class').filter(id__gt=600).count()
+            Object.please.list(instance_name='raptor', class_name='some_class').count()
+            Object.please.all(instance_name='raptor', class_name='some_class').count()
+        :return: The integer with estimated objects count;
+        """
+        self.method = 'GET'
+        self.query.update({'page_size': 0})
+        response = self.request()
+        return response['objects_count']
 
     @clone
     def filter(self, **kwargs):

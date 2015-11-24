@@ -48,6 +48,7 @@ class CodeBox(Model):
         {'display_name': 'nodejs', 'value': 'nodejs'},
         {'display_name': 'python', 'value': 'python'},
         {'display_name': 'ruby', 'value': 'ruby'},
+        {'display_name': 'golang', 'value': 'golang'},
     )
 
     label = fields.StringField(max_length=80)
