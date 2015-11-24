@@ -742,12 +742,6 @@ class ObjectManager(Manager):
         'eq', 'neq', 'exists', 'in',
     ]
 
-    def __init__(self):
-        super(ObjectManager, self).__init__()
-        self.query = {
-            'include_count': True,
-        }
-
     def serialize(self, data, model=None):
         model = model or self.model.get_subclass_model(**self.properties)
         return super(ObjectManager, self).serialize(data, model)
@@ -764,7 +758,10 @@ class ObjectManager(Manager):
         :return: The integer with estimated objects count;
         """
         self.method = 'GET'
-        self.query.update({'page_size': 0})
+        self.query.update({
+            'include_count': True,
+            'page_size': 0,
+        })
         response = self.request()
         return response['objects_count']
 
