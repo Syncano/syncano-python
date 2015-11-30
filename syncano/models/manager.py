@@ -747,6 +747,25 @@ class ObjectManager(Manager):
         return super(ObjectManager, self).serialize(data, model)
 
     @clone
+    def count(self):
+        """
+        Return the queryset count;
+
+        Usage::
+            Object.please.list(instance_name='raptor', class_name='some_class').filter(id__gt=600).count()
+            Object.please.list(instance_name='raptor', class_name='some_class').count()
+            Object.please.all(instance_name='raptor', class_name='some_class').count()
+        :return: The integer with estimated objects count;
+        """
+        self.method = 'GET'
+        self.query.update({
+            'include_count': True,
+            'page_size': 0,
+        })
+        response = self.request()
+        return response['objects_count']
+
+    @clone
     def filter(self, **kwargs):
         """
         Special method just for data object :class:`~syncano.models.base.Object` model.
