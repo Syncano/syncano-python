@@ -4,7 +4,7 @@ from datetime import date, datetime
 
 import six
 import validictory
-from syncano import logger
+from syncano import PUSH_ENV, logger
 from syncano.exceptions import SyncanoFieldError, SyncanoValueError
 from syncano.utils import force_text
 
@@ -577,6 +577,19 @@ class SchemaField(JSONField):
             value = value.schema
 
         return super(SchemaField, self).to_native(value)
+
+
+class PushJSONField(JSONField):
+    def to_native(self, value):
+        if value is None:
+            return
+
+        if not isinstance(value, six.string_types):
+            value.update({
+                'environment': PUSH_ENV,
+            })
+            value = json.dumps(value)
+        return value
 
 
 MAPPING = {
