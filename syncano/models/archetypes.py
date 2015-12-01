@@ -18,6 +18,7 @@ class ModelMetaclass(type):
         super_new = super(ModelMetaclass, cls).__new__
 
         parents = [b for b in bases if isinstance(b, ModelMetaclass)]
+        abstracts = [b for b in bases if hasattr(b, 'Meta') and hasattr(b.Meta, 'abstract') and b.Meta.abstract]
         if not parents:
             return super_new(cls, name, bases, attrs)
 
@@ -36,6 +37,11 @@ class ModelMetaclass(type):
 
         for n, v in six.iteritems(attrs):
             new_class.add_to_class(n, v)
+
+        for abstract in abstracts:
+            for n, v in abstract.__dict__.iteritems():
+                if isinstance(v, fields.Field) or n in ['LINKS']:  # extend this condition if required;
+                    new_class.add_to_class(n, v)
 
         if not meta.pk:
             pk_field = fields.IntegerField(primary_key=True, read_only=True,
