@@ -591,6 +591,7 @@ class PushJSONField(JSONField):
             value = json.dumps(value)
         return value
 
+
 MAPPING = {
     'string': StringField,
     'text': StringField,

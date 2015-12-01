@@ -63,9 +63,7 @@ class GCMDevice(Model):
         }
 
     def is_new(self):
-        if self.created_at is None:
-            return True
-        return False
+        return self.created_at is None
 
 
 class GCMMessage(Model):
