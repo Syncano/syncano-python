@@ -29,6 +29,7 @@ EMAIL = os.getenv('SYNCANO_EMAIL')
 PASSWORD = os.getenv('SYNCANO_PASSWORD')
 APIKEY = os.getenv('SYNCANO_APIKEY')
 INSTANCE = os.getenv('SYNCANO_INSTANCE')
+PUSH_ENV = os.getenv('SYNCANO_PUSH_ENV', 'production')
 
 
 def connect(*args, **kwargs):
