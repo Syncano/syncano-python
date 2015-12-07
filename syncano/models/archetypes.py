@@ -18,7 +18,7 @@ class ModelMetaclass(type):
         super_new = super(ModelMetaclass, cls).__new__
 
         parents = [b for b in bases if isinstance(b, ModelMetaclass)]
-        abstracts = [b for b in bases if hasattr(b, 'Meta') and hasattr(b.Meta, 'abstract') and b.Meta.abstract]
+        abstracts = [b for b in bases if hasattr(b, 'Meta') and getattr(b.Meta, 'abstract', None)]
         if not parents:
             return super_new(cls, name, bases, attrs)
 

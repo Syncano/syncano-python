@@ -123,14 +123,8 @@ class MessageBase(object):
     """
     Base abstract class for GCM and APNS Messages;
     """
-    STATUS_CHOICES = (
-        {'display_name': 'scheduled', 'value': 0},
-        {'display_name': 'error', 'value': 1},
-        {'display_name': 'partially_delivered', 'value': 2},
-        {'display_name': 'delivered', 'value': 3},
-    )
 
-    status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True)
+    status = fields.StringField(read_only=True)
     content = fields.PushJSONField(default={})
     result = fields.JSONField(default={}, read_only=True)
 
