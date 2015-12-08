@@ -61,7 +61,7 @@ class WebhookTestCase(unittest.TestCase):
         self.assertIsInstance(result, WebhookTrace)
         self.assertEqual(result.status, 'success')
         self.assertEqual(result.duration, 937)
-        self.assertEqual(result.result, '1')
+        self.assertEqual(result.result, 1)
         self.assertIsInstance(result.executed_at, datetime)
 
         connection_mock.assert_called_once_with(x=1, y=2)
