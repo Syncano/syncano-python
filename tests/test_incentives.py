@@ -49,7 +49,7 @@ class WebhookTestCase(unittest.TestCase):
         connection_mock.request.return_value = {
             'status': 'success',
             'duration': 937,
-            'result': '1',
+            'result': 1,
             'executed_at': '2015-03-16T11:52:14.172830Z'
         }
 
