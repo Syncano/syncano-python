@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from syncano.models import CustomResponseHandler
+from syncano.models.custom_response import CustomResponseHandler
 
 
 class ObjectTestCase(unittest.TestCase):
