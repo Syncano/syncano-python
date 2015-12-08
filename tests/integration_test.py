@@ -357,7 +357,7 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
 
         self.assertEquals(trace.status, 'success')
         self.assertDictEqual(trace.content, {'one': 1})
-        self.assertEqual(trace.contet_type, 'application/json')
+        self.assertEqual(trace.content_type, 'application/json')
         self.assertEqual(trace.status_code, 200)
 
         codebox.delete()
