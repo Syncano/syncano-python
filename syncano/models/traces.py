@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
 
-from .custom_response import CustomResponseMixin
 from . import fields
 from .base import Model
+from .custom_response import CustomResponseMixin
 from .incentives import CodeBox, Schedule, Trigger, Webhook
 
 
