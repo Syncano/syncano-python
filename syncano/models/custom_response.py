@@ -69,10 +69,15 @@ class CustomResponseHandler(object):
 
     @staticmethod
     def _find_content_type(response):
+        if not response:
+            return None
         return response.get('response', {}).get('content_type')
 
     @staticmethod
     def _default_handler(response):
+        if not response:
+            return None
+
         if 'response' in response:
             return response['response']
         if 'stdout' in response:
@@ -108,12 +113,18 @@ class CustomResponseMixin(object):
 
     @property
     def status_code(self):
+        if not self.result:
+            return None
         return self.result.get('response', {}).get('status')
 
     @property
     def error(self):
+        if not self.result:
+            return None
         return self.result.get('stderr')
 
     @property
     def content_type(self):
+        if not self.result:
+            return None
         return self.result.get('response', {}).get('content_type')

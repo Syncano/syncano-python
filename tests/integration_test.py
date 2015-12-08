@@ -356,7 +356,7 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
             trace.reload()
 
         self.assertEquals(trace.status, 'success')
-        self.assertDictEqual(trace.content, {'one', 1})
+        self.assertDictEqual(trace.content, {'one': 1})
         self.assertEqual(trace.contet_type, 'application/json')
         self.assertEqual(trace.status_code, 200)
 
@@ -428,6 +428,5 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
         )
 
         trace = webhook.run()
-        self.assertEquals(trace.status, 'success')
-        self.assertDictEqual(trace.content, {'one': 1})
+        self.assertDictEqual(trace, {'one': 1})
         webhook.delete()
