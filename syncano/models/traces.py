@@ -1,11 +1,12 @@
 from __future__ import unicode_literals
 
+from .custom_response import CustomResponseMixin
 from . import fields
 from .base import Model
 from .incentives import CodeBox, Schedule, Trigger, Webhook
 
 
-class CodeBoxTrace(Model):
+class CodeBoxTrace(CustomResponseMixin, Model):
     """
     :ivar status: :class:`~syncano.models.fields.ChoiceField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
@@ -26,7 +27,7 @@ class CodeBoxTrace(Model):
     status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
     links = fields.HyperlinkedField(links=LINKS)
     executed_at = fields.DateTimeField(read_only=True, required=False)
-    result = fields.StringField(read_only=True, required=False)
+    result = fields.JSONField(read_only=True, required=False)
     duration = fields.IntegerField(read_only=True, required=False)
 
     class Meta:
@@ -119,7 +120,7 @@ class TriggerTrace(Model):
         }
 
 
-class WebhookTrace(Model):
+class WebhookTrace(CustomResponseMixin, Model):
     """
     :ivar status: :class:`~syncano.models.fields.ChoiceField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
@@ -140,7 +141,7 @@ class WebhookTrace(Model):
     status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
     links = fields.HyperlinkedField(links=LINKS)
     executed_at = fields.DateTimeField(read_only=True, required=False)
-    result = fields.StringField(read_only=True, required=False)
+    result = fields.JSONField(read_only=True, required=False)
     duration = fields.IntegerField(read_only=True, required=False)
 
     class Meta:
