@@ -267,7 +267,9 @@ class Manager(ConnectionMixin):
         """
         self.endpoint = 'detail'
         self.method = self.get_allowed_method('PATCH', 'PUT', 'POST')
-        self.data = kwargs.pop('data', kwargs)
+        data = kwargs.pop('data', {})
+        self.data = kwargs.copy()
+        self.data.update(data)
 
         model = self.serialize(self.data, self.model)
         serialized = model.to_native()

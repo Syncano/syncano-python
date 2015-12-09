@@ -175,7 +175,7 @@ class ManagerTestCase(unittest.TestCase):
 
         self.assertEqual(self.manager.method, 'PATCH')
         self.assertEqual(self.manager.endpoint, 'detail')
-        self.assertEqual(self.manager.data, {'x': 1, 'y': 2})
+        self.assertEqual(self.manager.data, {'x': 1, 'y': 2, 'a': 1, 'b': 2})
 
         result = self.manager.update(1, 2, a=1, b=2, x=3, y=2)
         self.assertEqual(request_mock, result)
