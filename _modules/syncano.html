@@ -129,10 +129,13 @@
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="n">__title__</span> <span class="o">=</span> <span class="s">&#39;Syncano Python&#39;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;4.0.7&#39;</span>
-<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Daniel Kopka&#39;</span>
-<span class="n">__license__</span> <span class="o">=</span> <span class="s">&#39;MIT&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;4.0.8&#39;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Daniel Kopka, Michal Kobus, and Sebastian Opalczynski&quot;</span>
+<span class="n">__credits__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;Daniel Kopka&quot;</span><span class="p">,</span>
+               <span class="s">&quot;Michal Kobus&quot;</span><span class="p">,</span>
+               <span class="s">&quot;Sebastian Opalczynski&quot;</span><span class="p">]</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s">&#39;Copyright 2015 Syncano&#39;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s">&#39;MIT&#39;</span>
 
 <span class="n">env_loglevel</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;SYNCANO_LOGLEVEL&#39;</span><span class="p">,</span> <span class="s">&#39;INFO&#39;</span><span class="p">)</span>
 <span class="n">loglevel</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">logging</span><span class="p">,</span> <span class="n">env_loglevel</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="bp">None</span><span class="p">)</span>
@@ -156,6 +159,7 @@
 <span class="n">PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;SYNCANO_PASSWORD&#39;</span><span class="p">)</span>
 <span class="n">APIKEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;SYNCANO_APIKEY&#39;</span><span class="p">)</span>
 <span class="n">INSTANCE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;SYNCANO_INSTANCE&#39;</span><span class="p">)</span>
+<span class="n">PUSH_ENV</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;SYNCANO_PUSH_ENV&#39;</span><span class="p">,</span> <span class="s">&#39;production&#39;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="connect"><a class="viewcode-back" href="../refs/syncano.html#syncano.connect">[docs]</a><span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -200,10 +204,11 @@
 <span class="sd">        # OR</span>
 <span class="sd">        connection = syncano.connect(user_key=&#39;&#39;, api_key=&#39;&#39;, instance_name=&#39;&#39;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">syncano.connection</span> <span class="kn">import</span> <span class="n">default_connection</span>
+    <span class="kn">from</span> <span class="nn">syncano.connection</span> <span class="kn">import</span> <span class="n">DefaultConnection</span>
     <span class="kn">from</span> <span class="nn">syncano.models</span> <span class="kn">import</span> <span class="n">registry</span>
 
-    <span class="n">default_connection</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">registry</span><span class="o">.</span><span class="n">set_default_connection</span><span class="p">(</span><span class="n">DefaultConnection</span><span class="p">())</span>
+    <span class="n">registry</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">instance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">INSTANCE</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>

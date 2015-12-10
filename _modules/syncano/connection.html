@@ -141,7 +141,7 @@
     <span class="kn">from</span> <span class="nn">urlparse</span> <span class="kn">import</span> <span class="n">urljoin</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;default_connection&#39;</span><span class="p">,</span> <span class="s">&#39;Connection&#39;</span><span class="p">,</span> <span class="s">&#39;ConnectionMixin&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Connection&#39;</span><span class="p">,</span> <span class="s">&#39;ConnectionMixin&#39;</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">is_success</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
@@ -177,9 +177,6 @@
         <span class="k">return</span> <span class="n">connection</span>
 
 
-<span class="n">default_connection</span> <span class="o">=</span> <span class="n">DefaultConnection</span><span class="p">()</span>
-
-
 <div class="viewcode-block" id="Connection"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection">[docs]</a><span class="k">class</span> <span class="nc">Connection</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Base connection class.</span>
 
@@ -197,7 +194,7 @@
     <span class="n">CONTENT_TYPE</span> <span class="o">=</span> <span class="s">&#39;application/json&#39;</span>
 
     <span class="n">AUTH_SUFFIX</span> <span class="o">=</span> <span class="s">&#39;v1/account/auth&#39;</span>
-    <span class="n">SOCIAL_AUTH_SUFFIX</span> <span class="o">=</span> <span class="n">AUTH_SUFFIX</span> <span class="o">+</span> <span class="s">&#39;{social_backend}/&#39;</span>
+    <span class="n">SOCIAL_AUTH_SUFFIX</span> <span class="o">=</span> <span class="n">AUTH_SUFFIX</span> <span class="o">+</span> <span class="s">&#39;/{social_backend}/&#39;</span>
 
     <span class="n">USER_AUTH_SUFFIX</span> <span class="o">=</span> <span class="s">&#39;v1/instances/{name}/user/auth/&#39;</span>
 
@@ -295,7 +292,7 @@
                 <span class="s">&#39;X-API-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span>
             <span class="p">})</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="ow">and</span> <span class="s">&#39;Authorization&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">]:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">][</span><span class="s">&#39;Authorization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;token {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_social</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
+            <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">][</span><span class="s">&#39;Authorization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;token {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
 
         <span class="c"># We don&#39;t need to check SSL cert in DEBUG mode</span>
         <span class="k">if</span> <span class="n">syncano</span><span class="o">.</span><span class="n">DEBUG</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span><span class="p">:</span>
@@ -480,6 +477,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_social</span><span class="p">:</span>
                 <span class="n">request_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_params</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span>
                                                     <span class="bp">self</span><span class="o">.</span><span class="n">SOCIAL_LOGIN_PARAMS</span><span class="p">)</span>
+                <span class="n">request_args</span><span class="p">[</span><span class="s">&#39;access_token&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request_args</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;token&#39;</span><span class="p">)</span>  <span class="c"># core expects a access_token field;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">request_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_params</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span>
                                                     <span class="bp">self</span><span class="o">.</span><span class="n">LOGIN_PARAMS</span><span class="p">)</span>
@@ -514,7 +512,8 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c"># Sometimes someone will not use super</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;_connection&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">or</span> <span class="n">default_connection</span><span class="p">()</span>
+        <span class="kn">from</span> <span class="nn">syncano.models.registry</span> <span class="kn">import</span> <span class="n">registry</span>  <span class="c"># TODO: refactor this;</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;_connection&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">or</span> <span class="n">registry</span><span class="o">.</span><span class="n">connection</span><span class="p">()</span>
 
     <span class="nd">@connection.setter</span>
     <span class="k">def</span> <span class="nf">connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>

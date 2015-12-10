@@ -140,8 +140,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">models</span> <span class="o">=</span> <span class="n">models</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schemas</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pending_lookups</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_used_instance</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_default_connection</span> <span class="o">=</span> <span class="bp">None</span>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&#39;Registry: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">))</span>
@@ -171,18 +174,21 @@
 <div class="viewcode-block" id="Registry.get_model_by_name"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.get_model_by_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_model_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
 </div>
+<div class="viewcode-block" id="Registry.update"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cls</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cls</span>
+        <span class="n">related_name</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">related_name</span>
+        <span class="n">patterns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_patterns</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
+
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">cls</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">related_name</span><span class="p">),</span> <span class="n">cls</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;New model: </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">related_name</span><span class="p">)</span>
+</div>
 <div class="viewcode-block" id="Registry.add"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cls</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">cls</span>
-            <span class="n">related_name</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">related_name</span>
-            <span class="n">patterns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_patterns</span><span class="p">(</span><span class="n">cls</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
-
-            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">cls</span><span class="p">)</span>
-            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">related_name</span><span class="p">),</span> <span class="n">cls</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
-
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;New model: </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">related_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pending_lookups</span><span class="p">:</span>
             <span class="n">lookups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pending_lookups</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -202,7 +208,33 @@
 </div>
 <div class="viewcode-block" id="Registry.set_default_instance"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.set_default_instance">[docs]</a>    <span class="k">def</span> <span class="nf">set_default_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_default_property</span><span class="p">(</span><span class="s">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-
+</div>
+<div class="viewcode-block" id="Registry.set_last_used_instance"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.set_last_used_instance">[docs]</a>    <span class="k">def</span> <span class="nf">set_last_used_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">instance</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_used_instance</span> <span class="o">!=</span> <span class="n">instance</span> <span class="ow">or</span> <span class="n">registry</span><span class="o">.</span><span class="n">last_used_instance</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_default_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>  <span class="c"># update the registry with last used instance;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_used_instance</span> <span class="o">=</span> <span class="n">instance</span>
+</div>
+<div class="viewcode-block" id="Registry.clear_instance_name"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.clear_instance_name">[docs]</a>    <span class="k">def</span> <span class="nf">clear_instance_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_used_instance</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_default_instance</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Registry.get_schema"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.get_schema">[docs]</a>    <span class="k">def</span> <span class="nf">get_schema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">schemas</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">class_name</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Registry.set_schema"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.set_schema">[docs]</a>    <span class="k">def</span> <span class="nf">set_schema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">schema</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schemas</span><span class="p">[</span><span class="n">class_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">schema</span>
+</div>
+<div class="viewcode-block" id="Registry.clear_schemas"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.clear_schemas">[docs]</a>    <span class="k">def</span> <span class="nf">clear_schemas</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schemas</span> <span class="o">=</span> <span class="p">{}</span>
+</div>
+<div class="viewcode-block" id="Registry.set_default_connection"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.set_default_connection">[docs]</a>    <span class="k">def</span> <span class="nf">set_default_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_connection</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_default_connection</span> <span class="o">=</span> <span class="n">default_connection</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Registry.connection"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.connection">[docs]</a>    <span class="k">def</span> <span class="nf">connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_connection</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;Set the default connection first.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_connection</span>
 </div></div>
 <span class="n">registry</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">()</span>
 </pre></div>
