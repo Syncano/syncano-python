@@ -584,6 +584,28 @@ class ObjectManagerTestCase(unittest.TestCase):
         with self.assertRaises(SyncanoValueError):
             self.manager.order_by(10)
 
+    @mock.patch('syncano.models.manager.Manager.request')
+    @mock.patch('syncano.models.manager.ObjectManager.serialize')
+    def test_update(self, serialize_mock, request_mock):
+        serialize_mock.return_value = serialize_mock
+        self.assertFalse(serialize_mock.called)
+
+        self.model.please.update(
+            id=20,
+            class_name='test',
+            instance_name='test',
+            fieldb='23',
+            data={
+                'fielda': 1,
+                'fieldb': None
+            })
+
+        self.assertTrue(serialize_mock.called)
+        serialize_mock.assert_called_once_with(
+            {'class_name': 'test', 'instance_name': 'test', 'fielda': 1, 'id': 20, 'fieldb': None},
+            self.model
+        )
+
 
 # TODO
 class SchemaManagerTestCase(unittest.TestCase):
