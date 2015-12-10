@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from syncano.models import Object, User
+from syncano.models import Class, Object, User
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 
@@ -101,3 +101,31 @@ class ManagerBatchTest(InstanceMixin, IntegrationTest):
 
         # assert delete;
         self.assertEqual(mix_batches[2]['code'], 204)
+
+    def test_in_bulk_get(self):
+
+        self.update1.reload()
+        self.update2.reload()
+        self.update3.reload()
+
+        # test object bulk;
+        bulk_res = self.klass.objects.in_bulk([self.update1.id, self.update2.id, self.update3.id])
+
+        for res_id, res in bulk_res.iteritems():
+            self.assertEqual(res_id, res.id)
+
+        self.assertEqual(bulk_res[self.update1.id].title, self.update1.title)
+        self.assertEqual(bulk_res[self.update2.id].title, self.update2.title)
+        self.assertEqual(bulk_res[self.update3.id].title, self.update3.title)
+
+        # test class bulk
+
+        c_bulk_res = Class.please.in_bulk(['class_a'])
+
+        self.assertEqual(c_bulk_res['class_a'].name, 'class_a')
+
+        # test 404
+
+        c_bulk_res = Class.please.in_bulk(['class_b'])
+
+        self.assertEqual(c_bulk_res['class_b']['code'], 404)
