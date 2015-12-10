@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 
 from syncano.exceptions import SyncanoDoesNotExist, SyncanoRequestError, SyncanoValueError
-from syncano.models import CodeBox, CodeBoxTrace, Instance, Object, Webhook, WebhookTrace
+from syncano.models import CodeBox, CodeBoxTrace, Instance, Object, User, Webhook, WebhookTrace
 
 try:
     from unittest import mock
@@ -56,15 +56,56 @@ class ManagerTestCase(unittest.TestCase):
         self.assertTrue(model_mock.save.called)
         self.assertEqual(instance, model_mock)
 
-        model_mock.assert_called_once_with(a=1, b=2)
+        model_mock.assert_called_once_with(a=1, b=2, is_lazy=False)
         model_mock.save.assert_called_once_with()
 
-    @mock.patch('syncano.models.manager.Manager.create')
+    @mock.patch('syncano.models.bulk.ModelBulkCreate.make_batch_request')
     def test_bulk_create(self, create_mock):
         self.assertFalse(create_mock.called)
-        self.manager.bulk_create({'a': 1}, {'a': 2})
+        self.manager.bulk_create(
+            User(instance_name='A', username='a', password='a'),
+            User(instance_name='A', username='b', password='b')
+        )
         self.assertTrue(create_mock.called)
-        self.assertEqual(create_mock.call_count, 2)
+        self.assertEqual(create_mock.call_count, 1)
+
+    @mock.patch('syncano.models.manager.Manager.create')
+    @mock.patch('syncano.models.manager.Manager.update')
+    @mock.patch('syncano.models.manager.Manager.delete')
+    def test_batch(self, delete_mock, update_mock, create_mock):
+        self.assertFalse(delete_mock.called)
+        self.assertFalse(update_mock.called)
+        self.assertFalse(create_mock.called)
+        self.assertFalse(self.manager.is_lazy)
+        self.manager.batch(
+            self.manager.as_batch().update(id=2, a=1, b=3, name='Nabuchodonozor'),
+            self.manager.as_batch().create(a=2, b=3, name='Nabuchodonozor'),
+            self.manager.as_batch().delete(id=3, name='Nabuchodonozor'),
+        )
+        self.assertFalse(self.manager.is_lazy)
+        self.assertEqual(delete_mock.call_count, 1)
+        self.assertEqual(update_mock.call_count, 1)
+        self.assertEqual(create_mock.call_count, 1)
+
+    @mock.patch('syncano.models.archetypes.Model.batch_object')
+    def test_batch_object(self, batch_mock):
+        self.assertFalse(batch_mock.called)
+        self.manager.batch(
+            self.manager.as_batch().create(a=2, b=3, name='Nabuchodonozor'),
+        )
+        self.assertTrue(batch_mock.called)
+        self.assertEqual(batch_mock.call_count, 1)
+
+    @mock.patch('syncano.models.manager.Manager.request')
+    def test_batch_request(self, request_mock):
+        self.assertFalse(request_mock.called)
+        self.manager.batch(
+            self.manager.as_batch().update(a=2, b=3, name='Nabuchodonozor'),
+        )
+        self.assertFalse(request_mock.called)  # shouldn't be called when batch mode is on;
+        self.manager.update(a=2, b=3, name='Nabuchodonozor')
+        self.assertTrue(request_mock.called)
+        self.assertEqual(request_mock.call_count, 1)
 
     @mock.patch('syncano.models.manager.Manager.request')
     @mock.patch('syncano.models.manager.Manager._filter')
@@ -489,15 +530,14 @@ class ObjectManagerTestCase(unittest.TestCase):
         self.assertFalse(model_mock.called)
         self.assertFalse(get_subclass_model_mock.called)
         instance = self.manager.create(a=1, b=2)
-
         self.assertTrue(model_mock.called)
         self.assertTrue(model_mock.save.called)
         self.assertTrue(get_subclass_model_mock.called)
         self.assertEqual(instance, model_mock)
 
-        model_mock.assert_called_once_with(a=1, b=2)
+        model_mock.assert_called_once_with(a=1, b=2, is_lazy=False)
         model_mock.save.assert_called_once_with()
-        get_subclass_model_mock.assert_called_once_with(a=1, b=2)
+        get_subclass_model_mock.assert_called_once_with(a=1, b=2, is_lazy=False)
 
     @mock.patch('syncano.models.Object.get_subclass_model')
     def test_serialize(self, get_subclass_model_mock):
@@ -543,6 +583,28 @@ class ObjectManagerTestCase(unittest.TestCase):
 
         with self.assertRaises(SyncanoValueError):
             self.manager.order_by(10)
+
+    @mock.patch('syncano.models.manager.Manager.request')
+    @mock.patch('syncano.models.manager.ObjectManager.serialize')
+    def test_update(self, serialize_mock, request_mock):
+        serialize_mock.return_value = serialize_mock
+        self.assertFalse(serialize_mock.called)
+
+        self.model.please.update(
+            id=20,
+            class_name='test',
+            instance_name='test',
+            fieldb='23',
+            data={
+                'fielda': 1,
+                'fieldb': None
+            })
+
+        self.assertTrue(serialize_mock.called)
+        serialize_mock.assert_called_once_with(
+            {'class_name': 'test', 'instance_name': 'test', 'fielda': 1, 'id': 20, 'fieldb': None},
+            self.model
+        )
 
 
 # TODO

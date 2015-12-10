@@ -48,6 +48,7 @@ class CodeBox(Model):
         {'display_name': 'nodejs', 'value': 'nodejs'},
         {'display_name': 'python', 'value': 'python'},
         {'display_name': 'ruby', 'value': 'ruby'},
+        {'display_name': 'golang', 'value': 'golang'},
     )
 
     label = fields.StringField(max_length=80)
@@ -272,24 +273,23 @@ class Webhook(Model):
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('run', properties)
         connection = self._get_connection(**payload)
-        request = {
-            'data': {
-                'payload': json.dumps(payload)
-            }
-        }
-        response = connection.request('POST', endpoint, **request)
+
+        response = connection.request('POST', endpoint, **{'data': payload})
+
         response.update({'instance_name': self.instance_name,
                          'webhook_name': self.name})
         return WebhookTrace(**response)
 
-    def reset(self, **payload):
+    def reset_link(self):
         """
         Usage::
 
             >>> wh = Webhook.please.get('instance-name', 'webhook-name')
-            >>> wh.reset()
+            >>> wh.reset_link()
         """
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('reset', properties)
-        connection = self._get_connection(**payload)
-        return connection.request('POST', endpoint)
+        connection = self._get_connection()
+
+        response = connection.request('POST', endpoint)
+        self.public_link = response['public_link']

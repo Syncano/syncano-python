@@ -1,7 +1,7 @@
 import unittest
 
 from syncano.exceptions import SyncanoValidationError
-from syncano.models import Instance
+from syncano.models import Instance, registry
 
 try:
     from unittest import mock
@@ -13,6 +13,7 @@ class ModelTestCase(unittest.TestCase):
 
     def setUp(self):
         self.model = Instance()
+        registry.connection.open()
 
     def test_init(self):
         self.assertTrue(hasattr(self.model, '_raw_data'))

@@ -2,8 +2,9 @@ import unittest
 from urlparse import urljoin
 
 from syncano import connect, connect_instance
-from syncano.connection import Connection, ConnectionMixin, default_connection
+from syncano.connection import Connection, ConnectionMixin
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
+from syncano.models.registry import registry
 
 try:
     from unittest import mock
@@ -13,21 +14,17 @@ except ImportError:
 
 class ConnectTestCase(unittest.TestCase):
 
-    @mock.patch('syncano.models.registry')
-    @mock.patch('syncano.connection.default_connection.open')
-    def test_connect(self, open_mock, registry_mock):
-        registry_mock.return_value = registry_mock
-
-        self.assertFalse(registry_mock.called)
+    @mock.patch('syncano.connection.DefaultConnection.open')
+    def test_connect(self, open_mock):
         self.assertFalse(open_mock.called)
 
         connection = connect(1, 2, 3, a=1, b=2, c=3)
         open_mock.assert_called_once_with(1, 2, 3, a=1, b=2, c=3)
 
         self.assertTrue(open_mock.called)
-        self.assertEqual(connection, registry_mock)
+        self.assertEqual(connection, registry)
 
-    @mock.patch('syncano.connection.default_connection.open')
+    @mock.patch('syncano.models.registry.connection.open')
     @mock.patch('syncano.models.registry')
     @mock.patch('syncano.INSTANCE')
     def test_env_instance(self, instance_mock, registry_mock, *args):
@@ -298,7 +295,7 @@ class ConnectionTestCase(unittest.TestCase):
 class DefaultConnectionTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.connection = default_connection
+        self.connection = registry.connection
         self.connection._connection = None
 
     def test_call(self):
@@ -324,7 +321,7 @@ class ConnectionMixinTestCase(unittest.TestCase):
     def setUp(self):
         self.mixin = ConnectionMixin()
 
-    @mock.patch('syncano.connection.default_connection')
+    @mock.patch('syncano.models.registry._default_connection')
     def test_getter(self, default_connection_mock):
         default_connection_mock.return_value = default_connection_mock
 

@@ -2,10 +2,13 @@ import logging
 import os
 
 __title__ = 'Syncano Python'
-__version__ = '4.0.7'
-__author__ = 'Daniel Kopka'
-__license__ = 'MIT'
+__version__ = '4.0.8'
+__author__ = "Daniel Kopka, Michal Kobus, and Sebastian Opalczynski"
+__credits__ = ["Daniel Kopka",
+               "Michal Kobus",
+               "Sebastian Opalczynski"]
 __copyright__ = 'Copyright 2015 Syncano'
+__license__ = 'MIT'
 
 env_loglevel = os.getenv('SYNCANO_LOGLEVEL', 'INFO')
 loglevel = getattr(logging, env_loglevel.upper(), None)
@@ -29,6 +32,7 @@ EMAIL = os.getenv('SYNCANO_EMAIL')
 PASSWORD = os.getenv('SYNCANO_PASSWORD')
 APIKEY = os.getenv('SYNCANO_APIKEY')
 INSTANCE = os.getenv('SYNCANO_INSTANCE')
+PUSH_ENV = os.getenv('SYNCANO_PUSH_ENV', 'production')
 
 
 def connect(*args, **kwargs):
@@ -73,10 +77,11 @@ def connect(*args, **kwargs):
         # OR
         connection = syncano.connect(user_key='', api_key='', instance_name='')
     """
-    from syncano.connection import default_connection
+    from syncano.connection import DefaultConnection
     from syncano.models import registry
 
-    default_connection.open(*args, **kwargs)
+    registry.set_default_connection(DefaultConnection())
+    registry.connection.open(*args, **kwargs)
     instance = kwargs.get('instance_name', INSTANCE)
 
     if instance is not None:

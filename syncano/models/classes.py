@@ -79,6 +79,11 @@ class Class(Model):
             }
         }
 
+    def save(self, **kwargs):
+        if self.schema:  # do not allow add empty schema to registry;
+            registry.set_schema(self.name, self.schema)  # update the registry schema here;
+        return super(Class, self).save(**kwargs)
+
 
 class Object(Model):
     """
@@ -111,10 +116,10 @@ class Object(Model):
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
     owner = fields.IntegerField(label='owner id', required=False)
-    owner_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+    owner_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, required=False)
     group = fields.IntegerField(label='group id', required=False)
-    group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
-    other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+    group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, required=False)
+    other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, required=False)
     channel = fields.StringField(required=False)
     channel_room = fields.StringField(required=False, max_length=64)
 
@@ -135,9 +140,8 @@ class Object(Model):
 
     @staticmethod
     def __new__(cls, **kwargs):
-        instance_name = kwargs.get('instance_name')
-        class_name = kwargs.get('class_name')
-
+        instance_name = cls._get_instance_name(kwargs)
+        class_name = cls._get_class_name(kwargs)
         if not instance_name:
             raise SyncanoValidationError('Field "instance_name" is required.')
 
@@ -146,6 +150,18 @@ class Object(Model):
 
         model = cls.get_subclass_model(instance_name, class_name)
         return model(**kwargs)
+
+    @classmethod
+    def _set_up_object_class(cls, model):
+        pass
+
+    @classmethod
+    def _get_instance_name(cls, kwargs):
+        return kwargs.get('instance_name')
+
+    @classmethod
+    def _get_class_name(cls, kwargs):
+        return kwargs.get('class_name')
 
     @classmethod
     def create_subclass(cls, name, schema):
@@ -160,8 +176,9 @@ class Object(Model):
             query_allowed = ('order_index' in field or 'filter_index' in field)
             attrs[field['name']] = field_class(required=False, read_only=False,
                                                query_allowed=query_allowed)
-
-        return type(str(name), (Object, ), attrs)
+        model = type(str(name), (Object, ), attrs)
+        cls._set_up_object_class(model)
+        return model
 
     @classmethod
     def get_or_create_subclass(cls, name, schema):
@@ -170,7 +187,6 @@ class Object(Model):
         except LookupError:
             subclass = cls.create_subclass(name, schema)
             registry.add(name, subclass)
-
         return subclass
 
     @classmethod
@@ -179,9 +195,13 @@ class Object(Model):
 
     @classmethod
     def get_class_schema(cls, instance_name, class_name):
-        parent = cls._meta.parent
-        class_ = parent.please.get(instance_name, class_name)
-        return class_.schema
+        schema = registry.get_schema(class_name)
+        if not schema:
+            parent = cls._meta.parent
+            schema = parent.please.get(instance_name, class_name).schema
+            if schema:  # do not allow to add to registry empty schema;
+                registry.set_schema(class_name, schema)
+        return schema
 
     @classmethod
     def get_subclass_model(cls, instance_name, class_name, **kwargs):
@@ -197,8 +217,45 @@ class Object(Model):
         try:
             model = registry.get_model_by_name(model_name)
         except LookupError:
-            schema = cls.get_class_schema(instance_name, class_name)
+            parent = cls._meta.parent
+            schema = parent.please.get(instance_name, class_name).schema
             model = cls.create_subclass(model_name, schema)
             registry.add(model_name, model)
 
+        schema = cls.get_class_schema(instance_name, class_name)
+
+        for field in schema:
+            try:
+                getattr(model, field['name'])
+            except AttributeError:
+                # schema changed, update the registry;
+                model = cls.create_subclass(model_name, schema)
+                registry.update(model_name, model)
+                break
+
         return model
+
+
+class DataObjectMixin(object):
+
+    @classmethod
+    def _get_instance_name(cls, kwargs):
+        return cls.please.properties.get('instance_name') or kwargs.get('instance_name')
+
+    @classmethod
+    def _get_class_name(cls, kwargs):
+        return cls.PREDEFINED_CLASS_NAME
+
+    @classmethod
+    def get_class_object(cls):
+        return Class.please.get(name=cls.PREDEFINED_CLASS_NAME)
+
+    @classmethod
+    def _set_up_object_class(cls, model):
+        for field in model._meta.fields:
+            if field.has_endpoint_data and field.name == 'class_name':
+                if not getattr(model, field.name, None):
+                    setattr(model, field.name, getattr(cls, 'PREDEFINED_CLASS_NAME', None))
+        setattr(model, 'get_class_object', cls.get_class_object)
+        setattr(model, '_get_instance_name', cls._get_instance_name)
+        setattr(model, '_get_class_name', cls._get_class_name)
