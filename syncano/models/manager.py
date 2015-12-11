@@ -296,6 +296,59 @@ class Manager(ConnectionMixin):
         self._filter(*args, **kwargs)
         return self.request()
 
+    @clone
+    def in_bulk(self, object_ids_list, **kwargs):
+        """
+        A method which allows to bulk get objects;
+
+        Use::
+
+            response = Classes.please.in_bulk(['test_class', ...])
+
+        response is:
+
+            > {'test_class': <Class: test_class>}
+
+        For objects:
+
+            res = Object.please.in_bulk([1, 2], class_name='test_class')
+
+        or
+
+            res = klass.objects.in_bulk([1, 2])
+
+        response is:
+
+            {1: <SyncanoTestClassObject: 1>, 2: {u'content': {u'detail': u'Not found.'}, u'code': 404}}
+
+
+        :param object_ids_list: This list expects the primary keys - id in api, a names, ids can be used here;
+        :return: a dict in which keys are the object_ids_list elements, and values are a populated objects;
+        """
+        self.properties.update(kwargs)
+        path, defaults = self._get_endpoint_properties()
+        requests = [
+            {'method': 'GET', 'path': '{path}{id}/'.format(path=path, id=object_id)} for object_id in object_ids_list
+        ]
+
+        response = self.connection.request(
+            'POST',
+            self.BATCH_URI.format(name=registry.last_used_instance),
+            **{'data': {'requests': requests}}
+        )
+
+        bulk_response = {}
+
+        for object_id, object in zip(object_ids_list, response):
+            if object['code'] == 200:
+                data = object['content'].copy()
+                data.update(self.properties)
+                bulk_response[object_id] = self.model(**data)
+            else:
+                bulk_response[object_id] = object
+
+        return bulk_response
+
     def detail(self, *args, **kwargs):
         """
         Wrapper around ``get`` method.
