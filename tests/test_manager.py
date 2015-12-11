@@ -490,7 +490,7 @@ class WebhookManagerTestCase(unittest.TestCase):
         request_mock.return_value = {
             'status': 'success',
             'duration': 937,
-            'result': '1',
+            'result': 1,
             'executed_at': '2015-03-16T11:52:14.172830Z'
         }
 
@@ -501,7 +501,7 @@ class WebhookManagerTestCase(unittest.TestCase):
         self.assertIsInstance(result, WebhookTrace)
         self.assertEqual(result.status, 'success')
         self.assertEqual(result.duration, 937)
-        self.assertEqual(result.result, '1')
+        self.assertEqual(result.result, 1)
         self.assertIsInstance(result.executed_at, datetime)
 
         self.assertTrue(filter_mock.called)

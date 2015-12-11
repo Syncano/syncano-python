@@ -275,10 +275,12 @@ class Webhook(Model):
         connection = self._get_connection(**payload)
 
         response = connection.request('POST', endpoint, **{'data': payload})
-
-        response.update({'instance_name': self.instance_name,
-                         'webhook_name': self.name})
-        return WebhookTrace(**response)
+        if 'result' in response and 'stdout' in response['result']:
+            response.update({'instance_name': self.instance_name,
+                             'webhook_name': self.name})
+            return WebhookTrace(**response)
+        # if codebox is a custom one, return result 'as-it-is';
+        return response
 
     def reset_link(self):
         """
