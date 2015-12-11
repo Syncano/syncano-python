@@ -113,18 +113,12 @@ class CustomResponseMixin(object):
 
     @property
     def status_code(self):
-        if not self.result:
-            return None
-        return self.result.get('response', {}).get('status')
+        return self.result.get('response', {}).get('status') if self.result else None
 
     @property
     def error(self):
-        if not self.result:
-            return None
-        return self.result.get('stderr')
+        return self.result.get('stderr') if self.result else None
 
     @property
     def content_type(self):
-        if not self.result:
-            return None
-        return self.result.get('response', {}).get('content_type')
+        return self.result.get('response', {}).get('content_type') if self.result else None
