@@ -287,6 +287,38 @@ User(username=&#8217;user_b&#8217;, password=&#8216;4321&#8217;)</dd>
 </dd></dl>
 
 <dl class="method">
+<dt id="syncano.models.manager.Manager.in_bulk">
+<tt class="descname">in_bulk</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.in_bulk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.in_bulk" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method which allows to bulk get objects;</p>
+<p>Use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">response</span> <span class="o">=</span> <span class="n">Classes</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">in_bulk</span><span class="p">([</span><span class="s">&#39;test_class&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>response is:</p>
+<blockquote>
+<div>&gt; {&#8216;test_class&#8217;: &lt;Class: test_class&gt;}</div></blockquote>
+<p>For objects:</p>
+<blockquote>
+<div>res = Object.please.in_bulk([1, 2], class_name=&#8217;test_class&#8217;)</div></blockquote>
+<p>or</p>
+<blockquote>
+<div>res = klass.objects.in_bulk([1, 2])</div></blockquote>
+<p>response is:</p>
+<blockquote>
+<div>{1: &lt;SyncanoTestClassObject: 1&gt;, 2: {u&#8217;content&#8217;: {u&#8217;detail&#8217;: u&#8217;Not found.&#8217;}, u&#8217;code&#8217;: 404}}</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>object_ids_list</strong> &#8211; This list expects the primary keys - id in api, a names, ids can be used here;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a dict in which keys are the object_ids_list elements, and values are a populated objects;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="syncano.models.manager.Manager.detail">
 <tt class="descname">detail</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.detail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.detail" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper around <tt class="docutils literal"><span class="pre">get</span></tt> method.</p>

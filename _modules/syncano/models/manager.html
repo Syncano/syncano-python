@@ -425,6 +425,59 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
 </div>
+    <span class="nd">@clone</span>
+<div class="viewcode-block" id="Manager.in_bulk"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.in_bulk">[docs]</a>    <span class="k">def</span> <span class="nf">in_bulk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">object_ids_list</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A method which allows to bulk get objects;</span>
+
+<span class="sd">        Use::</span>
+
+<span class="sd">            response = Classes.please.in_bulk([&#39;test_class&#39;, ...])</span>
+
+<span class="sd">        response is:</span>
+
+<span class="sd">            &gt; {&#39;test_class&#39;: &lt;Class: test_class&gt;}</span>
+
+<span class="sd">        For objects:</span>
+
+<span class="sd">            res = Object.please.in_bulk([1, 2], class_name=&#39;test_class&#39;)</span>
+
+<span class="sd">        or</span>
+
+<span class="sd">            res = klass.objects.in_bulk([1, 2])</span>
+
+<span class="sd">        response is:</span>
+
+<span class="sd">            {1: &lt;SyncanoTestClassObject: 1&gt;, 2: {u&#39;content&#39;: {u&#39;detail&#39;: u&#39;Not found.&#39;}, u&#39;code&#39;: 404}}</span>
+
+
+<span class="sd">        :param object_ids_list: This list expects the primary keys - id in api, a names, ids can be used here;</span>
+<span class="sd">        :return: a dict in which keys are the object_ids_list elements, and values are a populated objects;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">path</span><span class="p">,</span> <span class="n">defaults</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_endpoint_properties</span><span class="p">()</span>
+        <span class="n">requests</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s">&#39;method&#39;</span><span class="p">:</span> <span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;{path}{id}/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">object_id</span><span class="p">)}</span> <span class="k">for</span> <span class="n">object_id</span> <span class="ow">in</span> <span class="n">object_ids_list</span>
+        <span class="p">]</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
+            <span class="s">&#39;POST&#39;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">BATCH_URI</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">registry</span><span class="o">.</span><span class="n">last_used_instance</span><span class="p">),</span>
+            <span class="o">**</span><span class="p">{</span><span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;requests&#39;</span><span class="p">:</span> <span class="n">requests</span><span class="p">}}</span>
+        <span class="p">)</span>
+
+        <span class="n">bulk_response</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">object_id</span><span class="p">,</span> <span class="nb">object</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">object_ids_list</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">object</span><span class="p">[</span><span class="s">&#39;code&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="nb">object</span><span class="p">[</span><span class="s">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
+                <span class="n">bulk_response</span><span class="p">[</span><span class="n">object_id</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bulk_response</span><span class="p">[</span><span class="n">object_id</span><span class="p">]</span> <span class="o">=</span> <span class="nb">object</span>
+
+        <span class="k">return</span> <span class="n">bulk_response</span>
+</div>
 <div class="viewcode-block" id="Manager.detail"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.detail">[docs]</a>    <span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Wrapper around ``get`` method.</span>
