@@ -49,7 +49,7 @@ class WebhookTestCase(unittest.TestCase):
         connection_mock.request.return_value = {
             'status': 'success',
             'duration': 937,
-            'result': '1',
+            'result': {u'stdout': 1, u'stderr': u''},
             'executed_at': '2015-03-16T11:52:14.172830Z'
         }
 
@@ -61,7 +61,7 @@ class WebhookTestCase(unittest.TestCase):
         self.assertIsInstance(result, WebhookTrace)
         self.assertEqual(result.status, 'success')
         self.assertEqual(result.duration, 937)
-        self.assertEqual(result.result, '1')
+        self.assertEqual(result.result, {u'stdout': 1, u'stderr': u''})
         self.assertIsInstance(result.executed_at, datetime)
 
         connection_mock.assert_called_once_with(x=1, y=2)

@@ -337,7 +337,28 @@ class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
             trace.reload()
 
         self.assertEquals(trace.status, 'success')
-        self.assertEquals(trace.result, u'{u\'stderr\': u\'\', u\'stdout\': u\'IntegrationTest\'}')
+        self.assertDictEqual(trace.result, {u'stderr': u'', u'stdout': u'IntegrationTest'})
+
+        codebox.delete()
+
+    def test_custom_response_run(self):
+        codebox = self.model.please.create(
+            instance_name=self.instance.name,
+            label='cb%s' % self.generate_hash()[:10],
+            runtime_name='python',
+            source="""
+set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='application/json'))"""
+        )
+
+        trace = codebox.run()
+        while trace.status == 'pending':
+            sleep(1)
+            trace.reload()
+
+        self.assertEquals(trace.status, 'success')
+        self.assertDictEqual(trace.content, {'one': 1})
+        self.assertEqual(trace.content_type, 'application/json')
+        self.assertEqual(trace.status_code, 200)
 
         codebox.delete()
 
@@ -354,6 +375,14 @@ class WebhookIntegrationTest(InstanceMixin, IntegrationTest):
             label='cb%s' % cls.generate_hash()[:10],
             runtime_name='python',
             source='print "IntegrationTest"'
+        )
+
+        cls.custom_codebox = CodeBox.please.create(
+            instance_name=cls.instance.name,
+            label='cb%s' % cls.generate_hash()[:10],
+            runtime_name='python',
+            source="""
+set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='application/json'))"""
         )
 
     @classmethod
@@ -388,5 +417,16 @@ class WebhookIntegrationTest(InstanceMixin, IntegrationTest):
 
         trace = webhook.run()
         self.assertEquals(trace.status, 'success')
-        self.assertEquals(trace.result, u'{u\'stderr\': u\'\', u\'stdout\': u\'IntegrationTest\'}')
+        self.assertDictEqual(trace.result, {u'stderr': u'', u'stdout': u'IntegrationTest'})
+        webhook.delete()
+
+    def test_custom_codebox_run(self):
+        webhook = self.model.please.create(
+            instance_name=self.instance.name,
+            codebox=self.custom_codebox.id,
+            name='wh%s' % self.generate_hash()[:10],
+        )
+
+        trace = webhook.run()
+        self.assertDictEqual(trace, {'one': 1})
         webhook.delete()

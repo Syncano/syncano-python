@@ -234,7 +234,12 @@ class Connection(object):
         :raises SyncanoValueError: if invalid request method was chosen
         :raises SyncanoRequestError: if something went wrong during the request
         """
-        files = kwargs.get('data', {}).pop('files', None)
+        data = kwargs.get('data', {})
+
+        files = {k: v for k, v in data.iteritems()
+                 if hasattr(v, 'read')}
+        map(data.pop, files.keys())
+
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)
 
