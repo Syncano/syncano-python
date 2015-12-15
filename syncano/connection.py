@@ -240,7 +240,7 @@ class Connection(object):
             files = data.pop('files', {})
         else:
             files = {k: v for k, v in data.iteritems()
-                     if hasattr(v, 'read')}
+                     if hasattr(v, 'read') and hasattr(v, 'write')}
             map(data.pop, files.keys())
 
         params = self.build_params(kwargs)
