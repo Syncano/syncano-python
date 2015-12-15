@@ -213,6 +213,31 @@ class ConnectionTestCase(unittest.TestCase):
         with self.assertRaises(SyncanoValueError):
             self.connection.make_request('INVALID', 'test')
 
+    @staticmethod
+    def _create_test_file():
+        with open('test_data_object_file', 'w+') as test_file:
+            test_file.write('bazinga')
+
+    @mock.patch('syncano.connection.Connection.get_response_content')
+    def test_make_request_for_creating_object_with_file(self, get_response_mock):
+        self._create_test_file()
+        kwargs = {
+            'data': {
+                'files': {'filename': open('test_data_object_file')}
+            }
+        }
+        # if FAIL will raise TypeError for json dump
+        self.connection.make_request('POST', 'test', **kwargs)
+
+    @mock.patch('syncano.connection.Connection.get_response_content')
+    def test_make_request_for_updating_object_with_file(self, get_reponse_mock):
+        self._create_test_file()
+        kwargs = {
+            'data': {'filename': open('test_data_object_file')}
+        }
+        # if FAIL will raise TypeError for json dump
+        self.connection.make_request('PATCH', 'test', **kwargs)
+
     @mock.patch('requests.Session.post')
     def test_request_error(self, post_mock):
         post_mock.return_value = mock.MagicMock(status_code=404, text='Invalid request')
