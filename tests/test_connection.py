@@ -1,3 +1,4 @@
+import tempfile
 import unittest
 from urlparse import urljoin
 
@@ -212,6 +213,26 @@ class ConnectionTestCase(unittest.TestCase):
     def test_invalid_method_name(self):
         with self.assertRaises(SyncanoValueError):
             self.connection.make_request('INVALID', 'test')
+
+    @mock.patch('syncano.connection.Connection.get_response_content')
+    @mock.patch('requests.Session.patch')
+    def test_make_request_for_creating_object_with_file(self, patch_mock, get_response_mock):
+        kwargs = {
+            'data': {
+                'files': {'filename': tempfile.TemporaryFile(mode='w')}
+            }
+        }
+        # if FAIL will raise TypeError for json dump
+        self.connection.make_request('POST', 'test', **kwargs)
+
+    @mock.patch('syncano.connection.Connection.get_response_content')
+    @mock.patch('requests.Session.patch')
+    def test_make_request_for_updating_object_with_file(self, patch_mock, get_reponse_mock):
+        kwargs = {
+            'data': {'filename': tempfile.TemporaryFile(mode='w')}
+        }
+        # if FAIL will raise TypeError for json dump
+        self.connection.make_request('PATCH', 'test', **kwargs)
 
     @mock.patch('requests.Session.post')
     def test_request_error(self, post_mock):
