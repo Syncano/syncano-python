@@ -236,9 +236,12 @@ class Connection(object):
         """
         data = kwargs.get('data', {})
 
-        files = {k: v for k, v in data.iteritems()
-                 if hasattr(v, 'read')}
-        map(data.pop, files.keys())
+        if method_name == 'POST':
+            files = data.pop('files', {})
+        else:
+            files = {k: v for k, v in data.iteritems()
+                     if hasattr(v, 'read') and hasattr(v, 'write')}
+            map(data.pop, files.keys())
 
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)
@@ -260,6 +263,7 @@ class Connection(object):
         # Encode request payload
         if 'data' in params and not isinstance(params['data'], six.string_types):
             params['data'] = json.dumps(params['data'])
+
         url = self.build_url(path)
         response = method(url, **params)
         content = self.get_response_content(url, response)
