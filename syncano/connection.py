@@ -1,5 +1,4 @@
 import json
-import os
 from copy import deepcopy
 
 import requests
@@ -240,7 +239,7 @@ class Connection(object):
 
         if files is None:
             files = {k: v for k, v in data.iteritems()
-                     if os.path.isfile(v.name)}
+                     if isinstance(v, file)}
             map(data.pop, files.keys())
 
         params = self.build_params(kwargs)
