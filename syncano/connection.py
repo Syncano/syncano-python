@@ -235,12 +235,11 @@ class Connection(object):
         :raises SyncanoRequestError: if something went wrong during the request
         """
         data = kwargs.get('data', {})
+        files = data.pop('files', None)
 
-        if method_name == 'POST':
-            files = data.pop('files', {})
-        else:
+        if files is None:
             files = {k: v for k, v in data.iteritems()
-                     if hasattr(v, 'read') and hasattr(v, 'write')}
+                     if isinstance(v, file)}
             map(data.pop, files.keys())
 
         params = self.build_params(kwargs)
