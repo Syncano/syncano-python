@@ -453,6 +453,33 @@ class Manager(ConnectionMixin):
 
         return self.model.batch_object(method=self.method, path=path, body=self.data, properties=defaults)
 
+    @clone
+    def filter_by_attributes(self, *args, **kwargs):
+        self._filter(*args, **kwargs)
+        return self
+
+    @clone
+    def do_update(self, *args, **kwargs):
+        self.endpoint = 'detail'
+        self.method = self.get_allowed_method('PATCH', 'PUT', 'POST')
+        self.data = kwargs
+
+        model = self.serialize(self.data, self.model)
+
+        serialized = model.to_native()
+
+        serialized = {k: v for k, v in serialized.iteritems()
+                      if k in self.data}
+
+        self.data.update(serialized)
+
+        if not self.is_lazy:
+            return self.request()
+
+        path, defaults = self._get_endpoint_properties()
+
+        return self.model.batch_object(method=self.method, path=path, body=self.data, properties=defaults)
+
     def update_or_create(self, defaults=None, **kwargs):
         """
         A convenience method for updating an object with the given parameters, creating a new one if necessary.
