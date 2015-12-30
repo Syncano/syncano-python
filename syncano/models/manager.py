@@ -218,9 +218,16 @@ class Manager(ConnectionMixin):
          found resource to delete);
         """
         # firstly turn off lazy mode:
-        meta = [arg['meta'] for arg in args]
-
         self.is_lazy = False
+
+        meta = []
+        for arg in args:
+            if isinstance(arg, list):  # update now can return a list;
+                for nested_arg in arg:
+                    meta.append(nested_arg['meta'])
+            else:
+                meta.append(arg['meta'])
+
         response = self.connection.request(
             'POST',
             self.BATCH_URI.format(name=registry.last_used_instance),
@@ -445,33 +452,6 @@ class Manager(ConnectionMixin):
 
         self.data.update(serialized)
         self._filter(*args, **kwargs)
-
-        if not self.is_lazy:
-            return self.request()
-
-        path, defaults = self._get_endpoint_properties()
-
-        return self.model.batch_object(method=self.method, path=path, body=self.data, properties=defaults)
-
-    @clone
-    def filter_by_attributes(self, *args, **kwargs):
-        self._filter(*args, **kwargs)
-        return self
-
-    @clone
-    def do_update(self, *args, **kwargs):
-        self.endpoint = 'detail'
-        self.method = self.get_allowed_method('PATCH', 'PUT', 'POST')
-        self.data = kwargs
-
-        model = self.serialize(self.data, self.model)
-
-        serialized = model.to_native()
-
-        serialized = {k: v for k, v in serialized.iteritems()
-                      if k in self.data}
-
-        self.data.update(serialized)
 
         if not self.is_lazy:
             return self.request()
@@ -884,6 +864,51 @@ class ObjectManager(Manager):
         self.method = 'GET'
         self.endpoint = 'list'
         return self
+
+    @clone
+    def update(self, *args, **kwargs):
+        """
+        Updates multiple instances based on provided arguments. There to ways to do so:
+
+            1. Django-style update.
+            2. By specifying arguments.
+
+        Usage::
+
+            objects = Object.please.list(instance_name=INSTANCE_NAME,
+                                 class_name='someclass').filter(id=1).update(arg='103')
+            objects = Object.please.list(instance_name=INSTANCE_NAME,
+                                 class_name='someclass').filter(id=1).update(arg='103')
+
+        The return value is a list of objects;
+
+        """
+        instances = []
+        for obj in self:
+            self.endpoint = 'detail'
+            self.method = self.get_allowed_method('PATCH', 'PUT', 'POST')
+            self.data = kwargs.copy()
+            self._filter(*args, **kwargs)
+            self.properties.update({'id': obj.id})
+
+            model = self.serialize(self.data, self.model)
+
+            serialized = model.to_native()
+
+            serialized = {k: v for k, v in serialized.iteritems()
+                          if k in self.data}
+
+            self.data.update(serialized)
+
+            if not self.is_lazy:
+                updated_instance = self.request()
+            else:
+                path, defaults = self._get_endpoint_properties()
+                updated_instance = self.model.batch_object(method=self.method, path=path, body=self.data,
+                                                           properties=defaults)
+
+            instances.append(updated_instance)
+        return instances
 
     def bulk_create(self, *objects):
         """
