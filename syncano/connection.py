@@ -104,17 +104,13 @@ class Connection(object):
         self.session = requests.Session()
 
     def _init_login_params(self, login_kwargs):
-
-        def _set_value_or_default(param):
-            param_lib_default_name = ''.join(param.split('_')).upper()
-            value = login_kwargs.get(param, getattr(syncano, param_lib_default_name, None))
+        for param in self.LOGIN_PARAMS.union(self.ALT_LOGIN_PARAMS,
+                                             self.USER_LOGIN_PARAMS,
+                                             self.USER_ALT_LOGIN_PARAMS,
+                                             self.SOCIAL_LOGIN_PARAMS):
+            def_name = param.replace('_', '').upper()
+            value = login_kwargs.get(param, getattr(syncano, def_name, None))
             setattr(self, param, value)
-
-        map(_set_value_or_default,
-            self.LOGIN_PARAMS.union(self.ALT_LOGIN_PARAMS,
-                                    self.USER_LOGIN_PARAMS,
-                                    self.USER_ALT_LOGIN_PARAMS,
-                                    self.SOCIAL_LOGIN_PARAMS))
 
     def _are_params_ok(self, params):
         return all(getattr(self, p) for p in params)
@@ -240,7 +236,7 @@ class Connection(object):
         if files is None:
             files = {k: v for k, v in data.iteritems()
                      if isinstance(v, file)}
-            map(data.pop, files.keys())
+            data = {k: v for k, v in data.iteritems() if k not in files}
 
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)
