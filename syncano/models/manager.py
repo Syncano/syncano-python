@@ -221,17 +221,20 @@ class Manager(ConnectionMixin):
         self.is_lazy = False
 
         meta = []
+        requests = []
         for arg in args:
             if isinstance(arg, list):  # update now can return a list;
                 for nested_arg in arg:
                     meta.append(nested_arg['meta'])
+                    requests.append(nested_arg['body'])
             else:
                 meta.append(arg['meta'])
+                requests.append(arg['body'])
 
         response = self.connection.request(
             'POST',
             self.BATCH_URI.format(name=registry.last_used_instance),
-            **{'data': {'requests': [arg['body'] for arg in args]}}
+            **{'data': {'requests': requests}}
         )
 
         populated_response = []
