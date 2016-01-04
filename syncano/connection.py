@@ -380,6 +380,8 @@ class Connection(object):
     def get_account_info(self, api_key=None):
         if api_key:
             self.api_key = api_key
+        if not self.api_key:
+            raise SyncanoValueError('api_key is required.')
         return self.make_request('GET', self.ACCOUNT_SUFFIX, headers={'X-API-KEY': self.api_key})
 
 
