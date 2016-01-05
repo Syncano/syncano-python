@@ -88,7 +88,7 @@ class ManagerBatchTest(InstanceMixin, IntegrationTest):
     def test_batch_mix(self):
         mix_batches = Object.please.batch(
             self.klass.objects.as_batch().create(title='four'),
-            self.klass.objects.as_batch().update(title='TerminatorArrival', id=self.update3.id),
+            self.klass.objects.as_batch().filter(id=self.update3.id).update(title='TerminatorArrival'),
             self.klass.objects.as_batch().delete(id=self.delete3.id)
         )
 

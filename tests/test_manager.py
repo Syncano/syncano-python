@@ -586,23 +586,17 @@ class ObjectManagerTestCase(unittest.TestCase):
 
     @mock.patch('syncano.models.manager.Manager.request')
     @mock.patch('syncano.models.manager.ObjectManager.serialize')
-    def test_update(self, serialize_mock, request_mock):
+    @mock.patch('syncano.models.manager.Manager.iterator')
+    def test_update(self, iterator_mock, serialize_mock, request_mock):
+        iterator_mock.return_value = [Object(class_name='test', instance_name='test')]
         serialize_mock.return_value = serialize_mock
         self.assertFalse(serialize_mock.called)
 
-        self.model.please.update(
-            id=20,
-            class_name='test',
-            instance_name='test',
-            fieldb='23',
-            data={
-                'fielda': 1,
-                'fieldb': None
-            })
+        self.model.please.list(class_name='test', instance_name='test').filter(id=20).update(fielda=1, fieldb=None)
 
         self.assertTrue(serialize_mock.called)
         serialize_mock.assert_called_once_with(
-            {'class_name': 'test', 'instance_name': 'test', 'fielda': 1, 'id': 20, 'fieldb': None},
+            {'fielda': 1, 'fieldb': None},
             self.model
         )
 
