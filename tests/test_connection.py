@@ -312,6 +312,56 @@ class ConnectionTestCase(unittest.TestCase):
         self.assertIsNotNone(self.connection.api_key)
         self.assertEqual(self.connection.api_key, api_key)
 
+    @mock.patch('syncano.connection.Connection.make_request')
+    def test_get_account_info(self, make_request):
+        info = {u'first_name': u'', u'last_name': u'', u'is_active': True,
+                u'id': 1, u'has_password': True, u'email': u'dummy'}
+        self.test_successful_authentication()
+        make_request.return_value = info
+        self.assertFalse(make_request.called)
+        self.assertIsNotNone(self.connection.api_key)
+        ret = self.connection.get_account_info()
+        self.assertTrue(make_request.called)
+        self.assertEqual(info, ret)
+
+    @mock.patch('syncano.connection.Connection.make_request')
+    def test_get_account_info_with_api_key(self, make_request):
+        info = {u'first_name': u'', u'last_name': u'', u'is_active': True,
+                u'id': 1, u'has_password': True, u'email': u'dummy'}
+        make_request.return_value = info
+        self.assertFalse(make_request.called)
+        self.assertIsNone(self.connection.api_key)
+        ret = self.connection.get_account_info(api_key='test')
+        self.assertIsNotNone(self.connection.api_key)
+        self.assertTrue(make_request.called)
+        self.assertEqual(info, ret)
+
+    @mock.patch('syncano.connection.Connection.make_request')
+    def test_get_account_info_invalid_key(self, make_request):
+        err = SyncanoRequestError(403, 'No such API Key.')
+        make_request.side_effect = err
+        self.assertFalse(make_request.called)
+        self.assertIsNone(self.connection.api_key)
+        try:
+            self.connection.get_account_info(api_key='invalid')
+            self.assertTrue(False)
+        except SyncanoRequestError, e:
+            self.assertIsNotNone(self.connection.api_key)
+            self.assertTrue(make_request.called)
+            self.assertEqual(e, err)
+
+    @mock.patch('syncano.connection.Connection.make_request')
+    def test_get_account_info_missing_key(self, make_request):
+        self.assertFalse(make_request.called)
+        self.assertIsNone(self.connection.api_key)
+        try:
+            self.connection.get_account_info()
+            self.assertTrue(False)
+        except SyncanoValueError, e:
+            self.assertIsNone(self.connection.api_key)
+            self.assertFalse(make_request.called)
+            self.assertIn('api_key', e.message)
+
 
 class DefaultConnectionTestCase(unittest.TestCase):
 
