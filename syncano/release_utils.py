@@ -17,5 +17,5 @@ class Deprecated(object):
                 category=DeprecationWarning,
                 filename=original_func.func_code.co_filename,
                 lineno=original_func.func_code.co_firstlineno + self.lineno)
-            original_func(*args, **kwargs)
+            return original_func(*args, **kwargs)
         return new_func
