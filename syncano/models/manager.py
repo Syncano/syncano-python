@@ -6,6 +6,7 @@ import six
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoRequestError, SyncanoValidationError, SyncanoValueError
 from syncano.models.bulk import ModelBulkCreate, ObjectBulkCreate
+from syncano.release_utils import Deprecated
 
 from .registry import registry
 
@@ -413,6 +414,7 @@ class Manager(ConnectionMixin):
         return self.model.batch_object(method=self.method, path=path, body=self.data, properties=defaults)
 
     @clone
+    @Deprecated(lineno=2)
     def update(self, *args, **kwargs):
         """
         Updates single instance based on provided arguments. There to ways to do so:
