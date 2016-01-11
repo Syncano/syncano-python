@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import warnings
+from functools import wraps
 
-warnings.simplefilter('default')
+warnings.simplefilter('once')
 
 
 class Deprecated(object):
@@ -12,8 +13,9 @@ class Deprecated(object):
         self.removed_in_version = removed_in_version
 
     def __call__(self, original_func):
+        @wraps(original_func)
         def new_func(*args, **kwargs):
-            warnings.showwarning(
+            warnings.warn_explicit(
                 message="Call to deprecated function '{}'. Will be removed in version: {}.".format(
                     original_func.__name__,
                     self.removed_in_version
