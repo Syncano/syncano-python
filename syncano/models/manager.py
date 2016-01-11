@@ -83,6 +83,7 @@ class Manager(ConnectionMixin):
         self.query = {}
         self.data = {}
         self.is_lazy = False
+        self._filter_kwargs = {}
 
         self._limit = None
         self._serialize = True
@@ -423,7 +424,84 @@ class Manager(ConnectionMixin):
         return self.model.batch_object(method=self.method, path=path, body=self.data, properties=defaults)
 
     @clone
+    def filter(self, **kwargs):
+        self._filter_kwargs = kwargs
+        return self
+
+    @clone
     def update(self, *args, **kwargs):
+        if self._filter_kwargs or self.query:
+            return self.new_update(*args, **kwargs)
+        return self.old_update(*args, **kwargs)
+
+    @clone
+    def new_update(self, *args, **kwargs):
+        """
+        Updates multiple instances based on provided arguments. There to ways to do so:
+
+            1. Django-style update.
+            2. By specifying arguments.
+
+        Usage::
+
+            objects = Object.please.list(instance_name=INSTANCE_NAME,
+                                 class_name='someclass').filter(id=1).update(arg='103')
+            objects = Object.please.list(instance_name=INSTANCE_NAME,
+                                 class_name='someclass').filter(id=1).update(arg='103')
+
+        The return value is a list of objects;
+
+        """
+
+        if self._filter_kwargs:
+            # do a single object update: Class, Instance for example;
+            self.data = kwargs.copy()
+            self.data.update(self._filter_kwargs)
+
+            model = self.serialize(self.data, self.model)
+
+            serialized = model.to_native()
+
+            serialized = {k: v for k, v in serialized.iteritems()
+                          if k in self.data}
+
+            self.data.update(serialized)
+            self._filter(*args, **kwargs)
+
+            if not self.is_lazy:
+                return [self.request()]
+            path, defaults = self._get_endpoint_properties()
+            return [self.model.batch_object(method=self.method, path=path, body=self.data, properties=defaults)]
+
+        instances = []
+        for obj in self:
+            self.endpoint = 'detail'
+            self.method = self.get_allowed_method('PATCH', 'PUT', 'POST')
+            self.data = kwargs.copy()
+            self._filter(*args, **kwargs)
+            model = self.serialize(self.data, self.model)
+
+            serialized = model.to_native()
+
+            serialized = {k: v for k, v in serialized.iteritems()
+                          if k in self.data}
+
+            self.data.update(serialized)
+            self.properties.update({'id': obj.id})
+            path, defaults = self._get_endpoint_properties()
+            updated_instance = self.model.batch_object(method=self.method, path=path, body=self.data,
+                                                       properties=defaults)
+
+        instances.append(updated_instance)  # always a batch structure here;
+
+        if not self.is_lazy:
+            # do batch query here!
+            instances = self.batch(instances)
+
+        return instances
+
+    @clone
+    def old_update(self, *args, **kwargs):
         """
         Updates single instance based on provided arguments. There to ways to do so:
 
@@ -460,7 +538,6 @@ class Manager(ConnectionMixin):
             return self.request()
 
         path, defaults = self._get_endpoint_properties()
-
         return self.model.batch_object(method=self.method, path=path, body=self.data, properties=defaults)
 
     def update_or_create(self, defaults=None, **kwargs):
@@ -651,6 +728,7 @@ class Manager(ConnectionMixin):
         manager._limit = self._limit
         manager.method = self.method
         manager.query = deepcopy(self.query)
+        manager._filter_kwargs = deepcopy(self._filter_kwargs)
         manager.data = deepcopy(self.data)
         manager._serialize = self._serialize
         manager.is_lazy = self.is_lazy
@@ -867,51 +945,6 @@ class ObjectManager(Manager):
         self.method = 'GET'
         self.endpoint = 'list'
         return self
-
-    @clone
-    def update(self, *args, **kwargs):
-        """
-        Updates multiple instances based on provided arguments. There to ways to do so:
-
-            1. Django-style update.
-            2. By specifying arguments.
-
-        Usage::
-
-            objects = Object.please.list(instance_name=INSTANCE_NAME,
-                                 class_name='someclass').filter(id=1).update(arg='103')
-            objects = Object.please.list(instance_name=INSTANCE_NAME,
-                                 class_name='someclass').filter(id=1).update(arg='103')
-
-        The return value is a list of objects;
-
-        """
-        instances = []
-        for obj in self:
-            self.endpoint = 'detail'
-            self.method = self.get_allowed_method('PATCH', 'PUT', 'POST')
-            self.data = kwargs.copy()
-            self._filter(*args, **kwargs)
-            self.properties.update({'id': obj.id})
-
-            model = self.serialize(self.data, self.model)
-
-            serialized = model.to_native()
-
-            serialized = {k: v for k, v in serialized.iteritems()
-                          if k in self.data}
-
-            self.data.update(serialized)
-
-            if not self.is_lazy:
-                updated_instance = self.request()
-            else:
-                path, defaults = self._get_endpoint_properties()
-                updated_instance = self.model.batch_object(method=self.method, path=path, body=self.data,
-                                                           properties=defaults)
-
-            instances.append(updated_instance)
-        return instances
 
     def bulk_create(self, *objects):
         """
