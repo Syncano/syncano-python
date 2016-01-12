@@ -225,6 +225,42 @@ class ManagerTestCase(unittest.TestCase):
         self.assertEqual(self.manager.endpoint, 'detail')
         self.assertEqual(self.manager.data, {'x': 3, 'y': 2, 'a': 1, 'b': 2})
 
+    @mock.patch('syncano.models.manager.Manager.request')
+    @mock.patch('syncano.models.manager.Manager._filter')
+    @mock.patch('syncano.models.manager.Manager._clone')
+    @mock.patch('syncano.models.manager.Manager.serialize')
+    def test_update_with_filter(self, serializer_mock, clone_mock, filter_mock, request_mock, ):
+        serializer_mock.returnValue = Instance(name='test')
+        clone_mock.return_value = self.manager
+        request_mock.return_value = request_mock
+
+        self.assertFalse(filter_mock.called)
+        self.assertFalse(request_mock.called)
+
+        result = self.manager.filter(name=2).update(created_at=1, updated_at=2, links=1)
+        # self.assertEqual(request_mock, result)
+
+        self.assertTrue(filter_mock.called)
+        self.assertTrue(request_mock.called)
+
+        filter_mock.assert_called_once_with(created_at=1, updated_at=2, links=1, name=2)
+        request_mock.assert_called_once_with()
+
+        self.assertEqual(self.manager.data, {'created_at': 1, 'updated_at': 2, 'links': 1, 'name': 2})
+
+    @mock.patch('syncano.models.manager.Manager.request')
+    @mock.patch('syncano.models.manager.Manager._filter')
+    @mock.patch('syncano.models.manager.Manager._clone')
+    def test_update_with_filter_wrong_arg(self, clone_mock, filter_mock, request_mock):
+        clone_mock.return_value = self.manager
+        request_mock.return_value = request_mock
+
+        self.assertFalse(filter_mock.called)
+        self.assertFalse(request_mock.called)
+
+        with self.assertRaises(SyncanoValueError):
+            self.manager.filter(name='1', bad_arg='something').update(a=1, b=2, data={'x': 1, 'y': 2})
+
     @mock.patch('syncano.models.manager.Manager.update')
     @mock.patch('syncano.models.manager.Manager.create')
     def test_update_or_create(self, create_mock, update_mock):
@@ -599,6 +635,23 @@ class ObjectManagerTestCase(unittest.TestCase):
             {'id': 20, 'fielda': 1, 'fieldb': None},
             self.model
         )
+
+    @mock.patch('syncano.models.manager.Manager.request')
+    @mock.patch('syncano.models.manager.ObjectManager.serialize')
+    @mock.patch('syncano.models.manager.Manager.iterator')
+    def test_update_with_filter(self, iterator_mock, serialize_mock, request_mock):
+        iterator_mock.return_value = [Object(class_name='test', instance_name='test')]
+        serialize_mock.return_value = serialize_mock
+        self.assertFalse(serialize_mock.called)
+
+        self.model.please.list(class_name='test', instance_name='test').filter(id=20).update(channel=1, revision=None)
+
+        self.assertTrue(serialize_mock.called)
+        serialize_mock.assert_called_once_with(
+            {'channel': 1, 'revision': None},
+            self.model
+        )
+
 
 
 # TODO
