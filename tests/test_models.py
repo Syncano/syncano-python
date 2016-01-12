@@ -179,3 +179,21 @@ class ModelTestCase(unittest.TestCase):
         self.model.description = 'desc'
         self.model.dummy = 'test'
         self.assertEqual(self.model.to_native(), {'name': 'test', 'description': 'desc'})
+
+    @mock.patch('syncano.models.Instance._get_connection')
+    def test_save_with_revision(self, connection_mock):
+        connection_mock.return_value = connection_mock
+        connection_mock.request.return_value = {}
+
+        self.assertFalse(connection_mock.called)
+        self.assertFalse(connection_mock.request.called)
+
+        Instance(name='test').save(expected_revision=12)
+
+        self.assertTrue(connection_mock.called)
+        self.assertTrue(connection_mock.request.called)
+        connection_mock.request.assert_called_with(
+            'POST',
+            '/v1/instances/',
+            data={'name': 'test', 'expected_revision': 12}
+        )
