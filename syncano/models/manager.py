@@ -425,12 +425,16 @@ class Manager(ConnectionMixin):
 
     @clone
     def filter(self, **kwargs):
+        endpoint_fields = [field.name for field in self.model._meta.fields if field.has_endpoint_data]
+        for kwarg_name in kwargs:
+            if kwarg_name not in endpoint_fields:
+                raise SyncanoValueError('Only endpoint properties can be used in filter: {}'.format(endpoint_fields))
         self._filter_kwargs = kwargs
         return self
 
     @clone
     def update(self, *args, **kwargs):
-        if self._filter_kwargs or self.query:
+        if self._filter_kwargs or self.query:  # means that .filter() was run;
             return self.new_update(*args, **kwargs)
         return self.old_update(*args, **kwargs)
 
@@ -453,36 +457,35 @@ class Manager(ConnectionMixin):
 
         """
 
-        if self._filter_kwargs:
+        if self._filter_kwargs:  # Manager context;
             # do a single object update: Class, Instance for example;
+            self.endpoint = 'detail'
+            self.method = self.get_allowed_method('PATCH', 'PUT', 'POST')
             self.data = kwargs.copy()
             self.data.update(self._filter_kwargs)
 
             model = self.serialize(self.data, self.model)
-
             serialized = model.to_native()
-
             serialized = {k: v for k, v in serialized.iteritems()
                           if k in self.data}
 
             self.data.update(serialized)
-            self._filter(*args, **kwargs)
+            self._filter(*args, **self.data)  # sets the proper self.properties here
 
             if not self.is_lazy:
-                return [self.request()]
+                return [self.serialize(self.request(), self.model)]
             path, defaults = self._get_endpoint_properties()
             return [self.model.batch_object(method=self.method, path=path, body=self.data, properties=defaults)]
 
-        instances = []
+        instances = []  # ObjectManager context;
         for obj in self:
             self.endpoint = 'detail'
             self.method = self.get_allowed_method('PATCH', 'PUT', 'POST')
             self.data = kwargs.copy()
             self._filter(*args, **kwargs)
+
             model = self.serialize(self.data, self.model)
-
             serialized = model.to_native()
-
             serialized = {k: v for k, v in serialized.iteritems()
                           if k in self.data}
 
@@ -495,7 +498,6 @@ class Manager(ConnectionMixin):
         instances.append(updated_instance)  # always a batch structure here;
 
         if not self.is_lazy:
-            # do batch query here!
             instances = self.batch(instances)
 
         return instances

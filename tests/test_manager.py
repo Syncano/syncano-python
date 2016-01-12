@@ -592,7 +592,7 @@ class ObjectManagerTestCase(unittest.TestCase):
         serialize_mock.return_value = serialize_mock
         self.assertFalse(serialize_mock.called)
 
-        self.model.please.list(class_name='test', instance_name='test').filter(id=20).update(fielda=1, fieldb=None)
+        self.model.please.list(class_name='test', instance_name='test').update(id=20, fielda=1, fieldb=None)
 
         self.assertTrue(serialize_mock.called)
         serialize_mock.assert_called_once_with(
