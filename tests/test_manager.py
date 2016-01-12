@@ -596,7 +596,7 @@ class ObjectManagerTestCase(unittest.TestCase):
 
         self.assertTrue(serialize_mock.called)
         serialize_mock.assert_called_once_with(
-            {'fielda': 1, 'fieldb': None},
+            {'id': 20, 'fielda': 1, 'fieldb': None},
             self.model
         )
 
