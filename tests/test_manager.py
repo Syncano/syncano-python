@@ -237,8 +237,7 @@ class ManagerTestCase(unittest.TestCase):
         self.assertFalse(filter_mock.called)
         self.assertFalse(request_mock.called)
 
-        result = self.manager.filter(name=2).update(created_at=1, updated_at=2, links=1)
-        # self.assertEqual(request_mock, result)
+        self.manager.filter(name=2).update(created_at=1, updated_at=2, links=1)
 
         self.assertTrue(filter_mock.called)
         self.assertTrue(request_mock.called)
@@ -651,7 +650,6 @@ class ObjectManagerTestCase(unittest.TestCase):
             {'channel': 1, 'revision': None},
             self.model
         )
-
 
 
 # TODO
