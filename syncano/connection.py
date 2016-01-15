@@ -290,7 +290,7 @@ class Connection(object):
 
         # Validation error
         if is_client_error(response.status_code):
-            if response.status_code == 400 and 'Revision mismatch.' in content.get('non_field_errors', [''])[0]:
+            if response.status_code == 400 and 'expected_revision' in content:
                 raise RevisionMismatchException(response.status_code, content)
             raise SyncanoRequestError(response.status_code, content)
 
