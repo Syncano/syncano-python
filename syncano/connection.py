@@ -4,7 +4,7 @@ from copy import deepcopy
 import requests
 import six
 import syncano
-from syncano.exceptions import SyncanoRequestError, SyncanoValueError
+from syncano.exceptions import RevisionMismatchException, SyncanoRequestError, SyncanoValueError
 
 if six.PY3:
     from urllib.parse import urljoin
@@ -290,6 +290,8 @@ class Connection(object):
 
         # Validation error
         if is_client_error(response.status_code):
+            if response.status_code == 400 and 'expected_revision' in content:
+                raise RevisionMismatchException(response.status_code, content)
             raise SyncanoRequestError(response.status_code, content)
 
         # Other errors
