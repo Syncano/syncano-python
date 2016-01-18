@@ -83,6 +83,7 @@ class Manager(ConnectionMixin):
         self.query = {}
         self.data = {}
         self.is_lazy = False
+        self._filter_kwargs = {}
 
         self._limit = None
         self._serialize = True
@@ -218,13 +219,23 @@ class Manager(ConnectionMixin):
          found resource to delete);
         """
         # firstly turn off lazy mode:
-        meta = [arg['meta'] for arg in args]
-
         self.is_lazy = False
+
+        meta = []
+        requests = []
+        for arg in args:
+            if isinstance(arg, list):  # update now can return a list;
+                for nested_arg in arg:
+                    meta.append(nested_arg['meta'])
+                    requests.append(nested_arg['body'])
+            else:
+                meta.append(arg['meta'])
+                requests.append(arg['body'])
+
         response = self.connection.request(
             'POST',
             self.BATCH_URI.format(name=registry.last_used_instance),
-            **{'data': {'requests': [arg['body'] for arg in args]}}
+            **{'data': {'requests': requests}}
         )
 
         populated_response = []
@@ -413,7 +424,78 @@ class Manager(ConnectionMixin):
         return self.model.batch_object(method=self.method, path=path, body=self.data, properties=defaults)
 
     @clone
+    def filter(self, **kwargs):
+        endpoint_fields = [field.name for field in self.model._meta.fields if field.has_endpoint_data]
+        for kwarg_name in kwargs:
+            if kwarg_name not in endpoint_fields:
+                raise SyncanoValueError('Only endpoint properties can be used in filter: {}'.format(endpoint_fields))
+        self._filter_kwargs = kwargs
+        return self
+
+    @clone
     def update(self, *args, **kwargs):
+        if self._filter_kwargs or self.query:  # means that .filter() was run;
+            return self.new_update(**kwargs)
+        return self.old_update(*args, **kwargs)
+
+    @clone
+    def new_update(self, **kwargs):
+        """
+        Updates multiple instances based on provided arguments. There to ways to do so:
+
+            1. Django-style update.
+            2. By specifying arguments.
+
+        Usage::
+
+            objects = Object.please.list(instance_name=INSTANCE_NAME,
+                                 class_name='someclass').filter(id=1).update(arg='103')
+            objects = Object.please.list(instance_name=INSTANCE_NAME,
+                                 class_name='someclass').filter(id=1).update(arg='103')
+
+        The return value is a list of objects;
+
+        """
+
+        model_fields = [field.name for field in self.model._meta.fields if not field.has_endpoint_data]
+        for field_name in kwargs:
+            if field_name not in model_fields:
+                raise SyncanoValueError('This model has not field {}'.format(field_name))
+
+        self.endpoint = 'detail'
+        self.method = self.get_allowed_method('PATCH', 'PUT', 'POST')
+        self.data = kwargs.copy()
+
+        if self._filter_kwargs:  # Manager context;
+            # do a single object update: Class, Instance for example;
+            self.data.update(self._filter_kwargs)
+            serialized = self._get_serialized_data()
+            self._filter(*(), **self.data)  # sets the proper self.properties here
+
+            if not self.is_lazy:
+                return [self.serialize(self.request(), self.model)]
+
+            path, defaults = self._get_endpoint_properties()
+            return [self.model.batch_object(method=self.method, path=path, body=serialized, properties=defaults)]
+
+        instances = []  # ObjectManager context;
+        for obj in self:
+            self._filter(*(), **kwargs)
+            serialized = self._get_serialized_data()
+            self.properties.update({'id': obj.id})
+            path, defaults = self._get_endpoint_properties()
+            updated_instance = self.model.batch_object(method=self.method, path=path, body=serialized,
+                                                       properties=defaults)
+
+        instances.append(updated_instance)  # always a batch structure here;
+
+        if not self.is_lazy:
+            instances = self.batch(instances)
+
+        return instances
+
+    @clone
+    def old_update(self, *args, **kwargs):
         """
         Updates single instance based on provided arguments. There to ways to do so:
 
@@ -450,7 +532,6 @@ class Manager(ConnectionMixin):
             return self.request()
 
         path, defaults = self._get_endpoint_properties()
-
         return self.model.batch_object(method=self.method, path=path, body=self.data, properties=defaults)
 
     def update_or_create(self, defaults=None, **kwargs):
@@ -613,6 +694,14 @@ class Manager(ConnectionMixin):
         if not self.name:
             self.name = name
 
+    def _get_serialized_data(self):
+        model = self.serialize(self.data, self.model)
+        serialized = model.to_native()
+        serialized = {k: v for k, v in serialized.iteritems()
+                      if k in self.data}
+        self.data.update(serialized)
+        return serialized
+
     def _filter(self, *args, **kwargs):
         properties = self.model._meta.get_endpoint_properties(self.endpoint)
 
@@ -641,6 +730,7 @@ class Manager(ConnectionMixin):
         manager._limit = self._limit
         manager.method = self.method
         manager.query = deepcopy(self.query)
+        manager._filter_kwargs = deepcopy(self._filter_kwargs)
         manager.data = deepcopy(self.data)
         manager._serialize = self._serialize
         manager.is_lazy = self.is_lazy
