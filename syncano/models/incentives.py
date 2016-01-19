@@ -295,3 +295,55 @@ class Webhook(Model):
 
         response = connection.request('POST', endpoint)
         self.public_link = response['public_link']
+
+
+class ResponseTemplate(Model):
+    """
+    OO wrapper around templates.
+
+    :ivar name: :class:`~syncano.models.fields.StringField`
+    :ivar content: :class:`~syncano.models.fields.IntegerField`
+    :ivar content_type: :class:`~syncano.models.fields.StringField`
+    :ivar context: :class:`~syncano.models.fields.JSONField`
+    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
+    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+    """
+
+    LINKS = (
+        {'type': 'detail', 'name': 'self'},
+    )
+
+    name = fields.StringField(max_length=64)
+    content = fields.StringField(label='content')
+    content_type = fields.StringField(label='content type')
+    context = fields.JSONField(label='context')
+    links = fields.HyperlinkedField(links=LINKS)
+
+    created_at = fields.DateTimeField(read_only=True, required=False)
+    updated_at = fields.DateTimeField(read_only=True, required=False)
+
+    class Meta:
+        parent = Instance
+        endpoints = {
+            'detail': {
+                'methods': ['put', 'get', 'patch', 'delete'],
+                'path': '/snippets/templates/{name}/',
+            },
+            'list': {
+                'methods': ['post', 'get'],
+                'path': '/snippets/templates/',
+            },
+            'render': {
+                'methods': ['post'],
+                'path': '/snippets/templates/{name}/render/',
+            },
+        }
+
+    def render(self, context=None):
+        context = context if context else {}
+        properties = self.get_endpoint_data()
+        endpoint = self._meta.resolve_endpoint('render', properties)
+
+        connection = self._get_connection()
+        return connection.request('POST', endpoint, data={'context': context})
