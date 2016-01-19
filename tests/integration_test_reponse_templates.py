@@ -29,7 +29,7 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
 
     def test_delete_api(self):
         ResponseTemplate.please.delete(name='to_delete')
-        with self.assertRaises(self.model.DoesNotExist):
+        with self.assertRaises(ResponseTemplate.DoesNotExist):
             ResponseTemplate.please.get(name='to_delete')
 
     def test_update_api(self):
