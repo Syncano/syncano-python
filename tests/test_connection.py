@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from urlparse import urljoin
 
-from syncano import connect, connect_instance
+from syncano import connect
 from syncano.connection import Connection, ConnectionMixin
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
 from syncano.models.registry import registry
@@ -35,46 +35,6 @@ class ConnectTestCase(unittest.TestCase):
 
         self.assertTrue(registry_mock.set_default_instance.called)
         registry_mock.set_default_instance.assert_called_once_with(instance_mock)
-
-
-class ConnectInstanceTestCase(unittest.TestCase):
-
-    @mock.patch('syncano.connect')
-    def test_connect_instance(self, connect_mock):
-        connect_mock.return_value = connect_mock
-        get_mock = connect_mock.Instance.please.get
-        get_mock.return_value = get_mock
-
-        self.assertFalse(connect_mock.called)
-        self.assertFalse(get_mock.called)
-
-        instance = connect_instance('test-name', a=1, b=2)
-
-        self.assertTrue(connect_mock.called)
-        self.assertTrue(get_mock.called)
-
-        connect_mock.assert_called_once_with(a=1, b=2, instance_name='test-name')
-        get_mock.assert_called_once_with('test-name')
-        self.assertEqual(instance, get_mock)
-
-    @mock.patch('syncano.connect')
-    @mock.patch('syncano.INSTANCE')
-    def test_env_connect_instance(self, instance_mock, connect_mock):
-        connect_mock.return_value = connect_mock
-        get_mock = connect_mock.Instance.please.get
-        get_mock.return_value = get_mock
-
-        self.assertFalse(connect_mock.called)
-        self.assertFalse(get_mock.called)
-
-        instance = connect_instance(a=1, b=2)
-
-        self.assertTrue(connect_mock.called)
-        self.assertTrue(get_mock.called)
-
-        connect_mock.assert_called_once_with(a=1, b=2, instance_name=instance_mock)
-        get_mock.assert_called_once_with(instance_mock)
-        self.assertEqual(instance, get_mock)
 
 
 class ConnectionTestCase(unittest.TestCase):
