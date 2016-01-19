@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from syncano.exceptions import SyncanoRequestError
+
 from syncano.models import ResponseTemplate
 from tests.integration_test import InstanceMixin, IntegrationTest
 
@@ -29,7 +29,7 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
 
     def test_delete_api(self):
         ResponseTemplate.please.delete(name='to_delete')
-        with self.assertRaises(SyncanoRequestError):
+        with self.assertRaises(self.model.DoesNotExist):
             ResponseTemplate.please.get(name='to_delete')
 
     def test_update_api(self):
