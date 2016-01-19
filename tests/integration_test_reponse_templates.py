@@ -17,10 +17,10 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
     def test_retrieve_api(self):
         template = ResponseTemplate.please.get(name='to_update')
         self.assertTrue(isinstance(template, ResponseTemplate))
-        self.assertTrue(ResponseTemplate.name)
-        self.assertTrue(ResponseTemplate.content)
-        self.assertTrue(ResponseTemplate.content_type)
-        self.assertTrue(ResponseTemplate.context)
+        self.assertTrue(template.name)
+        self.assertTrue(template.content)
+        self.assertTrue(template.content_type)
+        self.assertTrue(template.context)
 
     def test_create_api(self):
         template = ResponseTemplate.please.create(name='just_created', content='<div></div>', content_type='text/html',
@@ -30,7 +30,7 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
     def test_delete_api(self):
         ResponseTemplate.please.delete(name='to_delete')
         with self.assertRaises(SyncanoRequestError):
-            ResponseTemplate.please.get('to_delete')
+            ResponseTemplate.please.get(name='to_delete')
 
     def test_update_api(self):
         self.for_update.content = "<div>Hello!</div>"
@@ -41,7 +41,7 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
 
     def test_render_api(self):
         render_template = self.instance.templates.create(name='to_render',
-                                                         content="{% for o in objects %}<li>o</li>{% endfor %}",
+                                                         content="{% for o in objects %}<li>{{ o }}</li>{% endfor %}",
                                                          content_type='text/html', context={'objects': [1, 2]})
 
         rendered = render_template.render()
