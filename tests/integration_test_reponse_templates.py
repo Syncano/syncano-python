@@ -28,7 +28,7 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
         self.assertTrue(isinstance(template, ResponseTemplate))
 
     def test_delete_api(self):
-        ResponseTemplate.please.delete('to_delete')
+        ResponseTemplate.please.delete(name='to_delete')
         with self.assertRaises(SyncanoRequestError):
             ResponseTemplate.please.get('to_delete')
 
@@ -41,7 +41,7 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
 
     def test_render_api(self):
         render_template = self.instance.templates.create(name='to_render',
-                                                         content="{% for o in objects}<li>o</li>{% endfor %}",
+                                                         content="{% for o in objects %}<li>o</li>{% endfor %}",
                                                          content_type='text/html', context={'objects': [1, 2]})
 
         rendered = render_template.render()
