@@ -362,6 +362,44 @@ class ConnectionTestCase(unittest.TestCase):
             self.assertFalse(make_request.called)
             self.assertIn('api_key', e.message)
 
+    @mock.patch('syncano.connection.Connection.make_request')
+    def test_get_user_info(self, make_request_mock):
+        info = {u'profile': {}}
+        make_request_mock.return_value = info
+        self.assertFalse(make_request_mock.called)
+        self.connection.api_key = 'Ala has a cat'
+        self.connection.user_key = 'Tom has a cat also'
+        self.connection.instance_name = 'tom_ala'
+        ret = self.connection.get_user_info()
+        self.assertTrue(make_request_mock.called)
+        self.assertEqual(info, ret)
+
+    @mock.patch('syncano.connection.Connection.make_request')
+    def test_get_user_info_without_instance(self, make_request_mock):
+        info = {u'profile': {}}
+        make_request_mock.return_value = info
+        self.assertFalse(make_request_mock.called)
+        self.connection.api_key = 'Ala has a cat'
+        self.connection.user_key = 'Tom has a cat also'
+        self.connection.instance_name = None
+        with self.assertRaises(SyncanoValueError):
+            self.connection.get_user_info()
+
+    @mock.patch('syncano.connection.Connection.make_request')
+    def test_get_user_info_without_auth_keys(self, make_request_mock):
+        info = {u'profile': {}}
+        make_request_mock.return_value = info
+        self.assertFalse(make_request_mock.called)
+
+        self.connection.api_key = None
+        with self.assertRaises(SyncanoValueError):
+            self.connection.get_user_info()
+
+        self.connection.api_key = 'Ala has a cat'
+        self.connection.user_key = None
+        with self.assertRaises(SyncanoValueError):
+            self.connection.get_user_info()
+
 
 class DefaultConnectionTestCase(unittest.TestCase):
 
