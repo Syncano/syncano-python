@@ -69,6 +69,7 @@ class Connection(object):
     SOCIAL_AUTH_SUFFIX = AUTH_SUFFIX + '/{social_backend}/'
 
     USER_AUTH_SUFFIX = 'v1/instances/{name}/user/auth/'
+    USER_INFO_SUFFIX = 'v1/instances/{name}/user/'
 
     LOGIN_PARAMS = {'email',
                     'password'}
@@ -379,12 +380,21 @@ class Connection(object):
         self.user_key = response.get('user_key')
         return self.user_key
 
-    def get_account_info(self, api_key=None):
-        if api_key:
-            self.api_key = api_key
+    def get_account_info(self, api_key=None, user_key=None):
+        self.api_key = api_key if api_key else self.api_key
+        self.user_key = user_key if user_key else self.user_key
+
         if not self.api_key:
             raise SyncanoValueError('api_key is required.')
-        return self.make_request('GET', self.ACCOUNT_SUFFIX, headers={'X-API-KEY': self.api_key})
+
+        if self.api_key and not self.user_key:
+            return self.make_request('GET', self.ACCOUNT_SUFFIX, headers={'X-API-KEY': self.api_key})
+        # user profile info case
+        if not self.instance_name:
+            raise SyncanoValueError('Instance name not provided.')
+
+        return self.make_request('GET', self.USER_INFO_SUFFIX.format(name=self.instance_name), headers={
+            'X-API-KEY': self.api_key, 'X-USER-KEY': self.user_key})
 
 
 class ConnectionMixin(object):
