@@ -4,18 +4,18 @@ from syncano.models import ResponseTemplate
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 
-class ManagerBatchTest(InstanceMixin, IntegrationTest):
+class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
 
     @classmethod
     def setUpClass(cls):
-        super(ManagerBatchTest, cls).setUpClass()
+        super(ResponseTemplateApiTest, cls).setUpClass()
         cls.to_delete = cls.instance.templates.create(name='to_delete', content="<br/>",
                                                       content_type='text/html', context={'one': 1})
         cls.for_update = cls.instance.templates.create(name='to_update', content="<br/>",
                                                        content_type='text/html', context={'one': 1})
 
     def test_retrieve_api(self):
-        template = ResponseTemplate.please.get('to_update')
+        template = ResponseTemplate.please.get(name='to_update')
         self.assertTrue(isinstance(template, ResponseTemplate))
         self.assertTrue(ResponseTemplate.name)
         self.assertTrue(ResponseTemplate.content)
@@ -28,7 +28,7 @@ class ManagerBatchTest(InstanceMixin, IntegrationTest):
         self.assertTrue(isinstance(template, ResponseTemplate))
 
     def test_delete_api(self):
-        ResponseTemplate.please.get('to_delete').delete()
+        ResponseTemplate.please.delete('to_delete')
         with self.assertRaises(SyncanoRequestError):
             ResponseTemplate.please.get('to_delete')
 
@@ -36,11 +36,11 @@ class ManagerBatchTest(InstanceMixin, IntegrationTest):
         self.for_update.content = "<div>Hello!</div>"
         self.for_update.save()
 
-        template = ResponseTemplate.please.get(name='to_udpate')
+        template = ResponseTemplate.please.get(name='to_update')
         self.assertEqual(template.content, "<div>Hello!</div>")
 
     def test_render_api(self):
-        render_template = self.instance.templates.create(name='to_update',
+        render_template = self.instance.templates.create(name='to_render',
                                                          content="{% for o in objects}<li>o</li>{% endfor %}",
                                                          content_type='text/html', context={'objects': [1, 2]})
 
