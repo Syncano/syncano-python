@@ -71,3 +71,7 @@ class SyncanoFieldError(SyncanoValidationError):
 
 class SyncanoDoesNotExist(SyncanoException):
     """Syncano object doesn't exist error occurred."""
+
+
+class RevisionMismatchException(SyncanoRequestError):
+    """Revision do not match with expected one"""

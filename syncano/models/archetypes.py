@@ -134,6 +134,8 @@ class Model(six.with_metaclass(ModelMetaclass)):
                 method = 'PUT'
 
         endpoint = self._meta.resolve_endpoint(endpoint_name, properties)
+        if 'expected_revision' in kwargs:
+            data.update({'expected_revision': kwargs['expected_revision']})
         request = {'data': data}
 
         if not self.is_lazy:

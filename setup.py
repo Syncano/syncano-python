@@ -24,7 +24,7 @@ setup(
     ],
     install_requires=[
         'requests==2.7.0',
-        'certifi',
+        'certifi==2015.09.06.2',
         'ndg-httpsclient==0.4.0',
         'pyasn1==0.1.8',
         'pyOpenSSL==0.15.1',

@@ -4,7 +4,7 @@ from copy import deepcopy
 import requests
 import six
 import syncano
-from syncano.exceptions import SyncanoRequestError, SyncanoValueError
+from syncano.exceptions import RevisionMismatchException, SyncanoRequestError, SyncanoValueError
 
 if six.PY3:
     from urllib.parse import urljoin
@@ -65,9 +65,11 @@ class Connection(object):
     CONTENT_TYPE = 'application/json'
 
     AUTH_SUFFIX = 'v1/account/auth'
+    ACCOUNT_SUFFIX = 'v1/account/'
     SOCIAL_AUTH_SUFFIX = AUTH_SUFFIX + '/{social_backend}/'
 
     USER_AUTH_SUFFIX = 'v1/instances/{name}/user/auth/'
+    USER_INFO_SUFFIX = 'v1/instances/{name}/user/'
 
     LOGIN_PARAMS = {'email',
                     'password'}
@@ -104,17 +106,13 @@ class Connection(object):
         self.session = requests.Session()
 
     def _init_login_params(self, login_kwargs):
-
-        def _set_value_or_default(param):
-            param_lib_default_name = ''.join(param.split('_')).upper()
-            value = login_kwargs.get(param, getattr(syncano, param_lib_default_name, None))
+        for param in self.LOGIN_PARAMS.union(self.ALT_LOGIN_PARAMS,
+                                             self.USER_LOGIN_PARAMS,
+                                             self.USER_ALT_LOGIN_PARAMS,
+                                             self.SOCIAL_LOGIN_PARAMS):
+            def_name = param.replace('_', '').upper()
+            value = login_kwargs.get(param, getattr(syncano, def_name, None))
             setattr(self, param, value)
-
-        map(_set_value_or_default,
-            self.LOGIN_PARAMS.union(self.ALT_LOGIN_PARAMS,
-                                    self.USER_LOGIN_PARAMS,
-                                    self.USER_ALT_LOGIN_PARAMS,
-                                    self.SOCIAL_LOGIN_PARAMS))
 
     def _are_params_ok(self, params):
         return all(getattr(self, p) for p in params)
@@ -235,13 +233,12 @@ class Connection(object):
         :raises SyncanoRequestError: if something went wrong during the request
         """
         data = kwargs.get('data', {})
+        files = data.pop('files', None)
 
-        if method_name == 'POST':
-            files = data.pop('files', {})
-        else:
-            files = {k: v for k, v in data.iteritems()
-                     if hasattr(v, 'read') and hasattr(v, 'write')}
-            map(data.pop, files.keys())
+        if files is None:
+            files = {k: v for k, v in data.iteritems() if isinstance(v, file)}
+            if data:
+                kwargs['data'] = data = {k: v for k, v in data.iteritems() if k not in files}
 
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)
@@ -294,6 +291,8 @@ class Connection(object):
 
         # Validation error
         if is_client_error(response.status_code):
+            if response.status_code == 400 and 'expected_revision' in content:
+                raise RevisionMismatchException(response.status_code, content)
             raise SyncanoRequestError(response.status_code, content)
 
         # Other errors
@@ -380,6 +379,25 @@ class Connection(object):
         response = self.make_request('POST', self.AUTH_SUFFIX, data=request_args, headers=headers)
         self.user_key = response.get('user_key')
         return self.user_key
+
+    def get_account_info(self, api_key=None):
+        self.api_key = api_key or self.api_key
+
+        if not self.api_key:
+            raise SyncanoValueError('api_key is required.')
+
+        return self.make_request('GET', self.ACCOUNT_SUFFIX, headers={'X-API-KEY': self.api_key})
+
+    def get_user_info(self, api_key=None, user_key=None):
+        self.api_key = api_key or self.api_key
+        self.user_key = user_key or self.user_key
+
+        for attribute_name in ('api_key', 'user_key', 'instance_name'):
+            if not getattr(self, attribute_name, None):
+                raise SyncanoValueError('{attribute_name} is required.'.format(attribute_name=attribute_name))
+
+        return self.make_request('GET', self.USER_INFO_SUFFIX.format(name=self.instance_name), headers={
+            'X-API-KEY': self.api_key, 'X-USER-KEY': self.user_key})
 
 
 class ConnectionMixin(object):
