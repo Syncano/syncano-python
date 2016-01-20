@@ -392,9 +392,9 @@ class Connection(object):
         self.api_key = api_key or self.api_key
         self.user_key = user_key or self.user_key
 
-        for attribute_name in ['api_key', 'user_key', 'instance_name']:
+        for attribute_name in ('api_key', 'user_key', 'instance_name'):
             if not getattr(self, attribute_name, None):
-                SyncanoValueError('{attribute_name} is required.'.format(attribute_name=attribute_name))
+                raise SyncanoValueError('{attribute_name} is required.'.format(attribute_name=attribute_name))
 
         return self.make_request('GET', self.USER_INFO_SUFFIX.format(name=self.instance_name), headers={
             'X-API-KEY': self.api_key, 'X-USER-KEY': self.user_key})
