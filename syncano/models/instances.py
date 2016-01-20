@@ -30,6 +30,7 @@ class Instance(Model):
         {'type': 'list', 'name': 'users'},
         {'type': 'list', 'name': 'webhooks'},
         {'type': 'list', 'name': 'schedules'},
+        {'type': 'list', 'name': 'templates'}
     )
 
     name = fields.StringField(max_length=64, primary_key=True)

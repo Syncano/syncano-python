@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
+
 import unittest
 from datetime import datetime
 
 from syncano.exceptions import SyncanoValidationError
-from syncano.models import CodeBox, CodeBoxTrace, Webhook, WebhookTrace
+from syncano.models import CodeBox, CodeBoxTrace, ResponseTemplate, Webhook, WebhookTrace
 
 try:
     from unittest import mock
@@ -74,3 +76,28 @@ class WebhookTestCase(unittest.TestCase):
         model = Webhook()
         with self.assertRaises(SyncanoValidationError):
             model.run()
+
+
+class ResponseTemplateTestCase(unittest.TestCase):
+    def setUp(self):
+        self.model = ResponseTemplate
+
+    @mock.patch('syncano.models.ResponseTemplate._get_connection')
+    def test_render(self, connection_mock):
+        model = self.model(instance_name='test', name='name',
+                           links={'run': '/v1/instances/test/snippets/templates/name/render/'})
+        connection_mock.return_value = connection_mock
+        connection_mock.request.return_value = '<div>12345</div>'
+
+        self.assertFalse(connection_mock.called)
+        self.assertFalse(connection_mock.request.called)
+        response = model.render()
+        self.assertTrue(connection_mock.called)
+        self.assertTrue(connection_mock.request.called)
+        self.assertEqual(response, '<div>12345</div>')
+
+        connection_mock.request.assert_called_once_with(
+            'POST',
+            '/v1/instances/test/snippets/templates/name/render/',
+            data={'context': {}}
+        )
