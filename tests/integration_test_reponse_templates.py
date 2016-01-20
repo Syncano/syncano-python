@@ -17,10 +17,10 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
     def test_retrieve_api(self):
         template = ResponseTemplate.please.get(name='to_update')
         self.assertTrue(isinstance(template, ResponseTemplate))
-        self.assertTrue(template.name)
-        self.assertTrue(template.content)
-        self.assertTrue(template.content_type)
-        self.assertTrue(template.context)
+        self.assertEqual(template.name, 'to_update')
+        self.assertEqual(template.content, '<br/>')
+        self.assertEqual(template.content_type, 'text/html')
+        self.assertEqual(template.context, {'one': 1})
 
     def test_create_api(self):
         template = ResponseTemplate.please.create(name='just_created', content='<div></div>', content_type='text/html',

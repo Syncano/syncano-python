@@ -302,7 +302,7 @@ class ResponseTemplate(Model):
     OO wrapper around templates.
 
     :ivar name: :class:`~syncano.models.fields.StringField`
-    :ivar content: :class:`~syncano.models.fields.IntegerField`
+    :ivar content: :class:`~syncano.models.fields.StringField`
     :ivar content_type: :class:`~syncano.models.fields.StringField`
     :ivar context: :class:`~syncano.models.fields.JSONField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
@@ -341,7 +341,7 @@ class ResponseTemplate(Model):
         }
 
     def render(self, context=None):
-        context = context if context else {}
+        context = context or {}
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('render', properties)
 
