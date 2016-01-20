@@ -147,7 +147,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_default_connection</span> <span class="o">=</span> <span class="bp">None</span>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s">&#39;Registry: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">))</span>
+        <span class="k">return</span> <span class="s1">&#39;Registry: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">unicode</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
@@ -159,9 +159,9 @@
 <div class="viewcode-block" id="Registry.get_model_patterns"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.get_model_patterns">[docs]</a>    <span class="k">def</span> <span class="nf">get_model_patterns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">):</span>
         <span class="n">patterns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">endpoints</span><span class="p">):</span>
-            <span class="n">pattern</span> <span class="o">=</span> <span class="s">&#39;^{0}$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s">&#39;path&#39;</span><span class="p">])</span>
-            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;properties&#39;</span><span class="p">,</span> <span class="p">[]):</span>
-                <span class="n">pattern</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;{{{0}}}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="s">&#39;([^/.]+)&#39;</span><span class="p">)</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="s1">&#39;^{0}$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;properties&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="n">pattern</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;{{{0}}}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="s1">&#39;([^/.]+)&#39;</span><span class="p">)</span>
             <span class="n">patterns</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">),</span> <span class="n">cls</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">patterns</span>
 </div>
@@ -169,7 +169,7 @@
         <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">cls</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">cls</span>
-        <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s">&#39;Invalid path: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s1">&#39;Invalid path: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="Registry.get_model_by_name"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.get_model_by_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_model_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
@@ -183,7 +183,7 @@
         <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">cls</span><span class="p">)</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">related_name</span><span class="p">),</span> <span class="n">cls</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;New model: </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">related_name</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;New model: </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">related_name</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Registry.add"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">cls</span><span class="p">):</span>
 
@@ -207,11 +207,11 @@
                     <span class="n">field</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">value</span>
 </div>
 <div class="viewcode-block" id="Registry.set_default_instance"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.set_default_instance">[docs]</a>    <span class="k">def</span> <span class="nf">set_default_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_default_property</span><span class="p">(</span><span class="s">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_default_property</span><span class="p">(</span><span class="s1">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Registry.set_last_used_instance"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.set_last_used_instance">[docs]</a>    <span class="k">def</span> <span class="nf">set_last_used_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">instance</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_used_instance</span> <span class="o">!=</span> <span class="n">instance</span> <span class="ow">or</span> <span class="n">registry</span><span class="o">.</span><span class="n">last_used_instance</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_default_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>  <span class="c"># update the registry with last used instance;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_default_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>  <span class="c1"># update the registry with last used instance;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">last_used_instance</span> <span class="o">=</span> <span class="n">instance</span>
 </div>
 <div class="viewcode-block" id="Registry.clear_instance_name"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.clear_instance_name">[docs]</a>    <span class="k">def</span> <span class="nf">clear_instance_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -233,7 +233,7 @@
     <span class="nd">@property</span>
 <div class="viewcode-block" id="Registry.connection"><a class="viewcode-back" href="../../../refs/syncano.models.registry.html#syncano.models.registry.Registry.connection">[docs]</a>    <span class="k">def</span> <span class="nf">connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_connection</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;Set the default connection first.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Set the default connection first.&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_connection</span>
 </div></div>
 <span class="n">registry</span> <span class="o">=</span> <span class="n">Registry</span><span class="p">()</span>

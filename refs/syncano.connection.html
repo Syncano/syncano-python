@@ -160,6 +160,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="syncano.connection.Connection.ACCOUNT_SUFFIX">
+<tt class="descname">ACCOUNT_SUFFIX</tt><em class="property"> = 'v1/account/'</em><a class="headerlink" href="#syncano.connection.Connection.ACCOUNT_SUFFIX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="syncano.connection.Connection.SOCIAL_AUTH_SUFFIX">
 <tt class="descname">SOCIAL_AUTH_SUFFIX</tt><em class="property"> = 'v1/account/auth/{social_backend}/'</em><a class="headerlink" href="#syncano.connection.Connection.SOCIAL_AUTH_SUFFIX" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -167,6 +172,11 @@
 <dl class="attribute">
 <dt id="syncano.connection.Connection.USER_AUTH_SUFFIX">
 <tt class="descname">USER_AUTH_SUFFIX</tt><em class="property"> = 'v1/instances/{name}/user/auth/'</em><a class="headerlink" href="#syncano.connection.Connection.USER_AUTH_SUFFIX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.connection.Connection.USER_INFO_SUFFIX">
+<tt class="descname">USER_INFO_SUFFIX</tt><em class="property"> = 'v1/instances/{name}/user/'</em><a class="headerlink" href="#syncano.connection.Connection.USER_INFO_SUFFIX" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -366,6 +376,16 @@ will ensure that request is authenticated.</p>
 <dl class="method">
 <dt id="syncano.connection.Connection.authenticate_user">
 <tt class="descname">authenticate_user</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.authenticate_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.authenticate_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.connection.Connection.get_account_info">
+<tt class="descname">get_account_info</tt><big>(</big><em>api_key=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.get_account_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.get_account_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.connection.Connection.get_user_info">
+<tt class="descname">get_user_info</tt><big>(</big><em>api_key=None</em>, <em>user_key=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/connection.html#Connection.get_user_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.connection.Connection.get_user_info" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

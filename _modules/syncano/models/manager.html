@@ -138,7 +138,7 @@
 
 <span class="kn">from</span> <span class="nn">.registry</span> <span class="kn">import</span> <span class="n">registry</span>
 
-<span class="c"># The maximum number of items to display in a Manager.__repr__</span>
+<span class="c1"># The maximum number of items to display in a Manager.__repr__</span>
 <span class="n">REPR_OUTPUT_SIZE</span> <span class="o">=</span> <span class="mi">20</span>
 
 
@@ -159,7 +159,7 @@
 
     <span class="k">def</span> <span class="nf">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&quot;Manager isn&#39;t accessible via {0} instances.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">owner</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Manager isn&#39;t accessible via {0} instances.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">owner</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 
 </div>
@@ -172,7 +172,7 @@
 
     <span class="k">def</span> <span class="nf">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">instance</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&quot;RelatedManager is accessible only via {0} instances.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">owner</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;RelatedManager is accessible only via {0} instances.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">owner</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
 
         <span class="n">links</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
@@ -187,10 +187,10 @@
         <span class="n">Model</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">get_model_by_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Model</span><span class="o">.</span><span class="n">please</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">Model</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
 
-        <span class="n">properties</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_endpoint_properties</span><span class="p">(</span><span class="s">&#39;detail&#39;</span><span class="p">)</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_endpoint_properties</span><span class="p">(</span><span class="s1">&#39;detail&#39;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;Instance&#39;</span><span class="p">:</span>
-            <span class="n">registry</span><span class="o">.</span><span class="n">set_last_used_instance</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;Instance&#39;</span><span class="p">:</span>
+            <span class="n">registry</span><span class="o">.</span><span class="n">set_last_used_instance</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
         <span class="n">properties</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span> <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">method</span><span class="p">(</span><span class="o">*</span><span class="n">properties</span><span class="p">)</span>
@@ -199,7 +199,7 @@
 <div class="viewcode-block" id="Manager"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager">[docs]</a><span class="k">class</span> <span class="nc">Manager</span><span class="p">(</span><span class="n">ConnectionMixin</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Base class responsible for all ORM (``please``) actions.&quot;&quot;&quot;</span>
 
-    <span class="n">BATCH_URI</span> <span class="o">=</span> <span class="s">&#39;/v1/instances/{name}/batch/&#39;</span>
+    <span class="n">BATCH_URI</span> <span class="o">=</span> <span class="s1">&#39;/v1/instances/{name}/batch/&#39;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">None</span>
@@ -212,37 +212,38 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_lazy</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filter_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_limit</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_serialize</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span> <span class="o">=</span> <span class="bp">None</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
         <span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">[:</span><span class="n">REPR_OUTPUT_SIZE</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">REPR_OUTPUT_SIZE</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;...(remaining elements truncated)...&#39;</span>
+            <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;...(remaining elements truncated)...&#39;</span>
         <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
-        <span class="k">return</span> <span class="s">&#39;&lt;Manager: {0}&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;Manager: {0}&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
         <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
+    <span class="k">def</span> <span class="nf">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">return</span> <span class="bp">True</span>
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span>
 
-    <span class="k">def</span> <span class="nf">__nonzero__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
+    <span class="k">def</span> <span class="nf">__nonzero__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
@@ -254,7 +255,7 @@
         <span class="k">assert</span> <span class="p">((</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">))</span> <span class="ow">or</span>
                 <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">slice</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">k</span><span class="o">.</span><span class="n">start</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span>
                  <span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">stop</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">k</span><span class="o">.</span><span class="n">stop</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">))),</span> \
-            <span class="s">&quot;Negative indexing is not supported.&quot;</span>
+            <span class="s2">&quot;Negative indexing is not supported.&quot;</span>
 
         <span class="n">manager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clone</span><span class="p">()</span>
 
@@ -346,23 +347,33 @@
 <span class="sd">         when delete return a raw response from server (usually a dict: {&#39;code&#39;: 204}, sometimes information about not</span>
 <span class="sd">         found resource to delete);</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># firstly turn off lazy mode:</span>
-        <span class="n">meta</span> <span class="o">=</span> <span class="p">[</span><span class="n">arg</span><span class="p">[</span><span class="s">&#39;meta&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
-
+        <span class="c1"># firstly turn off lazy mode:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_lazy</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="n">meta</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">requests</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>  <span class="c1"># update now can return a list;</span>
+                <span class="k">for</span> <span class="n">nested_arg</span> <span class="ow">in</span> <span class="n">arg</span><span class="p">:</span>
+                    <span class="n">meta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nested_arg</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">])</span>
+                    <span class="n">requests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nested_arg</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">meta</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">])</span>
+                <span class="n">requests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arg</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">])</span>
+
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
-            <span class="s">&#39;POST&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">BATCH_URI</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">registry</span><span class="o">.</span><span class="n">last_used_instance</span><span class="p">),</span>
-            <span class="o">**</span><span class="p">{</span><span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;requests&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">arg</span><span class="p">[</span><span class="s">&#39;body&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]}}</span>
+            <span class="o">**</span><span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;requests&#39;</span><span class="p">:</span> <span class="n">requests</span><span class="p">}}</span>
         <span class="p">)</span>
 
         <span class="n">populated_response</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">meta</span><span class="p">,</span> <span class="n">res</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="s">&#39;code&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">201</span><span class="p">]:</span>  <span class="c"># success response: update or create;</span>
-                <span class="n">content</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s">&#39;content&#39;</span><span class="p">]</span>
-                <span class="n">model</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s">&#39;model&#39;</span><span class="p">]</span>
-                <span class="n">properties</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s">&#39;properties&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">201</span><span class="p">]:</span>  <span class="c1"># success response: update or create;</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span>
+                <span class="n">model</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">]</span>
+                <span class="n">properties</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">]</span>
                 <span class="n">content</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
                 <span class="n">populated_response</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">content</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
@@ -370,7 +381,7 @@
 
         <span class="k">return</span> <span class="n">populated_response</span>
 
-    <span class="c"># Object actions</span></div>
+    <span class="c1"># Object actions</span></div>
 <div class="viewcode-block" id="Manager.create"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A convenience method for creating an object and saving it all in one step. Thus::</span>
@@ -386,7 +397,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">attrs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
-        <span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;is_lazy&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_lazy</span><span class="p">})</span>
+        <span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;is_lazy&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_lazy</span><span class="p">})</span>
         <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_instance</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
         <span class="n">saved_instance</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_lazy</span><span class="p">:</span>
@@ -420,8 +431,8 @@
 <span class="sd">            instance = Instance.please.get(&#39;test-one&#39;)</span>
 <span class="sd">            instance = Instance.please.get(name=&#39;test-one&#39;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;GET&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#39;detail&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;GET&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s1">&#39;detail&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
 </div>
@@ -457,20 +468,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">path</span><span class="p">,</span> <span class="n">defaults</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_endpoint_properties</span><span class="p">()</span>
         <span class="n">requests</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">{</span><span class="s">&#39;method&#39;</span><span class="p">:</span> <span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;{path}{id}/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">object_id</span><span class="p">)}</span> <span class="k">for</span> <span class="n">object_id</span> <span class="ow">in</span> <span class="n">object_ids_list</span>
+            <span class="p">{</span><span class="s1">&#39;method&#39;</span><span class="p">:</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;{path}{id}/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">object_id</span><span class="p">)}</span> <span class="k">for</span> <span class="n">object_id</span> <span class="ow">in</span> <span class="n">object_ids_list</span>
         <span class="p">]</span>
 
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
-            <span class="s">&#39;POST&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">BATCH_URI</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">registry</span><span class="o">.</span><span class="n">last_used_instance</span><span class="p">),</span>
-            <span class="o">**</span><span class="p">{</span><span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;requests&#39;</span><span class="p">:</span> <span class="n">requests</span><span class="p">}}</span>
+            <span class="o">**</span><span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;requests&#39;</span><span class="p">:</span> <span class="n">requests</span><span class="p">}}</span>
         <span class="p">)</span>
 
         <span class="n">bulk_response</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">for</span> <span class="n">object_id</span><span class="p">,</span> <span class="nb">object</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">object_ids_list</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">object</span><span class="p">[</span><span class="s">&#39;code&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
-                <span class="n">data</span> <span class="o">=</span> <span class="nb">object</span><span class="p">[</span><span class="s">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">object</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="nb">object</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
                 <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
                 <span class="n">bulk_response</span><span class="p">[</span><span class="n">object_id</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -509,7 +520,7 @@
 
 <span class="sd">            instance, created = Instance.please.get_or_create(name=&#39;test-one&#39;, defaults={&#39;description&#39;: &#39;test&#39;})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">defaults</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;defaults&#39;</span><span class="p">,</span> <span class="p">{}))</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;defaults&#39;</span><span class="p">,</span> <span class="p">{}))</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">except</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
@@ -531,8 +542,8 @@
 <span class="sd">            Instance.please.delete(&#39;test-one&#39;)</span>
 <span class="sd">            Instance.please.delete(name=&#39;test-one&#39;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;DELETE&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#39;detail&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;DELETE&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s1">&#39;detail&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_lazy</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
@@ -542,7 +553,78 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">batch_object</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">defaults</span><span class="p">)</span>
 </div>
     <span class="nd">@clone</span>
+<div class="viewcode-block" id="Manager.filter"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">endpoint_fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span> <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">has_endpoint_data</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">kwarg_name</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kwarg_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">endpoint_fields</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Only endpoint properties can be used in filter: {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">endpoint_fields</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filter_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+    <span class="nd">@clone</span>
 <div class="viewcode-block" id="Manager.update"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_kwargs</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">:</span>  <span class="c1"># means that .filter() was run;</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_update</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div>
+    <span class="nd">@clone</span>
+<div class="viewcode-block" id="Manager.new_update"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.new_update">[docs]</a>    <span class="k">def</span> <span class="nf">new_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates multiple instances based on provided arguments. There to ways to do so:</span>
+
+<span class="sd">            1. Django-style update.</span>
+<span class="sd">            2. By specifying arguments.</span>
+
+<span class="sd">        Usage::</span>
+
+<span class="sd">            objects = Object.please.list(instance_name=INSTANCE_NAME,</span>
+<span class="sd">                                 class_name=&#39;someclass&#39;).filter(id=1).update(arg=&#39;103&#39;)</span>
+<span class="sd">            objects = Object.please.list(instance_name=INSTANCE_NAME,</span>
+<span class="sd">                                 class_name=&#39;someclass&#39;).filter(id=1).update(arg=&#39;103&#39;)</span>
+
+<span class="sd">        The return value is a list of objects;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">model_fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span><span class="o">.</span><span class="n">has_endpoint_data</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_fields</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;This model has not field {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field_name</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s1">&#39;detail&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_allowed_method</span><span class="p">(</span><span class="s1">&#39;PATCH&#39;</span><span class="p">,</span> <span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_kwargs</span><span class="p">:</span>  <span class="c1"># Manager context;</span>
+            <span class="c1"># do a single object update: Class, Instance for example;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filter_kwargs</span><span class="p">)</span>
+            <span class="n">serialized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_serialized_data</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="p">(</span><span class="o">*</span><span class="p">(),</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># sets the proper self.properties here</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_lazy</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)]</span>
+
+            <span class="n">path</span><span class="p">,</span> <span class="n">defaults</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_endpoint_properties</span><span class="p">()</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">batch_object</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">serialized</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">defaults</span><span class="p">)]</span>
+
+        <span class="n">instances</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># ObjectManager context;</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="p">(</span><span class="o">*</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">serialized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_serialized_data</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>
+            <span class="n">path</span><span class="p">,</span> <span class="n">defaults</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_endpoint_properties</span><span class="p">()</span>
+            <span class="n">updated_instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">batch_object</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">serialized</span><span class="p">,</span>
+                                                       <span class="n">properties</span><span class="o">=</span><span class="n">defaults</span><span class="p">)</span>
+
+        <span class="n">instances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">updated_instance</span><span class="p">)</span>  <span class="c1"># always a batch structure here;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_lazy</span><span class="p">:</span>
+            <span class="n">instances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">instances</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">instances</span>
+</div>
+    <span class="nd">@clone</span>
+<div class="viewcode-block" id="Manager.old_update"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.old_update">[docs]</a>    <span class="k">def</span> <span class="nf">old_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Updates single instance based on provided arguments. There to ways to do so:</span>
 
@@ -559,9 +641,9 @@
 <span class="sd">            instance = Instance.please.update(&#39;test-one&#39;, data={&#39;description&#39;: &#39;new one&#39;})</span>
 <span class="sd">            instance = Instance.please.update(name=&#39;test-one&#39;, data={&#39;description&#39;: &#39;new one&#39;})</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#39;detail&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_allowed_method</span><span class="p">(</span><span class="s">&#39;PATCH&#39;</span><span class="p">,</span> <span class="s">&#39;PUT&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">)</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s1">&#39;detail&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_allowed_method</span><span class="p">(</span><span class="s1">&#39;PATCH&#39;</span><span class="p">,</span> <span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">{})</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
@@ -579,7 +661,6 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
 
         <span class="n">path</span><span class="p">,</span> <span class="n">defaults</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_endpoint_properties</span><span class="p">()</span>
-
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">batch_object</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">defaults</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="Manager.update_or_create"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.update_or_create">[docs]</a>    <span class="k">def</span> <span class="nf">update_or_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">defaults</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -619,7 +700,7 @@
             <span class="n">created</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">return</span> <span class="n">instance</span><span class="p">,</span> <span class="n">created</span>
 
-    <span class="c"># List actions</span>
+    <span class="c1"># List actions</span>
 </div>
     <span class="nd">@clone</span>
 <div class="viewcode-block" id="Manager.all"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.all">[docs]</a>    <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -642,8 +723,8 @@
 <span class="sd">            instance = Instance.please.list()</span>
 <span class="sd">            classes = Class.please.list(instance_name=&#39;test-one&#39;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;GET&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#39;list&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;GET&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s1">&#39;list&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
 </div>
@@ -673,9 +754,9 @@
 <span class="sd">            instances = Instance.please.page_size(20).all()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">integer_types</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;page_size value needs to be an int.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;page_size value needs to be an int.&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s">&#39;page_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s1">&#39;page_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span>
 </div>
     <span class="nd">@clone</span>
@@ -689,13 +770,13 @@
 <span class="sd">            classes = Class.please.list(instance_name=&#39;test-one&#39;).limit(10)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">integer_types</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;Limit value needs to be an int.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Limit value needs to be an int.&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_limit</span> <span class="o">=</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span>
 </div>
     <span class="nd">@clone</span>
-<div class="viewcode-block" id="Manager.ordering"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.ordering">[docs]</a>    <span class="k">def</span> <span class="nf">ordering</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s">&#39;asc&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Manager.ordering"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.ordering">[docs]</a>    <span class="k">def</span> <span class="nf">ordering</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;asc&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets order of returned objects.</span>
 
@@ -703,10 +784,10 @@
 
 <span class="sd">            instances = Instance.please.ordering()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">order</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;asc&#39;</span><span class="p">,</span> <span class="s">&#39;desc&#39;</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;Invalid order value.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">order</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;asc&#39;</span><span class="p">,</span> <span class="s1">&#39;desc&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Invalid order value.&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s">&#39;ordering&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s1">&#39;ordering&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">order</span>
         <span class="k">return</span> <span class="bp">self</span>
 </div>
     <span class="nd">@clone</span>
@@ -728,13 +809,13 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Connection juggling.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c"># ConnectionMixin will validate this</span>
+        <span class="c1"># ConnectionMixin will validate this</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">connection</span> <span class="o">=</span> <span class="n">connection</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="c"># Other stuff</span>
+    <span class="c1"># Other stuff</span>
 </div>
-<div class="viewcode-block" id="Manager.contribute_to_class"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.contribute_to_class">[docs]</a>    <span class="k">def</span> <span class="nf">contribute_to_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
+<div class="viewcode-block" id="Manager.contribute_to_class"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.contribute_to_class">[docs]</a>    <span class="k">def</span> <span class="nf">contribute_to_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ManagerDescriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
@@ -742,25 +823,33 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 </div>
+    <span class="k">def</span> <span class="nf">_get_serialized_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">serialized</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to_native</span><span class="p">()</span>
+        <span class="n">serialized</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">serialized</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
+                      <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">serialized</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">serialized</span>
+
     <span class="k">def</span> <span class="nf">_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_endpoint_properties</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_default_properties</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">args</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">:</span>
-            <span class="c"># let user get object by &#39;id&#39;</span>
+            <span class="c1"># let user get object by &#39;id&#39;</span>
             <span class="n">too_much_properties</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">properties</span><span class="p">)</span>
-            <span class="n">id_specified</span> <span class="o">=</span> <span class="s">&#39;id&#39;</span> <span class="ow">in</span> <span class="n">properties</span>
+            <span class="n">id_specified</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span> <span class="ow">in</span> <span class="n">properties</span>
 
             <span class="k">if</span> <span class="n">too_much_properties</span> <span class="ow">and</span> <span class="n">id_specified</span><span class="p">:</span>
-                <span class="n">properties</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
+                <span class="n">properties</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
 
             <span class="n">mapped_args</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">properties</span><span class="p">,</span> <span class="n">args</span><span class="p">)}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mapped_args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_clone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c"># Maybe deepcopy ?</span>
+        <span class="c1"># Maybe deepcopy ?</span>
         <span class="n">manager</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">()</span>
         <span class="n">manager</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
         <span class="n">manager</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
@@ -770,6 +859,7 @@
         <span class="n">manager</span><span class="o">.</span><span class="n">_limit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_limit</span>
         <span class="n">manager</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span>
         <span class="n">manager</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">)</span>
+        <span class="n">manager</span><span class="o">.</span><span class="n">_filter_kwargs</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filter_kwargs</span><span class="p">)</span>
         <span class="n">manager</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
         <span class="n">manager</span><span class="o">.</span><span class="n">_serialize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_serialize</span>
         <span class="n">manager</span><span class="o">.</span><span class="n">is_lazy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_lazy</span>
@@ -780,14 +870,14 @@
         <span class="sd">&quot;&quot;&quot;Serializes passed data to related :class:`~syncano.models.base.Model` class.&quot;&quot;&quot;</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
 
-        <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">data</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;Unsupported data type.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Unsupported data type.&#39;</span><span class="p">)</span>
 
         <span class="n">properties</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
         <span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -804,24 +894,24 @@
             <span class="n">path</span><span class="p">,</span> <span class="n">defaults</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_endpoint_properties</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed_methods</span><span class="p">:</span>
-            <span class="n">methods</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">allowed_methods</span><span class="p">)</span>
-            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;Unsupported request method &quot;{0}&quot; allowed are {1}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">methods</span><span class="p">))</span>
+            <span class="n">methods</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">allowed_methods</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Unsupported request method &quot;{0}&quot; allowed are {1}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">methods</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="s">&#39;params&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">request</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">:</span>
-            <span class="n">request</span><span class="p">[</span><span class="s">&#39;params&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span>
+        <span class="k">if</span> <span class="s1">&#39;params&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">request</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">:</span>
+            <span class="n">request</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span>
 
-        <span class="k">if</span> <span class="s">&#39;data&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">request</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
-            <span class="n">request</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">if</span> <span class="s1">&#39;data&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">request</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="n">request</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">request</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">SyncanoRequestError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
-                <span class="n">obj_id</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-                <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">(</span><span class="s">&quot;{} not found.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj_id</span><span class="p">))</span>
+                <span class="n">obj_id</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+                <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">(</span><span class="s2">&quot;{} not found.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj_id</span><span class="p">))</span>
             <span class="k">raise</span>
 
-        <span class="k">if</span> <span class="s">&#39;next&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;next&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">response</span>
@@ -834,8 +924,8 @@
             <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">allowed_methods</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">method</span>
 
-        <span class="n">methods</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">methods</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;Unsupported request methods {0}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">methods</span><span class="p">))</span>
+        <span class="n">methods</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">methods</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Unsupported request methods {0}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">methods</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="Manager.iterator"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.iterator">[docs]</a>    <span class="k">def</span> <span class="nf">iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pagination handler&quot;&quot;&quot;</span>
@@ -843,8 +933,8 @@
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
         <span class="n">results</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-            <span class="n">objects</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;objects&#39;</span><span class="p">)</span>
-            <span class="n">next_url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;next&#39;</span><span class="p">)</span>
+            <span class="n">objects</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;objects&#39;</span><span class="p">)</span>
+            <span class="n">next_url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;next&#39;</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_limit</span> <span class="ow">and</span> <span class="n">results</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_limit</span><span class="p">:</span>
@@ -864,8 +954,8 @@
     <span class="k">def</span> <span class="nf">_get_endpoint_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">default</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">}</span>
         <span class="n">defaults</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">defaults</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance_name&#39;</span><span class="p">):</span>
-            <span class="n">registry</span><span class="o">.</span><span class="n">set_last_used_instance</span><span class="p">(</span><span class="n">defaults</span><span class="p">[</span><span class="s">&#39;instance_name&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">defaults</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;instance_name&#39;</span><span class="p">):</span>
+            <span class="n">registry</span><span class="o">.</span><span class="n">set_last_used_instance</span><span class="p">(</span><span class="n">defaults</span><span class="p">[</span><span class="s1">&#39;instance_name&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">defaults</span><span class="p">),</span> <span class="n">defaults</span>
 
 </div>
@@ -877,14 +967,14 @@
 
     <span class="nd">@clone</span>
 <div class="viewcode-block" id="CodeBoxManager.run"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.CodeBoxManager.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">payload</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;payload&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;payload&#39;</span><span class="p">,</span> <span class="p">{})</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
             <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;POST&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#39;run&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;payload&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">payload</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;POST&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s1">&#39;run&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;payload&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">payload</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_serialize</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
@@ -899,19 +989,19 @@
 
     <span class="nd">@clone</span>
 <div class="viewcode-block" id="WebhookManager.run"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.WebhookManager.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">payload</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;payload&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;payload&#39;</span><span class="p">,</span> <span class="p">{})</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
             <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;POST&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#39;run&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;payload&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">payload</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;POST&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s1">&#39;run&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;payload&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">payload</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_serialize</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
 
-        <span class="c"># Workaround for circular import</span>
+        <span class="c1"># Workaround for circular import</span>
         <span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">WebhookTrace</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)</span>
 
 </div></div>
@@ -920,10 +1010,10 @@
 <span class="sd">    Custom :class:`~syncano.models.manager.Manager`</span>
 <span class="sd">    class for :class:`~syncano.models.base.Object` model.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">LOOKUP_SEPARATOR</span> <span class="o">=</span> <span class="s">&#39;__&#39;</span>
+    <span class="n">LOOKUP_SEPARATOR</span> <span class="o">=</span> <span class="s1">&#39;__&#39;</span>
     <span class="n">ALLOWED_LOOKUPS</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s">&#39;gt&#39;</span><span class="p">,</span> <span class="s">&#39;gte&#39;</span><span class="p">,</span> <span class="s">&#39;lt&#39;</span><span class="p">,</span> <span class="s">&#39;lte&#39;</span><span class="p">,</span>
-        <span class="s">&#39;eq&#39;</span><span class="p">,</span> <span class="s">&#39;neq&#39;</span><span class="p">,</span> <span class="s">&#39;exists&#39;</span><span class="p">,</span> <span class="s">&#39;in&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;gt&#39;</span><span class="p">,</span> <span class="s1">&#39;gte&#39;</span><span class="p">,</span> <span class="s1">&#39;lt&#39;</span><span class="p">,</span> <span class="s1">&#39;lte&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;eq&#39;</span><span class="p">,</span> <span class="s1">&#39;neq&#39;</span><span class="p">,</span> <span class="s1">&#39;exists&#39;</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span>
     <span class="p">]</span>
 
 <div class="viewcode-block" id="ObjectManager.serialize"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -941,13 +1031,13 @@
 <span class="sd">            Object.please.all(instance_name=&#39;raptor&#39;, class_name=&#39;some_class&#39;).count()</span>
 <span class="sd">        :return: The integer with estimated objects count;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;GET&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;GET&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
-            <span class="s">&#39;include_count&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-            <span class="s">&#39;page_size&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;include_count&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="s1">&#39;page_size&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
         <span class="p">})</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s">&#39;objects_count&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;objects_count&#39;</span><span class="p">]</span>
 </div>
     <span class="nd">@clone</span>
 <div class="viewcode-block" id="ObjectManager.filter"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -962,29 +1052,29 @@
         <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_subclass_model</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="n">lookup</span> <span class="o">=</span> <span class="s">&#39;eq&#39;</span>
+            <span class="n">lookup</span> <span class="o">=</span> <span class="s1">&#39;eq&#39;</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">LOOKUP_SEPARATOR</span> <span class="ow">in</span> <span class="n">field_name</span><span class="p">:</span>
                 <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span> <span class="o">=</span> <span class="n">field_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">LOOKUP_SEPARATOR</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">field_names</span><span class="p">:</span>
-                <span class="n">allowed</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">field_names</span><span class="p">)</span>
-                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;Invalid field name &quot;{0}&quot; allowed are {1}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">allowed</span><span class="p">))</span>
+                <span class="n">allowed</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">field_names</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Invalid field name &quot;{0}&quot; allowed are {1}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">allowed</span><span class="p">))</span>
 
             <span class="k">if</span> <span class="n">lookup</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ALLOWED_LOOKUPS</span><span class="p">:</span>
-                <span class="n">allowed</span> <span class="o">=</span> <span class="s">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ALLOWED_LOOKUPS</span><span class="p">)</span>
-                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;Invalid lookup type &quot;{0}&quot; allowed are {1}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookup</span><span class="p">,</span> <span class="n">allowed</span><span class="p">))</span>
+                <span class="n">allowed</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ALLOWED_LOOKUPS</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Invalid lookup type &quot;{0}&quot; allowed are {1}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookup</span><span class="p">,</span> <span class="n">allowed</span><span class="p">))</span>
 
             <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">field_name</span><span class="p">:</span>
                     <span class="k">break</span>
 
             <span class="n">query</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="n">query</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s">&#39;_{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookup</span><span class="p">)]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">to_query</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">lookup</span><span class="p">)</span>
+            <span class="n">query</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s1">&#39;_{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookup</span><span class="p">)]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">to_query</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">lookup</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;GET&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#39;list&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;GET&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s1">&#39;list&#39;</span>
         <span class="k">return</span> <span class="bp">self</span>
 </div>
 <div class="viewcode-block" id="ObjectManager.bulk_create"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.bulk_create">[docs]</a>    <span class="k">def</span> <span class="nf">bulk_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">objects</span><span class="p">):</span>
@@ -1008,14 +1098,14 @@
         <span class="n">object_fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">]</span>
         <span class="n">schema</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_class_schema</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">object_fields</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">schema</span><span class="o">.</span><span class="n">schema</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">object_fields</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">schema</span><span class="o">.</span><span class="n">schema</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_validate_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_fields</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">arg</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model_fields</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Field &quot;{0}&quot; does not exist in class {1}.&#39;</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Field &quot;{0}&quot; does not exist in class {1}.&#39;</span>
                 <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span>
-                    <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s">&#39;class_name&#39;</span><span class="p">]))</span>
+                    <span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;class_name&#39;</span><span class="p">]))</span>
 
     <span class="nd">@clone</span>
 <div class="viewcode-block" id="ObjectManager.fields"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.fields">[docs]</a>    <span class="k">def</span> <span class="nf">fields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
@@ -1028,9 +1118,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">model_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_model_field_names</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_validate_fields</span><span class="p">(</span><span class="n">model_fields</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s">&#39;fields&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;GET&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#39;list&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s1">&#39;fields&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;GET&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s1">&#39;list&#39;</span>
         <span class="k">return</span> <span class="bp">self</span>
 </div>
     <span class="nd">@clone</span>
@@ -1047,13 +1137,13 @@
 
         <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">model_fields</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s">&#39;fields&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s">&#39;GET&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s">&#39;list&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s1">&#39;fields&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;GET&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s1">&#39;list&#39;</span>
         <span class="k">return</span> <span class="bp">self</span>
 </div>
 <div class="viewcode-block" id="ObjectManager.ordering"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.ordering">[docs]</a>    <span class="k">def</span> <span class="nf">ordering</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&#39;Ordering not implemented. Use order_by instead.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Ordering not implemented. Use order_by instead.&#39;</span><span class="p">)</span>
 </div>
     <span class="nd">@clone</span>
 <div class="viewcode-block" id="ObjectManager.order_by"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.order_by">[docs]</a>    <span class="k">def</span> <span class="nf">order_by</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
@@ -1069,9 +1159,9 @@
 <span class="sd">            instances = Object.please.order_by(&#39;-name&#39;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">field</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;Order by field needs to be a string.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Order by field needs to be a string.&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s">&#39;order_by&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s1">&#39;order_by&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span>
         <span class="k">return</span> <span class="bp">self</span>
 
 </div></div>
@@ -1089,11 +1179,11 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">schema</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c"># pragma: no cover</span>
-        <span class="k">return</span> <span class="s">&#39;&lt;SchemaManager&gt;&#39;</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;SchemaManager&gt;&#39;</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -1101,14 +1191,14 @@
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">v</span>
 
         <span class="k">raise</span> <span class="ne">KeyError</span>
 
     <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        <span class="n">value</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="n">value</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
@@ -1133,7 +1223,7 @@
 </div>
 <div class="viewcode-block" id="SchemaManager.remove"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.remove">[docs]</a>    <span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">names</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Removes selected objects based on their names.&quot;&quot;&quot;</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="SchemaManager.clear"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1153,13 +1243,13 @@
 <span class="sd">        :param order: Sets order index on selected field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">order</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">filter</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Choose at least one index.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Choose at least one index.&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">order</span><span class="p">:</span>
-            <span class="bp">self</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s">&#39;order_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;order_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
 
         <span class="k">if</span> <span class="nb">filter</span><span class="p">:</span>
-            <span class="bp">self</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s">&#39;filter_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;filter_index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
 </div>
 <div class="viewcode-block" id="SchemaManager.set_order_index"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.set_order_index">[docs]</a>    <span class="k">def</span> <span class="nf">set_order_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Shortcut for ``set_index(field, order=True)``.&quot;&quot;&quot;</span>
@@ -1182,13 +1272,13 @@
 <span class="sd">        :param order: Removes order index from selected field</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">order</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">filter</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Choose at least one index.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Choose at least one index.&#39;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">order</span> <span class="ow">and</span> <span class="s">&#39;order_index&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="n">field</span><span class="p">]:</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s">&#39;order_index&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">order</span> <span class="ow">and</span> <span class="s1">&#39;order_index&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="n">field</span><span class="p">]:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;order_index&#39;</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="nb">filter</span> <span class="ow">and</span> <span class="s">&#39;filter_index&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="n">field</span><span class="p">]:</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s">&#39;filter_index&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">filter</span> <span class="ow">and</span> <span class="s1">&#39;filter_index&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="n">field</span><span class="p">]:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;filter_index&#39;</span><span class="p">]</span>
 </div>
 <div class="viewcode-block" id="SchemaManager.remove_order_index"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.remove_order_index">[docs]</a>    <span class="k">def</span> <span class="nf">remove_order_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Shortcut for ``remove_index(field, order=True)``.&quot;&quot;&quot;</span>
