@@ -278,6 +278,30 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
 
         author.delete()
 
+    def test_count_and_with_count(self):
+        author_one = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.author.name,
+            first_name='john1', last_name='doe1')
+
+        author_two = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.author.name,
+            first_name='john2', last_name='doe2')
+
+        # just created two authors
+
+        count = Object.please.list(instance_name=self.instance.name, class_name=self.author.class_name).count()
+        self.assertEqual(count, 2)
+
+        objects, count = Object.please.list(instance_name=self.instance.name,
+                                            class_name=self.author.class_name).with_count()
+
+        self.assertEqual(count, 2)
+        for o in objects:
+            self.assertTrue(isinstance(o, self.model))
+
+        author_one.delete()
+        author_two.delete()
+
 
 class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
     model = CodeBox

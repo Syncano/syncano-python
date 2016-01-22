@@ -900,12 +900,32 @@ class ObjectManager(Manager):
             Object.please.list(instance_name='raptor', class_name='some_class').filter(id__gt=600).count()
             Object.please.list(instance_name='raptor', class_name='some_class').count()
             Object.please.all(instance_name='raptor', class_name='some_class').count()
-        :return: Two elements tuple with objects list and count: objects, count = DataObjects.please.list(...).count();
+        :return: The count of the returned objects: count = DataObjects.please.list(...).count();
         """
         self.method = 'GET'
         self.query.update({
             'include_count': True,
-            'page_size': 20,
+            'page_size': 0,
+        })
+        response = self.request()
+        return response['objects_count']
+
+    @clone
+    def with_count(self, pagination_size=20):
+        """
+        Return the queryset count;
+
+        Usage::
+            Object.please.list(instance_name='raptor', class_name='some_class').filter(id__gt=600).with_count()
+            Object.please.list(instance_name='raptor', class_name='some_class').with_count(pagination_size=30)
+            Object.please.all(instance_name='raptor', class_name='some_class').with_count()
+        :param pagination_size: The size of the pagination; Default to 20;
+        :return: The tuple with objects and the count: objects, count = DataObjects.please.list(...).with_count();
+        """
+        self.method = 'GET'
+        self.query.update({
+            'include_count': True,
+            'page_size': pagination_size,
         })
         response = self.request()
         raw_objects = response['objects']
