@@ -289,11 +289,11 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
 
         # just created two authors
 
-        count = Object.please.list(instance_name=self.instance.name, class_name=self.author.class_name).count()
+        count = Object.please.list(instance_name=self.instance.name, class_name=self.author.name).count()
         self.assertEqual(count, 2)
 
         objects, count = Object.please.list(instance_name=self.instance.name,
-                                            class_name=self.author.class_name).with_count()
+                                            class_name=self.author.name).with_count()
 
         self.assertEqual(count, 2)
         for o in objects:
