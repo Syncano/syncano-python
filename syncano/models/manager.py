@@ -938,7 +938,7 @@ class ObjectManager(Manager):
         self.query.update(query_data)
         response = self.request()
         self._initial_response = response
-        return self, self.__initial_response['objects_count']
+        return self, self._initial_response['objects_count']
 
     @clone
     def filter(self, **kwargs):
