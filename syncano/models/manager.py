@@ -801,7 +801,7 @@ class Manager(ConnectionMixin):
     def iterator(self):
         """Pagination handler"""
 
-        response = self.request()
+        response = self._get_response()
         results = 0
         while True:
             objects = response.get('objects')
@@ -818,6 +818,9 @@ class Manager(ConnectionMixin):
                 break
 
             response = self.request(path=next_url)
+
+    def _get_response(self):
+        return self.request()
 
     def _get_instance(self, attrs):
         return self.model(**attrs)
@@ -887,6 +890,10 @@ class ObjectManager(Manager):
         'eq', 'neq', 'exists', 'in',
     ]
 
+    def __init__(self):
+        super(ObjectManager, self).__init__()
+        self._initial_response = None
+
     def serialize(self, data, model=None):
         model = model or self.model.get_subclass_model(**self.properties)
         return super(ObjectManager, self).serialize(data, model)
@@ -911,29 +918,27 @@ class ObjectManager(Manager):
         return response['objects_count']
 
     @clone
-    def with_count(self, pagination_size=20):
+    def with_count(self, page_size=20):
         """
         Return the queryset count;
 
         Usage::
             Object.please.list(instance_name='raptor', class_name='some_class').filter(id__gt=600).with_count()
-            Object.please.list(instance_name='raptor', class_name='some_class').with_count(pagination_size=30)
+            Object.please.list(instance_name='raptor', class_name='some_class').with_count(page_size=30)
             Object.please.all(instance_name='raptor', class_name='some_class').with_count()
-        :param pagination_size: The size of the pagination; Default to 20;
+        :param page_size: The size of the pagination; Default to 20;
         :return: The tuple with objects and the count: objects, count = DataObjects.please.list(...).with_count();
         """
-        self.method = 'GET'
-        self.query.update({
+        query_data = {
             'include_count': True,
-            'page_size': pagination_size,
-        })
+            'page_size': page_size,
+        }
+
+        self.method = 'GET'
+        self.query.update(query_data)
         response = self.request()
-        raw_objects = response['objects']
-        objects = []
-        for raw_data in raw_objects:
-            raw_data.update(self.properties)
-            objects.append(self.model(**raw_data))
-        return objects, response['objects_count']
+        self._initial_response = response
+        return self, self.__initial_response['objects_count']
 
     @clone
     def filter(self, **kwargs):
@@ -986,6 +991,9 @@ class ObjectManager(Manager):
         :return: a created and populated list of objects; When error occurs a plain dict is returned in that place;
         """
         return ObjectBulkCreate(objects, self).process()
+
+    def _get_response(self):
+        return self._initial_response or self.request()
 
     def _get_instance(self, attrs):
         return self.model.get_subclass_model(**attrs)(**attrs)
@@ -1059,6 +1067,11 @@ class ObjectManager(Manager):
 
         self.query['order_by'] = field
         return self
+    
+    def _clone(self):
+        manager = super(ObjectManager, self)._clone()
+        manager._initial_response = self._initial_response
+        return manager
 
 
 class SchemaManager(object):
