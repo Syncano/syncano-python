@@ -1067,7 +1067,7 @@ class ObjectManager(Manager):
 
         self.query['order_by'] = field
         return self
-    
+
     def _clone(self):
         manager = super(ObjectManager, self)._clone()
         manager._initial_response = self._initial_response
