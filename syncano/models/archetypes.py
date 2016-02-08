@@ -242,7 +242,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
         for field in self._meta.fields:
             if not field.read_only and field.has_data:
                 value = getattr(self, field.name)
-                if not value and field.blank:
+                if value is None and field.blank:
                     continue
 
                 if field.mapping:
