@@ -9,7 +9,7 @@ from syncano.exceptions import RevisionMismatchException, SyncanoRequestError, S
 if six.PY3:
     from urllib.parse import urljoin
 else:
-    from urlparse import urljoin
+    from urllib.parse import urljoin
 
 
 __all__ = ['Connection', 'ConnectionMixin']
@@ -236,9 +236,9 @@ class Connection(object):
         files = data.pop('files', None)
 
         if files is None:
-            files = {k: v for k, v in data.iteritems() if isinstance(v, file)}
+            files = {k: v for k, v in data.items() if isinstance(v, file)}
             if data:
-                kwargs['data'] = data = {k: v for k, v in data.iteritems() if k not in files}
+                kwargs['data'] = data = {k: v for k, v in data.items() if k not in files}
 
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)

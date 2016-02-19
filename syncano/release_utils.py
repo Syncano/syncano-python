@@ -21,7 +21,7 @@ class Deprecated(object):
                     self.removed_in_version
                 ),
                 category=DeprecationWarning,
-                filename=original_func.func_code.co_filename,
-                lineno=original_func.func_code.co_firstlineno + self.lineno)
+                filename=original_func.__code__.co_filename,
+                lineno=original_func.__code__.co_firstlineno + self.lineno)
             return original_func(*args, **kwargs)
         return new_func
