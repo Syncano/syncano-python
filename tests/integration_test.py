@@ -464,6 +464,7 @@ class ApiKeyIntegrationTest(InstanceMixin, IntegrationTest):
             allow_user_create=True,
             ignore_acl=True,
             allow_anonymous_read=True,
+            instance_name=self.instance.name,
         )
         self._assert_api_key_flags(api_key_id=api_key.id)
 
@@ -472,6 +473,7 @@ class ApiKeyIntegrationTest(InstanceMixin, IntegrationTest):
             allow_user_create=True,
             ignore_acl=True,
             allow_anonymous_read=True,
+            instance_name=self.instance.name,
         )
 
         self._assert_api_key_flags(api_key_id=api_key.id)
