@@ -114,9 +114,6 @@ class Manager(ConnectionMixin):
         except IndexError:
             return False
 
-    def __bool__(self):  # pragma: no cover
-        return type(self).__bool__(self)
-
     def __getitem__(self, k):
         """
         Retrieves an item or slice from the set of results.
