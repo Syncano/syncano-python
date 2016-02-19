@@ -466,28 +466,9 @@ class ApiKeyIntegrationTest(InstanceMixin, IntegrationTest):
             allow_anonymous_read=True,
             instance_name=self.instance.name,
         )
-        self._assert_api_key_flags(api_key_id=api_key.id)
 
-    def test_api_key_flags_update(self):
-        api_key = self.model.please.create(
-            allow_user_create=True,
-            ignore_acl=True,
-            allow_anonymous_read=True,
-            instance_name=self.instance.name,
-        )
+        reloaded_api_key = self.model.please.get(id=api_key.id, instance_name=self.instance.name)
 
-        self._assert_api_key_flags(api_key_id=api_key.id)
-
-        api_key.allow_user_create = False
-        api_key.ignore_acl = False
-        api_key.allow_anonymous_read = False
-        api_key.save()
-
-        self._assert_api_key_flags(api_key_id=api_key.id, checked_value=False)
-
-    def _assert_api_key_flags(self, api_key_id, checked_value=True):
-        reloaded_api_key = self.model.please.get(id=api_key_id, instance_name=self.instance.name)
-
-        self.assertTrue(reloaded_api_key.allow_user_create, checked_value)
-        self.assertTrue(reloaded_api_key.ignore_acl, checked_value)
-        self.assertTrue(reloaded_api_key.allow_anonymous_read, checked_value)
+        self.assertTrue(reloaded_api_key.allow_user_create, True)
+        self.assertTrue(reloaded_api_key.ignore_acl, True)
+        self.assertTrue(reloaded_api_key.allow_anonymous_read, True)
