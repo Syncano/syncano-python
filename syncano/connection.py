@@ -1,5 +1,6 @@
 import json
 from copy import deepcopy
+from io import IOBase
 
 import requests
 import six
@@ -236,7 +237,7 @@ class Connection(object):
         files = data.pop('files', None)
 
         if files is None:
-            files = {k: v for k, v in data.items() if isinstance(v, file)}
+            files = {k: v for k, v in data.items() if isinstance(v, IOBase)}
             if data:
                 kwargs['data'] = data = {k: v for k, v in data.items() if k not in files}
 
