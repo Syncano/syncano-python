@@ -109,6 +109,15 @@ class InstanceIntegrationTest(IntegrationTest):
         with self.assertRaises(self.model.DoesNotExist):
             self.model.please.get(name=name)
 
+    def test_rename(self):
+        name = 'i%s' % self.generate_hash()[:10]
+        new_name = 'icy-snow-jon-von-doe-312'
+
+        instance = self.model.please.create(name=name, description='rest_rename')
+        instance = instance.rename(new_name=new_name)
+
+        self.assertEqual(instance.name, new_name)
+
 
 class ClassIntegrationTest(InstanceMixin, IntegrationTest):
     model = Class

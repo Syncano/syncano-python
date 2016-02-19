@@ -54,6 +54,19 @@ class Instance(Model):
             }
         }
 
+    def rename(self, new_name):
+        """
+        A method for changing the instance name;
+        :param new_name: the new name for the instance;
+        :return: a populated Instance object;
+        """
+        rename_path = self.links.get('rename')
+        data = {'new_name': new_name}
+        connection = self._get_connection()
+        response = connection.request('POST', rename_path, data=data)
+        self.to_python(response)
+        return self
+
 
 class ApiKey(Model):
     """
