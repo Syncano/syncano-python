@@ -486,7 +486,7 @@ class ApiKeyIntegrationTest(InstanceMixin, IntegrationTest):
         self._assert_api_key_flags(api_key_id=api_key.id, checked_value=False)
 
     def _assert_api_key_flags(self, api_key_id, checked_value=True):
-        reloaded_api_key = self.model.please.get(id=api_key_id)
+        reloaded_api_key = self.model.please.get(id=api_key_id, instance_name=self.instance.name)
 
         self.assertTrue(reloaded_api_key.allow_user_create, checked_value)
         self.assertTrue(reloaded_api_key.ignore_acl, checked_value)
