@@ -79,7 +79,7 @@ class ApiKey(Model):
         parent = Instance
         endpoints = {
             'detail': {
-                'methods': ['get', 'delete'],
+                'methods': ['get', 'put', 'patch', 'delete'],
                 'path': '/api_keys/{id}/',
             },
             'list': {
