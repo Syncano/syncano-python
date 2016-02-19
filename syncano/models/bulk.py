@@ -4,14 +4,13 @@ from abc import ABCMeta, abstractmethod
 from syncano.exceptions import SyncanoValidationError, SyncanoValueError
 
 
-class BaseBulkCreate(object):
+class BaseBulkCreate(object, metaclass=ABCMeta):
     """
     Helper class for making bulk create;
 
     Usage:
         instances = ObjectBulkCreate(objects, manager).process()
     """
-    __metaclass__ = ABCMeta
 
     MAX_BATCH_SIZE = 50
 

@@ -10,7 +10,7 @@ from syncano.utils import camelcase_to_underscore
 if six.PY3:
     from urllib.parse import urljoin
 else:
-    from urlparse import urljoin
+    from urllib.parse import urljoin
 
 
 class Options(ConnectionMixin):

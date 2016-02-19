@@ -1,7 +1,8 @@
 import os
 
-from integration_test import IntegrationTest
 from syncano.connection import Connection
+
+from .integration_test import IntegrationTest
 
 
 class LoginTest(IntegrationTest):
