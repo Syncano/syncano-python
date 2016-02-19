@@ -419,7 +419,7 @@ class ManagerTestCase(unittest.TestCase):
 
         request_mock.assert_called_once_with(
             'GET',
-            u'/v1/instances/',
+            '/v1/instances/',
             data={'b': 2},
             params={'a': 1}
         )

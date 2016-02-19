@@ -182,7 +182,7 @@ class ClassIntegrationTest(InstanceMixin, IntegrationTest):
         )
         cls.description = 'dummy'
 
-        for i in xrange(3):
+        for i in range(3):
             try:
                 cls.save()
             except SyncanoRequestError as e:
@@ -360,8 +360,8 @@ class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
             sleep(1)
             trace.reload()
 
-        self.assertEquals(trace.status, 'success')
-        self.assertDictEqual(trace.result, {u'stderr': u'', u'stdout': u'IntegrationTest'})
+        self.assertEqual(trace.status, 'success')
+        self.assertDictEqual(trace.result, {'stderr': '', 'stdout': 'IntegrationTest'})
 
         codebox.delete()
 
@@ -379,7 +379,7 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
             sleep(1)
             trace.reload()
 
-        self.assertEquals(trace.status, 'success')
+        self.assertEqual(trace.status, 'success')
         self.assertDictEqual(trace.content, {'one': 1})
         self.assertEqual(trace.content_type, 'application/json')
         self.assertEqual(trace.status_code, 200)
@@ -440,8 +440,8 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
         )
 
         trace = webhook.run()
-        self.assertEquals(trace.status, 'success')
-        self.assertDictEqual(trace.result, {u'stderr': u'', u'stdout': u'IntegrationTest'})
+        self.assertEqual(trace.status, 'success')
+        self.assertDictEqual(trace.result, {'stderr': '', 'stdout': 'IntegrationTest'})
         webhook.delete()
 
     def test_custom_codebox_run(self):

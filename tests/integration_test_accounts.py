@@ -1,6 +1,6 @@
 import os
 
-from integration_test import IntegrationTest
+from .integration_test import IntegrationTest
 from syncano.connection import Connection
 
 
