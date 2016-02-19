@@ -7,7 +7,7 @@ from uuid import uuid4
 
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
-from syncano.models import Class, CodeBox, Instance, Object, Webhook, registry
+from syncano.models import ApiKey, Class, CodeBox, Instance, Object, Webhook, registry
 
 
 class IntegrationTest(unittest.TestCase):
@@ -454,3 +454,38 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
         trace = webhook.run()
         self.assertDictEqual(trace, {'one': 1})
         webhook.delete()
+
+
+class ApiKeyIntegrationTest(InstanceMixin, IntegrationTest):
+    model = ApiKey
+
+    def test_api_key_flags(self):
+        api_key = self.model.please.create(
+            allow_user_create=True,
+            ignore_acl=True,
+            allow_anonymous_read=True,
+        )
+        self._assert_api_key_flags(api_key_id=api_key.id)
+
+    def test_api_key_flags_update(self):
+        api_key = self.model.please.create(
+            allow_user_create=True,
+            ignore_acl=True,
+            allow_anonymous_read=True,
+        )
+
+        self._assert_api_key_flags(api_key_id=api_key.id)
+
+        api_key.allow_user_create = False
+        api_key.ignore_acl = False
+        api_key.allow_anonymous_read = False
+        api_key.save()
+
+        self._assert_api_key_flags(api_key_id=api_key.id, checked_value=False)
+
+    def _assert_api_key_flags(self, api_key_id, checked_value=True):
+        reloaded_api_key = self.model.please.get(id=api_key_id)
+
+        self.assertTrue(reloaded_api_key.allow_user_create, checked_value)
+        self.assertTrue(reloaded_api_key.ignore_acl, checked_value)
+        self.assertTrue(reloaded_api_key.allow_anonymous_read, checked_value)
