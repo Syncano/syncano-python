@@ -72,6 +72,7 @@ class ApiKey(Model):
     description = fields.StringField(required=False)
     allow_user_create = fields.BooleanField(required=False, default=False)
     ignore_acl = fields.BooleanField(required=False, default=False)
+    allow_anonymous_read = fields.BooleanField(required=False, default=False)
     links = fields.HyperlinkedField(links=LINKS)
 
     class Meta:

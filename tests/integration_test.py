@@ -7,7 +7,7 @@ from uuid import uuid4
 
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
-from syncano.models import Class, CodeBox, Instance, Object, Webhook, registry
+from syncano.models import ApiKey, Class, CodeBox, Instance, Object, Webhook, registry
 
 
 class IntegrationTest(unittest.TestCase):
@@ -454,3 +454,21 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
         trace = webhook.run()
         self.assertDictEqual(trace, {'one': 1})
         webhook.delete()
+
+
+class ApiKeyIntegrationTest(InstanceMixin, IntegrationTest):
+    model = ApiKey
+
+    def test_api_key_flags(self):
+        api_key = self.model.please.create(
+            allow_user_create=True,
+            ignore_acl=True,
+            allow_anonymous_read=True,
+            instance_name=self.instance.name,
+        )
+
+        reloaded_api_key = self.model.please.get(id=api_key.id, instance_name=self.instance.name)
+
+        self.assertTrue(reloaded_api_key.allow_user_create, True)
+        self.assertTrue(reloaded_api_key.ignore_acl, True)
+        self.assertTrue(reloaded_api_key.allow_anonymous_read, True)
