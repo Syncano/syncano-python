@@ -69,15 +69,10 @@ class InstanceIntegrationTest(IntegrationTest):
         name = 'i%s' % self.generate_hash()[:10]
         description = 'IntegrationTest'
 
-        self.assertFalse(bool(self.model.please.list()))
-
         instance = self.model.please.create(name=name, description=description)
         self.assertIsNotNone(instance.pk)
         self.assertEqual(instance.name, name)
         self.assertEqual(instance.description, description)
-
-        self.assertTrue(bool(self.model.please.list()))
-        instance.delete()
 
         instance = self.model(name=name, description=description)
         instance.save()
