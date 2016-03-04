@@ -22,15 +22,15 @@ class Instance(Model):
         {'type': 'detail', 'name': 'self'},
         {'type': 'list', 'name': 'admins'},
         {'type': 'list', 'name': 'classes'},
-        {'type': 'list', 'name': 'scripts'},
         {'type': 'list', 'name': 'invitations'},
-        {'type': 'list', 'name': 'runtimes'},
         {'type': 'list', 'name': 'api_keys'},
         {'type': 'list', 'name': 'triggers'},
         {'type': 'list', 'name': 'users'},
-        {'type': 'list', 'name': 'script_endpoints'},
+        {'type': 'list', 'name': 'groups'},
         {'type': 'list', 'name': 'schedules'},
-        {'type': 'list', 'name': 'templates'}
+        {'type': 'list', 'name': 'endpoints'},
+        {'type': 'list', 'name': 'snippets'},
+        {'type': 'list', 'name': 'push_notifications'},
     )
 
     name = fields.StringField(max_length=64, primary_key=True)

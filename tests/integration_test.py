@@ -312,14 +312,14 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
         author_two.delete()
 
 
-class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
+class ScriptIntegrationTest(InstanceMixin, IntegrationTest):
     model = Script
 
     @classmethod
     def tearDownClass(cls):
         for cb in cls.instance.scripts.all():
             cb.delete()
-        super(CodeboxIntegrationTest, cls).tearDownClass()
+        super(ScriptIntegrationTest, cls).tearDownClass()
 
     def test_required_fields(self):
         with self.assertRaises(SyncanoValueError):
