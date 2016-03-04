@@ -4,7 +4,7 @@ import unittest
 from datetime import datetime
 
 from syncano.exceptions import SyncanoValidationError
-from syncano.models import CodeBox, CodeBoxTrace, ResponseTemplate, Webhook, WebhookTrace
+from syncano.models import Script, ScriptTrace, ResponseTemplate, ScriptEndpoint, ScriptEndpointTrace
 
 try:
     from unittest import mock
@@ -12,14 +12,14 @@ except ImportError:
     import mock
 
 
-class CodeBoxTestCase(unittest.TestCase):
+class ScriptTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.model = CodeBox()
+        self.model = Script()
 
-    @mock.patch('syncano.models.CodeBox._get_connection')
+    @mock.patch('syncano.models.Script._get_connection')
     def test_run(self, connection_mock):
-        model = CodeBox(instance_name='test', id=10, links={'run': '/v1/instances/test/codeboxes/10/run/'})
+        model = Script(instance_name='test', id=10, links={'run': '/v1.1/instances/test/snippets/scripts/10/run/'})
         connection_mock.return_value = connection_mock
         connection_mock.request.return_value = {'id': 10}
 
@@ -28,25 +28,26 @@ class CodeBoxTestCase(unittest.TestCase):
         result = model.run(a=1, b=2)
         self.assertTrue(connection_mock.called)
         self.assertTrue(connection_mock.request.called)
-        self.assertIsInstance(result, CodeBoxTrace)
+        self.assertIsInstance(result, ScriptTrace)
 
         connection_mock.assert_called_once_with(a=1, b=2)
         connection_mock.request.assert_called_once_with(
-            'POST', '/v1/instances/test/codeboxes/10/run/', data={'payload': '{"a": 1, "b": 2}'}
+            'POST', '/v1.1/instances/test/snippets/scripts/10/run/', data={'payload': '{"a": 1, "b": 2}'}
         )
 
-        model = CodeBox()
+        model = Script()
         with self.assertRaises(SyncanoValidationError):
             model.run()
 
 
-class WebhookTestCase(unittest.TestCase):
+class ScriptEndpointTestCase(unittest.TestCase):
     def setUp(self):
-        self.model = Webhook()
+        self.model = ScriptEndpoint()
 
-    @mock.patch('syncano.models.Webhook._get_connection')
+    @mock.patch('syncano.models.ScriptEndpoint._get_connection')
     def test_run(self, connection_mock):
-        model = Webhook(instance_name='test', name='name', links={'run': '/v1/instances/test/webhooks/name/run/'})
+        model = ScriptEndpoint(instance_name='test', name='name',
+                               links={'run': '/v1.1/instances/test/endpoints/scripts/name/run/'})
         connection_mock.return_value = connection_mock
         connection_mock.request.return_value = {
             'status': 'success',
@@ -60,7 +61,7 @@ class WebhookTestCase(unittest.TestCase):
         result = model.run(x=1, y=2)
         self.assertTrue(connection_mock.called)
         self.assertTrue(connection_mock.request.called)
-        self.assertIsInstance(result, WebhookTrace)
+        self.assertIsInstance(result, ScriptEndpointTrace)
         self.assertEqual(result.status, 'success')
         self.assertEqual(result.duration, 937)
         self.assertEqual(result.result, {u'stdout': 1, u'stderr': u''})
@@ -69,11 +70,11 @@ class WebhookTestCase(unittest.TestCase):
         connection_mock.assert_called_once_with(x=1, y=2)
         connection_mock.request.assert_called_once_with(
             'POST',
-            '/v1/instances/test/webhooks/name/run/',
+            '/v1.1/instances/test/endpoints/scripts/name/run/',
             data={"y": 2, "x": 1}
         )
 
-        model = Webhook()
+        model = ScriptEndpoint()
         with self.assertRaises(SyncanoValidationError):
             model.run()
 
@@ -85,7 +86,7 @@ class ResponseTemplateTestCase(unittest.TestCase):
     @mock.patch('syncano.models.ResponseTemplate._get_connection')
     def test_render(self, connection_mock):
         model = self.model(instance_name='test', name='name',
-                           links={'run': '/v1/instances/test/snippets/templates/name/render/'})
+                           links={'run': '/v1.1/instances/test/snippets/templates/name/render/'})
         connection_mock.return_value = connection_mock
         connection_mock.request.return_value = '<div>12345</div>'
 
@@ -98,6 +99,6 @@ class ResponseTemplateTestCase(unittest.TestCase):
 
         connection_mock.request.assert_called_once_with(
             'POST',
-            '/v1/instances/test/snippets/templates/name/render/',
+            '/v1.1/instances/test/snippets/templates/name/render/',
             data={'context': {}}
         )

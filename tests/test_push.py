@@ -7,7 +7,7 @@ from mock import mock
 from syncano.models import APNSDevice, APNSMessage, GCMDevice, GCMMessage
 
 
-class CodeBoxTestCase(unittest.TestCase):
+class ScriptTestCase(unittest.TestCase):
 
     @mock.patch('syncano.models.GCMDevice._get_connection')
     def test_gcm_device(self, connection_mock):
@@ -31,14 +31,14 @@ class CodeBoxTestCase(unittest.TestCase):
 
         connection_mock.assert_called_once_with()
         connection_mock.request.assert_called_once_with(
-            u'POST', u'/v1/instances/test/push_notifications/gcm/devices/',
+            u'POST', u'/v1.1/instances/test/push_notifications/gcm/devices/',
             data={"registration_id": u'86152312314401555', "device_id": "10000000001", "is_active": True,
                   "label": "example label"}
         )
         model.created_at = datetime.now()  # to Falsify is_new()
         model.delete()
         connection_mock.request.assert_called_with(
-            u'DELETE', u'/v1/instances/test/push_notifications/gcm/devices/86152312314401555/'
+            u'DELETE', u'/v1.1/instances/test/push_notifications/gcm/devices/86152312314401555/'
         )
 
     @mock.patch('syncano.models.APNSDevice._get_connection')
@@ -64,7 +64,7 @@ class CodeBoxTestCase(unittest.TestCase):
 
         connection_mock.assert_called_once_with()
         connection_mock.request.assert_called_once_with(
-            u'POST', u'/v1/instances/test/push_notifications/apns/devices/',
+            u'POST', u'/v1.1/instances/test/push_notifications/apns/devices/',
             data={"registration_id": u'86152312314401555', "device_id": "10000000001", "is_active": True,
                   "label": "example label"}
         )
@@ -72,7 +72,7 @@ class CodeBoxTestCase(unittest.TestCase):
         model.created_at = datetime.now()  # to Falsify is_new()
         model.delete()
         connection_mock.request.assert_called_with(
-            u'DELETE', u'/v1/instances/test/push_notifications/apns/devices/86152312314401555/'
+            u'DELETE', u'/v1.1/instances/test/push_notifications/apns/devices/86152312314401555/'
         )
 
     @mock.patch('syncano.models.GCMMessage._get_connection')
@@ -93,7 +93,7 @@ class CodeBoxTestCase(unittest.TestCase):
 
         connection_mock.assert_called_once_with()
         connection_mock.request.assert_called_once_with(
-            u'POST', u'/v1/instances/test/push_notifications/gcm/messages/',
+            u'POST', u'/v1.1/instances/test/push_notifications/gcm/messages/',
             data={'content': '{"environment": "production", "data": "some data"}'}
         )
 
@@ -115,6 +115,6 @@ class CodeBoxTestCase(unittest.TestCase):
 
         connection_mock.assert_called_once_with()
         connection_mock.request.assert_called_once_with(
-            u'POST', u'/v1/instances/test/push_notifications/apns/messages/',
+            u'POST', u'/v1.1/instances/test/push_notifications/apns/messages/',
             data={'content': '{"environment": "production", "data": "some data"}'}
         )

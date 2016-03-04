@@ -92,7 +92,7 @@ class ChannelTestCase(unittest.TestCase):
         self.assertTrue(connection_mock.called)
         poll_thread_mock.assert_called_once_with(
             connection_mock,
-            '/v1/instances/None/channels/None/poll/',
+            '/v1.1/instances/None/channels/None/poll/',
             'c',
             'd',
             last_id='b',
@@ -113,6 +113,6 @@ class ChannelTestCase(unittest.TestCase):
         self.assertTrue(connection_mock.request.called)
         connection_mock.request.assert_called_once_with(
             'POST',
-            '/v1/instances/None/channels/None/publish/',
+            '/v1.1/instances/None/channels/None/publish/',
             data={'room': u'1', 'payload': '{"a": 1}'}
         )

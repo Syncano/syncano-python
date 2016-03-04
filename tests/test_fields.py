@@ -64,11 +64,11 @@ class AllFieldsModel(models.Model):
         endpoints = {
             'detail': {
                 'methods': ['delete', 'post', 'patch', 'get'],
-                'path': '/v1/dummy/{dynamic_field}/',
+                'path': '/v1.1/dummy/{dynamic_field}/',
             },
             'list': {
                 'methods': ['post', 'get'],
-                'path': '/v1/dummy/',
+                'path': '/v1.1/dummy/',
             }
         }
 

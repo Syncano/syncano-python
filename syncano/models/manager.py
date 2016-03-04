@@ -70,7 +70,7 @@ class RelatedManagerDescriptor(object):
 class Manager(ConnectionMixin):
     """Base class responsible for all ORM (``please``) actions."""
 
-    BATCH_URI = '/v1/instances/{name}/batch/'
+    BATCH_URI = '/v1.1/instances/{name}/batch/'
 
     def __init__(self):
         self.name = None
@@ -833,10 +833,10 @@ class Manager(ConnectionMixin):
         return self.model._meta.resolve_endpoint(self.endpoint, defaults), defaults
 
 
-class CodeBoxManager(Manager):
+class ScriptManager(Manager):
     """
     Custom :class:`~syncano.models.manager.Manager`
-    class for :class:`~syncano.models.base.CodeBox` model.
+    class for :class:`~syncano.models.base.Script` model.
     """
 
     @clone
@@ -852,13 +852,13 @@ class CodeBoxManager(Manager):
         self._filter(*args, **kwargs)
         self._serialize = False
         response = self.request()
-        return registry.CodeBoxTrace(**response)
+        return registry.ScriptTrace(**response)
 
 
-class WebhookManager(Manager):
+class ScriptEndpointManager(Manager):
     """
     Custom :class:`~syncano.models.manager.Manager`
-    class for :class:`~syncano.models.base.Webhook` model.
+    class for :class:`~syncano.models.base.ScriptEndpoint` model.
     """
 
     @clone
@@ -876,7 +876,7 @@ class WebhookManager(Manager):
         response = self.request()
 
         # Workaround for circular import
-        return registry.WebhookTrace(**response)
+        return registry.ScriptEndpointTrace(**response)
 
 
 class ObjectManager(Manager):

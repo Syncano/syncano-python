@@ -7,7 +7,7 @@ from uuid import uuid4
 
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
-from syncano.models import ApiKey, Class, CodeBox, Instance, Object, Webhook, registry
+from syncano.models import ApiKey, Class, Script, Instance, Object, ScriptEndpoint, registry
 
 
 class IntegrationTest(unittest.TestCase):
@@ -313,11 +313,11 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
 
 
 class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
-    model = CodeBox
+    model = Script
 
     @classmethod
     def tearDownClass(cls):
-        for cb in cls.instance.codeboxes.all():
+        for cb in cls.instance.scripts.all():
             cb.delete()
         super(CodeboxIntegrationTest, cls).tearDownClass()
 
@@ -327,44 +327,44 @@ class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
             list(self.model.please.all())
 
     def test_list(self):
-        codeboxes = self.model.please.all(self.instance.name)
-        self.assertTrue(len(list(codeboxes)) >= 0)
+        scripts = self.model.please.all(self.instance.name)
+        self.assertTrue(len(list(scripts)) >= 0)
 
     def test_create(self):
-        codebox = self.model.please.create(
+        script = self.model.please.create(
             instance_name=self.instance.name,
             label='cb%s' % self.generate_hash()[:10],
             runtime_name='python',
             source='print "IntegrationTest"'
         )
 
-        codebox.delete()
+        script.delete()
 
     def test_update(self):
-        codebox = self.model.please.create(
+        script = self.model.please.create(
             instance_name=self.instance.name,
             label='cb%s' % self.generate_hash()[:10],
             runtime_name='python',
             source='print "IntegrationTest"'
         )
 
-        codebox.source = 'print "NotIntegrationTest"'
-        codebox.save()
+        script.source = 'print "NotIntegrationTest"'
+        script.save()
 
-        codebox2 = self.model.please.get(self.instance.name, codebox.pk)
-        self.assertEqual(codebox.source, codebox2.source)
+        script2 = self.model.please.get(self.instance.name, script.pk)
+        self.assertEqual(script.source, script2.source)
 
-        codebox.delete()
+        script.delete()
 
     def test_source_run(self):
-        codebox = self.model.please.create(
+        script = self.model.please.create(
             instance_name=self.instance.name,
             label='cb%s' % self.generate_hash()[:10],
             runtime_name='python',
             source='print "IntegrationTest"'
         )
 
-        trace = codebox.run()
+        trace = script.run()
         while trace.status == 'pending':
             sleep(1)
             trace.reload()
@@ -372,10 +372,10 @@ class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
         self.assertEquals(trace.status, 'success')
         self.assertDictEqual(trace.result, {u'stderr': u'', u'stdout': u'IntegrationTest'})
 
-        codebox.delete()
+        script.delete()
 
     def test_custom_response_run(self):
-        codebox = self.model.please.create(
+        script = self.model.please.create(
             instance_name=self.instance.name,
             label='cb%s' % self.generate_hash()[:10],
             runtime_name='python',
@@ -383,7 +383,7 @@ class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
 set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='application/json'))"""
         )
 
-        trace = codebox.run()
+        trace = script.run()
         while trace.status == 'pending':
             sleep(1)
             trace.reload()
@@ -393,24 +393,24 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
         self.assertEqual(trace.content_type, 'application/json')
         self.assertEqual(trace.status_code, 200)
 
-        codebox.delete()
+        script.delete()
 
 
-class WebhookIntegrationTest(InstanceMixin, IntegrationTest):
-    model = Webhook
+class ScriptEndpointIntegrationTest(InstanceMixin, IntegrationTest):
+    model = ScriptEndpoint
 
     @classmethod
     def setUpClass(cls):
-        super(WebhookIntegrationTest, cls).setUpClass()
+        super(ScriptEndpointIntegrationTest, cls).setUpClass()
 
-        cls.codebox = CodeBox.please.create(
+        cls.script = Script.please.create(
             instance_name=cls.instance.name,
             label='cb%s' % cls.generate_hash()[:10],
             runtime_name='python',
             source='print "IntegrationTest"'
         )
 
-        cls.custom_codebox = CodeBox.please.create(
+        cls.custom_script = Script.please.create(
             instance_name=cls.instance.name,
             label='cb%s' % cls.generate_hash()[:10],
             runtime_name='python',
@@ -420,8 +420,8 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
 
     @classmethod
     def tearDownClass(cls):
-        cls.codebox.delete()
-        super(WebhookIntegrationTest, cls).tearDownClass()
+        cls.script.delete()
+        super(ScriptEndpointIntegrationTest, cls).tearDownClass()
 
     def test_required_fields(self):
         with self.assertRaises(SyncanoValueError):
@@ -429,40 +429,40 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
             list(self.model.please.all())
 
     def test_list(self):
-        webhooks = self.model.please.all(self.instance.name)
-        self.assertTrue(len(list(webhooks)) >= 0)
+        script_endpoints = self.model.please.all(self.instance.name)
+        self.assertTrue(len(list(script_endpoints)) >= 0)
 
     def test_create(self):
-        webhook = self.model.please.create(
+        script_endpoint = self.model.please.create(
             instance_name=self.instance.name,
-            codebox=self.codebox.id,
+            script=self.script.id,
             name='wh%s' % self.generate_hash()[:10],
         )
 
-        webhook.delete()
+        script_endpoint.delete()
 
-    def test_codebox_run(self):
-        webhook = self.model.please.create(
+    def test_script_run(self):
+        script_endpoint = self.model.please.create(
             instance_name=self.instance.name,
-            codebox=self.codebox.id,
+            script=self.script.id,
             name='wh%s' % self.generate_hash()[:10],
         )
 
-        trace = webhook.run()
+        trace = script_endpoint.run()
         self.assertEquals(trace.status, 'success')
         self.assertDictEqual(trace.result, {u'stderr': u'', u'stdout': u'IntegrationTest'})
-        webhook.delete()
+        script_endpoint.delete()
 
-    def test_custom_codebox_run(self):
-        webhook = self.model.please.create(
+    def test_custom_script_run(self):
+        script_endpoint = self.model.please.create(
             instance_name=self.instance.name,
-            codebox=self.custom_codebox.id,
+            script=self.custom_script.id,
             name='wh%s' % self.generate_hash()[:10],
         )
 
-        trace = webhook.run()
+        trace = script_endpoint.run()
         self.assertDictEqual(trace, {'one': 1})
-        webhook.delete()
+        script_endpoint.delete()
 
 
 class ApiKeyIntegrationTest(InstanceMixin, IntegrationTest):

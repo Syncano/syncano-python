@@ -37,11 +37,11 @@ class Coupon(Model):
         endpoints = {
             'detail': {
                 'methods': ['get', 'delete'],
-                'path': '/v1/billing/coupons/{name}/',
+                'path': '/v1.1/billing/coupons/{name}/',
             },
             'list': {
                 'methods': ['post', 'get'],
-                'path': '/v1/billing/coupons/',
+                'path': '/v1.1/billing/coupons/',
             }
         }
 
@@ -71,10 +71,10 @@ class Discount(Model):
         endpoints = {
             'detail': {
                 'methods': ['get'],
-                'path': '/v1/billing/discounts/{id}/',
+                'path': '/v1.1/billing/discounts/{id}/',
             },
             'list': {
                 'methods': ['post', 'get'],
-                'path': '/v1/billing/discounts/',
+                'path': '/v1.1/billing/discounts/',
             }
         }

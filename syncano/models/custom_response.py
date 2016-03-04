@@ -8,13 +8,13 @@ class CustomResponseHandler(object):
     A helper class which allows to define and maintain custom response handlers.
 
     Consider an example:
-    CodeBox code:
+    Script code:
 
       >> set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='application/json'))
 
-    When suitable CodeBoxTrace is used:
+    When suitable ScriptTrace is used:
 
-      >> trace = CodeBoxTrace.please.get(id=<code_box_trace_id>, codebox_id=<codebox_id>)
+      >> trace = ScriptTrace.please.get(id=<code_box_trace_id>, script=<script_id>)
 
     Then trace object will have a content attribute, which will be a dict created from json (simple: json.loads under
       the hood);
@@ -35,7 +35,7 @@ class CustomResponseHandler(object):
 
     or globally:
 
-    CodeBoxTrace.response_handler.overwrite_handler('application/json', custom_handler)
+    ScriptTrace.response_handler.overwrite_handler('application/json', custom_handler)
 
     Then trace.content is equal to:
       >> 1
@@ -96,10 +96,10 @@ class CustomResponseHandler(object):
 
 class CustomResponseMixin(object):
     """
-    A mixin which extends the CodeBox and Webhook traces (and any other Model - if used) with following fields:
-      * content - This is the response data if set_response is used in CodeBox code, otherwise it is the 'stdout' field;
-      * content_type - The content_type specified by the user in CodeBox code;
-      * status_code - The status_code specified by the user in CodeBox code;
+    A mixin which extends the Script and ScriptEndpoint traces (and any other Model - if used) with following fields:
+      * content - This is the response data if set_response is used in Script code, otherwise it is the 'stdout' field;
+      * content_type - The content_type specified by the user in Script code;
+      * status_code - The status_code specified by the user in Script code;
       * error - An error which can occur when code is executed: the stderr response field;
 
     To process the content based on content_type this Mixin uses the CustomResponseHandler - see the docs there.

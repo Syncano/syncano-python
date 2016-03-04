@@ -3,10 +3,10 @@ from __future__ import unicode_literals
 from . import fields
 from .base import Model
 from .custom_response import CustomResponseMixin
-from .incentives import CodeBox, Schedule, Trigger, Webhook
+from .incentives import Script, Schedule, Trigger, ScriptEndpoint
 
 
-class CodeBoxTrace(CustomResponseMixin, Model):
+class ScriptTrace(CustomResponseMixin, Model):
     """
     :ivar status: :class:`~syncano.models.fields.ChoiceField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
@@ -18,6 +18,7 @@ class CodeBoxTrace(CustomResponseMixin, Model):
         {'display_name': 'Success', 'value': 'success'},
         {'display_name': 'Failure', 'value': 'failure'},
         {'display_name': 'Timeout', 'value': 'timeout'},
+        {'display_name': 'Processing', 'value': 'processing'},
         {'display_name': 'Pending', 'value': 'pending'},
     )
     LINKS = (
@@ -31,7 +32,7 @@ class CodeBoxTrace(CustomResponseMixin, Model):
     duration = fields.IntegerField(read_only=True, required=False)
 
     class Meta:
-        parent = CodeBox
+        parent = Script
         endpoints = {
             'detail': {
                 'methods': ['get'],
@@ -120,7 +121,7 @@ class TriggerTrace(Model):
         }
 
 
-class WebhookTrace(CustomResponseMixin, Model):
+class ScriptEndpointTrace(CustomResponseMixin, Model):
     """
     :ivar status: :class:`~syncano.models.fields.ChoiceField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
@@ -145,7 +146,7 @@ class WebhookTrace(CustomResponseMixin, Model):
     duration = fields.IntegerField(read_only=True, required=False)
 
     class Meta:
-        parent = Webhook
+        parent = ScriptEndpoint
         endpoints = {
             'detail': {
                 'methods': ['get'],

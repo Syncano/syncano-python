@@ -22,13 +22,13 @@ class Instance(Model):
         {'type': 'detail', 'name': 'self'},
         {'type': 'list', 'name': 'admins'},
         {'type': 'list', 'name': 'classes'},
-        {'type': 'list', 'name': 'codeboxes'},
+        {'type': 'list', 'name': 'scripts'},
         {'type': 'list', 'name': 'invitations'},
         {'type': 'list', 'name': 'runtimes'},
         {'type': 'list', 'name': 'api_keys'},
         {'type': 'list', 'name': 'triggers'},
         {'type': 'list', 'name': 'users'},
-        {'type': 'list', 'name': 'webhooks'},
+        {'type': 'list', 'name': 'script_endpoints'},
         {'type': 'list', 'name': 'schedules'},
         {'type': 'list', 'name': 'templates'}
     )
@@ -46,11 +46,11 @@ class Instance(Model):
         endpoints = {
             'detail': {
                 'methods': ['delete', 'patch', 'put', 'get'],
-                'path': '/v1/instances/{name}/',
+                'path': '/v1.1/instances/{name}/',
             },
             'list': {
                 'methods': ['post', 'get'],
-                'path': '/v1/instances/',
+                'path': '/v1.1/instances/',
             }
         }
 

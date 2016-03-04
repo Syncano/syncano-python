@@ -74,7 +74,7 @@ class ModelTestCase(unittest.TestCase):
         self.assertTrue(connection_mock.request.called)
         connection_mock.request.assert_called_with(
             'POST',
-            '/v1/instances/',
+            '/v1.1/instances/',
             data={'name': 'test'}
         )
 
@@ -92,7 +92,7 @@ class ModelTestCase(unittest.TestCase):
         self.assertTrue(connection_mock.request.called)
         connection_mock.request.assert_called_with(
             'PUT',
-            '/v1/instances/test/',
+            '/v1.1/instances/test/',
             data={'name': 'test'}
         )
 
@@ -103,13 +103,13 @@ class ModelTestCase(unittest.TestCase):
         self.assertTrue(connection_mock.request.called)
         connection_mock.request.assert_called_with(
             'PUT',
-            '/v1/instances/test/',
+            '/v1.1/instances/test/',
             data={'name': 'test'}
         )
 
     @mock.patch('syncano.models.Instance._get_connection')
     def test_delete(self, connection_mock):
-        model = Instance(name='test', links={'self': '/v1/instances/test/'})
+        model = Instance(name='test', links={'self': '/v1.1/instances/test/'})
         connection_mock.return_value = connection_mock
 
         self.assertFalse(connection_mock.called)
@@ -119,7 +119,7 @@ class ModelTestCase(unittest.TestCase):
         self.assertTrue(connection_mock.request.called)
 
         connection_mock.assert_called_once_with()
-        connection_mock.request.assert_called_once_with('DELETE', '/v1/instances/test/')
+        connection_mock.request.assert_called_once_with('DELETE', '/v1.1/instances/test/')
 
         model = Instance()
         with self.assertRaises(SyncanoValidationError):
@@ -127,7 +127,7 @@ class ModelTestCase(unittest.TestCase):
 
     @mock.patch('syncano.models.Instance._get_connection')
     def test_reload(self, connection_mock):
-        model = Instance(name='test', links={'self': '/v1/instances/test/'})
+        model = Instance(name='test', links={'self': '/v1.1/instances/test/'})
         connection_mock.return_value = connection_mock
         connection_mock.request.return_value = {
             'name': 'new_one',
@@ -144,7 +144,7 @@ class ModelTestCase(unittest.TestCase):
         self.assertEqual(model.description, 'dummy desc')
 
         connection_mock.assert_called_once_with()
-        connection_mock.request.assert_called_once_with('GET', '/v1/instances/test/')
+        connection_mock.request.assert_called_once_with('GET', '/v1.1/instances/test/')
 
         model = Instance()
         with self.assertRaises(SyncanoValidationError):
@@ -194,6 +194,6 @@ class ModelTestCase(unittest.TestCase):
         self.assertTrue(connection_mock.request.called)
         connection_mock.request.assert_called_with(
             'POST',
-            '/v1/instances/',
+            '/v1.1/instances/',
             data={'name': 'test', 'expected_revision': 12}
         )

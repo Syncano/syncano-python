@@ -34,7 +34,7 @@ class LoginTest(IntegrationTest):
         cls.connection = None
 
     def check_connection(self, con):
-        response = con.request('GET', '/v1/instances/test_login/classes/')
+        response = con.request('GET', '/v1.1/instances/test_login/classes/')
 
         obj_list = response['objects']
 

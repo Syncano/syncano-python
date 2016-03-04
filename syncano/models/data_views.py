@@ -5,7 +5,7 @@ from .base import Model
 from .instances import Instance
 
 
-class DataView(Model):
+class EndpointData(Model):
     """
     :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`
@@ -46,27 +46,26 @@ class DataView(Model):
 
     class Meta:
         parent = Instance
-        plural_name = 'DataViews'
         endpoints = {
             'detail': {
                 'methods': ['get', 'put', 'patch', 'delete'],
-                'path': '/api/objects/{name}/',
+                'path': '/endpoints/data/{name}/',
             },
             'list': {
                 'methods': ['post', 'get'],
-                'path': '/api/objects/',
+                'path': '/endpoints/data/',
             },
             'get': {
                 'methods': ['get'],
-                'path': '/api/objects/{name}/get/',
+                'path': '/endpoints/data/{name}/get/',
             },
             'rename': {
                 'methods': ['post'],
-                'path': '/api/objects/{name}/rename/',
+                'path': '/endpoints/data/{name}/rename/',
             },
             'clear_cache': {
                 'methods': ['post'],
-                'path': '/api/objects/{name}/clear_cache/',
+                'path': '/endpoints/data/{name}/clear_cache/',
             }
         }
 
