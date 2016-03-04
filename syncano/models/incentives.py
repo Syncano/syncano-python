@@ -7,7 +7,7 @@ from syncano.exceptions import SyncanoValidationError
 from . import fields
 from .base import Model
 from .instances import Instance
-from .manager import ScriptManager, ScriptEndpointManager
+from .manager import ScriptEndpointManager, ScriptManager
 
 
 class Script(Model):
@@ -208,7 +208,8 @@ class ScriptEndpoint(Model):
         **ScriptEndpoint** has special method called ``run`` which will execute related script::
 
             >>> ScriptEndpoint.please.run('instance-name', 'script-name')
-            >>> ScriptEndpoint.please.run('instance-name', 'script-name', payload={'variable_one': 1, 'variable_two': 2})
+            >>> ScriptEndpoint.please.run('instance-name', 'script-name', payload={'variable_one': 1,
+                                                                                   'variable_two': 2})
             >>> ScriptEndpoint.please.run('instance-name', 'script-name',
                                    payload="{\"variable_one\": 1, \"variable_two\": 2}")
 

@@ -4,7 +4,7 @@ import unittest
 from datetime import datetime
 
 from syncano.exceptions import SyncanoValidationError
-from syncano.models import Script, ScriptTrace, ResponseTemplate, ScriptEndpoint, ScriptEndpointTrace
+from syncano.models import ResponseTemplate, Script, ScriptEndpoint, ScriptEndpointTrace, ScriptTrace
 
 try:
     from unittest import mock

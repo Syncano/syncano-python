@@ -7,7 +7,7 @@ from uuid import uuid4
 
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
-from syncano.models import ApiKey, Class, Script, Instance, Object, ScriptEndpoint, registry
+from syncano.models import ApiKey, Class, Instance, Object, Script, ScriptEndpoint, registry
 
 
 class IntegrationTest(unittest.TestCase):

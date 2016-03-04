@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from . import fields
 from .base import Model
 from .custom_response import CustomResponseMixin
-from .incentives import Script, Schedule, Trigger, ScriptEndpoint
+from .incentives import Schedule, Script, ScriptEndpoint, Trigger
 
 
 class ScriptTrace(CustomResponseMixin, Model):
