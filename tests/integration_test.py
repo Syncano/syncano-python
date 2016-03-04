@@ -73,6 +73,7 @@ class InstanceIntegrationTest(IntegrationTest):
         self.assertIsNotNone(instance.pk)
         self.assertEqual(instance.name, name)
         self.assertEqual(instance.description, description)
+        instance.delete()
 
         instance = self.model(name=name, description=description)
         instance.save()

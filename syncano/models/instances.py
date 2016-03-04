@@ -33,6 +33,7 @@ class Instance(Model):
         {'type': 'list', 'name': 'push_notifications'},
         {'type': 'list', 'name': 'scripts', 'child': True, 'model_name': 'Script'},
         {'type': 'list', 'name': 'script_endpoints', 'child': True, 'model_name': 'ScriptEndpoint'},
+        {'type': 'list', 'name': 'templates', 'child': True, 'model_name': 'ResponseTemplate'},
         {'type': 'list', 'name': 'gcm_devices', 'child': True, 'model_name': 'GCMDevice'},
         {'type': 'list', 'name': 'gcm_messages', 'child': True, 'model_name': 'GCMMessage'},
         {'type': 'list', 'name': 'apns_devices', 'child': True, 'model_name': 'APNSDevice'},
