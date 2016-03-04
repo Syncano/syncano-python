@@ -36,10 +36,12 @@ class ManagerDescriptor(object):
 
 class RelatedManagerDescriptor(object):
 
-    def __init__(self, field, name, endpoint):
+    def __init__(self, field, name, endpoint, search_by_path=True, model_name=None):
+        self.search_by_path = search_by_path
         self.field = field
         self.name = name
         self.endpoint = endpoint
+        self.model_name = model_name
 
     def __get__(self, instance, owner=None):
         if instance is None:
@@ -50,12 +52,16 @@ class RelatedManagerDescriptor(object):
         if not links:
             return None
 
-        path = links[self.name]
+        if self.search_by_path:
+            path = links[self.name]
 
-        if not path:
-            return None
+            if not path:
+                return None
 
-        Model = registry.get_model_by_path(path)
+            Model = registry.get_model_by_path(path)
+        else:
+            Model = registry.get_model_by_name(self.model_name)
+
         method = getattr(Model.please, self.endpoint, Model.please.all)
 
         properties = instance._meta.get_endpoint_properties('detail')

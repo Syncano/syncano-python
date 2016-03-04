@@ -403,7 +403,9 @@ class HyperlinkedField(Field):
             if name in self.IGNORED_LINKS:
                 continue
 
-            setattr(cls, name, RelatedManagerDescriptor(self, name, endpoint))
+            setattr(cls, name, RelatedManagerDescriptor(self, name, endpoint,
+                                                        search_by_path=not link.get('child', False),
+                                                        model_name=link.get('model_name')))
 
 
 class ModelField(Field):
