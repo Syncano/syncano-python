@@ -237,10 +237,14 @@ class Manager(ConnectionMixin):
         attrs.update(self.properties)
         attrs.update({'is_lazy': self.is_lazy})
         instance = self._get_instance(attrs)
-        saved_instance = instance.save()
+
+        if instance.__class__.__name__ == 'Instance':
+            registry.set_used_instance(instance.name)
+
         if not self.is_lazy:
-            return instance
-        return saved_instance
+            return instance.save()
+
+        return instance
 
     def bulk_create(self, *objects):
         """
