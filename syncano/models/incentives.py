@@ -36,14 +36,7 @@ class Script(Model):
             >>> s.run()
             >>> s.run(variable_one=1, variable_two=2)
     """
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'list', 'name': 'runtimes'},
-        # This will cause name collision between model run method
-        # and HyperlinkedField dynamic methods.
-        # {'type': 'detail', 'name': 'run'},
-        {'type': 'list', 'name': 'traces'},
-    )
+
     RUNTIME_CHOICES = (
         {'display_name': 'nodejs', 'value': 'nodejs'},
         {'display_name': 'python', 'value': 'python'},
@@ -56,9 +49,11 @@ class Script(Model):
     source = fields.StringField()
     runtime_name = fields.ChoiceField(choices=RUNTIME_CHOICES)
     config = fields.Field(required=False)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
+
+    traces = fields.RelatedManagerField('ScriptTrace')
 
     please = ScriptManager()
 
@@ -120,11 +115,6 @@ class Schedule(Model):
     :ivar scheduled_next: :class:`~syncano.models.fields.DateTimeField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     """
-    LINKS = [
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'detail', 'name': 'script'},
-        {'type': 'list', 'name': 'traces'},
-    ]
 
     label = fields.StringField(max_length=80)
     script = fields.IntegerField(label='script id')
@@ -133,7 +123,11 @@ class Schedule(Model):
     payload = fields.StringField(required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
     scheduled_next = fields.DateTimeField(read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
+
+    traces = fields.RelatedManagerField('ScheduleTraces')
+    # TODO: think of such case
+    # script = fields.RelatedManagerField('Script', endpoint='detail')
 
     class Meta:
         parent = Instance
@@ -161,12 +155,7 @@ class Trigger(Model):
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
     """
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'detail', 'name': 'script'},
-        {'type': 'detail', 'name': 'class_name'},
-        {'type': 'list', 'name': 'traces'},
-    )
+
     SIGNAL_CHOICES = (
         {'display_name': 'post_update', 'value': 'post_update'},
         {'display_name': 'post_create', 'value': 'post_create'},
@@ -177,9 +166,14 @@ class Trigger(Model):
     script = fields.IntegerField(label='script id')
     class_name = fields.StringField(label='class name', mapping='class')
     signal = fields.ChoiceField(choices=SIGNAL_CHOICES)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
+
+    traces = fields.RelatedManagerField('TriggerTrace')
+    # TODO: handle this
+    # class_name = fields.RelatedManagerField
+    # script = fields.RelatedManagerField
 
     class Meta:
         parent = Instance
@@ -220,18 +214,16 @@ class ScriptEndpoint(Model):
             >>> se.run(variable_one=1, variable_two=2)
 
     """
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'detail', 'name': 'script'},
-        {'type': 'list', 'name': 'traces'},
-    )
 
     name = fields.SlugField(max_length=50, primary_key=True)
     script = fields.IntegerField(label='script id')
     public = fields.BooleanField(required=False, default=False)
     public_link = fields.ChoiceField(required=False, read_only=True)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
 
+    traces = fields.RelatedManagerField('ScriptEndpointTrace')
+    # TODO: think of such case
+    # script = fields.RelatedManagerField('Script', endpoint='detail')
     please = ScriptEndpointManager()
 
     class Meta:
@@ -312,15 +304,11 @@ class ResponseTemplate(Model):
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
     """
 
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-
     name = fields.StringField(max_length=64)
     content = fields.StringField(label='content')
     content_type = fields.StringField(label='content type')
     context = fields.JSONField(label='context')
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
 
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)

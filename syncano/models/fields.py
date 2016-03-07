@@ -8,7 +8,7 @@ from syncano import PUSH_ENV, logger
 from syncano.exceptions import SyncanoFieldError, SyncanoValueError
 from syncano.utils import force_text
 
-from .manager import RelatedManagerDescriptor, SchemaManager
+from .manager import SchemaManager
 from .registry import registry
 
 
@@ -156,6 +156,28 @@ class Field(object):
         )
 
         setattr(self, 'ValidationError', error_class)
+
+
+class RelatedManagerField(Field):
+
+    def __init__(self, model_name, endpoint='list'):
+        self.model_name = model_name
+        self.endpoint = endpoint
+        self.model_name = model_name
+
+    def __get__(self, instance, owner=None):
+        if instance is None:
+            raise AttributeError("RelatedManager is accessible only via {0} instances.".format(owner.__name__))
+
+        Model = registry.get_model_by_name(self.model_name)
+        method = getattr(Model.please, self.endpoint, Model.please.all)
+        properties = instance._meta.get_endpoint_properties('detail')
+        properties = [getattr(instance, prop) for prop in properties]
+
+        return method(*properties)
+
+    def contribute_to_class(self, cls, name):
+        setattr(cls, name, self)
 
 
 class PrimaryKeyField(Field):
@@ -385,27 +407,36 @@ class DateTimeField(DateField):
         return ret
 
 
-class HyperlinkedField(Field):
+class LinksWrapper(object):
+
+    def __init__(self, links_dict, ignored_links):
+        self.links_dict = links_dict
+        self.ignored_links = ignored_links
+
+    def __getattribute__(self, item):
+        try:
+            return super(LinksWrapper, self).__getattribute__(item)
+        except AttributeError:
+            if item not in self.links_dict or item in self.ignored_links:
+                raise
+            return self.links_dict[item]
+
+    def to_native(self):
+        return self.links_dict
+
+
+class LinksField(Field):
     query_allowed = False
     IGNORED_LINKS = ('self', )
 
     def __init__(self, *args, **kwargs):
-        self.links = kwargs.pop('links', [])
-        super(HyperlinkedField, self).__init__(*args, **kwargs)
+        super(LinksField, self).__init__(*args, **kwargs)
 
-    def contribute_to_class(self, cls, name):
-        super(HyperlinkedField, self).contribute_to_class(cls, name)
+    def to_python(self, value):
+        return LinksWrapper(value, self.IGNORED_LINKS)
 
-        for link in self.links:
-            name = link['name']
-            endpoint = link['type']
-
-            if name in self.IGNORED_LINKS:
-                continue
-
-            setattr(cls, name, RelatedManagerDescriptor(self, name, endpoint,
-                                                        search_by_path=not link.get('child', False),
-                                                        model_name=link.get('model_name')))
+    def to_native(self, value):
+        return value
 
 
 class ModelField(Field):
@@ -611,7 +642,7 @@ MAPPING = {
     'field': Field,
     'writable': WritableField,
     'endpoint': EndpointField,
-    'links': HyperlinkedField,
+    'links': LinksField,
     'model': ModelField,
     'json': JSONField,
     'schema': SchemaField,

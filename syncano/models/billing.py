@@ -17,17 +17,13 @@ class Coupon(Model):
     :ivar duration: :class:`~syncano.models.fields.IntegerField`
     """
 
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'list', 'name': 'redeem'},
-    )
     CURRENCY_CHOICES = (
         {'display_name': 'USD', 'value': 'usd'},
     )
 
     name = fields.StringField(max_length=32, primary_key=True)
     redeem_by = fields.DateField()
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     percent_off = fields.IntegerField(required=False)
     amount_off = fields.FloatField(required=False)
     currency = fields.ChoiceField(choices=CURRENCY_CHOICES)
@@ -57,15 +53,11 @@ class Discount(Model):
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     """
 
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-
     instance = fields.ModelField('Instance')
     coupon = fields.ModelField('Coupon')
     start = fields.DateField(read_only=True, required=False)
     end = fields.DateField(read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
 
     class Meta:
         endpoints = {

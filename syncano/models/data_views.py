@@ -18,11 +18,6 @@ class EndpointData(Model):
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     """
 
-    LINKS = [
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'list', 'name': 'data_views'},
-    ]
-
     PERMISSIONS_CHOICES = (
         {'display_name': 'None', 'value': 'none'},
         {'display_name': 'Read', 'value': 'read'},
@@ -42,7 +37,7 @@ class EndpointData(Model):
     order_by = fields.StringField(required=False)
     page_size = fields.IntegerField(required=False)
 
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
 
     class Meta:
         parent = Instance

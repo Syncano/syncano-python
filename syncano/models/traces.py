@@ -21,12 +21,9 @@ class ScriptTrace(CustomResponseMixin, Model):
         {'display_name': 'Processing', 'value': 'processing'},
         {'display_name': 'Pending', 'value': 'pending'},
     )
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
 
     status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     executed_at = fields.DateTimeField(read_only=True, required=False)
     result = fields.JSONField(read_only=True, required=False)
     duration = fields.IntegerField(read_only=True, required=False)
@@ -59,12 +56,9 @@ class ScheduleTrace(Model):
         {'display_name': 'Timeout', 'value': 'timeout'},
         {'display_name': 'Pending', 'value': 'pending'},
     )
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
 
     status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     executed_at = fields.DateTimeField(read_only=True, required=False)
     result = fields.StringField(read_only=True, required=False)
     duration = fields.IntegerField(read_only=True, required=False)
@@ -102,7 +96,7 @@ class TriggerTrace(Model):
     )
 
     status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     executed_at = fields.DateTimeField(read_only=True, required=False)
     result = fields.StringField(read_only=True, required=False)
     duration = fields.IntegerField(read_only=True, required=False)
@@ -135,12 +129,9 @@ class ScriptEndpointTrace(CustomResponseMixin, Model):
         {'display_name': 'Timeout', 'value': 'timeout'},
         {'display_name': 'Pending', 'value': 'pending'},
     )
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
 
     status = fields.ChoiceField(choices=STATUS_CHOICES, read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     executed_at = fields.DateTimeField(read_only=True, required=False)
     result = fields.JSONField(read_only=True, required=False)
     duration = fields.IntegerField(read_only=True, required=False)

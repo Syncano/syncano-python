@@ -34,45 +34,6 @@ class ManagerDescriptor(object):
         return self.manager.all()
 
 
-class RelatedManagerDescriptor(object):
-
-    def __init__(self, field, name, endpoint, search_by_path=True, model_name=None):
-        self.search_by_path = search_by_path
-        self.field = field
-        self.name = name
-        self.endpoint = endpoint
-        self.model_name = model_name
-
-    def __get__(self, instance, owner=None):
-        if instance is None:
-            raise AttributeError("RelatedManager is accessible only via {0} instances.".format(owner.__name__))
-
-        links = getattr(instance, self.field.name)
-
-        if not links:
-            return None
-
-        if self.search_by_path:
-            path = links[self.name]
-
-            if not path:
-                return None
-
-            Model = registry.get_model_by_path(path)
-        else:
-            Model = registry.get_model_by_name(self.model_name)
-
-        method = getattr(Model.please, self.endpoint, Model.please.all)
-
-        properties = instance._meta.get_endpoint_properties('detail')
-
-        if instance.__class__.__name__ == 'Instance':
-            registry.set_last_used_instance(getattr(instance, 'name', None))
-        properties = [getattr(instance, prop) for prop in properties]
-
-        return method(*properties)
-
-
 class Manager(ConnectionMixin):
     """Base class responsible for all ORM (``please``) actions."""
 

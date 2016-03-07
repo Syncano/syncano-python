@@ -55,7 +55,7 @@ class AllFieldsModel(models.Model):
     choice_field = models.ChoiceField(choices=CHOICES)
     date_field = models.DateField()
     datetime_field = models.DateTimeField()
-    hyperlinked_field = models.HyperlinkedField()
+    hyperlinked_field = models.LinksField()
     model_field = models.ModelField('Instance')
     json_field = models.JSONField(schema=SCHEMA)
     schema_field = models.SchemaField()
