@@ -795,8 +795,6 @@ class Manager(ConnectionMixin):
     def _get_endpoint_properties(self):
         defaults = {f.name: f.default for f in self.model._meta.fields if f.default is not None}
         defaults.update(self.properties)
-        if defaults.get('instance_name'):
-            registry.set_last_used_instance(defaults['instance_name'])
         return self.model._meta.resolve_endpoint(self.endpoint, defaults), defaults
 
 

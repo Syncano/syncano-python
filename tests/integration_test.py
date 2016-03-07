@@ -319,7 +319,7 @@ class ScriptIntegrationTest(InstanceMixin, IntegrationTest):
 
     def test_required_fields(self):
         with self.assertRaises(SyncanoValueError):
-            registry.clear_instance_name()
+            registry.clear_used_instance()
             list(self.model.please.all())
 
     def test_list(self):
@@ -421,7 +421,7 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
 
     def test_required_fields(self):
         with self.assertRaises(SyncanoValueError):
-            registry.clear_instance_name()
+            registry.clear_used_instance()
             list(self.model.please.all())
 
     def test_list(self):

@@ -14,7 +14,7 @@ class Registry(object):
         self.schemas = {}
         self.patterns = []
         self._pending_lookups = {}
-        self.last_used_instance = None
+        self.instance_name = None
         self._default_connection = None
 
     def __str__(self):
@@ -80,13 +80,13 @@ class Registry(object):
     def set_default_instance(self, value):
         self.set_default_property('instance_name', value)
 
-    def set_last_used_instance(self, instance):
-        if instance and self.last_used_instance != instance or registry.last_used_instance is None:
+    def set_used_instance(self, instance):
+        if instance and self.instance_name != instance or registry.instance_name is None:
             self.set_default_instance(instance)  # update the registry with last used instance;
-            self.last_used_instance = instance
+            self.instance_name = instance
 
-    def clear_instance_name(self):
-        self.last_used_instance = None
+    def clear_used_instance(self):
+        self.instance_name = None
         self.set_default_instance(None)
 
     def get_schema(self, class_name):
