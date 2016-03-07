@@ -173,9 +173,8 @@ class RelatedManagerField(Field):
         method = getattr(Model.please, self.endpoint, Model.please.all)
         properties = instance._meta.get_endpoint_properties('detail')
         properties = [getattr(instance, prop) for prop in properties]
-
-        if properties.get('instance_name'):
-            registry.set_last_used_instance(properties['instance_name'])
+        if instance.__class__.name == 'Instance':
+            registry.set_last_used_instance(instance.name)
         return method(*properties)
 
     def contribute_to_class(self, cls, name):
