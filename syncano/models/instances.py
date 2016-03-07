@@ -67,7 +67,7 @@ class Instance(Model):
         :param new_name: the new name for the instance;
         :return: a populated Instance object;
         """
-        rename_path = self.links.get('rename')
+        rename_path = self.links.rename
         data = {'new_name': new_name}
         connection = self._get_connection()
         response = connection.request('POST', rename_path, data=data)
