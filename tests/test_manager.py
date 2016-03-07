@@ -2,8 +2,7 @@ import unittest
 from datetime import datetime
 
 from syncano.exceptions import SyncanoDoesNotExist, SyncanoRequestError, SyncanoValueError
-from syncano.models import Instance, Object, Script, ScriptEndpoint, ScriptEndpointTrace, ScriptTrace, User
-from syncano.models import registry
+from syncano.models import Instance, Object, Script, ScriptEndpoint, ScriptEndpointTrace, ScriptTrace, User, registry
 
 try:
     from unittest import mock
