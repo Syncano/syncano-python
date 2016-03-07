@@ -233,10 +233,11 @@ class Manager(ConnectionMixin):
 
         are equivalent.
         """
+        data = self.properties.copy()
         attrs = kwargs.copy()
-        attrs.update(self.properties)
-        attrs.update({'is_lazy': self.is_lazy})
-        instance = self._get_instance(attrs)
+        data.update(attrs)
+        data.update({'is_lazy': self.is_lazy})
+        instance = self._get_instance(data)
 
         if instance.__class__.__name__ == 'Instance':
             registry.set_used_instance(instance.name)
