@@ -3,6 +3,7 @@ from datetime import datetime
 
 from syncano.exceptions import SyncanoDoesNotExist, SyncanoRequestError, SyncanoValueError
 from syncano.models import Instance, Object, Script, ScriptEndpoint, ScriptEndpointTrace, ScriptTrace, User
+from syncano.models import registry
 
 try:
     from unittest import mock
@@ -35,6 +36,7 @@ class ManagerTestCase(unittest.TestCase):
 
         self.model = None
         self.manager = None
+        registry.clear_used_instance()
 
     def get_name_from_fields(self):
         names = [f for f in self.model._meta.fields
