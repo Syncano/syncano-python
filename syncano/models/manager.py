@@ -201,7 +201,7 @@ class Manager(ConnectionMixin):
 
         response = self.connection.request(
             'POST',
-            self.BATCH_URI.format(name=registry.last_used_instance),
+            self.BATCH_URI.format(name=registry.instance_name),
             **{'data': {'requests': requests}}
         )
 
@@ -241,10 +241,11 @@ class Manager(ConnectionMixin):
         if instance.__class__.__name__ == 'Instance':
             registry.set_used_instance(instance.name)
 
+        saved_instance = instance.save()
         if not self.is_lazy:
-            return instance.save()
+            return instance
 
-        return instance
+        return saved_instance
 
     def bulk_create(self, *objects):
         """
@@ -315,7 +316,7 @@ class Manager(ConnectionMixin):
 
         response = self.connection.request(
             'POST',
-            self.BATCH_URI.format(name=registry.last_used_instance),
+            self.BATCH_URI.format(name=registry.instance_name),
             **{'data': {'requests': requests}}
         )
 
