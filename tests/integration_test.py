@@ -119,6 +119,7 @@ class ClassIntegrationTest(InstanceMixin, IntegrationTest):
     model = Class
 
     def test_instance_name_is_required(self):
+        registry.clear_used_instance()
         with self.assertRaises(SyncanoValueError):
             list(self.model.please.all())
 
