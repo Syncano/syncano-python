@@ -126,8 +126,6 @@ class Schedule(Model):
     links = fields.LinksField()
 
     traces = fields.RelatedManagerField('ScheduleTraces')
-    # TODO: think of such case
-    # script = fields.RelatedManagerField('Script', endpoint='detail')
 
     class Meta:
         parent = Instance
@@ -171,9 +169,6 @@ class Trigger(Model):
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
     traces = fields.RelatedManagerField('TriggerTrace')
-    # TODO: handle this
-    # class_name = fields.RelatedManagerField
-    # script = fields.RelatedManagerField
 
     class Meta:
         parent = Instance
@@ -222,8 +217,6 @@ class ScriptEndpoint(Model):
     links = fields.LinksField()
 
     traces = fields.RelatedManagerField('ScriptEndpointTrace')
-    # TODO: think of such case
-    # script = fields.RelatedManagerField('Script', endpoint='detail')
     please = ScriptEndpointManager()
 
     class Meta:
