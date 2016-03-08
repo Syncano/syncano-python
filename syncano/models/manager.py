@@ -772,6 +772,19 @@ class Manager(ConnectionMixin):
 
         return model(**properties) if self._serialize else data
 
+    def build_request(self, request):
+        if 'params' not in request and self.query:
+            request['params'] = self.query
+
+        if 'data' not in request and self.data:
+            request['data'] = self.data
+
+        if 'headers' not in request:
+            request['headers'] = {}
+
+        if self._template is not None and 'X-TEMPLATE-RESPONSE' not in request['headers']:
+            request['headers']['X-TEMPLATE-RESPONSE'] = self._template
+
     def request(self, method=None, path=None, **request):
         """Internal method, which calls Syncano API and returns serialized data."""
         meta = self.model._meta
@@ -785,17 +798,7 @@ class Manager(ConnectionMixin):
             methods = ', '.join(allowed_methods)
             raise SyncanoValueError('Unsupported request method "{0}" allowed are {1}.'.format(method, methods))
 
-        if 'params' not in request and self.query:
-            request['params'] = self.query
-
-        if 'data' not in request and self.data:
-            request['data'] = self.data
-
-        if 'headers' not in request:
-            request['headers'] = {}
-
-        if self._template is not None and 'X-TEMPLATE-RESPONSE' not in request['headers']:
-            request['headers']['X-TEMPLATE-RESPONSE'] = self._template
+        self.build_request(request)
 
         try:
             response = self.connection.request(method, path, **request)
