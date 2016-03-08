@@ -393,7 +393,7 @@ class ManagerTestCase(unittest.TestCase):
         clone_mock.return_value = self.manager
 
         self.assertTrue(self.manager._serialize)
-        self.assertNone(self.manager._template)
+        self.assertIsNone(self.manager._template)
         self.manager.template('test')
         self.assertFalse(self.manager._serialize)
         self.assertEqual(self.manager._template, 'test')
@@ -431,6 +431,7 @@ class ManagerTestCase(unittest.TestCase):
             'GET',
             u'/v1/instances/',
             data={'b': 2},
+            headers={},
             params={'a': 1}
         )
 
