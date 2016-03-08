@@ -245,8 +245,10 @@ class Connection(object):
 
         # JSON dump can be expensive
         if syncano.DEBUG:
+            debug_params = params.copy()
+            debug_params.update({'files': [f for f in files]})  # show files in debug info;
             formatted_params = json.dumps(
-                params,
+                debug_params,
                 sort_keys=True,
                 indent=2,
                 separators=(',', ': ')

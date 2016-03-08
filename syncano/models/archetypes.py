@@ -248,8 +248,12 @@ class Model(six.with_metaclass(ModelMetaclass)):
                 if field.mapping:
                     data[field.mapping] = field.to_native(value)
                 else:
+
                     param_name = getattr(field, 'param_name', field.name)
-                    data[param_name] = field.to_native(value)
+                    if param_name == 'files' and param_name in data:
+                        data[param_name].update(field.to_native(value))
+                    else:
+                        data[param_name] = field.to_native(value)
         return data
 
     def get_endpoint_data(self):
