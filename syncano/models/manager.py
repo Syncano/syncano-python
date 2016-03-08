@@ -88,6 +88,7 @@ class Manager(ConnectionMixin):
         self._limit = None
         self._serialize = True
         self._connection = None
+        self._template = None
 
     def __repr__(self):  # pragma: no cover
         data = list(self[:REPR_OUTPUT_SIZE + 1])
@@ -676,6 +677,21 @@ class Manager(ConnectionMixin):
         return self
 
     @clone
+    def template(self, name):
+        """
+        Disables serialization. ``request`` method will return raw text.
+
+        Usage::
+
+            >>> instances = Instance.please.list().template('test')
+            >>> instances
+            u'text'
+        """
+        self._serialize = False
+        self._template = name
+        return self
+
+    @clone
     def using(self, connection):
         """
         Connection juggling.
@@ -725,6 +741,7 @@ class Manager(ConnectionMixin):
         manager.name = self.name
         manager.model = self.model
         manager._connection = self._connection
+        manager._template = self._template
         manager.endpoint = self.endpoint
         manager.properties = deepcopy(self.properties)
         manager._limit = self._limit
@@ -773,6 +790,12 @@ class Manager(ConnectionMixin):
 
         if 'data' not in request and self.data:
             request['data'] = self.data
+
+        if 'headers' not in request:
+            request['headers'] = {}
+
+        if self._template is not None and 'X-TEMPLATE-RESPONSE' not in request['headers']:
+            request['headers']['X-TEMPLATE-RESPONSE'] = self._template
 
         try:
             response = self.connection.request(method, path, **request)

@@ -286,6 +286,7 @@ class Connection(object):
             content = response.json()
         except ValueError:
             content = response.text
+
         if is_server_error(response.status_code):
             raise SyncanoRequestError(response.status_code, 'Server error.')
 
