@@ -163,7 +163,6 @@ class RelatedManagerField(Field):
     def __init__(self, model_name, endpoint='list'):
         self.model_name = model_name
         self.endpoint = endpoint
-        self.model_name = model_name
 
     def __get__(self, instance, owner=None):
         if instance is None:

@@ -16,7 +16,7 @@ class DeviceBase(object):
     device_id = fields.StringField(required=False)
     is_active = fields.BooleanField(default=True)
     label = fields.StringField(max_length=80)
-    user_id = fields.IntegerField(required=False)
+    user = fields.IntegerField(required=False)
 
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
