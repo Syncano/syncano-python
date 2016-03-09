@@ -245,8 +245,10 @@ class Connection(object):
 
         # JSON dump can be expensive
         if syncano.DEBUG:
+            debug_params = params.copy()
+            debug_params.update({'files': [f for f in files]})  # show files in debug info;
             formatted_params = json.dumps(
-                params,
+                debug_params,
                 sort_keys=True,
                 indent=2,
                 separators=(',', ': ')
@@ -286,6 +288,7 @@ class Connection(object):
             content = response.json()
         except ValueError:
             content = response.text
+
         if is_server_error(response.status_code):
             raise SyncanoRequestError(response.status_code, 'Server error.')
 

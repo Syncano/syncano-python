@@ -7,7 +7,7 @@ from uuid import uuid4
 
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
-from syncano.models import Class, CodeBox, Instance, Object, Webhook, registry
+from syncano.models import ApiKey, Class, CodeBox, Instance, Object, Webhook, registry
 
 
 class IntegrationTest(unittest.TestCase):
@@ -108,6 +108,15 @@ class InstanceIntegrationTest(IntegrationTest):
 
         with self.assertRaises(self.model.DoesNotExist):
             self.model.please.get(name=name)
+
+    def test_rename(self):
+        name = 'i%s' % self.generate_hash()[:10]
+        new_name = 'icy-snow-jon-von-doe-312'
+
+        instance = self.model.please.create(name=name, description='rest_rename')
+        instance = instance.rename(new_name=new_name)
+
+        self.assertEqual(instance.name, new_name)
 
 
 class ClassIntegrationTest(InstanceMixin, IntegrationTest):
@@ -278,6 +287,30 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
 
         author.delete()
 
+    def test_count_and_with_count(self):
+        author_one = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.author.name,
+            first_name='john1', last_name='doe1')
+
+        author_two = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.author.name,
+            first_name='john2', last_name='doe2')
+
+        # just created two authors
+
+        count = Object.please.list(instance_name=self.instance.name, class_name=self.author.name).count()
+        self.assertEqual(count, 2)
+
+        objects, count = Object.please.list(instance_name=self.instance.name,
+                                            class_name=self.author.name).with_count()
+
+        self.assertEqual(count, 2)
+        for o in objects:
+            self.assertTrue(isinstance(o, self.model))
+
+        author_one.delete()
+        author_two.delete()
+
 
 class CodeboxIntegrationTest(InstanceMixin, IntegrationTest):
     model = CodeBox
@@ -430,3 +463,21 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
         trace = webhook.run()
         self.assertDictEqual(trace, {'one': 1})
         webhook.delete()
+
+
+class ApiKeyIntegrationTest(InstanceMixin, IntegrationTest):
+    model = ApiKey
+
+    def test_api_key_flags(self):
+        api_key = self.model.please.create(
+            allow_user_create=True,
+            ignore_acl=True,
+            allow_anonymous_read=True,
+            instance_name=self.instance.name,
+        )
+
+        reloaded_api_key = self.model.please.get(id=api_key.id, instance_name=self.instance.name)
+
+        self.assertTrue(reloaded_api_key.allow_user_create, True)
+        self.assertTrue(reloaded_api_key.ignore_acl, True)
+        self.assertTrue(reloaded_api_key.allow_anonymous_read, True)
