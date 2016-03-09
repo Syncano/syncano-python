@@ -133,11 +133,11 @@ well how to use it to make API calls.</p>
 <div class="section" id="installing-syncano">
 <h2>Installing Syncano<a class="headerlink" href="#installing-syncano" title="Permalink to this headline">¶</a></h2>
 <p>You can use <tt class="docutils literal"><span class="pre">pip</span></tt> to install the latest released version of <tt class="docutils literal"><span class="pre">syncano</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre>pip install syncano
+<div class="highlight-python"><div class="highlight"><pre><span></span>pip install syncano
 </pre></div>
 </div>
 <p>If you want to install <tt class="docutils literal"><span class="pre">syncano</span></tt> from source:</p>
-<div class="highlight-python"><div class="highlight"><pre>git clone git@github.com:Syncano/syncano-python.git
+<div class="highlight-python"><div class="highlight"><pre><span></span>git clone git@github.com:Syncano/syncano-python.git
 cd syncano-python
 python setup.py install
 </pre></div>
@@ -148,29 +148,29 @@ python setup.py install
 <p>Another common way to install <tt class="docutils literal"><span class="pre">syncano</span></tt> is to use a <tt class="docutils literal"><span class="pre">virtualenv</span></tt>, which
 provides isolated environments. First, install the <tt class="docutils literal"><span class="pre">virtualenv</span></tt> Python
 package:</p>
-<div class="highlight-python"><div class="highlight"><pre>pip install virtualenv
+<div class="highlight-python"><div class="highlight"><pre><span></span>pip install virtualenv
 </pre></div>
 </div>
 <p>Next, create a virtual environment by using the <tt class="docutils literal"><span class="pre">virtualenv</span></tt> command and
 specifying where you want the virtualenv to be created (you can specify
 any directory you like, though this example allows for compatibility with
 <tt class="docutils literal"><span class="pre">virtualenvwrapper</span></tt>):</p>
-<div class="highlight-python"><div class="highlight"><pre>mkdir ~/.virtualenvs
+<div class="highlight-python"><div class="highlight"><pre><span></span>mkdir ~/.virtualenvs
 virtualenv ~/.virtualenvs/syncano
 </pre></div>
 </div>
 <p>You can now activate the virtual environment:</p>
-<div class="highlight-python"><div class="highlight"><pre>source ~/.virtualenvs/syncano/bin/activate
+<div class="highlight-python"><div class="highlight"><pre><span></span>source ~/.virtualenvs/syncano/bin/activate
 </pre></div>
 </div>
 <p>Now, any usage of <tt class="docutils literal"><span class="pre">python</span></tt> or <tt class="docutils literal"><span class="pre">pip</span></tt> (within the current shell) will default
 to the new, isolated version within your virtualenv.</p>
 <p>You can now install <tt class="docutils literal"><span class="pre">syncano</span></tt> into this virtual environment:</p>
-<div class="highlight-python"><div class="highlight"><pre>pip install syncano
+<div class="highlight-python"><div class="highlight"><pre><span></span>pip install syncano
 </pre></div>
 </div>
 <p>When you are done using <tt class="docutils literal"><span class="pre">syncano</span></tt>, you can deactivate your virtual environment:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">deactivate</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">deactivate</span>
 </pre></div>
 </div>
 <p>If you are creating a lot of virtual environments, <a class="reference external" href="http://virtualenvwrapper.readthedocs.org/en/latest/">virtualenvwrapper</a>
@@ -179,17 +179,17 @@ is an excellent tool that lets you easily manage your virtual environments.</p>
 <div class="section" id="making-connections">
 <h2>Making Connections<a class="headerlink" href="#making-connections" title="Permalink to this headline">¶</a></h2>
 <p><tt class="docutils literal"><span class="pre">syncano</span></tt> provides a number of convenience functions to simplify connecting to our services:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s1">&#39;YOUR_EMAIL&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;YOUR_PASSWORD&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If you want to connect directly to chosen instance you can use <tt class="xref py py-func docutils literal"><span class="pre">connect_instance()</span></tt> function:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect_instance</span><span class="p">(</span><span class="s1">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="s1">&#39;YOUR_EMAIL&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;YOUR_PASSWORD&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If you have obtained your <tt class="docutils literal"><span class="pre">Account</span> <span class="pre">Key</span></tt> from the website you can omit <tt class="docutils literal"><span class="pre">email</span></tt> &amp; <tt class="docutils literal"><span class="pre">password</span></tt> and pass <tt class="docutils literal"><span class="pre">Account</span> <span class="pre">Key</span></tt> directly to connection:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s1">&#39;YOUR_API_KEY&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect_instance</span><span class="p">(</span><span class="s1">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s1">&#39;YOUR_API_KEY&#39;</span><span class="p">)</span>
 </pre></div>
@@ -198,7 +198,7 @@ is an excellent tool that lets you easily manage your virtual environments.</p>
 <div class="section" id="troubleshooting-connections">
 <h2>Troubleshooting Connections<a class="headerlink" href="#troubleshooting-connections" title="Permalink to this headline">¶</a></h2>
 <p>When calling the various queries, you might run into an error like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s1">&#39;abcd&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
 <span class="gt">Traceback (most recent call last):</span>
@@ -209,7 +209,7 @@ is an excellent tool that lets you easily manage your virtual environments.</p>
 </div>
 <p>This is because your endpoint has invalid SSL certificate.
 If you want to skip SSL verification you need to create a new connection like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s1">&#39;abcd&#39;</span><span class="p">,</span> <span class="n">verify_ssl</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">instances</span><span class="p">)</span>
 <span class="go">[&lt;Instance: syncano&gt;]</span>
@@ -220,7 +220,7 @@ If you want to skip SSL verification you need to create a new connection like th
 <h2>Interacting with Syncano<a class="headerlink" href="#interacting-with-syncano" title="Permalink to this headline">¶</a></h2>
 <p>The following code demonstrates how to create a new <tt class="xref py py-class docutils literal"><span class="pre">Instance</span></tt>
 and add a <tt class="xref py py-class docutils literal"><span class="pre">ApiKey</span></tt> to it:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s1">&#39;abcd&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">instances</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;dummy_test&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span>
