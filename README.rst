@@ -15,10 +15,8 @@ You can also find library reference hosted on GitHub pages [here](http://syncano
 Backwards incompatible changes
 ------------------------------
 
-Version 4.0 is designed for new release of Syncano platform and
+Version 5.x is designed for new release of Syncano (API v1.1) platform and
 it's **not compatible** with any previous releases.
 
-Code from `0.6.x` release is avalable on [stable/0.6.x](https://github.com/Syncano/syncano-python/tree/stable/0.6.x) branch
-and it can be installed directly from pip via:
+On this branch we support old version of the library - 4.0 and above which handle the api v1 on the Syncano platform.
 
-``pip install syncano==0.6.2 --pre``
