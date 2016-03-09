@@ -388,6 +388,16 @@ class ManagerTestCase(unittest.TestCase):
         self.manager.raw()
         self.assertFalse(self.manager._serialize)
 
+    @mock.patch('syncano.models.manager.Manager._clone')
+    def test_template(self, clone_mock):
+        clone_mock.return_value = self.manager
+
+        self.assertTrue(self.manager._serialize)
+        self.assertIsNone(self.manager._template)
+        self.manager.template('test')
+        self.assertFalse(self.manager._serialize)
+        self.assertEqual(self.manager._template, 'test')
+
     def test_serialize(self):
         model = mock.Mock()
         self.manager.model = mock.Mock
@@ -421,6 +431,7 @@ class ManagerTestCase(unittest.TestCase):
             'GET',
             u'/v1/instances/',
             data={'b': 2},
+            headers={},
             params={'a': 1}
         )
 
