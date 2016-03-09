@@ -36,11 +36,6 @@ class Class(Model):
         **dynamically populated** with fields defined in schema attribute.
     """
 
-    LINKS = [
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'list', 'name': 'objects'},
-    ]
-
     PERMISSIONS_CHOICES = (
         {'display_name': 'None', 'value': 'none'},
         {'display_name': 'Read', 'value': 'read'},
@@ -52,7 +47,7 @@ class Class(Model):
     objects_count = fields.Field(read_only=True, required=False)
 
     schema = fields.SchemaField(read_only=False, required=True)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     status = fields.Field()
     metadata = fields.JSONField(read_only=False, required=False)
 
@@ -64,6 +59,8 @@ class Class(Model):
     group = fields.IntegerField(label='group id', required=False)
     group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
     other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+
+    objects = fields.RelatedManagerField('Object')
 
     class Meta:
         parent = Instance

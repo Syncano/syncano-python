@@ -174,7 +174,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
         connection = self._get_connection(**kwargs)
         connection.request('DELETE', endpoint)
         if self.__class__.__name__ == 'Instance':  # avoid circular import;
-            registry.clear_instance_name()
+            registry.clear_used_instance()
         self._raw_data = {}
 
     def reload(self, **kwargs):

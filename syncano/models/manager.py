@@ -34,43 +34,10 @@ class ManagerDescriptor(object):
         return self.manager.all()
 
 
-class RelatedManagerDescriptor(object):
-
-    def __init__(self, field, name, endpoint):
-        self.field = field
-        self.name = name
-        self.endpoint = endpoint
-
-    def __get__(self, instance, owner=None):
-        if instance is None:
-            raise AttributeError("RelatedManager is accessible only via {0} instances.".format(owner.__name__))
-
-        links = getattr(instance, self.field.name)
-
-        if not links:
-            return None
-
-        path = links[self.name]
-
-        if not path:
-            return None
-
-        Model = registry.get_model_by_path(path)
-        method = getattr(Model.please, self.endpoint, Model.please.all)
-
-        properties = instance._meta.get_endpoint_properties('detail')
-
-        if instance.__class__.__name__ == 'Instance':
-            registry.set_last_used_instance(getattr(instance, 'name', None))
-        properties = [getattr(instance, prop) for prop in properties]
-
-        return method(*properties)
-
-
 class Manager(ConnectionMixin):
     """Base class responsible for all ORM (``please``) actions."""
 
-    BATCH_URI = '/v1/instances/{name}/batch/'
+    BATCH_URI = '/v1.1/instances/{name}/batch/'
 
     def __init__(self):
         self.name = None
@@ -235,7 +202,7 @@ class Manager(ConnectionMixin):
 
         response = self.connection.request(
             'POST',
-            self.BATCH_URI.format(name=registry.last_used_instance),
+            self.BATCH_URI.format(name=registry.instance_name),
             **{'data': {'requests': requests}}
         )
 
@@ -267,13 +234,19 @@ class Manager(ConnectionMixin):
 
         are equivalent.
         """
+        data = self.properties.copy()
         attrs = kwargs.copy()
-        attrs.update(self.properties)
-        attrs.update({'is_lazy': self.is_lazy})
-        instance = self._get_instance(attrs)
+        data.update(attrs)
+        data.update({'is_lazy': self.is_lazy})
+        instance = self._get_instance(data)
+
+        if instance.__class__.__name__ == 'Instance':
+            registry.set_used_instance(instance.name)
+
         saved_instance = instance.save()
         if not self.is_lazy:
             return instance
+
         return saved_instance
 
     def bulk_create(self, *objects):
@@ -345,7 +318,7 @@ class Manager(ConnectionMixin):
 
         response = self.connection.request(
             'POST',
-            self.BATCH_URI.format(name=registry.last_used_instance),
+            self.BATCH_URI.format(name=registry.instance_name),
             **{'data': {'requests': requests}}
         )
 
@@ -854,15 +827,13 @@ class Manager(ConnectionMixin):
     def _get_endpoint_properties(self):
         defaults = {f.name: f.default for f in self.model._meta.fields if f.default is not None}
         defaults.update(self.properties)
-        if defaults.get('instance_name'):
-            registry.set_last_used_instance(defaults['instance_name'])
         return self.model._meta.resolve_endpoint(self.endpoint, defaults), defaults
 
 
-class CodeBoxManager(Manager):
+class ScriptManager(Manager):
     """
     Custom :class:`~syncano.models.manager.Manager`
-    class for :class:`~syncano.models.base.CodeBox` model.
+    class for :class:`~syncano.models.base.Script` model.
     """
 
     @clone
@@ -878,13 +849,13 @@ class CodeBoxManager(Manager):
         self._filter(*args, **kwargs)
         self._serialize = False
         response = self.request()
-        return registry.CodeBoxTrace(**response)
+        return registry.ScriptTrace(**response)
 
 
-class WebhookManager(Manager):
+class ScriptEndpointManager(Manager):
     """
     Custom :class:`~syncano.models.manager.Manager`
-    class for :class:`~syncano.models.base.Webhook` model.
+    class for :class:`~syncano.models.base.ScriptEndpoint` model.
     """
 
     @clone
@@ -902,7 +873,7 @@ class WebhookManager(Manager):
         response = self.request()
 
         # Workaround for circular import
-        return registry.WebhookTrace(**response)
+        return registry.ScriptEndpointTrace(**response)
 
 
 class ObjectManager(Manager):

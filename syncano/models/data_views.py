@@ -5,7 +5,7 @@ from .base import Model
 from .instances import Instance
 
 
-class DataView(Model):
+class EndpointData(Model):
     """
     :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`
@@ -17,11 +17,6 @@ class DataView(Model):
     :ivar page_size: :class:`~syncano.models.fields.IntegerField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     """
-
-    LINKS = [
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'list', 'name': 'data_views'},
-    ]
 
     PERMISSIONS_CHOICES = (
         {'display_name': 'None', 'value': 'none'},
@@ -42,31 +37,30 @@ class DataView(Model):
     order_by = fields.StringField(required=False)
     page_size = fields.IntegerField(required=False)
 
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
 
     class Meta:
         parent = Instance
-        plural_name = 'DataViews'
         endpoints = {
             'detail': {
                 'methods': ['get', 'put', 'patch', 'delete'],
-                'path': '/api/objects/{name}/',
+                'path': '/endpoints/data/{name}/',
             },
             'list': {
                 'methods': ['post', 'get'],
-                'path': '/api/objects/',
+                'path': '/endpoints/data/',
             },
             'get': {
                 'methods': ['get'],
-                'path': '/api/objects/{name}/get/',
+                'path': '/endpoints/data/{name}/get/',
             },
             'rename': {
                 'methods': ['post'],
-                'path': '/api/objects/{name}/rename/',
+                'path': '/endpoints/data/{name}/rename/',
             },
             'clear_cache': {
                 'methods': ['post'],
-                'path': '/api/objects/{name}/clear_cache/',
+                'path': '/endpoints/data/{name}/clear_cache/',
             }
         }
 

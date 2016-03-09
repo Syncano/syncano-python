@@ -18,39 +18,46 @@ class Instance(Model):
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
     """
 
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'list', 'name': 'admins'},
-        {'type': 'list', 'name': 'classes'},
-        {'type': 'list', 'name': 'codeboxes'},
-        {'type': 'list', 'name': 'invitations'},
-        {'type': 'list', 'name': 'runtimes'},
-        {'type': 'list', 'name': 'api_keys'},
-        {'type': 'list', 'name': 'triggers'},
-        {'type': 'list', 'name': 'users'},
-        {'type': 'list', 'name': 'webhooks'},
-        {'type': 'list', 'name': 'schedules'},
-        {'type': 'list', 'name': 'templates'}
-    )
-
     name = fields.StringField(max_length=64, primary_key=True)
     description = fields.StringField(read_only=False, required=False)
     role = fields.Field(read_only=True, required=False)
     owner = fields.ModelField('Admin', read_only=True)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     metadata = fields.JSONField(read_only=False, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
+
+    # user related fields;
+    api_keys = fields.RelatedManagerField('ApiKey')
+    users = fields.RelatedManagerField('User')
+    admins = fields.RelatedManagerField('Admin')
+    groups = fields.RelatedManagerField('Group')
+
+    # snippets and data fields;
+    scripts = fields.RelatedManagerField('Script')
+    script_endpoints = fields.RelatedManagerField('ScriptEndpoint')
+    templates = fields.RelatedManagerField('ResponseTemplate')
+
+    triggers = fields.RelatedManagerField('Trigger')
+    schedules = fields.RelatedManagerField('Schedule')
+    classes = fields.RelatedManagerField('Class')
+    invitations = fields.RelatedManagerField('InstanceInvitation')
+
+    # push notifications fields;
+    gcm_devices = fields.RelatedManagerField('GCMDevice')
+    gcm_messages = fields.RelatedManagerField('GCMMessage')
+    apns_devices = fields.RelatedManagerField('APNSDevice')
+    apns_messages = fields.RelatedManagerField('APNSMessage')
 
     class Meta:
         endpoints = {
             'detail': {
                 'methods': ['delete', 'patch', 'put', 'get'],
-                'path': '/v1/instances/{name}/',
+                'path': '/v1.1/instances/{name}/',
             },
             'list': {
                 'methods': ['post', 'get'],
-                'path': '/v1/instances/',
+                'path': '/v1.1/instances/',
             }
         }
 
@@ -60,7 +67,7 @@ class Instance(Model):
         :param new_name: the new name for the instance;
         :return: a populated Instance object;
         """
-        rename_path = self.links.get('rename')
+        rename_path = self.links.rename
         data = {'new_name': new_name}
         connection = self._get_connection()
         response = connection.request('POST', rename_path, data=data)
@@ -77,16 +84,13 @@ class ApiKey(Model):
     :ivar ignore_acl: :class:`~syncano.models.fields.BooleanField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     """
-    LINKS = [
-        {'type': 'detail', 'name': 'self'},
-    ]
 
     api_key = fields.StringField(read_only=True, required=False)
     description = fields.StringField(required=False)
     allow_user_create = fields.BooleanField(required=False, default=False)
     ignore_acl = fields.BooleanField(required=False, default=False)
     allow_anonymous_read = fields.BooleanField(required=False, default=False)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
 
     class Meta:
         parent = Instance
@@ -115,16 +119,13 @@ class InstanceInvitation(Model):
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
     """
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
     from .accounts import Admin
 
     email = fields.EmailField(max_length=254)
     role = fields.ChoiceField(choices=Admin.ROLE_CHOICES)
     key = fields.StringField(read_only=True, required=False)
     state = fields.StringField(read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 

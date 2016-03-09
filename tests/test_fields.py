@@ -55,7 +55,7 @@ class AllFieldsModel(models.Model):
     choice_field = models.ChoiceField(choices=CHOICES)
     date_field = models.DateField()
     datetime_field = models.DateTimeField()
-    hyperlinked_field = models.HyperlinkedField()
+    hyperlinked_field = models.LinksField()
     model_field = models.ModelField('Instance')
     json_field = models.JSONField(schema=SCHEMA)
     schema_field = models.SchemaField()
@@ -64,11 +64,11 @@ class AllFieldsModel(models.Model):
         endpoints = {
             'detail': {
                 'methods': ['delete', 'post', 'patch', 'get'],
-                'path': '/v1/dummy/{dynamic_field}/',
+                'path': '/v1.1/dummy/{dynamic_field}/',
             },
             'list': {
                 'methods': ['post', 'get'],
-                'path': '/v1/dummy/',
+                'path': '/v1.1/dummy/',
             }
         }
 

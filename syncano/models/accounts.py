@@ -17,9 +17,6 @@ class Admin(Model):
     :ivar role: :class:`~syncano.models.fields.ChoiceField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     """
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
     ROLE_CHOICES = (
         {'display_name': 'full', 'value': 'full'},
         {'display_name': 'write', 'value': 'write'},
@@ -30,7 +27,7 @@ class Admin(Model):
     last_name = fields.StringField(read_only=True, required=False)
     email = fields.EmailField(read_only=True, required=False)
     role = fields.ChoiceField(choices=ROLE_CHOICES)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
 
     class Meta:
         parent = Instance
@@ -52,10 +49,6 @@ class Profile(DataObjectMixin, Object):
 
     PREDEFINED_CLASS_NAME = 'user_profile'
 
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-
     PERMISSIONS_CHOICES = (
         {'display_name': 'None', 'value': 'none'},
         {'display_name': 'Read', 'value': 'read'},
@@ -71,7 +64,7 @@ class Profile(DataObjectMixin, Object):
     channel = fields.StringField(required=False)
     channel_room = fields.StringField(required=False, max_length=64)
 
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
@@ -102,9 +95,6 @@ class User(Model):
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
     """
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
 
     username = fields.StringField(max_length=64, required=True)
     password = fields.StringField(read_only=False, required=True)
@@ -112,7 +102,7 @@ class User(Model):
 
     profile = fields.ModelField('Profile')
 
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
@@ -174,14 +164,11 @@ class Group(Model):
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
     """
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
 
     label = fields.StringField(max_length=64, required=True)
     description = fields.StringField(read_only=False, required=False)
 
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 

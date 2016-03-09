@@ -15,15 +15,15 @@ class Meta:
     endpoints = {
         'detail': {
             'methods': ['delete', 'post', 'patch', 'get'],
-            'path': '/v1/dummy/{name}/',
+            'path': '/v1.1/dummy/{name}/',
         },
         'list': {
             'methods': ['post', 'get'],
-            'path': '/v1/dummy/',
+            'path': '/v1.1/dummy/',
         },
         'dummy': {
             'methods': ['post', 'get'],
-            'path': '/v1/dummy/{a}/{b}/',
+            'path': '/v1.1/dummy/{a}/{b}/',
             'properties': ['a', 'b']
         }
     }
@@ -138,7 +138,7 @@ class OptionsTestCase(unittest.TestCase):
         properties = {'instance_name': 'test', 'a': 'a', 'b': 'b'}
         path = self.options.resolve_endpoint('dummy', properties)
 
-        self.assertEqual(path, '/v1/instances/test/v1/dummy/a/b/')
+        self.assertEqual(path, '/v1.1/instances/test/v1.1/dummy/a/b/')
 
     def test_get_endpoint_query_params(self):
         properties = {'instance_name': 'test', 'x': 'y'}
