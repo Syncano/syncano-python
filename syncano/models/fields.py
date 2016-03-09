@@ -375,7 +375,7 @@ class DateTimeField(DateField):
     def to_native(self, value):
         if value is None:
             return
-        ret = value.isoformat()
+        ret = value.strftime(self.FORMAT)
         if ret.endswith('+00:00'):
             ret = ret[:-6] + 'Z'
 

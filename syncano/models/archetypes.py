@@ -242,14 +242,18 @@ class Model(six.with_metaclass(ModelMetaclass)):
         for field in self._meta.fields:
             if not field.read_only and field.has_data:
                 value = getattr(self, field.name)
-                if not value and field.blank:
+                if value is None and field.blank:
                     continue
 
                 if field.mapping:
                     data[field.mapping] = field.to_native(value)
                 else:
+
                     param_name = getattr(field, 'param_name', field.name)
-                    data[param_name] = field.to_native(value)
+                    if param_name == 'files' and param_name in data:
+                        data[param_name].update(field.to_native(value))
+                    else:
+                        data[param_name] = field.to_native(value)
         return data
 
     def get_endpoint_data(self):

@@ -66,7 +66,7 @@ class ConnectionTestCase(unittest.TestCase):
         self.connection.make_request('POST', 'test')
         self.assertTrue(dumps_mock.called)
         dumps_mock.assert_called_once_with(
-            {'headers': {'content-type': 'application/json'}, 'timeout': 30, 'verify': False},
+            {'files': [], 'headers': {'content-type': 'application/json'}, 'timeout': 30, 'verify': False},
             sort_keys=True, indent=2, separators=(',', ': '))
 
     @mock.patch('requests.Session.post')
