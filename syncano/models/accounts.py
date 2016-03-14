@@ -100,7 +100,8 @@ class User(Model):
     password = fields.StringField(read_only=False, required=True)
     user_key = fields.StringField(read_only=True, required=False)
 
-    profile = fields.ModelField('Profile')
+    # TODO: correct this: add relation which handle DataObject
+    profile = fields.JSONField()
 
     links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
