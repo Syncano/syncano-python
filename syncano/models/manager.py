@@ -75,6 +75,13 @@ class Manager(ConnectionMixin):
     def __iter__(self):  # pragma: no cover
         return iter(self.iterator())
 
+    def __nonzero__(self):
+        try:
+            self[0]
+            return True
+        except IndexError:
+            return False
+
     def __bool__(self):  # pragma: no cover
         try:
             self[0]
