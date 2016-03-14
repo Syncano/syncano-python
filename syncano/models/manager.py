@@ -82,9 +82,6 @@ class Manager(ConnectionMixin):
         except IndexError:
             return False
 
-    def __nonzero__(self):  # pragma: no cover
-        return type(self).__bool__(self)
-
     def __getitem__(self, k):
         """
         Retrieves an item or slice from the set of results.
@@ -496,7 +493,7 @@ class Manager(ConnectionMixin):
 
         serialized = model.to_native()
 
-        serialized = {k: v for k, v in serialized.iteritems()
+        serialized = {k: v for k, v in six.iteritems(serialized)
                       if k in self.data}
 
         self.data.update(serialized)
@@ -686,7 +683,7 @@ class Manager(ConnectionMixin):
     def _get_serialized_data(self):
         model = self.serialize(self.data, self.model)
         serialized = model.to_native()
-        serialized = {k: v for k, v in serialized.iteritems()
+        serialized = {k: v for k, v in six.iteritems(serialized)
                       if k in self.data}
         self.data.update(serialized)
         return serialized

@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from copy import deepcopy
 
@@ -146,7 +146,7 @@ class Object(Model):
             raise SyncanoValidationError('Field "class_name" is required.')
 
         model = cls.get_subclass_model(instance_name, class_name)
-        return model(**kwargs)
+        return model()
 
     @classmethod
     def _set_up_object_class(cls, model):
@@ -165,6 +165,7 @@ class Object(Model):
         attrs = {
             'Meta': deepcopy(Object._meta),
             '__new__': Model.__new__,  # We don't want to have maximum recursion depth exceeded error
+            '__init__': Model.__init__,
         }
 
         for field in schema:

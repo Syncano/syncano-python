@@ -17,7 +17,7 @@ class ModelTestCase(unittest.TestCase):
 
     def test_init(self):
         self.assertTrue(hasattr(self.model, '_raw_data'))
-        self.assertEquals(self.model._raw_data, {})
+        self.assertEqual(self.model._raw_data, {})
 
         model = Instance(name='test', dummy_field='dummy')
         self.assertTrue('name' in model._raw_data)
@@ -40,11 +40,11 @@ class ModelTestCase(unittest.TestCase):
         self.assertEqual(out, expected)
 
     def test_unicode(self):
-        expected = u'<{0}: {1}>'.format(
+        expected = '<{0}: {1}>'.format(
             self.model.__class__.__name__,
             self.model.pk
         )
-        out = unicode(self.model)
+        out = str(self.model)
         self.assertEqual(out, expected)
 
     def test_eq(self):

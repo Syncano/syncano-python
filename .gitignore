@@ -13,3 +13,5 @@ junit
 reports
 run_it.py
 syncano.egg-info
+.tox/*
+test

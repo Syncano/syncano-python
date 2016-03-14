@@ -12,7 +12,6 @@ class BaseBulkCreate(object):
         instances = ObjectBulkCreate(objects, manager).process()
     """
     __metaclass__ = ABCMeta
-
     MAX_BATCH_SIZE = 50
 
     @abstractmethod

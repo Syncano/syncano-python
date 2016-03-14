@@ -188,7 +188,7 @@ class ClassIntegrationTest(InstanceMixin, IntegrationTest):
         )
         cls.description = 'dummy'
 
-        for i in xrange(3):
+        for i in range(3):
             try:
                 cls.save()
             except SyncanoRequestError as e:
@@ -367,7 +367,7 @@ class ScriptIntegrationTest(InstanceMixin, IntegrationTest):
             trace.reload()
 
         self.assertEquals(trace.status, 'success')
-        self.assertDictEqual(trace.result, {u'stderr': u'', u'stdout': u'IntegrationTest'})
+        self.assertDictEqual(trace.result, {'stderr': '', 'stdout': 'IntegrationTest'})
 
         script.delete()
 
@@ -447,7 +447,7 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
 
         trace = script_endpoint.run()
         self.assertEquals(trace.status, 'success')
-        self.assertDictEqual(trace.result, {u'stderr': u'', u'stdout': u'IntegrationTest'})
+        self.assertDictEqual(trace.result, {'stderr': '', 'stdout': 'IntegrationTest'})
         script_endpoint.delete()
 
     def test_custom_script_run(self):

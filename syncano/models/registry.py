@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 import re
 
@@ -21,7 +21,7 @@ class Registry(object):
         return 'Registry: {0}'.format(', '.join(self.models))
 
     def __unicode__(self):
-        return unicode(str(self))
+        return str(str(self))
 
     def __iter__(self):
         for name, model in six.iteritems(self.models):

@@ -236,9 +236,9 @@ class Connection(object):
         files = data.pop('files', None)
 
         if files is None:
-            files = {k: v for k, v in data.iteritems() if isinstance(v, file)}
+            files = {k: v for k, v in six.iteritems(data) if hasattr(v, 'read')}
             if data:
-                kwargs['data'] = data = {k: v for k, v in data.iteritems() if k not in files}
+                kwargs['data'] = {k: v for k, v in six.iteritems(data) if k not in files}
 
         params = self.build_params(kwargs)
         method = getattr(self.session, method_name.lower(), None)

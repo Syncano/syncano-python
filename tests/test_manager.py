@@ -1,3 +1,4 @@
+import json
 import unittest
 from datetime import datetime
 
@@ -430,7 +431,7 @@ class ManagerTestCase(unittest.TestCase):
 
         request_mock.assert_called_once_with(
             'GET',
-            u'/v1.1/instances/',
+            '/v1.1/instances/',
             data={'b': 2},
             headers={},
             params={'a': 1}
@@ -520,7 +521,7 @@ class ScriptManagerTestCase(unittest.TestCase):
 
         self.assertEqual(self.manager.method, 'POST')
         self.assertEqual(self.manager.endpoint, 'run')
-        self.assertEqual(self.manager.data['payload'], '{"y": 2, "x": 1}')
+        self.assertDictEqual(json.loads(self.manager.data['payload']), {"y": 2, "x": 1})
 
 
 class ScriptEndpointManagerTestCase(unittest.TestCase):
@@ -559,7 +560,7 @@ class ScriptEndpointManagerTestCase(unittest.TestCase):
 
         self.assertEqual(self.manager.method, 'POST')
         self.assertEqual(self.manager.endpoint, 'run')
-        self.assertEqual(self.manager.data['payload'], '{"y": 2, "x": 1}')
+        self.assertDictEqual(json.loads(self.manager.data['payload']), {"y": 2, "x": 1})
 
 
 class ObjectManagerTestCase(unittest.TestCase):
@@ -613,7 +614,10 @@ class ObjectManagerTestCase(unittest.TestCase):
         self.assertEqual(self.manager.query['query'], '{"name": {"_gt": "test"}}')
 
         self.manager.filter(name__gt='test', description='test')
-        self.assertEqual(self.manager.query['query'], '{"description": {"_eq": "test"}, "name": {"_gt": "test"}}')
+        self.assertDictEqual(
+            json.loads(self.manager.query['query']),
+            {"description": {"_eq": "test"}, "name": {"_gt": "test"}}
+        )
 
         with self.assertRaises(SyncanoValueError):
             self.manager.filter(dummy_field=4)

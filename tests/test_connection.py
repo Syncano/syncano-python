@@ -1,11 +1,17 @@
+import json
 import tempfile
 import unittest
-from urlparse import urljoin
 
+import six
 from syncano import connect
 from syncano.connection import Connection, ConnectionMixin
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
 from syncano.models.registry import registry
+
+if six.PY3:
+    from urllib.parse import urljoin
+else:
+    from urlparse import urljoin
 
 try:
     from unittest import mock
@@ -251,14 +257,15 @@ class ConnectionTestCase(unittest.TestCase):
 
         self.assertTrue(post_mock.called)
         self.assertIsNone(self.connection.api_key)
+        call_args = post_mock.call_args[0]
+        call_kwargs = post_mock.call_args[1]
+        call_kwargs['data'] = json.loads(call_kwargs['data'])
 
-        post_mock.assert_called_once_with(
-            urljoin(self.connection.host, '{0}/'.format(self.connection.AUTH_SUFFIX)),
-            headers={'content-type': self.connection.CONTENT_TYPE},
-            data='{"password": "dummy", "email": "dummy"}',
-            timeout=30,
-            verify=True
-        )
+        self.assertEqual(call_args[0], urljoin(self.connection.host, '{0}/'.format(self.connection.AUTH_SUFFIX)))
+        self.assertEqual(call_kwargs['headers'], {'content-type': self.connection.CONTENT_TYPE})
+        self.assertEqual(call_kwargs['timeout'], 30)
+        self.assertTrue(call_kwargs['verify'])
+        self.assertDictEqual(call_kwargs['data'], {"password": "dummy", "email": "dummy"})
 
     @mock.patch('syncano.connection.Connection.make_request')
     def test_successful_authentication(self, make_request):
@@ -274,8 +281,8 @@ class ConnectionTestCase(unittest.TestCase):
 
     @mock.patch('syncano.connection.Connection.make_request')
     def test_get_account_info(self, make_request):
-        info = {u'first_name': u'', u'last_name': u'', u'is_active': True,
-                u'id': 1, u'has_password': True, u'email': u'dummy'}
+        info = {'first_name': '', 'last_name': '', 'is_active': True,
+                'id': 1, 'has_password': True, 'email': 'dummy'}
         self.test_successful_authentication()
         make_request.return_value = info
         self.assertFalse(make_request.called)
@@ -286,8 +293,8 @@ class ConnectionTestCase(unittest.TestCase):
 
     @mock.patch('syncano.connection.Connection.make_request')
     def test_get_account_info_with_api_key(self, make_request):
-        info = {u'first_name': u'', u'last_name': u'', u'is_active': True,
-                u'id': 1, u'has_password': True, u'email': u'dummy'}
+        info = {'first_name': '', 'last_name': '', 'is_active': True,
+                'id': 1, 'has_password': True, 'email': 'dummy'}
         make_request.return_value = info
         self.assertFalse(make_request.called)
         self.assertIsNone(self.connection.api_key)
@@ -305,7 +312,7 @@ class ConnectionTestCase(unittest.TestCase):
         try:
             self.connection.get_account_info(api_key='invalid')
             self.assertTrue(False)
-        except SyncanoRequestError, e:
+        except SyncanoRequestError as e:
             self.assertIsNotNone(self.connection.api_key)
             self.assertTrue(make_request.called)
             self.assertEqual(e, err)
@@ -317,14 +324,13 @@ class ConnectionTestCase(unittest.TestCase):
         try:
             self.connection.get_account_info()
             self.assertTrue(False)
-        except SyncanoValueError, e:
+        except SyncanoValueError:
             self.assertIsNone(self.connection.api_key)
             self.assertFalse(make_request.called)
-            self.assertIn('api_key', e.message)
 
     @mock.patch('syncano.connection.Connection.make_request')
     def test_get_user_info(self, make_request_mock):
-        info = {u'profile': {}}
+        info = {'profile': {}}
         make_request_mock.return_value = info
         self.assertFalse(make_request_mock.called)
         self.connection.api_key = 'Ala has a cat'
@@ -336,7 +342,7 @@ class ConnectionTestCase(unittest.TestCase):
 
     @mock.patch('syncano.connection.Connection.make_request')
     def test_get_user_info_without_instance(self, make_request_mock):
-        info = {u'profile': {}}
+        info = {'profile': {}}
         make_request_mock.return_value = info
         self.assertFalse(make_request_mock.called)
         self.connection.api_key = 'Ala has a cat'
@@ -347,7 +353,7 @@ class ConnectionTestCase(unittest.TestCase):
 
     @mock.patch('syncano.connection.Connection.make_request')
     def test_get_user_info_without_auth_keys(self, make_request_mock):
-        info = {u'profile': {}}
+        info = {'profile': {}}
         make_request_mock.return_value = info
         self.assertFalse(make_request_mock.called)
 

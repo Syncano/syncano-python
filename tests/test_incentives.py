@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import json
 import unittest
 from datetime import datetime
 
@@ -31,9 +31,11 @@ class ScriptTestCase(unittest.TestCase):
         self.assertIsInstance(result, ScriptTrace)
 
         connection_mock.assert_called_once_with(a=1, b=2)
-        connection_mock.request.assert_called_once_with(
-            'POST', '/v1.1/instances/test/snippets/scripts/10/run/', data={'payload': '{"a": 1, "b": 2}'}
-        )
+        call_args = connection_mock.request.call_args[0]
+        call_kwargs = connection_mock.request.call_args[1]
+        call_kwargs['data']['payload'] = json.loads(call_kwargs['data']['payload'])
+        self.assertEqual(('POST', '/v1.1/instances/test/snippets/scripts/10/run/'), call_args)
+        self.assertDictEqual(call_kwargs['data'], {'payload': {"a": 1, "b": 2}})
 
         model = Script()
         with self.assertRaises(SyncanoValidationError):
@@ -52,7 +54,7 @@ class ScriptEndpointTestCase(unittest.TestCase):
         connection_mock.request.return_value = {
             'status': 'success',
             'duration': 937,
-            'result': {u'stdout': 1, u'stderr': u''},
+            'result': {'stdout': 1, 'stderr': ''},
             'executed_at': '2015-03-16T11:52:14.172830Z'
         }
 
@@ -64,7 +66,7 @@ class ScriptEndpointTestCase(unittest.TestCase):
         self.assertIsInstance(result, ScriptEndpointTrace)
         self.assertEqual(result.status, 'success')
         self.assertEqual(result.duration, 937)
-        self.assertEqual(result.result, {u'stdout': 1, u'stderr': u''})
+        self.assertEqual(result.result, {'stdout': 1, 'stderr': ''})
         self.assertIsInstance(result.executed_at, datetime)
 
         connection_mock.assert_called_once_with(x=1, y=2)
