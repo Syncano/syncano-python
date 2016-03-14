@@ -146,8 +146,6 @@ class Object(Model):
             raise SyncanoValidationError('Field "class_name" is required.')
 
         model = cls.get_subclass_model(instance_name, class_name)
-        import pdb
-        pdb.set_trace()
         return model(**kwargs)
 
     @classmethod
