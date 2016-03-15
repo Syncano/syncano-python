@@ -163,18 +163,26 @@ class Object(Model):
 
     @classmethod
     def create_subclass(cls, name, schema):
+        meta = deepcopy(Object._meta)
         attrs = {
-            'Meta': deepcopy(Object._meta),
+            'Meta': meta,
             '__new__': Model.__new__,  # We don't want to have maximum recursion depth exceeded error
+            'please': ObjectManager()
         }
+
+        model = type(str(name), (Model, ), attrs)
 
         for field in schema:
             field_type = field.get('type')
             field_class = fields.MAPPING[field_type]
             query_allowed = ('order_index' in field or 'filter_index' in field)
-            attrs[field['name']] = field_class(required=False, read_only=False,
-                                               query_allowed=query_allowed)
-        model = type(str(name), (Object, ), attrs)
+            field_class(required=False, read_only=False, query_allowed=query_allowed).contribute_to_class(
+                model, field.get('name')
+            )
+
+        for field in meta.fields:
+            setattr(model, field.name, field)
+
         cls._set_up_object_class(model)
         return model
 
