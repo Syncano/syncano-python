@@ -5,11 +5,11 @@ machine:
 dependencies:
   pre:
     - pip install -U setuptools
-    - pip install -r requirements.txt
+    - pip install -r requirements-test.txt
 
 test:
   override:
-    - ./run_tests.sh
+    - tox
 
 general:
   artifacts:
