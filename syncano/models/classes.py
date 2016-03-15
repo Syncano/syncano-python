@@ -181,6 +181,8 @@ class Object(Model):
             )
 
         for field in meta.fields:
+            if field.primary_key:
+                setattr(model, 'pk', field)
             setattr(model, field.name, field)
 
         cls._set_up_object_class(model)
