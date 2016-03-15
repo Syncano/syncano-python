@@ -37,7 +37,7 @@ class ManagerBatchTest(InstanceMixin, IntegrationTest):
         )
 
         for r in results:
-            self.assertTrue(isinstance(r, Object))
+            self.assertTrue(isinstance(r, Model))
             self.assertTrue(r.id)
             self.assertTrue(r.title)
 
