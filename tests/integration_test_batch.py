@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import six
-from syncano.models import Class, Object, User
+from syncano.models import Class, Model, Object, User
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 
@@ -25,7 +25,7 @@ class ManagerBatchTest(InstanceMixin, IntegrationTest):
 
         results = Object.please.bulk_create(*objects)
         for r in results:
-            self.assertTrue(isinstance(r, Object))
+            self.assertTrue(isinstance(r, Model))
             self.assertTrue(r.id)
             self.assertTrue(r.title)
 

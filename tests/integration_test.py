@@ -7,7 +7,7 @@ from uuid import uuid4
 
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
-from syncano.models import ApiKey, Class, Instance, Object, Script, ScriptEndpoint, registry
+from syncano.models import ApiKey, Class, Instance, Model, Object, Script, ScriptEndpoint, registry
 
 
 class IntegrationTest(unittest.TestCase):
@@ -303,7 +303,7 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
 
         self.assertEqual(count, 2)
         for o in objects:
-            self.assertTrue(isinstance(o, self.model))
+            self.assertTrue(isinstance(o, Model))
 
         author_one.delete()
         author_two.delete()
