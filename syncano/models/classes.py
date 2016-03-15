@@ -101,6 +101,7 @@ class Object(Model):
         This model is special because each instance will be **dynamically populated**
         with fields defined in related :class:`~syncano.models.base.Class` schema attribute.
     """
+
     PERMISSIONS_CHOICES = (
         {'display_name': 'None', 'value': 'none'},
         {'display_name': 'Read', 'value': 'read'},

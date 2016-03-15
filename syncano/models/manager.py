@@ -746,7 +746,6 @@ class Manager(ConnectionMixin):
 
         properties = deepcopy(self.properties)
         properties.update(data)
-
         return model(**properties) if self._serialize else data
 
     def build_request(self, request):

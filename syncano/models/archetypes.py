@@ -83,6 +83,7 @@ class ModelMetaclass(type):
 class Model(six.with_metaclass(ModelMetaclass)):
     """Base class for all models.
     """
+
     def __init__(self, **kwargs):
         self.is_lazy = kwargs.pop('is_lazy', False)
         self._raw_data = {}
