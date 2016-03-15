@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-import six
 from abc import ABCMeta, abstractmethod
 
+import six
 from syncano.exceptions import SyncanoValidationError, SyncanoValueError
 
 
