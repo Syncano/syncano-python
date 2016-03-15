@@ -32,7 +32,8 @@ class IntegrationTest(unittest.TestCase):
 
     @classmethod
     def generate_hash(cls):
-        return md5('%s%s' % (uuid4(), datetime.now())).hexdigest()
+        hash_feed = '{}{}'.format(uuid4(), datetime.now())
+        return md5(hash_feed.encode('ascii')).hexdigest()
 
 
 class InstanceMixin(object):
