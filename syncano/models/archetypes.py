@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 import inspect
 
@@ -39,7 +39,7 @@ class ModelMetaclass(type):
             new_class.add_to_class(n, v)
 
         for abstract in abstracts:
-            for n, v in abstract.__dict__.iteritems():
+            for n, v in six.iteritems(abstract.__dict__):
                 if isinstance(v, fields.Field) or n in ['LINKS']:  # extend this condition if required;
                     new_class.add_to_class(n, v)
 
@@ -83,6 +83,7 @@ class ModelMetaclass(type):
 class Model(six.with_metaclass(ModelMetaclass)):
     """Base class for all models.
     """
+
     def __init__(self, **kwargs):
         self.is_lazy = kwargs.pop('is_lazy', False)
         self._raw_data = {}

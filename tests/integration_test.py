@@ -7,7 +7,7 @@ from uuid import uuid4
 
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
-from syncano.models import ApiKey, Class, Instance, Object, Script, ScriptEndpoint, registry
+from syncano.models import ApiKey, Class, Instance, Model, Object, Script, ScriptEndpoint, registry
 
 
 class IntegrationTest(unittest.TestCase):
@@ -32,7 +32,8 @@ class IntegrationTest(unittest.TestCase):
 
     @classmethod
     def generate_hash(cls):
-        return md5('%s%s' % (uuid4(), datetime.now())).hexdigest()
+        hash_feed = '{}{}'.format(uuid4(), datetime.now())
+        return md5(hash_feed.encode('ascii')).hexdigest()
 
 
 class InstanceMixin(object):
@@ -188,7 +189,7 @@ class ClassIntegrationTest(InstanceMixin, IntegrationTest):
         )
         cls.description = 'dummy'
 
-        for i in xrange(3):
+        for i in range(3):
             try:
                 cls.save()
             except SyncanoRequestError as e:
@@ -303,7 +304,7 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
 
         self.assertEqual(count, 2)
         for o in objects:
-            self.assertTrue(isinstance(o, self.model))
+            self.assertTrue(isinstance(o, Model))
 
         author_one.delete()
         author_two.delete()
@@ -367,7 +368,7 @@ class ScriptIntegrationTest(InstanceMixin, IntegrationTest):
             trace.reload()
 
         self.assertEquals(trace.status, 'success')
-        self.assertDictEqual(trace.result, {u'stderr': u'', u'stdout': u'IntegrationTest'})
+        self.assertDictEqual(trace.result, {'stderr': '', 'stdout': 'IntegrationTest'})
 
         script.delete()
 
@@ -447,7 +448,7 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
 
         trace = script_endpoint.run()
         self.assertEquals(trace.status, 'success')
-        self.assertDictEqual(trace.result, {u'stderr': u'', u'stdout': u'IntegrationTest'})
+        self.assertDictEqual(trace.result, {'stderr': '', 'stdout': 'IntegrationTest'})
         script_endpoint.delete()
 
     def test_custom_script_run(self):

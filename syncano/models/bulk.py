@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 
+import six
 from syncano.exceptions import SyncanoValidationError, SyncanoValueError
 
 
-class BaseBulkCreate(object):
+class BaseBulkCreate(six.with_metaclass(ABCMeta)):
     """
     Helper class for making bulk create;
 
     Usage:
         instances = ObjectBulkCreate(objects, manager).process()
     """
-    __metaclass__ = ABCMeta
-
     MAX_BATCH_SIZE = 50
 
     @abstractmethod

@@ -5,11 +5,13 @@ machine:
 dependencies:
   pre:
     - pip install -U setuptools
-    - pip install -r requirements.txt
+    - pip install -r requirements-test.txt
+  post:
+    - pyenv local 3.4.3 2.7.6
 
 test:
   override:
-    - ./run_tests.sh
+    - tox
 
 general:
   artifacts:

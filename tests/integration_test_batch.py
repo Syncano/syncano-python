@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from syncano.models import Class, Object, User
+import six
+from syncano.models import Class, Model, Object, User
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 
@@ -24,7 +25,7 @@ class ManagerBatchTest(InstanceMixin, IntegrationTest):
 
         results = Object.please.bulk_create(*objects)
         for r in results:
-            self.assertTrue(isinstance(r, Object))
+            self.assertTrue(isinstance(r, Model))
             self.assertTrue(r.id)
             self.assertTrue(r.title)
 
@@ -36,7 +37,7 @@ class ManagerBatchTest(InstanceMixin, IntegrationTest):
         )
 
         for r in results:
-            self.assertTrue(isinstance(r, Object))
+            self.assertTrue(isinstance(r, Model))
             self.assertTrue(r.id)
             self.assertTrue(r.title)
 
@@ -111,7 +112,7 @@ class ManagerBatchTest(InstanceMixin, IntegrationTest):
         # test object bulk;
         bulk_res = self.klass.objects.in_bulk([self.update1.id, self.update2.id, self.update3.id])
 
-        for res_id, res in bulk_res.iteritems():
+        for res_id, res in six.iteritems(bulk_res):
             self.assertEqual(res_id, res.id)
 
         self.assertEqual(bulk_res[self.update1.id].title, self.update1.title)

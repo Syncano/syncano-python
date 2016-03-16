@@ -60,6 +60,8 @@ class Field(object):
     def __lt__(self, other):
         if isinstance(other, Field):
             return self.creation_counter < other.creation_counter
+        if isinstance(other, int):
+            return self.creation_counter < other
         return NotImplemented
 
     def __hash__(self):  # pragma: no cover
@@ -160,7 +162,8 @@ class Field(object):
 
 class RelatedManagerField(Field):
 
-    def __init__(self, model_name, endpoint='list'):
+    def __init__(self, model_name, endpoint='list', *args, **kwargs):
+        super(RelatedManagerField, self).__init__(*args, **kwargs)
         self.model_name = model_name
         self.endpoint = endpoint
 

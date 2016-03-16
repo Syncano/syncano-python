@@ -114,5 +114,5 @@ class ChannelTestCase(unittest.TestCase):
         connection_mock.request.assert_called_once_with(
             'POST',
             '/v1.1/instances/None/channels/None/publish/',
-            data={'room': u'1', 'payload': '{"a": 1}'}
+            data={'room': '1', 'payload': '{"a": 1}'}
         )

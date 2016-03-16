@@ -75,15 +75,19 @@ class Manager(ConnectionMixin):
     def __iter__(self):  # pragma: no cover
         return iter(self.iterator())
 
-    def __bool__(self):  # pragma: no cover
+    def __nonzero__(self):
         try:
             self[0]
             return True
         except IndexError:
             return False
 
-    def __nonzero__(self):  # pragma: no cover
-        return type(self).__bool__(self)
+    def __bool__(self):  # pragma: no cover
+        try:
+            self[0]
+            return True
+        except IndexError:
+            return False
 
     def __getitem__(self, k):
         """
@@ -496,7 +500,7 @@ class Manager(ConnectionMixin):
 
         serialized = model.to_native()
 
-        serialized = {k: v for k, v in serialized.iteritems()
+        serialized = {k: v for k, v in six.iteritems(serialized)
                       if k in self.data}
 
         self.data.update(serialized)
@@ -686,7 +690,7 @@ class Manager(ConnectionMixin):
     def _get_serialized_data(self):
         model = self.serialize(self.data, self.model)
         serialized = model.to_native()
-        serialized = {k: v for k, v in serialized.iteritems()
+        serialized = {k: v for k, v in six.iteritems(serialized)
                       if k in self.data}
         self.data.update(serialized)
         return serialized
@@ -742,7 +746,6 @@ class Manager(ConnectionMixin):
 
         properties = deepcopy(self.properties)
         properties.update(data)
-
         return model(**properties) if self._serialize else data
 
     def build_request(self, request):

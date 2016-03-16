@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import json
 import unittest
 from datetime import datetime
 
@@ -31,14 +31,14 @@ class ScriptTestCase(unittest.TestCase):
 
         connection_mock.assert_called_once_with()
         connection_mock.request.assert_called_once_with(
-            u'POST', u'/v1.1/instances/test/push_notifications/gcm/devices/',
-            data={"registration_id": u'86152312314401555', "device_id": "10000000001", "is_active": True,
+            'POST', '/v1.1/instances/test/push_notifications/gcm/devices/',
+            data={"registration_id": '86152312314401555', "device_id": "10000000001", "is_active": True,
                   "label": "example label"}
         )
         model.created_at = datetime.now()  # to Falsify is_new()
         model.delete()
         connection_mock.request.assert_called_with(
-            u'DELETE', u'/v1.1/instances/test/push_notifications/gcm/devices/86152312314401555/'
+            'DELETE', '/v1.1/instances/test/push_notifications/gcm/devices/86152312314401555/'
         )
 
     @mock.patch('syncano.models.APNSDevice._get_connection')
@@ -64,15 +64,15 @@ class ScriptTestCase(unittest.TestCase):
 
         connection_mock.assert_called_once_with()
         connection_mock.request.assert_called_once_with(
-            u'POST', u'/v1.1/instances/test/push_notifications/apns/devices/',
-            data={"registration_id": u'86152312314401555', "device_id": "10000000001", "is_active": True,
+            'POST', '/v1.1/instances/test/push_notifications/apns/devices/',
+            data={"registration_id": '86152312314401555', "device_id": "10000000001", "is_active": True,
                   "label": "example label"}
         )
 
         model.created_at = datetime.now()  # to Falsify is_new()
         model.delete()
         connection_mock.request.assert_called_with(
-            u'DELETE', u'/v1.1/instances/test/push_notifications/apns/devices/86152312314401555/'
+            'DELETE', '/v1.1/instances/test/push_notifications/apns/devices/86152312314401555/'
         )
 
     @mock.patch('syncano.models.GCMMessage._get_connection')
@@ -92,9 +92,16 @@ class ScriptTestCase(unittest.TestCase):
         self.assertTrue(connection_mock.request.called)
 
         connection_mock.assert_called_once_with()
-        connection_mock.request.assert_called_once_with(
-            u'POST', u'/v1.1/instances/test/push_notifications/gcm/messages/',
-            data={'content': '{"environment": "production", "data": "some data"}'}
+
+        call_args = connection_mock.request.call_args[0]
+        call_kwargs = connection_mock.request.call_args[1]
+
+        call_kwargs['data']['content'] = json.loads(call_kwargs['data']['content'])
+
+        self.assertEqual(('POST', '/v1.1/instances/test/push_notifications/gcm/messages/'), call_args)
+        self.assertDictEqual(
+            {'data': {'content': {"environment": "production", "data": "some data"}}},
+            call_kwargs,
         )
 
     @mock.patch('syncano.models.APNSMessage._get_connection')
@@ -114,7 +121,8 @@ class ScriptTestCase(unittest.TestCase):
         self.assertTrue(connection_mock.request.called)
 
         connection_mock.assert_called_once_with()
-        connection_mock.request.assert_called_once_with(
-            u'POST', u'/v1.1/instances/test/push_notifications/apns/messages/',
-            data={'content': '{"environment": "production", "data": "some data"}'}
-        )
+        call_args = connection_mock.request.call_args[0]
+        call_kwargs = connection_mock.request.call_args[1]
+        call_kwargs['data']['content'] = json.loads(call_kwargs['data']['content'])
+        self.assertEqual(('POST', '/v1.1/instances/test/push_notifications/apns/messages/'), call_args)
+        self.assertDictEqual(call_kwargs['data'], {'content': {"environment": "production", "data": "some data"}})

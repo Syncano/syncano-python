@@ -1,8 +1,10 @@
+import json
 import unittest
 from datetime import datetime
 from functools import wraps
 from time import mktime
 
+import six
 from syncano import models
 from syncano.exceptions import SyncanoValidationError, SyncanoValueError
 from syncano.models.manager import SchemaManager
@@ -105,11 +107,11 @@ class BaseTestCase(unittest.TestCase):
 
     @skip_base_class
     def test_field_unicode(self):
-        expected = u'<{0}: {1}>'.format(
+        expected = six.u('<{0}: {1}>').format(
             self.field.__class__.__name__,
             self.field_name
         )
-        out = unicode(self.field)
+        out = str(self.field)
         self.assertEqual(out, expected)
 
     @skip_base_class
@@ -248,11 +250,11 @@ class StringFieldTestCase(BaseTestCase):
     def test_to_python(self):
         self.assertEqual(self.field.to_python(None), None)
         self.assertEqual(self.field.to_python('test'), 'test')
-        self.assertEqual(self.field.to_python(10), u'10')
-        self.assertEqual(self.field.to_python(10.0), u'10.0')
-        self.assertEqual(self.field.to_python(True), u'True')
-        self.assertEqual(self.field.to_python({'a': 1}), u"{'a': 1}")
-        self.assertEqual(self.field.to_python([1, 2]), u"[1, 2]")
+        self.assertEqual(self.field.to_python(10), '10')
+        self.assertEqual(self.field.to_python(10.0), '10.0')
+        self.assertEqual(self.field.to_python(True), 'True')
+        self.assertEqual(self.field.to_python({'a': 1}), "{'a': 1}")
+        self.assertEqual(self.field.to_python([1, 2]), "[1, 2]")
 
 
 class IntegerFieldTestCase(BaseTestCase):
@@ -524,5 +526,5 @@ class SchemaFieldTestCase(BaseTestCase):
 
         schema = SchemaManager(value)
         self.assertEqual(self.field.to_native(None), None)
-        self.assertEqual(self.field.to_native(schema), '[{"type": "string", "name": "username"}]')
-        self.assertEqual(self.field.to_native(value), '[{"type": "string", "name": "username"}]')
+        self.assertListEqual(json.loads(self.field.to_native(schema)), [{"type": "string", "name": "username"}])
+        self.assertListEqual(json.loads(self.field.to_native(value)), [{"type": "string", "name": "username"}])
