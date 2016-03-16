@@ -4,6 +4,7 @@ from datetime import datetime
 from functools import wraps
 from time import mktime
 
+import six
 from syncano import models
 from syncano.exceptions import SyncanoValidationError, SyncanoValueError
 from syncano.models.manager import SchemaManager
@@ -106,7 +107,7 @@ class BaseTestCase(unittest.TestCase):
 
     @skip_base_class
     def test_field_unicode(self):
-        expected = '<{0}: {1}>'.format(
+        expected = six.u('<{0}: {1}>').format(
             self.field.__class__.__name__,
             self.field_name
         )

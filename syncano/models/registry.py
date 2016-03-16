@@ -21,7 +21,7 @@ class Registry(object):
         return 'Registry: {0}'.format(', '.join(self.models))
 
     def __unicode__(self):
-        return str(str(self))
+        return six.u(str(self))
 
     def __iter__(self):
         for name, model in six.iteritems(self.models):
