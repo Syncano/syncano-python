@@ -17,6 +17,7 @@ import sys
 from os.path import abspath, dirname
 
 import sphinx_rtd_theme
+from syncano.models.fields import RelatedManagerField
 
 sys.path.insert(1, dirname(dirname(dirname(abspath(__file__)))))
 
@@ -109,5 +110,4 @@ texinfo_documents = [(
 autodoc_member_order = 'bysource'
 highlight_language = 'python'
 
-from syncano.models.fields import RelatedManagerField
 RelatedManagerField.__get__ = lambda self, *args, **kwargs: self
