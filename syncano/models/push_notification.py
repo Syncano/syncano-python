@@ -35,8 +35,7 @@ class GCMDevice(DeviceBase, Model):
 
     Usage::
 
-    Create a new Device:
-
+        Create a new Device:
         gcm_device = GCMDevice(
             label='example label',
             registration_id=86152312314401555,
@@ -46,17 +45,15 @@ class GCMDevice(DeviceBase, Model):
 
         gcm_device.save()
 
-    Note::
+        Read:
+        gcm_device = GCMDevice.please.get(registration_id=86152312314401554)
 
-        another save on the same object will always fail (altering the Device data is currently not possible);
-
-    Delete a Device:
-
+        Delete:
         gcm_device.delete()
 
-    Read a Device data:
+    .. note::
 
-        gcm_device = GCMDevice.please.get(registration_id=86152312314401554)
+        another save on the same object will always fail (altering the Device data is currently not possible);
 
     """
 
@@ -81,7 +78,7 @@ class APNSDevice(DeviceBase, Model):
 
     Usage::
 
-    Create
+        Create a new Device:
         apns_device = APNSDevice(
             label='example label',
             registration_id='4719084371920471208947120984731208947910827409128470912847120894',
@@ -90,19 +87,21 @@ class APNSDevice(DeviceBase, Model):
         )
         apns_device.save()
 
-    Note::
-
-        another save on the same object will always fail (altering the Device data is currently not possible);
-
-        Also note the different format (from GCM) of registration_id required by APNS; the device_id have different
-         format too.
-
-    Read
+        Read:
         apns_device =
             APNSDevice.please.get(registration_id='4719084371920471208947120984731208947910827409128470912847120894')
 
-    Delete
+        Delete:
         apns_device.delete()
+
+    .. note::
+
+        another save on the same object will always fail (altering the Device data is currently not possible);
+
+    .. note::
+
+        Also note the different format (from GCM) of registration_id required by APNS; the device_id have different
+        format too.
 
     """
     class Meta:
@@ -142,8 +141,7 @@ class GCMMessage(MessageBase, Model):
 
     Usage::
 
-    Create
-
+        Create a new Message:
 
         message = GCMMessage(
             content={
@@ -156,20 +154,24 @@ class GCMMessage(MessageBase, Model):
         )
         message.save()
 
-        The data parameter is passed as-it-is to the GCM server; Base checking is made on syncano CORE;
-        For more details read the GCM documentation;
 
-    Note::
-        Every save after initial one will raise an error;
+        Read:
 
-    Read
         gcm_message = GCMMessage.please.get(id=1)
 
-    Debugging:
+        Debugging:
+
         gcm_message.status - on of the (scheduled, error, partially_delivered, delivered)
         gcm_message.result - a result from GCM server;
 
-    Note::
+
+    The data parameter is passed as-it-is to the GCM server; Base checking is made on syncano CORE;
+    For more details read the GCM documentation;
+
+    .. note::
+        Every save after initial one will raise an error;
+
+    .. note::
         The altering of existing Message is not possible. It also not possible to delete message.
 
     """
@@ -195,7 +197,7 @@ class APNSMessage(MessageBase, Model):
 
     Usage::
 
-    Create
+        Create new Message:
         apns_message = APNSMessage(
             content={
                 'registration_ids': [gcm_device.registration_id],
@@ -205,18 +207,20 @@ class APNSMessage(MessageBase, Model):
 
         apns_message.save()
 
-        The 'aps' data is send 'as-it-is' to APNS, some validation is made on syncano CORE;
-        For more details read the APNS documentation;
+        Read:
 
-    Note::
-        Every save after initial one will raise an error;
-
-    Read
         apns_message = APNSMessage.please.get(id=1)
 
-    Debugging
+        Debugging:
+
         apns_message.status - one of the following: scheduled, error, partially_delivered, delivered;
         apns_message.result - a result from APNS server;
+
+    The 'aps' data is send 'as-it-is' to APNS, some validation is made on syncano CORE;
+    For more details read the APNS documentation;
+
+    .. note::
+        Every save after initial one will raise an error;
 
     """
     class Meta:

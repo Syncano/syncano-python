@@ -12,7 +12,7 @@ from .manager import ScriptEndpointManager, ScriptManager
 
 class Script(Model):
     """
-    OO wrapper around scripts `endpoint <http://docs.syncano.com/v4.0/docs/codebox-list-codeboxes>`_.
+    OO wrapper around scripts `link <http://docs.syncano.com/docs/snippets-scripts>`_.
 
     :ivar label: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`
@@ -104,7 +104,7 @@ class Script(Model):
 
 class Schedule(Model):
     """
-    OO wrapper around script schedules `endpoint <http://docs.syncano.com/v4.0/docs/codebox-schedules-list>`_.
+    OO wrapper around script schedules `link <http://docs.syncano.com/docs/schedules>`_.
 
     :ivar label: :class:`~syncano.models.fields.StringField`
     :ivar script: :class:`~syncano.models.fields.IntegerField`
@@ -143,7 +143,7 @@ class Schedule(Model):
 
 class Trigger(Model):
     """
-    OO wrapper around triggers `endpoint <http://docs.syncano.com/v4.0/docs/triggers-list>`_.
+    OO wrapper around triggers `link <http://docs.syncano.com/docs/triggers>`_.
 
     :ivar label: :class:`~syncano.models.fields.StringField`
     :ivar script: :class:`~syncano.models.fields.IntegerField`
@@ -185,9 +185,8 @@ class Trigger(Model):
 
 
 class ScriptEndpoint(Model):
-    # TODO: update docs when ready;
     """
-    OO wrapper around script endpoints `endpoint <http://docs.syncano.com/v4.0/docs/webhooks-list>`_.
+    OO wrapper around script endpoints `link <http://docs.syncano.com/docs/codebox-sockets>`_.
 
     :ivar name: :class:`~syncano.models.fields.SlugField`
     :ivar script: :class:`~syncano.models.fields.IntegerField`

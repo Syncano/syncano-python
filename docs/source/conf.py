@@ -108,3 +108,6 @@ texinfo_documents = [(
 
 autodoc_member_order = 'bysource'
 highlight_language = 'python'
+
+from syncano.models.fields import RelatedManagerField
+RelatedManagerField.__get__ = lambda self, *args, **kwargs: self
