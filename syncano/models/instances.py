@@ -123,7 +123,8 @@ class ApiKey(Model):
 
 class InstanceInvitation(Model):
     """
-    OO wrapper around instance invitations `link <http://docs.syncano.com/docs/administrators#inviting-administrators>`_.
+    OO wrapper around instance
+    invitations `link <http://docs.syncano.com/docs/administrators#inviting-administrators>`_.
 
     :ivar email: :class:`~syncano.models.fields.EmailField`
     :ivar role: :class:`~syncano.models.fields.ChoiceField`
