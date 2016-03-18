@@ -33,7 +33,7 @@ class UserProfileTest(InstanceMixin, IntegrationTest):
         ]
 
         klass.save()
-        self.user.profile.reload()  # force to refresh profile model;
+        self.user.reload()  # force to refresh profile model;
 
         self.user.profile.profile_pic = self.SAMPLE_PROFILE_PIC
         self.user.profile.save()
