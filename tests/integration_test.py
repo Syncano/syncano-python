@@ -367,7 +367,7 @@ class ScriptIntegrationTest(InstanceMixin, IntegrationTest):
             sleep(1)
             trace.reload()
 
-        self.assertEquals(trace.status, 'success')
+        self.assertEqual(trace.status, 'success')
         self.assertDictEqual(trace.result, {'stderr': '', 'stdout': 'IntegrationTest'})
 
         script.delete()
@@ -386,7 +386,7 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
             sleep(1)
             trace.reload()
 
-        self.assertEquals(trace.status, 'success')
+        self.assertEqual(trace.status, 'success')
         self.assertDictEqual(trace.content, {'one': 1})
         self.assertEqual(trace.content_type, 'application/json')
         self.assertEqual(trace.status_code, 200)
@@ -447,7 +447,7 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
         )
 
         trace = script_endpoint.run()
-        self.assertEquals(trace.status, 'success')
+        self.assertEqual(trace.status, 'success')
         self.assertDictEqual(trace.result, {'stderr': '', 'stdout': 'IntegrationTest'})
         script_endpoint.delete()
 
