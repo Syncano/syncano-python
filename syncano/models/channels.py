@@ -66,7 +66,7 @@ class Channel(Model):
     """
     .. _long polling: http://en.wikipedia.org/wiki/Push_technology#Long_polling
 
-    OO wrapper around channels `link <TODO>`_.
+    OO wrapper around channels `link http://docs.syncano.io/docs/realtime-communication`_.
 
     :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar type: :class:`~syncano.models.fields.ChoiceField`
@@ -157,7 +157,7 @@ class Channel(Model):
 
 class Message(Model):
     """
-    OO wrapper around channel hisotry `link <TODO>`_.
+    OO wrapper around channel hisotry `link http://docs.syncano.io/docs/realtime-communication`_.
 
     :ivar room: :class:`~syncano.models.fields.StringField`
     :ivar action: :class:`~syncano.models.fields.ChoiceField`
