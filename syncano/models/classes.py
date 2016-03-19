@@ -79,7 +79,7 @@ class Class(Model):
 
     def save(self, **kwargs):
         if self.schema:  # do not allow add empty schema to registry;
-            registry.set_schema(self.name, self.schema)  # update the registry schema here;
+            registry.set_schema(self.name, self.schema.schema)  # update the registry schema here;
         return super(Class, self).save(**kwargs)
 
 

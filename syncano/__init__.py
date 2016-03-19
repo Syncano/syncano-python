@@ -84,5 +84,5 @@ def connect(*args, **kwargs):
     instance = kwargs.get('instance_name', INSTANCE)
 
     if instance is not None:
-        registry.set_default_instance(instance)
+        registry.set_used_instance(instance)
     return registry
