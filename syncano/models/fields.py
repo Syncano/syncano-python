@@ -552,6 +552,9 @@ class ArrayField(JSONToPythonMixin, WritableField):
     def validate(self, value, model_instance):
         super(ArrayField, self).validate(value, model_instance)
 
+        if not self.required and not value:
+            return
+
         if isinstance(value, six.string_types):
             try:
                 value = json.loads(value)
@@ -571,6 +574,9 @@ class ObjectField(JSONToPythonMixin, WritableField):
 
     def validate(self, value, model_instance):
         super(ObjectField, self).validate(value, model_instance)
+
+        if not self.required and not value:
+            return
 
         if isinstance(value, six.string_types):
             try:
