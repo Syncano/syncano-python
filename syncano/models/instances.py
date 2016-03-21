@@ -6,7 +6,7 @@ from .base import Model
 
 class Instance(Model):
     """
-    OO wrapper around instances `endpoint <http://docs.syncano.com/v4.0/docs/instances>`_.
+    OO wrapper around instances `link <http://docs.syncano.com/docs/getting-started-with-syncano#adding-an-instance>`_.
 
     :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`
@@ -16,6 +16,20 @@ class Instance(Model):
     :ivar metadata: :class:`~syncano.models.fields.JSONField`
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
+    :ivar api_keys: :class:`~syncano.models.fields.RelatedManagerField`
+    :ivar users: :class:`~syncano.models.fields.RelatedManagerField`
+    :ivar admins: :class:`~syncano.models.fields.RelatedManagerField`
+    :ivar scripts: :class:`~syncano.models.fields.RelatedManagerField`
+    :ivar script_endpoints: :class:`~syncano.models.fields.RelatedManagerField`
+    :ivar templates: :class:`~syncano.models.fields.RelatedManagerField`
+    :ivar triggers: :class:`~syncano.models.fields.RelatedManagerField`
+    :ivar schedules: :class:`~syncano.models.fields.RelatedManagerField`
+    :ivar classes: :class:`~syncano.models.fields.RelatedManagerField`
+    :ivar invitations: :class:`~syncano.models.fields.RelatedManagerField`
+    :ivar gcm_devices: :class:`~syncano.models.fields.RelatedManagerField`
+    :ivar gcm_messages: :class:`~syncano.models.fields.RelatedManagerField`
+    :ivar apns_devices: :class:`~syncano.models.fields.RelatedManagerField`
+    :ivar apns_messages: :class:`~syncano.models.fields.RelatedManagerField`
     """
 
     name = fields.StringField(max_length=64, primary_key=True)
@@ -64,6 +78,7 @@ class Instance(Model):
     def rename(self, new_name):
         """
         A method for changing the instance name;
+
         :param new_name: the new name for the instance;
         :return: a populated Instance object;
         """
@@ -77,7 +92,7 @@ class Instance(Model):
 
 class ApiKey(Model):
     """
-    OO wrapper around instance api keys `endpoint <TODO>`_.
+    OO wrapper around instance api keys `link <http://docs.syncano.com/docs/authentication>`_.
 
     :ivar api_key: :class:`~syncano.models.fields.StringField`
     :ivar allow_user_create: :class:`~syncano.models.fields.BooleanField`
@@ -108,8 +123,8 @@ class ApiKey(Model):
 
 class InstanceInvitation(Model):
     """
-    OO wrapper around instance invitations
-    `endpoint <http://docs.syncano.com/v4.0/docs/list-administrator-invitations>`_.
+    OO wrapper around instance
+    invitations `link <http://docs.syncano.com/docs/administrators#inviting-administrators>`_.
 
     :ivar email: :class:`~syncano.models.fields.EmailField`
     :ivar role: :class:`~syncano.models.fields.ChoiceField`

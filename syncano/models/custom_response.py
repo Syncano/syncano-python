@@ -8,37 +8,38 @@ class CustomResponseHandler(object):
     A helper class which allows to define and maintain custom response handlers.
 
     Consider an example:
-    Script code:
+    Script code::
 
-      >> set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='application/json'))
+        set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='application/json'))
 
-    When suitable ScriptTrace is used:
+    When suitable ScriptTrace is used::
 
-      >> trace = ScriptTrace.please.get(id=<code_box_trace_id>, script=<script_id>)
+        trace = ScriptTrace.please.get(id=<code_box_trace_id>, script=<script_id>)
 
     Then trace object will have a content attribute, which will be a dict created from json (simple: json.loads under
       the hood);
 
-    So this is possible:
+    So this is possible::
 
-      >> trace.content['one']
+        trace.content['one']
 
-    And the trace.content is equal to:
-      >> {'one': 1}
+    And the trace.content is equal to::
 
-    The handler can be easily overwrite:
+        {'one': 1}
 
-    def custom_handler(response):
-        return json.loads(response['response']['content'])['one']
+    The handler can be easily overwrite::
 
-    trace.response_handler.overwrite_handler('application/json', custom_handler)
+        def custom_handler(response):
+            return json.loads(response['response']['content'])['one']
 
-    or globally:
+        trace.response_handler.overwrite_handler('application/json', custom_handler)
 
-    ScriptTrace.response_handler.overwrite_handler('application/json', custom_handler)
+    or globally::
 
-    Then trace.content is equal to:
-      >> 1
+        ScriptTrace.response_handler.overwrite_handler('application/json', custom_handler)
+
+    Then trace.content is equal to::
+        1
 
     Currently supported content_types (but any handler can be defined):
       * application/json

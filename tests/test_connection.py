@@ -35,12 +35,13 @@ class ConnectTestCase(unittest.TestCase):
     @mock.patch('syncano.models.registry')
     @mock.patch('syncano.INSTANCE')
     def test_env_instance(self, instance_mock, registry_mock, *args):
-        self.assertFalse(registry_mock.set_default_instance.called)
+        instance_mock.return_value = 'test_instance'
+        self.assertFalse(registry_mock.set_used_instance.called)
 
         connect(1, 2, 3, a=1, b=2, c=3)
 
-        self.assertTrue(registry_mock.set_default_instance.called)
-        registry_mock.set_default_instance.assert_called_once_with(instance_mock)
+        self.assertTrue(registry_mock.set_used_instance.called)
+        registry_mock.set_used_instance.assert_called_once_with(instance_mock)
 
 
 class ConnectionTestCase(unittest.TestCase):

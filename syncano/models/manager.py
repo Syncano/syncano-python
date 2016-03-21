@@ -131,14 +131,13 @@ class Manager(ConnectionMixin):
         Usage::
 
             klass = instance.classes.get(name='some_class')
-
             Object.please.batch(
                 klass.objects.as_batch().delete(id=652),
                 klass.objects.as_batch().delete(id=653),
                 ...
             )
 
-            and::
+        and::
 
             Object.please.batch(
                 klass.objects.as_batch().update(id=652, arg='some_b'),
@@ -146,13 +145,15 @@ class Manager(ConnectionMixin):
                 ...
             )
 
-            and::
+        and::
+
             Object.please.batch(
                 klass.objects.as_batch().create(arg='some_c'),
                 klass.objects.as_batch().create(arg='some_c'),
                 ...
             )
-            and::
+
+        and::
 
             Object.please.batch(
                 klass.objects.as_batch().delete(id=653),
@@ -161,28 +162,29 @@ class Manager(ConnectionMixin):
                 ...
             )
 
-            are posible.
+        are posible.
 
-            But::
+        But::
+
             Object.please.batch(
                 klass.objects.as_batch().get_or_create(id=653, arg='some_a')
             )
 
-            will not work as expected.
+        will not work as expected.
 
-        Some snippet for working with instance users:
+        Some snippet for working with instance users::
 
-        instance = Instance.please.get(name='Nabuchodonozor')
+            instance = Instance.please.get(name='Nabuchodonozor')
+            model_users = instance.users.batch(
+                instance.users.as_batch().delete(id=7),
+                instance.users.as_batch().update(id=9, username='username_a'),
+                instance.users.as_batch().create(username='username_b', password='5432'),
+                ...
+            )
 
-        model_users = instance.users.batch(
-            instance.users.as_batch().delete(id=7),
-            instance.users.as_batch().update(id=9, username='username_a'),
-            instance.users.as_batch().create(username='username_b', password='5432'),
-            ...
-        )
+        And sample response will be::
 
-        And sample response will be:
-        [{u'code': 204}, <User: 9>, <User: 11>, ...]
+            [{u'code': 204}, <User: 9>, <User: 11>, ...]
 
         :param args: a arg is on of the: klass.objects.as_batch().create(...), klass.objects.as_batch().update(...),
          klass.objects.as_batch().delete(...)
@@ -258,14 +260,15 @@ class Manager(ConnectionMixin):
         Creates many new instances based on provided list of objects.
 
         Usage::
-            instance = Instance.please.get(name='instance_a')
 
+            instance = Instance.please.get(name='instance_a')
             instances = instance.users.bulk_create(
                 User(username='user_a', password='1234'),
                 User(username='user_b', password='4321')
             )
 
-        .. warning::
+        Warning::
+
             This method is restricted to handle 50 objects at once.
         """
         return ModelBulkCreate(objects, self).process()
@@ -904,9 +907,11 @@ class ObjectManager(Manager):
         Return the queryset count;
 
         Usage::
+
             Object.please.list(instance_name='raptor', class_name='some_class').filter(id__gt=600).count()
             Object.please.list(instance_name='raptor', class_name='some_class').count()
             Object.please.all(instance_name='raptor', class_name='some_class').count()
+
         :return: The count of the returned objects: count = DataObjects.please.list(...).count();
         """
         self.method = 'GET'
@@ -920,12 +925,14 @@ class ObjectManager(Manager):
     @clone
     def with_count(self, page_size=20):
         """
-        Return the queryset count;
+        Return the queryset with count;
 
         Usage::
+
             Object.please.list(instance_name='raptor', class_name='some_class').filter(id__gt=600).with_count()
             Object.please.list(instance_name='raptor', class_name='some_class').with_count(page_size=30)
             Object.please.all(instance_name='raptor', class_name='some_class').with_count()
+
         :param page_size: The size of the pagination; Default to 20;
         :return: The tuple with objects and the count: objects, count = DataObjects.please.list(...).with_count();
         """
@@ -981,12 +988,14 @@ class ObjectManager(Manager):
     def bulk_create(self, *objects):
         """
         Creates many new objects.
-        Usage:
-        created_objects = Object.please.bulk_create(
-            Object(instance_name='instance_a', class_name='some_class', title='one'),
-            Object(instance_name='instance_a', class_name='some_class', title='two'),
-            Object(instance_name='instance_a', class_name='some_class', title='three')
-        )
+        Usage::
+
+            created_objects = Object.please.bulk_create(
+                Object(instance_name='instance_a', class_name='some_class', title='one'),
+                Object(instance_name='instance_a', class_name='some_class', title='two'),
+                Object(instance_name='instance_a', class_name='some_class', title='three')
+            )
+
         :param objects: a list of the instances of data objects to be created;
         :return: a created and populated list of objects; When error occurs a plain dict is returned in that place;
         """
