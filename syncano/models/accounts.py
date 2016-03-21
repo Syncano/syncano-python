@@ -9,7 +9,7 @@ from .manager import ObjectManager
 
 class Admin(Model):
     """
-    OO wrapper around instance admins `endpoint <http://docs.syncano.com/v4.0/docs/v1instancesinstanceadmins>`_.
+    OO wrapper around instance admins `link <http://docs.syncano.com/docs/administrators>`_.
 
     :ivar first_name: :class:`~syncano.models.fields.StringField`
     :ivar last_name: :class:`~syncano.models.fields.StringField`
@@ -86,7 +86,7 @@ class Profile(DataObjectMixin, Object):
 
 class User(Model):
     """
-    OO wrapper around users `endpoint <http://docs.syncano.com/v4.0/docs/user-management>`_.
+    OO wrapper around users `link <http://docs.syncano.com/docs/user-management>`_.
 
     :ivar username: :class:`~syncano.models.fields.StringField`
     :ivar password: :class:`~syncano.models.fields.StringField`
@@ -100,7 +100,7 @@ class User(Model):
     password = fields.StringField(read_only=False, required=True)
     user_key = fields.StringField(read_only=True, required=False)
 
-    profile = fields.ModelField('Profile')
+    profile = fields.ModelField('Profile', read_only=False, default={})
 
     links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
@@ -156,7 +156,7 @@ class User(Model):
 
 class Group(Model):
     """
-    OO wrapper around groups `endpoint <http://docs.syncano.com/v4.0/docs/groups>`_.
+    OO wrapper around groups `link <http://docs.syncano.com/docs/groups>`_.
 
     :ivar label: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`

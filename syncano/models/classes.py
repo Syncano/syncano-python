@@ -14,7 +14,7 @@ from .registry import registry
 
 class Class(Model):
     """
-    OO wrapper around instance classes `endpoint <http://docs.syncano.com/v4.0/docs/instancesinstanceclasses>`_.
+    OO wrapper around instance classes `link <http://docs.syncano.com/docs/classes>`_.
 
     :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`
@@ -30,6 +30,7 @@ class Class(Model):
     :ivar group: :class:`~syncano.models.fields.IntegerField`
     :ivar group_permissions: :class:`~syncano.models.fields.ChoiceField`
     :ivar other_permissions: :class:`~syncano.models.fields.ChoiceField`
+    :ivar objects: :class:`~syncano.models.fields.RelatedManagerField`
 
     .. note::
         This model is special because each related :class:`~syncano.models.base.Object` will be
@@ -78,13 +79,13 @@ class Class(Model):
 
     def save(self, **kwargs):
         if self.schema:  # do not allow add empty schema to registry;
-            registry.set_schema(self.name, self.schema)  # update the registry schema here;
+            registry.set_schema(self.name, self.schema.schema)  # update the registry schema here;
         return super(Class, self).save(**kwargs)
 
 
 class Object(Model):
     """
-    OO wrapper around data objects `endpoint <http://docs.syncano.com/v4.0/docs/view-data-objects>`_.
+    OO wrapper around data objects `link <http://docs.syncano.com/docs/data-objects>`_.
 
     :ivar revision: :class:`~syncano.models.fields.IntegerField`
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`

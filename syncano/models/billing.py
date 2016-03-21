@@ -6,7 +6,7 @@ from .base import Model
 
 class Coupon(Model):
     """
-    OO wrapper around coupons `endpoint <TODO>`_.
+    OO wrapper around coupons `link <TODO>`_.
 
     :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar redeem_by: :class:`~syncano.models.fields.DateField`
@@ -44,7 +44,7 @@ class Coupon(Model):
 
 class Discount(Model):
     """
-    OO wrapper around discounts `endpoint <TODO>`_.
+    OO wrapper around discounts `link <TODO>`_.
 
     :ivar instance: :class:`~syncano.models.fields.ModelField`
     :ivar coupon: :class:`~syncano.models.fields.ModelField`

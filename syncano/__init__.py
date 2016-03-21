@@ -69,8 +69,7 @@ def connect(*args, **kwargs):
         # OR
         connection = syncano.connect(api_key='')
         # OR
-        connection = syncano.connect(social_backend='github',
-                                     token='sfdsdfsdf')
+        connection = syncano.connect(social_backend='github', token='sfdsdfsdf')
 
         # User login
         connection = syncano.connect(username='', password='', api_key='', instance_name='')
@@ -85,5 +84,5 @@ def connect(*args, **kwargs):
     instance = kwargs.get('instance_name', INSTANCE)
 
     if instance is not None:
-        registry.set_default_instance(instance)
+        registry.set_used_instance(instance)
     return registry
