@@ -605,7 +605,7 @@ class SchemaField(JSONField):
                         'boolean',
                         'datetime',
                         'file',
-                        'reference'
+                        'reference',
                         'array',
                         'object',
                     ],
