@@ -12,6 +12,20 @@ from .manager import SchemaManager
 from .registry import registry
 
 
+class JSONToPythonMixin(object):
+
+    def to_python(self, value):
+        if value is None:
+            return
+
+        if isinstance(value, six.string_types):
+            try:
+                value = json.loads(value)
+            except (ValueError, TypeError):
+                raise SyncanoValueError('Invalid value: can not be parsed')
+        return value
+
+
 class Field(object):
     """Base class for all field types."""
 
@@ -508,7 +522,7 @@ class FileField(WritableField):
         return {self.name: value}
 
 
-class JSONField(WritableField):
+class JSONField(JSONToPythonMixin, WritableField):
     query_allowed = False
     schema = None
 
@@ -524,14 +538,6 @@ class JSONField(WritableField):
             except ValueError as e:
                 raise self.ValidationError(e)
 
-    def to_python(self, value):
-        if value is None:
-            return
-
-        if isinstance(value, six.string_types):
-            value = json.loads(value)
-        return value
-
     def to_native(self, value):
         if value is None:
             return
@@ -539,6 +545,47 @@ class JSONField(WritableField):
         if not isinstance(value, six.string_types):
             value = json.dumps(value)
         return value
+
+
+class ArrayField(JSONToPythonMixin, WritableField):
+
+    def validate(self, value, model_instance):
+        super(ArrayField, self).validate(value, model_instance)
+
+        if not self.required and not value:
+            return
+
+        if isinstance(value, six.string_types):
+            try:
+                value = json.loads(value)
+            except (ValueError, TypeError):
+                raise SyncanoValueError('Expected an array')
+
+        if not isinstance(value, list):
+            raise SyncanoValueError('Expected an array')
+
+        for element in value:
+            if not isinstance(element, six.string_types + (bool, int, float)):
+                raise SyncanoValueError(
+                    'Currently supported types for array items are: string types, bool, float and int')
+
+
+class ObjectField(JSONToPythonMixin, WritableField):
+
+    def validate(self, value, model_instance):
+        super(ObjectField, self).validate(value, model_instance)
+
+        if not self.required and not value:
+            return
+
+        if isinstance(value, six.string_types):
+            try:
+                value = json.loads(value)
+            except (ValueError, TypeError):
+                raise SyncanoValueError('Expected an object')
+
+        if not isinstance(value, dict):
+            raise SyncanoValueError('Expected an object')
 
 
 class SchemaField(JSONField):
@@ -564,7 +611,9 @@ class SchemaField(JSONField):
                         'boolean',
                         'datetime',
                         'file',
-                        'reference'
+                        'reference',
+                        'array',
+                        'object',
                     ],
                 },
                 'order_index': {
@@ -647,4 +696,6 @@ MAPPING = {
     'model': ModelField,
     'json': JSONField,
     'schema': SchemaField,
+    'array': ArrayField,
+    'object': ObjectField,
 }
