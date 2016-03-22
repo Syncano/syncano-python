@@ -19,7 +19,6 @@ Contents:
 
    getting_started
    interacting
-   models
    refs/syncano
 
 

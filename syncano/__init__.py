@@ -64,6 +64,7 @@ def connect(*args, **kwargs):
     :return: A models registry
 
     Usage::
+
         # Admin login
         connection = syncano.connect(email='', password='')
         # OR
