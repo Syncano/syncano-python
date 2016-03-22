@@ -567,7 +567,7 @@ class ArrayField(JSONToPythonMixin, WritableField):
         for element in value:
             if not isinstance(element, six.string_types + (bool, int, float)):
                 raise SyncanoValueError(
-                    'Curently supported types for array items are: string types, bool, float and int')
+                    'Currently supported types for array items are: string types, bool, float and int')
 
 
 class ObjectField(JSONToPythonMixin, WritableField):

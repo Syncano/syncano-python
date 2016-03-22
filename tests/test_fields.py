@@ -563,11 +563,11 @@ class ObjectFieldTestCase(BaseTestCase):
             self.field.validate("a", self.instance)
 
         self.field.validate({'raz': 1, 'dwa': 2}, self.instance)
-        self.field.validate("{\"raz\": 1, \"dwa\": 2}", self.instance)
+        self.field.validate('{"raz": 1, "dwa": 2}', self.instance)
 
     def test_to_python(self):
         with self.assertRaises(SyncanoValueError):
             self.field.to_python('a')
 
         self.field.to_python({'raz': 1, 'dwa': 2})
-        self.field.to_python("{\"raz\": 1, \"dwa\": 2}")
+        self.field.to_python('{"raz": 1, "dwa": 2}')
