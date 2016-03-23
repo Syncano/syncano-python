@@ -1,8 +1,10 @@
+import json
 import unittest
 from datetime import datetime
 from functools import wraps
 from time import mktime
 
+import six
 from syncano import models
 from syncano.exceptions import SyncanoValidationError, SyncanoValueError
 from syncano.models.manager import SchemaManager
@@ -55,20 +57,22 @@ class AllFieldsModel(models.Model):
     choice_field = models.ChoiceField(choices=CHOICES)
     date_field = models.DateField()
     datetime_field = models.DateTimeField()
-    hyperlinked_field = models.HyperlinkedField()
+    hyperlinked_field = models.LinksField()
     model_field = models.ModelField('Instance')
     json_field = models.JSONField(schema=SCHEMA)
     schema_field = models.SchemaField()
+    array_field = models.ArrayField()
+    object_field = models.ObjectField()
 
     class Meta:
         endpoints = {
             'detail': {
                 'methods': ['delete', 'post', 'patch', 'get'],
-                'path': '/v1/dummy/{dynamic_field}/',
+                'path': '/v1.1/dummy/{dynamic_field}/',
             },
             'list': {
                 'methods': ['post', 'get'],
-                'path': '/v1/dummy/',
+                'path': '/v1.1/dummy/',
             }
         }
 
@@ -105,11 +109,11 @@ class BaseTestCase(unittest.TestCase):
 
     @skip_base_class
     def test_field_unicode(self):
-        expected = u'<{0}: {1}>'.format(
+        expected = six.u('<{0}: {1}>').format(
             self.field.__class__.__name__,
             self.field_name
         )
-        out = unicode(self.field)
+        out = str(self.field)
         self.assertEqual(out, expected)
 
     @skip_base_class
@@ -248,11 +252,11 @@ class StringFieldTestCase(BaseTestCase):
     def test_to_python(self):
         self.assertEqual(self.field.to_python(None), None)
         self.assertEqual(self.field.to_python('test'), 'test')
-        self.assertEqual(self.field.to_python(10), u'10')
-        self.assertEqual(self.field.to_python(10.0), u'10.0')
-        self.assertEqual(self.field.to_python(True), u'True')
-        self.assertEqual(self.field.to_python({'a': 1}), u"{'a': 1}")
-        self.assertEqual(self.field.to_python([1, 2]), u"[1, 2]")
+        self.assertEqual(self.field.to_python(10), '10')
+        self.assertEqual(self.field.to_python(10.0), '10.0')
+        self.assertEqual(self.field.to_python(True), 'True')
+        self.assertEqual(self.field.to_python({'a': 1}), "{'a': 1}")
+        self.assertEqual(self.field.to_python([1, 2]), "[1, 2]")
 
 
 class IntegerFieldTestCase(BaseTestCase):
@@ -524,5 +528,46 @@ class SchemaFieldTestCase(BaseTestCase):
 
         schema = SchemaManager(value)
         self.assertEqual(self.field.to_native(None), None)
-        self.assertEqual(self.field.to_native(schema), '[{"type": "string", "name": "username"}]')
-        self.assertEqual(self.field.to_native(value), '[{"type": "string", "name": "username"}]')
+        self.assertListEqual(json.loads(self.field.to_native(schema)), [{"type": "string", "name": "username"}])
+        self.assertListEqual(json.loads(self.field.to_native(value)), [{"type": "string", "name": "username"}])
+
+
+class ArrayFieldTestCase(BaseTestCase):
+    field_name = 'array_field'
+
+    def test_validate(self):
+
+        with self.assertRaises(SyncanoValueError):
+            self.field.validate("a", self.instance)
+
+        with self.assertRaises(SyncanoValueError):
+            self.field.validate([1, 2, [12, 13]], self.instance)
+
+        self.field.validate([1, 2, 3], self.instance)
+        self.field.validate("[1, 2, 3]", self.instance)
+
+    def test_to_python(self):
+        with self.assertRaises(SyncanoValueError):
+            self.field.to_python('a')
+
+        self.field.to_python([1, 2, 3, 4])
+        self.field.to_python("[1, 2, 3, 4]")
+
+
+class ObjectFieldTestCase(BaseTestCase):
+    field_name = 'object_field'
+
+    def test_validate(self):
+
+        with self.assertRaises(SyncanoValueError):
+            self.field.validate("a", self.instance)
+
+        self.field.validate({'raz': 1, 'dwa': 2}, self.instance)
+        self.field.validate('{"raz": 1, "dwa": 2}', self.instance)
+
+    def test_to_python(self):
+        with self.assertRaises(SyncanoValueError):
+            self.field.to_python('a')
+
+        self.field.to_python({'raz': 1, 'dwa': 2})
+        self.field.to_python('{"raz": 1, "dwa": 2}')

@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from . import fields
 from .base import Model
@@ -6,7 +6,7 @@ from .base import Model
 
 class Coupon(Model):
     """
-    OO wrapper around coupons `endpoint <TODO>`_.
+    OO wrapper around coupons `link <TODO>`_.
 
     :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar redeem_by: :class:`~syncano.models.fields.DateField`
@@ -17,17 +17,13 @@ class Coupon(Model):
     :ivar duration: :class:`~syncano.models.fields.IntegerField`
     """
 
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'list', 'name': 'redeem'},
-    )
     CURRENCY_CHOICES = (
         {'display_name': 'USD', 'value': 'usd'},
     )
 
     name = fields.StringField(max_length=32, primary_key=True)
     redeem_by = fields.DateField()
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     percent_off = fields.IntegerField(required=False)
     amount_off = fields.FloatField(required=False)
     currency = fields.ChoiceField(choices=CURRENCY_CHOICES)
@@ -37,18 +33,18 @@ class Coupon(Model):
         endpoints = {
             'detail': {
                 'methods': ['get', 'delete'],
-                'path': '/v1/billing/coupons/{name}/',
+                'path': '/v1.1/billing/coupons/{name}/',
             },
             'list': {
                 'methods': ['post', 'get'],
-                'path': '/v1/billing/coupons/',
+                'path': '/v1.1/billing/coupons/',
             }
         }
 
 
 class Discount(Model):
     """
-    OO wrapper around discounts `endpoint <TODO>`_.
+    OO wrapper around discounts `link <TODO>`_.
 
     :ivar instance: :class:`~syncano.models.fields.ModelField`
     :ivar coupon: :class:`~syncano.models.fields.ModelField`
@@ -57,24 +53,20 @@ class Discount(Model):
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     """
 
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-
     instance = fields.ModelField('Instance')
     coupon = fields.ModelField('Coupon')
     start = fields.DateField(read_only=True, required=False)
     end = fields.DateField(read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
 
     class Meta:
         endpoints = {
             'detail': {
                 'methods': ['get'],
-                'path': '/v1/billing/discounts/{id}/',
+                'path': '/v1.1/billing/discounts/{id}/',
             },
             'list': {
                 'methods': ['post', 'get'],
-                'path': '/v1/billing/discounts/',
+                'path': '/v1.1/billing/discounts/',
             }
         }

@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from . import fields
 from .base import Model
@@ -9,7 +9,7 @@ from .manager import ObjectManager
 
 class Admin(Model):
     """
-    OO wrapper around instance admins `endpoint <http://docs.syncano.com/v4.0/docs/v1instancesinstanceadmins>`_.
+    OO wrapper around instance admins `link <http://docs.syncano.com/docs/administrators>`_.
 
     :ivar first_name: :class:`~syncano.models.fields.StringField`
     :ivar last_name: :class:`~syncano.models.fields.StringField`
@@ -17,9 +17,6 @@ class Admin(Model):
     :ivar role: :class:`~syncano.models.fields.ChoiceField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     """
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
     ROLE_CHOICES = (
         {'display_name': 'full', 'value': 'full'},
         {'display_name': 'write', 'value': 'write'},
@@ -30,7 +27,7 @@ class Admin(Model):
     last_name = fields.StringField(read_only=True, required=False)
     email = fields.EmailField(read_only=True, required=False)
     role = fields.ChoiceField(choices=ROLE_CHOICES)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
 
     class Meta:
         parent = Instance
@@ -52,10 +49,6 @@ class Profile(DataObjectMixin, Object):
 
     PREDEFINED_CLASS_NAME = 'user_profile'
 
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-
     PERMISSIONS_CHOICES = (
         {'display_name': 'None', 'value': 'none'},
         {'display_name': 'Read', 'value': 'read'},
@@ -71,7 +64,7 @@ class Profile(DataObjectMixin, Object):
     channel = fields.StringField(required=False)
     channel_room = fields.StringField(required=False, max_length=64)
 
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
@@ -93,7 +86,7 @@ class Profile(DataObjectMixin, Object):
 
 class User(Model):
     """
-    OO wrapper around users `endpoint <http://docs.syncano.com/v4.0/docs/user-management>`_.
+    OO wrapper around users `link <http://docs.syncano.com/docs/user-management>`_.
 
     :ivar username: :class:`~syncano.models.fields.StringField`
     :ivar password: :class:`~syncano.models.fields.StringField`
@@ -102,17 +95,14 @@ class User(Model):
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
     """
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
 
     username = fields.StringField(max_length=64, required=True)
     password = fields.StringField(read_only=False, required=True)
     user_key = fields.StringField(read_only=True, required=False)
 
-    profile = fields.ModelField('Profile')
+    profile = fields.ModelField('Profile', read_only=False, default={})
 
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
@@ -166,7 +156,7 @@ class User(Model):
 
 class Group(Model):
     """
-    OO wrapper around groups `endpoint <http://docs.syncano.com/v4.0/docs/groups>`_.
+    OO wrapper around groups `link <http://docs.syncano.com/docs/groups>`_.
 
     :ivar label: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`
@@ -174,14 +164,11 @@ class Group(Model):
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
     """
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
 
     label = fields.StringField(max_length=64, required=True)
     description = fields.StringField(read_only=False, required=False)
 
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 

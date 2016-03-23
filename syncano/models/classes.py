@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from copy import deepcopy
 
@@ -14,7 +14,7 @@ from .registry import registry
 
 class Class(Model):
     """
-    OO wrapper around instance classes `endpoint <http://docs.syncano.com/v4.0/docs/instancesinstanceclasses>`_.
+    OO wrapper around instance classes `link <http://docs.syncano.com/docs/classes>`_.
 
     :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`
@@ -30,16 +30,12 @@ class Class(Model):
     :ivar group: :class:`~syncano.models.fields.IntegerField`
     :ivar group_permissions: :class:`~syncano.models.fields.ChoiceField`
     :ivar other_permissions: :class:`~syncano.models.fields.ChoiceField`
+    :ivar objects: :class:`~syncano.models.fields.RelatedManagerField`
 
     .. note::
         This model is special because each related :class:`~syncano.models.base.Object` will be
         **dynamically populated** with fields defined in schema attribute.
     """
-
-    LINKS = [
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'list', 'name': 'objects'},
-    ]
 
     PERMISSIONS_CHOICES = (
         {'display_name': 'None', 'value': 'none'},
@@ -52,7 +48,7 @@ class Class(Model):
     objects_count = fields.Field(read_only=True, required=False)
 
     schema = fields.SchemaField(read_only=False, required=True)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     status = fields.Field()
     metadata = fields.JSONField(read_only=False, required=False)
 
@@ -64,6 +60,8 @@ class Class(Model):
     group = fields.IntegerField(label='group id', required=False)
     group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
     other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
+
+    objects = fields.RelatedManagerField('Object')
 
     class Meta:
         parent = Instance
@@ -81,13 +79,13 @@ class Class(Model):
 
     def save(self, **kwargs):
         if self.schema:  # do not allow add empty schema to registry;
-            registry.set_schema(self.name, self.schema)  # update the registry schema here;
+            registry.set_schema(self.name, self.schema.schema)  # update the registry schema here;
         return super(Class, self).save(**kwargs)
 
 
 class Object(Model):
     """
-    OO wrapper around data objects `endpoint <http://docs.syncano.com/v4.0/docs/view-data-objects>`_.
+    OO wrapper around data objects `link <http://docs.syncano.com/docs/data-objects>`_.
 
     :ivar revision: :class:`~syncano.models.fields.IntegerField`
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
@@ -104,6 +102,7 @@ class Object(Model):
         This model is special because each instance will be **dynamically populated**
         with fields defined in related :class:`~syncano.models.base.Class` schema attribute.
     """
+
     PERMISSIONS_CHOICES = (
         {'display_name': 'None', 'value': 'none'},
         {'display_name': 'Read', 'value': 'read'},
@@ -165,18 +164,28 @@ class Object(Model):
 
     @classmethod
     def create_subclass(cls, name, schema):
+        meta = deepcopy(Object._meta)
         attrs = {
-            'Meta': deepcopy(Object._meta),
+            'Meta': meta,
             '__new__': Model.__new__,  # We don't want to have maximum recursion depth exceeded error
+            'please': ObjectManager()
         }
+
+        model = type(str(name), (Model, ), attrs)
 
         for field in schema:
             field_type = field.get('type')
             field_class = fields.MAPPING[field_type]
             query_allowed = ('order_index' in field or 'filter_index' in field)
-            attrs[field['name']] = field_class(required=False, read_only=False,
-                                               query_allowed=query_allowed)
-        model = type(str(name), (Object, ), attrs)
+            field_class(required=False, read_only=False, query_allowed=query_allowed).contribute_to_class(
+                model, field.get('name')
+            )
+
+        for field in meta.fields:
+            if field.primary_key:
+                setattr(model, 'pk', field)
+            setattr(model, field.name, field)
+
         cls._set_up_object_class(model)
         return model
 

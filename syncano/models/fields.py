@@ -8,8 +8,22 @@ from syncano import PUSH_ENV, logger
 from syncano.exceptions import SyncanoFieldError, SyncanoValueError
 from syncano.utils import force_text
 
-from .manager import RelatedManagerDescriptor, SchemaManager
+from .manager import SchemaManager
 from .registry import registry
+
+
+class JSONToPythonMixin(object):
+
+    def to_python(self, value):
+        if value is None:
+            return
+
+        if isinstance(value, six.string_types):
+            try:
+                value = json.loads(value)
+            except (ValueError, TypeError):
+                raise SyncanoValueError('Invalid value: can not be parsed')
+        return value
 
 
 class Field(object):
@@ -60,6 +74,8 @@ class Field(object):
     def __lt__(self, other):
         if isinstance(other, Field):
             return self.creation_counter < other.creation_counter
+        if isinstance(other, int):
+            return self.creation_counter < other
         return NotImplemented
 
     def __hash__(self):  # pragma: no cover
@@ -156,6 +172,27 @@ class Field(object):
         )
 
         setattr(self, 'ValidationError', error_class)
+
+
+class RelatedManagerField(Field):
+
+    def __init__(self, model_name, endpoint='list', *args, **kwargs):
+        super(RelatedManagerField, self).__init__(*args, **kwargs)
+        self.model_name = model_name
+        self.endpoint = endpoint
+
+    def __get__(self, instance, owner=None):
+        if instance is None:
+            raise AttributeError("RelatedManager is accessible only via {0} instances.".format(owner.__name__))
+
+        Model = registry.get_model_by_name(self.model_name)
+        method = getattr(Model.please, self.endpoint, Model.please.all)
+        properties = instance._meta.get_endpoint_properties('detail')
+        properties = [getattr(instance, prop) for prop in properties]
+        return method(*properties)
+
+    def contribute_to_class(self, cls, name):
+        setattr(cls, name, self)
 
 
 class PrimaryKeyField(Field):
@@ -385,25 +422,37 @@ class DateTimeField(DateField):
         return ret
 
 
-class HyperlinkedField(Field):
+class LinksWrapper(object):
+
+    def __init__(self, links_dict, ignored_links):
+        self.links_dict = links_dict
+        self.ignored_links = ignored_links
+
+    def __getattribute__(self, item):
+        try:
+            return super(LinksWrapper, self).__getattribute__(item)
+        except AttributeError:
+            item = item.replace('_', '-')
+            if item not in self.links_dict or item in self.ignored_links:
+                raise
+            return self.links_dict[item]
+
+    def to_native(self):
+        return self.links_dict
+
+
+class LinksField(Field):
     query_allowed = False
     IGNORED_LINKS = ('self', )
 
     def __init__(self, *args, **kwargs):
-        self.links = kwargs.pop('links', [])
-        super(HyperlinkedField, self).__init__(*args, **kwargs)
+        super(LinksField, self).__init__(*args, **kwargs)
 
-    def contribute_to_class(self, cls, name):
-        super(HyperlinkedField, self).contribute_to_class(cls, name)
+    def to_python(self, value):
+        return LinksWrapper(value, self.IGNORED_LINKS)
 
-        for link in self.links:
-            name = link['name']
-            endpoint = link['type']
-
-            if name in self.IGNORED_LINKS:
-                continue
-
-            setattr(cls, name, RelatedManagerDescriptor(self, name, endpoint))
+    def to_native(self, value):
+        return value
 
 
 class ModelField(Field):
@@ -474,7 +523,7 @@ class FileField(WritableField):
         return {self.name: value}
 
 
-class JSONField(WritableField):
+class JSONField(JSONToPythonMixin, WritableField):
     query_allowed = False
     schema = None
 
@@ -490,14 +539,6 @@ class JSONField(WritableField):
             except ValueError as e:
                 raise self.ValidationError(e)
 
-    def to_python(self, value):
-        if value is None:
-            return
-
-        if isinstance(value, six.string_types):
-            value = json.loads(value)
-        return value
-
     def to_native(self, value):
         if value is None:
             return
@@ -505,6 +546,47 @@ class JSONField(WritableField):
         if not isinstance(value, six.string_types):
             value = json.dumps(value)
         return value
+
+
+class ArrayField(JSONToPythonMixin, WritableField):
+
+    def validate(self, value, model_instance):
+        super(ArrayField, self).validate(value, model_instance)
+
+        if not self.required and not value:
+            return
+
+        if isinstance(value, six.string_types):
+            try:
+                value = json.loads(value)
+            except (ValueError, TypeError):
+                raise SyncanoValueError('Expected an array')
+
+        if not isinstance(value, list):
+            raise SyncanoValueError('Expected an array')
+
+        for element in value:
+            if not isinstance(element, six.string_types + (bool, int, float)):
+                raise SyncanoValueError(
+                    'Currently supported types for array items are: string types, bool, float and int')
+
+
+class ObjectField(JSONToPythonMixin, WritableField):
+
+    def validate(self, value, model_instance):
+        super(ObjectField, self).validate(value, model_instance)
+
+        if not self.required and not value:
+            return
+
+        if isinstance(value, six.string_types):
+            try:
+                value = json.loads(value)
+            except (ValueError, TypeError):
+                raise SyncanoValueError('Expected an object')
+
+        if not isinstance(value, dict):
+            raise SyncanoValueError('Expected an object')
 
 
 class SchemaField(JSONField):
@@ -530,7 +612,9 @@ class SchemaField(JSONField):
                         'boolean',
                         'datetime',
                         'file',
-                        'reference'
+                        'reference',
+                        'array',
+                        'object',
                     ],
                 },
                 'order_index': {
@@ -609,8 +693,10 @@ MAPPING = {
     'field': Field,
     'writable': WritableField,
     'endpoint': EndpointField,
-    'links': HyperlinkedField,
+    'links': LinksField,
     'model': ModelField,
     'json': JSONField,
     'schema': SchemaField,
+    'array': ArrayField,
+    'object': ObjectField,
 }

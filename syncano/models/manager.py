@@ -34,43 +34,10 @@ class ManagerDescriptor(object):
         return self.manager.all()
 
 
-class RelatedManagerDescriptor(object):
-
-    def __init__(self, field, name, endpoint):
-        self.field = field
-        self.name = name
-        self.endpoint = endpoint
-
-    def __get__(self, instance, owner=None):
-        if instance is None:
-            raise AttributeError("RelatedManager is accessible only via {0} instances.".format(owner.__name__))
-
-        links = getattr(instance, self.field.name)
-
-        if not links:
-            return None
-
-        path = links[self.name]
-
-        if not path:
-            return None
-
-        Model = registry.get_model_by_path(path)
-        method = getattr(Model.please, self.endpoint, Model.please.all)
-
-        properties = instance._meta.get_endpoint_properties('detail')
-
-        if instance.__class__.__name__ == 'Instance':
-            registry.set_last_used_instance(getattr(instance, 'name', None))
-        properties = [getattr(instance, prop) for prop in properties]
-
-        return method(*properties)
-
-
 class Manager(ConnectionMixin):
     """Base class responsible for all ORM (``please``) actions."""
 
-    BATCH_URI = '/v1/instances/{name}/batch/'
+    BATCH_URI = '/v1.1/instances/{name}/batch/'
 
     def __init__(self):
         self.name = None
@@ -108,15 +75,19 @@ class Manager(ConnectionMixin):
     def __iter__(self):  # pragma: no cover
         return iter(self.iterator())
 
-    def __bool__(self):  # pragma: no cover
+    def __nonzero__(self):
         try:
             self[0]
             return True
         except IndexError:
             return False
 
-    def __nonzero__(self):  # pragma: no cover
-        return type(self).__bool__(self)
+    def __bool__(self):  # pragma: no cover
+        try:
+            self[0]
+            return True
+        except IndexError:
+            return False
 
     def __getitem__(self, k):
         """
@@ -160,14 +131,13 @@ class Manager(ConnectionMixin):
         Usage::
 
             klass = instance.classes.get(name='some_class')
-
             Object.please.batch(
                 klass.objects.as_batch().delete(id=652),
                 klass.objects.as_batch().delete(id=653),
                 ...
             )
 
-            and::
+        and::
 
             Object.please.batch(
                 klass.objects.as_batch().update(id=652, arg='some_b'),
@@ -175,13 +145,15 @@ class Manager(ConnectionMixin):
                 ...
             )
 
-            and::
+        and::
+
             Object.please.batch(
                 klass.objects.as_batch().create(arg='some_c'),
                 klass.objects.as_batch().create(arg='some_c'),
                 ...
             )
-            and::
+
+        and::
 
             Object.please.batch(
                 klass.objects.as_batch().delete(id=653),
@@ -190,28 +162,29 @@ class Manager(ConnectionMixin):
                 ...
             )
 
-            are posible.
+        are posible.
 
-            But::
+        But::
+
             Object.please.batch(
                 klass.objects.as_batch().get_or_create(id=653, arg='some_a')
             )
 
-            will not work as expected.
+        will not work as expected.
 
-        Some snippet for working with instance users:
+        Some snippet for working with instance users::
 
-        instance = Instance.please.get(name='Nabuchodonozor')
+            instance = Instance.please.get(name='Nabuchodonozor')
+            model_users = instance.users.batch(
+                instance.users.as_batch().delete(id=7),
+                instance.users.as_batch().update(id=9, username='username_a'),
+                instance.users.as_batch().create(username='username_b', password='5432'),
+                ...
+            )
 
-        model_users = instance.users.batch(
-            instance.users.as_batch().delete(id=7),
-            instance.users.as_batch().update(id=9, username='username_a'),
-            instance.users.as_batch().create(username='username_b', password='5432'),
-            ...
-        )
+        And sample response will be::
 
-        And sample response will be:
-        [{u'code': 204}, <User: 9>, <User: 11>, ...]
+            [{u'code': 204}, <User: 9>, <User: 11>, ...]
 
         :param args: a arg is on of the: klass.objects.as_batch().create(...), klass.objects.as_batch().update(...),
          klass.objects.as_batch().delete(...)
@@ -235,7 +208,7 @@ class Manager(ConnectionMixin):
 
         response = self.connection.request(
             'POST',
-            self.BATCH_URI.format(name=registry.last_used_instance),
+            self.BATCH_URI.format(name=registry.instance_name),
             **{'data': {'requests': requests}}
         )
 
@@ -267,13 +240,19 @@ class Manager(ConnectionMixin):
 
         are equivalent.
         """
+        data = self.properties.copy()
         attrs = kwargs.copy()
-        attrs.update(self.properties)
-        attrs.update({'is_lazy': self.is_lazy})
-        instance = self._get_instance(attrs)
+        data.update(attrs)
+        data.update({'is_lazy': self.is_lazy})
+        instance = self._get_instance(data)
+
+        if instance.__class__.__name__ == 'Instance':
+            registry.set_used_instance(instance.name)
+
         saved_instance = instance.save()
         if not self.is_lazy:
             return instance
+
         return saved_instance
 
     def bulk_create(self, *objects):
@@ -281,14 +260,15 @@ class Manager(ConnectionMixin):
         Creates many new instances based on provided list of objects.
 
         Usage::
-            instance = Instance.please.get(name='instance_a')
 
+            instance = Instance.please.get(name='instance_a')
             instances = instance.users.bulk_create(
                 User(username='user_a', password='1234'),
                 User(username='user_b', password='4321')
             )
 
-        .. warning::
+        Warning::
+
             This method is restricted to handle 50 objects at once.
         """
         return ModelBulkCreate(objects, self).process()
@@ -345,7 +325,7 @@ class Manager(ConnectionMixin):
 
         response = self.connection.request(
             'POST',
-            self.BATCH_URI.format(name=registry.last_used_instance),
+            self.BATCH_URI.format(name=registry.instance_name),
             **{'data': {'requests': requests}}
         )
 
@@ -523,7 +503,7 @@ class Manager(ConnectionMixin):
 
         serialized = model.to_native()
 
-        serialized = {k: v for k, v in serialized.iteritems()
+        serialized = {k: v for k, v in six.iteritems(serialized)
                       if k in self.data}
 
         self.data.update(serialized)
@@ -713,7 +693,7 @@ class Manager(ConnectionMixin):
     def _get_serialized_data(self):
         model = self.serialize(self.data, self.model)
         serialized = model.to_native()
-        serialized = {k: v for k, v in serialized.iteritems()
+        serialized = {k: v for k, v in six.iteritems(serialized)
                       if k in self.data}
         self.data.update(serialized)
         return serialized
@@ -769,7 +749,6 @@ class Manager(ConnectionMixin):
 
         properties = deepcopy(self.properties)
         properties.update(data)
-
         return model(**properties) if self._serialize else data
 
     def build_request(self, request):
@@ -854,15 +833,13 @@ class Manager(ConnectionMixin):
     def _get_endpoint_properties(self):
         defaults = {f.name: f.default for f in self.model._meta.fields if f.default is not None}
         defaults.update(self.properties)
-        if defaults.get('instance_name'):
-            registry.set_last_used_instance(defaults['instance_name'])
         return self.model._meta.resolve_endpoint(self.endpoint, defaults), defaults
 
 
-class CodeBoxManager(Manager):
+class ScriptManager(Manager):
     """
     Custom :class:`~syncano.models.manager.Manager`
-    class for :class:`~syncano.models.base.CodeBox` model.
+    class for :class:`~syncano.models.base.Script` model.
     """
 
     @clone
@@ -878,13 +855,13 @@ class CodeBoxManager(Manager):
         self._filter(*args, **kwargs)
         self._serialize = False
         response = self.request()
-        return registry.CodeBoxTrace(**response)
+        return registry.ScriptTrace(**response)
 
 
-class WebhookManager(Manager):
+class ScriptEndpointManager(Manager):
     """
     Custom :class:`~syncano.models.manager.Manager`
-    class for :class:`~syncano.models.base.Webhook` model.
+    class for :class:`~syncano.models.base.ScriptEndpoint` model.
     """
 
     @clone
@@ -902,7 +879,7 @@ class WebhookManager(Manager):
         response = self.request()
 
         # Workaround for circular import
-        return registry.WebhookTrace(**response)
+        return registry.ScriptEndpointTrace(**response)
 
 
 class ObjectManager(Manager):
@@ -930,9 +907,11 @@ class ObjectManager(Manager):
         Return the queryset count;
 
         Usage::
+
             Object.please.list(instance_name='raptor', class_name='some_class').filter(id__gt=600).count()
             Object.please.list(instance_name='raptor', class_name='some_class').count()
             Object.please.all(instance_name='raptor', class_name='some_class').count()
+
         :return: The count of the returned objects: count = DataObjects.please.list(...).count();
         """
         self.method = 'GET'
@@ -946,12 +925,14 @@ class ObjectManager(Manager):
     @clone
     def with_count(self, page_size=20):
         """
-        Return the queryset count;
+        Return the queryset with count;
 
         Usage::
+
             Object.please.list(instance_name='raptor', class_name='some_class').filter(id__gt=600).with_count()
             Object.please.list(instance_name='raptor', class_name='some_class').with_count(page_size=30)
             Object.please.all(instance_name='raptor', class_name='some_class').with_count()
+
         :param page_size: The size of the pagination; Default to 20;
         :return: The tuple with objects and the count: objects, count = DataObjects.please.list(...).with_count();
         """
@@ -1007,12 +988,14 @@ class ObjectManager(Manager):
     def bulk_create(self, *objects):
         """
         Creates many new objects.
-        Usage:
-        created_objects = Object.please.bulk_create(
-            Object(instance_name='instance_a', class_name='some_class', title='one'),
-            Object(instance_name='instance_a', class_name='some_class', title='two'),
-            Object(instance_name='instance_a', class_name='some_class', title='three')
-        )
+        Usage::
+
+            created_objects = Object.please.bulk_create(
+                Object(instance_name='instance_a', class_name='some_class', title='one'),
+                Object(instance_name='instance_a', class_name='some_class', title='two'),
+                Object(instance_name='instance_a', class_name='some_class', title='three')
+            )
+
         :param objects: a list of the instances of data objects to be created;
         :return: a created and populated list of objects; When error occurs a plain dict is returned in that place;
         """

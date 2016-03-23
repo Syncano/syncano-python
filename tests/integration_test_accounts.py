@@ -1,7 +1,8 @@
 import os
 
-from integration_test import IntegrationTest
 from syncano.connection import Connection
+
+from .integration_test import IntegrationTest
 
 
 class LoginTest(IntegrationTest):
@@ -34,12 +35,12 @@ class LoginTest(IntegrationTest):
         cls.connection = None
 
     def check_connection(self, con):
-        response = con.request('GET', '/v1/instances/test_login/classes/')
+        response = con.request('GET', '/v1.1/instances/test_login/classes/')
 
         obj_list = response['objects']
 
         self.assertEqual(len(obj_list), 2)
-        self.assertItemsEqual([o['name'] for o in obj_list], ['user_profile', self.CLASS_NAME])
+        self.assertEqual(sorted([o['name'] for o in obj_list]), sorted(['user_profile', self.CLASS_NAME]))
 
     def test_admin_login(self):
         con = Connection(host=self.API_ROOT,

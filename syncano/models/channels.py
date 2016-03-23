@@ -66,7 +66,7 @@ class Channel(Model):
     """
     .. _long polling: http://en.wikipedia.org/wiki/Push_technology#Long_polling
 
-    OO wrapper around channels `endpoint <TODO>`_.
+    OO wrapper around channels `link http://docs.syncano.io/docs/realtime-communication`_.
 
     :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar type: :class:`~syncano.models.fields.ChoiceField`
@@ -92,10 +92,6 @@ class Channel(Model):
             >>> channel.poll(callback=callback)
     """
 
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-
     TYPE_CHOICES = (
         {'display_name': 'Default', 'value': 'default'},
         {'display_name': 'Separate rooms', 'value': 'separate_rooms'},
@@ -113,7 +109,7 @@ class Channel(Model):
     group_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
     other_permissions = fields.ChoiceField(choices=PERMISSIONS_CHOICES, default='none')
     custom_publish = fields.BooleanField(default=False, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
 
     class Meta:
         parent = Instance
@@ -161,7 +157,7 @@ class Channel(Model):
 
 class Message(Model):
     """
-    OO wrapper around channel hisotry `endpoint <TODO>`_.
+    OO wrapper around channel hisotry `link http://docs.syncano.io/docs/realtime-communication`_.
 
     :ivar room: :class:`~syncano.models.fields.StringField`
     :ivar action: :class:`~syncano.models.fields.ChoiceField`

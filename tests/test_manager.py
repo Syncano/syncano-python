@@ -1,8 +1,9 @@
+import json
 import unittest
 from datetime import datetime
 
 from syncano.exceptions import SyncanoDoesNotExist, SyncanoRequestError, SyncanoValueError
-from syncano.models import CodeBox, CodeBoxTrace, Instance, Object, User, Webhook, WebhookTrace
+from syncano.models import Instance, Object, Script, ScriptEndpoint, ScriptEndpointTrace, ScriptTrace, User, registry
 
 try:
     from unittest import mock
@@ -35,6 +36,7 @@ class ManagerTestCase(unittest.TestCase):
 
         self.model = None
         self.manager = None
+        registry.clear_used_instance()
 
     def get_name_from_fields(self):
         names = [f for f in self.model._meta.fields
@@ -429,7 +431,7 @@ class ManagerTestCase(unittest.TestCase):
 
         request_mock.assert_called_once_with(
             'GET',
-            u'/v1/instances/',
+            '/v1.1/instances/',
             data={'b': 2},
             headers={},
             params={'a': 1}
@@ -492,15 +494,15 @@ class ManagerTestCase(unittest.TestCase):
             self.manager.get_allowed_method('dummy')
 
 
-class CodeBoxManagerTestCase(unittest.TestCase):
+class ScriptManagerTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.model = CodeBox
-        self.manager = CodeBox.please
+        self.model = Script
+        self.manager = Script.please
 
-    @mock.patch('syncano.models.manager.CodeBoxManager.request')
-    @mock.patch('syncano.models.manager.CodeBoxManager._filter')
-    @mock.patch('syncano.models.manager.CodeBoxManager._clone')
+    @mock.patch('syncano.models.manager.ScriptManager.request')
+    @mock.patch('syncano.models.manager.ScriptManager._filter')
+    @mock.patch('syncano.models.manager.ScriptManager._clone')
     def test_run(self, clone_mock, filter_mock, request_mock):
         clone_mock.return_value = self.manager
         request_mock.return_value = {'id': 10}
@@ -509,7 +511,7 @@ class CodeBoxManagerTestCase(unittest.TestCase):
         self.assertFalse(request_mock.called)
 
         result = self.manager.run(1, 2, a=1, b=2, payload={'x': 1, 'y': 2})
-        self.assertIsInstance(result, CodeBoxTrace)
+        self.assertIsInstance(result, ScriptTrace)
 
         self.assertTrue(filter_mock.called)
         self.assertTrue(request_mock.called)
@@ -519,18 +521,18 @@ class CodeBoxManagerTestCase(unittest.TestCase):
 
         self.assertEqual(self.manager.method, 'POST')
         self.assertEqual(self.manager.endpoint, 'run')
-        self.assertEqual(self.manager.data['payload'], '{"y": 2, "x": 1}')
+        self.assertDictEqual(json.loads(self.manager.data['payload']), {"y": 2, "x": 1})
 
 
-class WebhookManagerTestCase(unittest.TestCase):
+class ScriptEndpointManagerTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.model = Webhook
-        self.manager = Webhook.please
+        self.model = ScriptEndpoint
+        self.manager = ScriptEndpoint.please
 
-    @mock.patch('syncano.models.manager.WebhookManager.request')
-    @mock.patch('syncano.models.manager.WebhookManager._filter')
-    @mock.patch('syncano.models.manager.WebhookManager._clone')
+    @mock.patch('syncano.models.manager.ScriptEndpointManager.request')
+    @mock.patch('syncano.models.manager.ScriptEndpointManager._filter')
+    @mock.patch('syncano.models.manager.ScriptEndpointManager._clone')
     def test_run(self, clone_mock, filter_mock, request_mock):
         clone_mock.return_value = self.manager
         request_mock.return_value = {
@@ -544,7 +546,7 @@ class WebhookManagerTestCase(unittest.TestCase):
         self.assertFalse(request_mock.called)
 
         result = self.manager.run(1, 2, a=1, b=2, payload={'x': 1, 'y': 2})
-        self.assertIsInstance(result, WebhookTrace)
+        self.assertIsInstance(result, ScriptEndpointTrace)
         self.assertEqual(result.status, 'success')
         self.assertEqual(result.duration, 937)
         self.assertEqual(result.result, 1)
@@ -558,7 +560,7 @@ class WebhookManagerTestCase(unittest.TestCase):
 
         self.assertEqual(self.manager.method, 'POST')
         self.assertEqual(self.manager.endpoint, 'run')
-        self.assertEqual(self.manager.data['payload'], '{"y": 2, "x": 1}')
+        self.assertDictEqual(json.loads(self.manager.data['payload']), {"y": 2, "x": 1})
 
 
 class ObjectManagerTestCase(unittest.TestCase):
@@ -612,7 +614,10 @@ class ObjectManagerTestCase(unittest.TestCase):
         self.assertEqual(self.manager.query['query'], '{"name": {"_gt": "test"}}')
 
         self.manager.filter(name__gt='test', description='test')
-        self.assertEqual(self.manager.query['query'], '{"description": {"_eq": "test"}, "name": {"_gt": "test"}}')
+        self.assertDictEqual(
+            json.loads(self.manager.query['query']),
+            {"description": {"_eq": "test"}, "name": {"_gt": "test"}}
+        )
 
         with self.assertRaises(SyncanoValueError):
             self.manager.filter(dummy_field=4)

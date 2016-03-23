@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 import json
 
@@ -7,12 +7,12 @@ from syncano.exceptions import SyncanoValidationError
 from . import fields
 from .base import Model
 from .instances import Instance
-from .manager import CodeBoxManager, WebhookManager
+from .manager import ScriptEndpointManager, ScriptManager
 
 
-class CodeBox(Model):
+class Script(Model):
     """
-    OO wrapper around codeboxes `endpoint <http://docs.syncano.com/v4.0/docs/codebox-list-codeboxes>`_.
+    OO wrapper around scripts `link <http://docs.syncano.com/docs/snippets-scripts>`_.
 
     :ivar label: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`
@@ -24,26 +24,19 @@ class CodeBox(Model):
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
 
     .. note::
-        **CodeBox** has special method called ``run`` which will execute attached source code::
+        **Script** has special method called ``run`` which will execute attached source code::
 
-            >>> CodeBox.please.run('instance-name', 1234)
-            >>> CodeBox.please.run('instance-name', 1234, payload={'variable_one': 1, 'variable_two': 2})
-            >>> CodeBox.please.run('instance-name', 1234, payload="{\"variable_one\": 1, \"variable_two\": 2}")
+            >>> Script.please.run('instance-name', 1234)
+            >>> Script.please.run('instance-name', 1234, payload={'variable_one': 1, 'variable_two': 2})
+            >>> Script.please.run('instance-name', 1234, payload="{\"variable_one\": 1, \"variable_two\": 2}")
 
         or via instance::
 
-            >>> cb = CodeBox.please.get('instance-name', 1234)
-            >>> cb.run()
-            >>> cb.run(variable_one=1, variable_two=2)
+            >>> s = Script.please.get('instance-name', 1234)
+            >>> s.run()
+            >>> s.run(variable_one=1, variable_two=2)
     """
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'list', 'name': 'runtimes'},
-        # This will cause name collision between model run method
-        # and HyperlinkedField dynamic methods.
-        # {'type': 'detail', 'name': 'run'},
-        {'type': 'list', 'name': 'traces'},
-    )
+
     RUNTIME_CHOICES = (
         {'display_name': 'nodejs', 'value': 'nodejs'},
         {'display_name': 'python', 'value': 'python'},
@@ -56,28 +49,30 @@ class CodeBox(Model):
     source = fields.StringField()
     runtime_name = fields.ChoiceField(choices=RUNTIME_CHOICES)
     config = fields.Field(required=False)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
-    please = CodeBoxManager()
+    traces = fields.RelatedManagerField('ScriptTrace')
+
+    please = ScriptManager()
 
     class Meta:
         parent = Instance
-        name = 'Codebox'
-        plural_name = 'Codeboxes'
+        name = 'Script'
+        plural_name = 'Scripts'
         endpoints = {
             'detail': {
                 'methods': ['put', 'get', 'patch', 'delete'],
-                'path': '/codeboxes/{id}/',
+                'path': '/snippets/scripts/{id}/',
             },
             'list': {
                 'methods': ['post', 'get'],
-                'path': '/codeboxes/',
+                'path': '/snippets/scripts/',
             },
             'run': {
                 'methods': ['post'],
-                'path': '/codeboxes/{id}/run/',
+                'path': '/snippets/scripts/{id}/run/',
             },
         }
 
@@ -85,11 +80,11 @@ class CodeBox(Model):
         """
         Usage::
 
-            >>> cb = CodeBox.please.get('instance-name', 1234)
-            >>> cb.run()
-            >>> cb.run(variable_one=1, variable_two=2)
+            >>> s = Script.please.get('instance-name', 1234)
+            >>> s.run()
+            >>> s.run(variable_one=1, variable_two=2)
         """
-        from .traces import CodeBoxTrace
+        from .traces import ScriptTrace
 
         if self.is_new():
             raise SyncanoValidationError('Method allowed only on existing model.')
@@ -103,16 +98,16 @@ class CodeBox(Model):
             }
         }
         response = connection.request('POST', endpoint, **request)
-        response.update({'instance_name': self.instance_name, 'codebox_id': self.id})
-        return CodeBoxTrace(**response)
+        response.update({'instance_name': self.instance_name, 'script_id': self.id})
+        return ScriptTrace(**response)
 
 
 class Schedule(Model):
     """
-    OO wrapper around codebox schedules `endpoint <http://docs.syncano.com/v4.0/docs/codebox-schedules-list>`_.
+    OO wrapper around script schedules `link <http://docs.syncano.com/docs/schedules>`_.
 
     :ivar label: :class:`~syncano.models.fields.StringField`
-    :ivar codebox: :class:`~syncano.models.fields.IntegerField`
+    :ivar script: :class:`~syncano.models.fields.IntegerField`
     :ivar interval_sec: :class:`~syncano.models.fields.IntegerField`
     :ivar crontab: :class:`~syncano.models.fields.StringField`
     :ivar payload: :class:`~syncano.models.fields.HyperliStringFieldnkedField`
@@ -120,20 +115,17 @@ class Schedule(Model):
     :ivar scheduled_next: :class:`~syncano.models.fields.DateTimeField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     """
-    LINKS = [
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'detail', 'name': 'codebox'},
-        {'type': 'list', 'name': 'traces'},
-    ]
 
     label = fields.StringField(max_length=80)
-    codebox = fields.IntegerField(label='codebox id')
+    script = fields.IntegerField(label='script id')
     interval_sec = fields.IntegerField(read_only=False, required=False)
     crontab = fields.StringField(max_length=40, required=False)
     payload = fields.StringField(required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
     scheduled_next = fields.DateTimeField(read_only=True, required=False)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
+
+    traces = fields.RelatedManagerField('ScheduleTraces')
 
     class Meta:
         parent = Instance
@@ -151,22 +143,17 @@ class Schedule(Model):
 
 class Trigger(Model):
     """
-    OO wrapper around triggers `endpoint <http://docs.syncano.com/v4.0/docs/triggers-list>`_.
+    OO wrapper around triggers `link <http://docs.syncano.com/docs/triggers>`_.
 
     :ivar label: :class:`~syncano.models.fields.StringField`
-    :ivar codebox: :class:`~syncano.models.fields.IntegerField`
+    :ivar script: :class:`~syncano.models.fields.IntegerField`
     :ivar class_name: :class:`~syncano.models.fields.StringField`
     :ivar signal: :class:`~syncano.models.fields.ChoiceField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
     """
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'detail', 'name': 'codebox'},
-        {'type': 'detail', 'name': 'class_name'},
-        {'type': 'list', 'name': 'traces'},
-    )
+
     SIGNAL_CHOICES = (
         {'display_name': 'post_update', 'value': 'post_update'},
         {'display_name': 'post_create', 'value': 'post_create'},
@@ -174,12 +161,14 @@ class Trigger(Model):
     )
 
     label = fields.StringField(max_length=80)
-    codebox = fields.IntegerField(label='codebox id')
+    script = fields.IntegerField(label='script id')
     class_name = fields.StringField(label='class name', mapping='class')
     signal = fields.ChoiceField(choices=SIGNAL_CHOICES)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
+
+    traces = fields.RelatedManagerField('TriggerTrace')
 
     class Meta:
         parent = Instance
@@ -195,65 +184,62 @@ class Trigger(Model):
         }
 
 
-class Webhook(Model):
+class ScriptEndpoint(Model):
     """
-    OO wrapper around webhooks `endpoint <http://docs.syncano.com/v4.0/docs/webhooks-list>`_.
+    OO wrapper around script endpoints `link <http://docs.syncano.com/docs/codebox-sockets>`_.
 
     :ivar name: :class:`~syncano.models.fields.SlugField`
-    :ivar codebox: :class:`~syncano.models.fields.IntegerField`
+    :ivar script: :class:`~syncano.models.fields.IntegerField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
 
     .. note::
-        **WebHook** has special method called ``run`` which will execute related codebox::
+        **ScriptEndpoint** has special method called ``run`` which will execute related script::
 
-            >>> Webhook.please.run('instance-name', 'webhook-name')
-            >>> Webhook.please.run('instance-name', 'webhook-name', payload={'variable_one': 1, 'variable_two': 2})
-            >>> Webhook.please.run('instance-name', 'webhook-name',
+            >>> ScriptEndpoint.please.run('instance-name', 'script-name')
+            >>> ScriptEndpoint.please.run('instance-name', 'script-name', payload={'variable_one': 1,
+                                                                                   'variable_two': 2})
+            >>> ScriptEndpoint.please.run('instance-name', 'script-name',
                                    payload="{\"variable_one\": 1, \"variable_two\": 2}")
 
         or via instance::
 
-            >>> wh = Webhook.please.get('instance-name', 'webhook-name')
-            >>> wh.run()
-            >>> wh.run(variable_one=1, variable_two=2)
+            >>> se = ScriptEndpoint.please.get('instance-name', 'script-name')
+            >>> se.run()
+            >>> se.run(variable_one=1, variable_two=2)
 
     """
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-        {'type': 'detail', 'name': 'codebox'},
-        {'type': 'list', 'name': 'traces'},
-    )
 
     name = fields.SlugField(max_length=50, primary_key=True)
-    codebox = fields.IntegerField(label='codebox id')
+    script = fields.IntegerField(label='script id')
     public = fields.BooleanField(required=False, default=False)
     public_link = fields.ChoiceField(required=False, read_only=True)
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
 
-    please = WebhookManager()
+    traces = fields.RelatedManagerField('ScriptEndpointTrace')
+    please = ScriptEndpointManager()
 
     class Meta:
         parent = Instance
         endpoints = {
             'detail': {
                 'methods': ['put', 'get', 'patch', 'delete'],
-                'path': '/webhooks/{name}/',
+                'path': '/endpoints/scripts/{name}/',
             },
             'list': {
                 'methods': ['post', 'get'],
-                'path': '/webhooks/',
+                'path': '/endpoints/scripts/',
             },
             'run': {
                 'methods': ['post'],
-                'path': '/webhooks/{name}/run/',
+                'path': '/endpoints/scripts/{name}/run/',
             },
             'reset': {
                 'methods': ['post'],
-                'path': '/webhooks/{name}/reset_link/',
+                'path': '/endpoints/scripts/{name}/reset_link/',
             },
             'public': {
                 'methods': ['get'],
-                'path': '/webhooks/p/{public_link}/{name}/',
+                'path': '/endpoints/scripts/p/{public_link}/{name}/',
             }
         }
 
@@ -261,11 +247,11 @@ class Webhook(Model):
         """
         Usage::
 
-            >>> wh = Webhook.please.get('instance-name', 'webhook-name')
-            >>> wh.run()
-            >>> wh.run(variable_one=1, variable_two=2)
+            >>> se = ScriptEndpoint.please.get('instance-name', 'script-name')
+            >>> se.run()
+            >>> se.run(variable_one=1, variable_two=2)
         """
-        from .traces import WebhookTrace
+        from .traces import ScriptEndpointTrace
 
         if self.is_new():
             raise SyncanoValidationError('Method allowed only on existing model.')
@@ -275,19 +261,20 @@ class Webhook(Model):
         connection = self._get_connection(**payload)
 
         response = connection.request('POST', endpoint, **{'data': payload})
-        if 'result' in response and 'stdout' in response['result']:
+
+        if isinstance(response, dict) and 'result' in response and 'stdout' in response['result']:
             response.update({'instance_name': self.instance_name,
-                             'webhook_name': self.name})
-            return WebhookTrace(**response)
-        # if codebox is a custom one, return result 'as-it-is';
+                             'script_name': self.name})
+            return ScriptEndpointTrace(**response)
+        # if script is a custom one, return result 'as-it-is';
         return response
 
     def reset_link(self):
         """
         Usage::
 
-            >>> wh = Webhook.please.get('instance-name', 'webhook-name')
-            >>> wh.reset_link()
+            >>> se = ScriptEndpoint.please.get('instance-name', 'script-name')
+            >>> se.reset_link()
         """
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('reset', properties)
@@ -310,15 +297,11 @@ class ResponseTemplate(Model):
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
     """
 
-    LINKS = (
-        {'type': 'detail', 'name': 'self'},
-    )
-
     name = fields.StringField(max_length=64)
     content = fields.StringField(label='content')
     content_type = fields.StringField(label='content type')
     context = fields.JSONField(label='context')
-    links = fields.HyperlinkedField(links=LINKS)
+    links = fields.LinksField()
 
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
