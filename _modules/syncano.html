@@ -124,41 +124,41 @@
           <div role="main">
             
   <h1>Source code for syncano</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="n">__title__</span> <span class="o">=</span> <span class="s1">&#39;Syncano Python&#39;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;5.0.0&#39;</span>
-<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Daniel Kopka, Michal Kobus, and Sebastian Opalczynski&quot;</span>
-<span class="n">__credits__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Daniel Kopka&quot;</span><span class="p">,</span>
-               <span class="s2">&quot;Michal Kobus&quot;</span><span class="p">,</span>
-               <span class="s2">&quot;Sebastian Opalczynski&quot;</span><span class="p">]</span>
-<span class="n">__copyright__</span> <span class="o">=</span> <span class="s1">&#39;Copyright 2015 Syncano&#39;</span>
-<span class="n">__license__</span> <span class="o">=</span> <span class="s1">&#39;MIT&#39;</span>
+<span class="n">__title__</span> <span class="o">=</span> <span class="s">&#39;Syncano Python&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;5.0.0&#39;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Daniel Kopka, Michal Kobus, and Sebastian Opalczynski&quot;</span>
+<span class="n">__credits__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;Daniel Kopka&quot;</span><span class="p">,</span>
+               <span class="s">&quot;Michal Kobus&quot;</span><span class="p">,</span>
+               <span class="s">&quot;Sebastian Opalczynski&quot;</span><span class="p">]</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s">&#39;Copyright 2015 Syncano&#39;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s">&#39;MIT&#39;</span>
 
-<span class="n">env_loglevel</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;SYNCANO_LOGLEVEL&#39;</span><span class="p">,</span> <span class="s1">&#39;INFO&#39;</span><span class="p">)</span>
+<span class="n">env_loglevel</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;SYNCANO_LOGLEVEL&#39;</span><span class="p">,</span> <span class="s">&#39;INFO&#39;</span><span class="p">)</span>
 <span class="n">loglevel</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">logging</span><span class="p">,</span> <span class="n">env_loglevel</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="bp">None</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">loglevel</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid log level: {0}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loglevel</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Invalid log level: {0}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">loglevel</span><span class="p">))</span>
 
-<span class="n">console_formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(name)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">console_formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%(asctime)s</span><span class="s"> - </span><span class="si">%(name)s</span><span class="s"> - </span><span class="si">%(levelname)s</span><span class="s"> - </span><span class="si">%(message)s</span><span class="s">&#39;</span><span class="p">)</span>
 <span class="n">console_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
 <span class="n">console_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">console_formatter</span><span class="p">)</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;syncano&#39;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s">&#39;syncano&#39;</span><span class="p">)</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">loglevel</span><span class="p">)</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">console_handler</span><span class="p">)</span>
 
-<span class="c1"># Few global env variables</span>
+<span class="c"># Few global env variables</span>
 <span class="n">VERSION</span> <span class="o">=</span> <span class="n">__version__</span>
-<span class="n">DEBUG</span> <span class="o">=</span> <span class="n">env_loglevel</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;debug&#39;</span>
-<span class="n">API_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;SYNCANO_APIROOT&#39;</span><span class="p">,</span> <span class="s1">&#39;https://api.syncano.io/&#39;</span><span class="p">)</span>
-<span class="n">EMAIL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;SYNCANO_EMAIL&#39;</span><span class="p">)</span>
-<span class="n">PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;SYNCANO_PASSWORD&#39;</span><span class="p">)</span>
-<span class="n">APIKEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;SYNCANO_APIKEY&#39;</span><span class="p">)</span>
-<span class="n">INSTANCE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;SYNCANO_INSTANCE&#39;</span><span class="p">)</span>
-<span class="n">PUSH_ENV</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;SYNCANO_PUSH_ENV&#39;</span><span class="p">,</span> <span class="s1">&#39;production&#39;</span><span class="p">)</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="n">env_loglevel</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;debug&#39;</span>
+<span class="n">API_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;SYNCANO_APIROOT&#39;</span><span class="p">,</span> <span class="s">&#39;https://api.syncano.io/&#39;</span><span class="p">)</span>
+<span class="n">EMAIL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;SYNCANO_EMAIL&#39;</span><span class="p">)</span>
+<span class="n">PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;SYNCANO_PASSWORD&#39;</span><span class="p">)</span>
+<span class="n">APIKEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;SYNCANO_APIKEY&#39;</span><span class="p">)</span>
+<span class="n">INSTANCE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;SYNCANO_INSTANCE&#39;</span><span class="p">)</span>
+<span class="n">PUSH_ENV</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;SYNCANO_PUSH_ENV&#39;</span><span class="p">,</span> <span class="s">&#39;production&#39;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="connect"><a class="viewcode-back" href="../refs/syncano.html#syncano.connect">[docs]</a><span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -208,7 +208,7 @@
 
     <span class="n">registry</span><span class="o">.</span><span class="n">set_default_connection</span><span class="p">(</span><span class="n">DefaultConnection</span><span class="p">())</span>
     <span class="n">registry</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">instance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">INSTANCE</span><span class="p">)</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">INSTANCE</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
         <span class="n">registry</span><span class="o">.</span><span class="n">set_used_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>

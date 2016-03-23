@@ -126,7 +126,7 @@
           <div role="main">
             
   <h1>Source code for syncano.models.instances</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fields</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Model</span>
 
 
@@ -161,43 +161,43 @@
     <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">description</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
     <span class="n">role</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">owner</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ModelField</span><span class="p">(</span><span class="s1">&#39;Admin&#39;</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">owner</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ModelField</span><span class="p">(</span><span class="s">&#39;Admin&#39;</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">LinksField</span><span class="p">()</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
     <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
     <span class="n">updated_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
-    <span class="c1"># user related fields;</span>
-    <span class="n">api_keys</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;ApiKey&#39;</span><span class="p">)</span>
-    <span class="n">users</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;User&#39;</span><span class="p">)</span>
-    <span class="n">admins</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;Admin&#39;</span><span class="p">)</span>
-    <span class="n">groups</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;Group&#39;</span><span class="p">)</span>
+    <span class="c"># user related fields;</span>
+    <span class="n">api_keys</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;ApiKey&#39;</span><span class="p">)</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">)</span>
+    <span class="n">admins</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;Admin&#39;</span><span class="p">)</span>
+    <span class="n">groups</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;Group&#39;</span><span class="p">)</span>
 
-    <span class="c1"># snippets and data fields;</span>
-    <span class="n">scripts</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;Script&#39;</span><span class="p">)</span>
-    <span class="n">script_endpoints</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;ScriptEndpoint&#39;</span><span class="p">)</span>
-    <span class="n">templates</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;ResponseTemplate&#39;</span><span class="p">)</span>
+    <span class="c"># snippets and data fields;</span>
+    <span class="n">scripts</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;Script&#39;</span><span class="p">)</span>
+    <span class="n">script_endpoints</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;ScriptEndpoint&#39;</span><span class="p">)</span>
+    <span class="n">templates</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;ResponseTemplate&#39;</span><span class="p">)</span>
 
-    <span class="n">triggers</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;Trigger&#39;</span><span class="p">)</span>
-    <span class="n">schedules</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;Schedule&#39;</span><span class="p">)</span>
-    <span class="n">classes</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;Class&#39;</span><span class="p">)</span>
-    <span class="n">invitations</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;InstanceInvitation&#39;</span><span class="p">)</span>
+    <span class="n">triggers</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;Trigger&#39;</span><span class="p">)</span>
+    <span class="n">schedules</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;Schedule&#39;</span><span class="p">)</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;Class&#39;</span><span class="p">)</span>
+    <span class="n">invitations</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;InstanceInvitation&#39;</span><span class="p">)</span>
 
-    <span class="c1"># push notifications fields;</span>
-    <span class="n">gcm_devices</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;GCMDevice&#39;</span><span class="p">)</span>
-    <span class="n">gcm_messages</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;GCMMessage&#39;</span><span class="p">)</span>
-    <span class="n">apns_devices</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;APNSDevice&#39;</span><span class="p">)</span>
-    <span class="n">apns_messages</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;APNSMessage&#39;</span><span class="p">)</span>
+    <span class="c"># push notifications fields;</span>
+    <span class="n">gcm_devices</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;GCMDevice&#39;</span><span class="p">)</span>
+    <span class="n">gcm_messages</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;GCMMessage&#39;</span><span class="p">)</span>
+    <span class="n">apns_devices</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;APNSDevice&#39;</span><span class="p">)</span>
+    <span class="n">apns_messages</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s">&#39;APNSMessage&#39;</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;delete&#39;</span><span class="p">,</span> <span class="s1">&#39;patch&#39;</span><span class="p">,</span> <span class="s1">&#39;put&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/v1.1/instances/{name}/&#39;</span><span class="p">,</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;delete&#39;</span><span class="p">,</span> <span class="s">&#39;patch&#39;</span><span class="p">,</span> <span class="s">&#39;put&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/v1.1/instances/{name}/&#39;</span><span class="p">,</span>
             <span class="p">},</span>
-            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/v1.1/instances/&#39;</span><span class="p">,</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/v1.1/instances/&#39;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
@@ -209,9 +209,9 @@
 <span class="sd">        :return: a populated Instance object;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rename_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">rename</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;new_name&#39;</span><span class="p">:</span> <span class="n">new_name</span><span class="p">}</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;new_name&#39;</span><span class="p">:</span> <span class="n">new_name</span><span class="p">}</span>
         <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">rename_path</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">rename_path</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
 
@@ -236,13 +236,13 @@
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
         <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;delete&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/api_keys/{id}/&#39;</span><span class="p">,</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">,</span> <span class="s">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/api_keys/{id}/&#39;</span><span class="p">,</span>
             <span class="p">},</span>
-            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/api_keys/&#39;</span><span class="p">,</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/api_keys/&#39;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
@@ -272,15 +272,15 @@
 
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Invitation&#39;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Invitation&#39;</span>
         <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;delete&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/invitations/{id}/&#39;</span><span class="p">,</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">,</span> <span class="s">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/invitations/{id}/&#39;</span><span class="p">,</span>
             <span class="p">},</span>
-            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/invitations/&#39;</span><span class="p">,</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;post&#39;</span><span class="p">,</span> <span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/invitations/&#39;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span>
 </pre></div></div>

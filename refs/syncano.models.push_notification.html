@@ -200,7 +200,7 @@
 <p>Model which handles the Google Cloud Message Device.
 CORE supports only Create, Delete and Read;</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Create a new Device:
+<div class="highlight-python"><div class="highlight"><pre>Create a new Device:
 gcm_device = GCMDevice(
     label=&#39;example label&#39;,
     registration_id=86152312314401555,
@@ -291,7 +291,7 @@ gcm_device.delete()
 <p>Model which handles the Apple Push Notification Server Device.
 CORE supports only Create, Delete and Read;</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Create a new Device:
+<div class="highlight-python"><div class="highlight"><pre>Create a new Device:
 apns_device = APNSDevice(
     label=&#39;example label&#39;,
     registration_id=&#39;4719084371920471208947120984731208947910827409128470912847120894&#39;,
@@ -429,7 +429,7 @@ format too.</p>
 <p>Model which handles the Google Cloud Messaging Message.
 Only creating and reading is allowed.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Create a new Message:
+<div class="highlight-python"><div class="highlight"><pre>Create a new Message:
 
 message = GCMMessage(
     content={
@@ -523,7 +523,7 @@ For more details read the GCM documentation;</p>
 <p>Model which handles the Apple Push Notification Server Message.
 Only creating and reading is allowed.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Create new Message:
+<div class="highlight-python"><div class="highlight"><pre>Create new Message:
 apns_message = APNSMessage(
     content={
         &#39;registration_ids&#39;: [gcm_device.registration_id],

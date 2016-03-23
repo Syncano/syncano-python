@@ -126,7 +126,7 @@
           <div role="main">
             
   <h1>Source code for syncano.connection</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
@@ -140,7 +140,7 @@
     <span class="kn">from</span> <span class="nn">urlparse</span> <span class="kn">import</span> <span class="n">urljoin</span>
 
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Connection&#39;</span><span class="p">,</span> <span class="s1">&#39;ConnectionMixin&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Connection&#39;</span><span class="p">,</span> <span class="s">&#39;ConnectionMixin&#39;</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">is_success</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
@@ -166,7 +166,7 @@
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Please open new connection.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;Please open new connection.&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span>
 
     <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -190,36 +190,36 @@
 <span class="sd">    :ivar verify_ssl: Verify SSL certificate</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">CONTENT_TYPE</span> <span class="o">=</span> <span class="s1">&#39;application/json&#39;</span>
+    <span class="n">CONTENT_TYPE</span> <span class="o">=</span> <span class="s">&#39;application/json&#39;</span>
 
-    <span class="n">AUTH_SUFFIX</span> <span class="o">=</span> <span class="s1">&#39;v1/account/auth&#39;</span>
-    <span class="n">ACCOUNT_SUFFIX</span> <span class="o">=</span> <span class="s1">&#39;v1/account/&#39;</span>
-    <span class="n">SOCIAL_AUTH_SUFFIX</span> <span class="o">=</span> <span class="n">AUTH_SUFFIX</span> <span class="o">+</span> <span class="s1">&#39;/{social_backend}/&#39;</span>
+    <span class="n">AUTH_SUFFIX</span> <span class="o">=</span> <span class="s">&#39;v1/account/auth&#39;</span>
+    <span class="n">ACCOUNT_SUFFIX</span> <span class="o">=</span> <span class="s">&#39;v1/account/&#39;</span>
+    <span class="n">SOCIAL_AUTH_SUFFIX</span> <span class="o">=</span> <span class="n">AUTH_SUFFIX</span> <span class="o">+</span> <span class="s">&#39;/{social_backend}/&#39;</span>
 
-    <span class="n">USER_AUTH_SUFFIX</span> <span class="o">=</span> <span class="s1">&#39;v1/instances/{name}/user/auth/&#39;</span>
-    <span class="n">USER_INFO_SUFFIX</span> <span class="o">=</span> <span class="s1">&#39;v1/instances/{name}/user/&#39;</span>
+    <span class="n">USER_AUTH_SUFFIX</span> <span class="o">=</span> <span class="s">&#39;v1/instances/{name}/user/auth/&#39;</span>
+    <span class="n">USER_INFO_SUFFIX</span> <span class="o">=</span> <span class="s">&#39;v1/instances/{name}/user/&#39;</span>
 
-    <span class="n">LOGIN_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;email&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;password&#39;</span><span class="p">}</span>
-    <span class="n">ALT_LOGIN_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;api_key&#39;</span><span class="p">}</span>
+    <span class="n">LOGIN_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;email&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;password&#39;</span><span class="p">}</span>
+    <span class="n">ALT_LOGIN_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;api_key&#39;</span><span class="p">}</span>
 
-    <span class="n">USER_LOGIN_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;username&#39;</span><span class="p">,</span>
-                         <span class="s1">&#39;password&#39;</span><span class="p">,</span>
-                         <span class="s1">&#39;api_key&#39;</span><span class="p">,</span>
-                         <span class="s1">&#39;instance_name&#39;</span><span class="p">}</span>
-    <span class="n">USER_ALT_LOGIN_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;user_key&#39;</span><span class="p">,</span>
-                             <span class="s1">&#39;api_key&#39;</span><span class="p">,</span>
-                             <span class="s1">&#39;instance_name&#39;</span><span class="p">}</span>
+    <span class="n">USER_LOGIN_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;username&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;password&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;api_key&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;instance_name&#39;</span><span class="p">}</span>
+    <span class="n">USER_ALT_LOGIN_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;user_key&#39;</span><span class="p">,</span>
+                             <span class="s">&#39;api_key&#39;</span><span class="p">,</span>
+                             <span class="s">&#39;instance_name&#39;</span><span class="p">}</span>
 
-    <span class="n">SOCIAL_LOGIN_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;token&#39;</span><span class="p">,</span>
-                           <span class="s1">&#39;social_backend&#39;</span><span class="p">}</span>
+    <span class="n">SOCIAL_LOGIN_PARAMS</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;token&#39;</span><span class="p">,</span>
+                           <span class="s">&#39;social_backend&#39;</span><span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span> <span class="ow">or</span> <span class="n">syncano</span><span class="o">.</span><span class="n">API_ROOT</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logger&#39;</span><span class="p">,</span> <span class="n">syncano</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
-        <span class="c1"># We don&#39;t need to check SSL cert in DEBUG mode</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;verify_ssl&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;logger&#39;</span><span class="p">,</span> <span class="n">syncano</span><span class="o">.</span><span class="n">logger</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;timeout&#39;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+        <span class="c"># We don&#39;t need to check SSL cert in DEBUG mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;verify_ssl&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_login_params</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -238,7 +238,7 @@
                                              <span class="bp">self</span><span class="o">.</span><span class="n">USER_LOGIN_PARAMS</span><span class="p">,</span>
                                              <span class="bp">self</span><span class="o">.</span><span class="n">USER_ALT_LOGIN_PARAMS</span><span class="p">,</span>
                                              <span class="bp">self</span><span class="o">.</span><span class="n">SOCIAL_LOGIN_PARAMS</span><span class="p">):</span>
-            <span class="n">def_name</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+            <span class="n">def_name</span> <span class="o">=</span> <span class="n">param</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">login_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">syncano</span><span class="p">,</span> <span class="n">def_name</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
@@ -276,24 +276,24 @@
 <span class="sd">        :return: Request params</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;timeout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
-        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;headers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;headers&#39;</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;verify&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span>
+        <span class="n">params</span><span class="p">[</span><span class="s">&#39;timeout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;timeout&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;headers&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">params</span><span class="p">[</span><span class="s">&#39;verify&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span>
 
-        <span class="k">if</span> <span class="s1">&#39;content-type&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;headers&#39;</span><span class="p">]:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;headers&#39;</span><span class="p">][</span><span class="s1">&#39;content-type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CONTENT_TYPE</span>
+        <span class="k">if</span> <span class="s">&#39;content-type&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">]:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">][</span><span class="s">&#39;content-type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CONTENT_TYPE</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_user</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;headers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
-                <span class="s1">&#39;X-USER-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span><span class="p">,</span>
-                <span class="s1">&#39;X-API-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span>
+            <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="s">&#39;X-USER-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span><span class="p">,</span>
+                <span class="s">&#39;X-API-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span>
             <span class="p">})</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="ow">and</span> <span class="s1">&#39;Authorization&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;headers&#39;</span><span class="p">]:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;headers&#39;</span><span class="p">][</span><span class="s1">&#39;Authorization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;token {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="ow">and</span> <span class="s">&#39;Authorization&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">]:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">][</span><span class="s">&#39;Authorization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;token {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span>
 
-        <span class="c1"># We don&#39;t need to check SSL cert in DEBUG mode</span>
+        <span class="c"># We don&#39;t need to check SSL cert in DEBUG mode</span>
         <span class="k">if</span> <span class="n">syncano</span><span class="o">.</span><span class="n">DEBUG</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">verify_ssl</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;verify&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">params</span><span class="p">[</span><span class="s">&#39;verify&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
 
         <span class="k">return</span> <span class="n">params</span>
 </div>
@@ -307,24 +307,24 @@
 <span class="sd">        :return: Request URL</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;&quot;path&quot; should be a string.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;&quot;path&quot; should be a string.&#39;</span><span class="p">)</span>
 
         <span class="n">query</span> <span class="o">=</span> <span class="bp">None</span>
 
         <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">path</span>
 
-        <span class="k">if</span> <span class="s1">&#39;?&#39;</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
-            <span class="n">path</span><span class="p">,</span> <span class="n">query</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s">&#39;?&#39;</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
+            <span class="n">path</span><span class="p">,</span> <span class="n">query</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;?&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span>
-            <span class="n">path</span> <span class="o">+=</span> <span class="s1">&#39;/&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">+=</span> <span class="s">&#39;/&#39;</span>
 
-        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">):</span>
             <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 
         <span class="k">if</span> <span class="n">query</span><span class="p">:</span>
-            <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;{0}?{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="s">&#39;{0}?{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 </div>
@@ -360,52 +360,52 @@
 <span class="sd">        :raises SyncanoValueError: if invalid request method was chosen</span>
 <span class="sd">        :raises SyncanoRequestError: if something went wrong during the request</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="n">files</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;files&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;files&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">files</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s1">&#39;read&#39;</span><span class="p">)}</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s">&#39;read&#39;</span><span class="p">)}</span>
             <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
-                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">files</span><span class="p">}</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">files</span><span class="p">}</span>
 
         <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_params</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">method_name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="bp">None</span><span class="p">)</span>
 
-        <span class="c1"># JSON dump can be expensive</span>
+        <span class="c"># JSON dump can be expensive</span>
         <span class="k">if</span> <span class="n">syncano</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
             <span class="n">debug_params</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="n">debug_params</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;files&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]})</span>  <span class="c1"># show files in debug info;</span>
+            <span class="n">debug_params</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;files&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]})</span>  <span class="c"># show files in debug info;</span>
             <span class="n">formatted_params</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
                 <span class="n">debug_params</span><span class="p">,</span>
                 <span class="n">sort_keys</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                 <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;: &#39;</span><span class="p">)</span>
+                <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;: &#39;</span><span class="p">)</span>
             <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;API Root: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Request: </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">formatted_params</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;API Root: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Request: </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">formatted_params</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Invalid request method: {0}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method_name</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;Invalid request method: {0}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method_name</span><span class="p">))</span>
 
-        <span class="c1"># Encode request payload</span>
-        <span class="k">if</span> <span class="s1">&#39;data&#39;</span> <span class="ow">in</span> <span class="n">params</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+        <span class="c"># Encode request payload</span>
+        <span class="k">if</span> <span class="s">&#39;data&#39;</span> <span class="ow">in</span> <span class="n">params</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">],</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="n">params</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">])</span>
 
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
         <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response_content</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">files</span><span class="p">:</span>
-            <span class="c1"># remove &#39;data&#39; and &#39;content-type&#39; to avoid &quot;ValueError: Data must not be a string.&quot;</span>
-            <span class="n">params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;headers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;content-type&#39;</span><span class="p">)</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">files</span>
+            <span class="c"># remove &#39;data&#39; and &#39;content-type&#39; to avoid &quot;ValueError: Data must not be a string.&quot;</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;data&#39;</span><span class="p">)</span>
+            <span class="n">params</span><span class="p">[</span><span class="s">&#39;headers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;content-type&#39;</span><span class="p">)</span>
+            <span class="n">params</span><span class="p">[</span><span class="s">&#39;files&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">files</span>
 
             <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">201</span><span class="p">:</span>
-                <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;{}{}/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">content</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
+                <span class="n">url</span> <span class="o">=</span> <span class="s">&#39;{}{}/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">content</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">])</span>
 
-            <span class="n">patch</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="s1">&#39;patch&#39;</span><span class="p">)</span>
-            <span class="c1"># second request is needed to upload a file</span>
+            <span class="n">patch</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="s">&#39;patch&#39;</span><span class="p">)</span>
+            <span class="c"># second request is needed to upload a file</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">patch</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
             <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response_content</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
 
@@ -418,19 +418,19 @@
             <span class="n">content</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
 
         <span class="k">if</span> <span class="n">is_server_error</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">SyncanoRequestError</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="s1">&#39;Server error.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SyncanoRequestError</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="s">&#39;Server error.&#39;</span><span class="p">)</span>
 
-        <span class="c1"># Validation error</span>
+        <span class="c"># Validation error</span>
         <span class="k">if</span> <span class="n">is_client_error</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span> <span class="ow">and</span> <span class="s1">&#39;expected_revision&#39;</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span> <span class="ow">and</span> <span class="s">&#39;expected_revision&#39;</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">RevisionMismatchException</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
             <span class="k">raise</span> <span class="n">SyncanoRequestError</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
 
-        <span class="c1"># Other errors</span>
+        <span class="c"># Other errors</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_success</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Request Error: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Status code: </span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Response: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Request Error: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Status code: </span><span class="si">%d</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Response: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
             <span class="k">raise</span> <span class="n">SyncanoRequestError</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">content</span>
@@ -462,10 +462,10 @@
         <span class="n">is_auth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">is_auth</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Connection already authenticated: {}&#39;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Connection already authenticated: {}&#39;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Authentication successful: {}&#39;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Authenticating&#39;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;Authentication successful: {}&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Authenticating&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">auth_method</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth_key</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
@@ -476,7 +476,7 @@
             <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
 
             <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;&quot;{}&quot; is required.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;&quot;{}&quot; is required.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">kwargs</span>
 </div>
 <div class="viewcode-block" id="Connection.authenticate_admin"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection.authenticate_admin">[docs]</a>    <span class="k">def</span> <span class="nf">authenticate_admin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -487,13 +487,13 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_social</span><span class="p">:</span>
                 <span class="n">request_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_params</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span>
                                                     <span class="bp">self</span><span class="o">.</span><span class="n">SOCIAL_LOGIN_PARAMS</span><span class="p">)</span>
-                <span class="n">request_args</span><span class="p">[</span><span class="s1">&#39;access_token&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request_args</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;token&#39;</span><span class="p">)</span>  <span class="c1"># core expects a access_token field;</span>
+                <span class="n">request_args</span><span class="p">[</span><span class="s">&#39;access_token&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">request_args</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;token&#39;</span><span class="p">)</span>  <span class="c"># core expects a access_token field;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">request_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_params</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span>
                                                     <span class="bp">self</span><span class="o">.</span><span class="n">LOGIN_PARAMS</span><span class="p">)</span>
 
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AUTH_SUFFIX</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">request_args</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;account_key&#39;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AUTH_SUFFIX</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">request_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;account_key&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span>
 </div>
 <div class="viewcode-block" id="Connection.authenticate_user"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection.authenticate_user">[docs]</a>    <span class="k">def</span> <span class="nf">authenticate_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -504,31 +504,31 @@
             <span class="n">request_args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_params</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span>
                                                 <span class="bp">self</span><span class="o">.</span><span class="n">USER_LOGIN_PARAMS</span><span class="p">)</span>
         <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;content-type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">CONTENT_TYPE</span><span class="p">,</span>
-            <span class="s1">&#39;X-API-KEY&#39;</span><span class="p">:</span> <span class="n">request_args</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;api_key&#39;</span><span class="p">)</span>
+            <span class="s">&#39;content-type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">CONTENT_TYPE</span><span class="p">,</span>
+            <span class="s">&#39;X-API-KEY&#39;</span><span class="p">:</span> <span class="n">request_args</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;api_key&#39;</span><span class="p">)</span>
         <span class="p">}</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AUTH_SUFFIX</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">request_args</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;user_key&#39;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">AUTH_SUFFIX</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">request_args</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;user_key&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span>
 </div>
 <div class="viewcode-block" id="Connection.get_account_info"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection.get_account_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_account_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">api_key</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;api_key is required.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;api_key is required.&#39;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ACCOUNT_SUFFIX</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;X-API-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">})</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ACCOUNT_SUFFIX</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;X-API-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">})</span>
 </div>
 <div class="viewcode-block" id="Connection.get_user_info"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.Connection.get_user_info">[docs]</a>    <span class="k">def</span> <span class="nf">get_user_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">user_key</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">api_key</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span> <span class="o">=</span> <span class="n">user_key</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span>
 
-        <span class="k">for</span> <span class="n">attribute_name</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;api_key&#39;</span><span class="p">,</span> <span class="s1">&#39;user_key&#39;</span><span class="p">,</span> <span class="s1">&#39;instance_name&#39;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">attribute_name</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;api_key&#39;</span><span class="p">,</span> <span class="s">&#39;user_key&#39;</span><span class="p">,</span> <span class="s">&#39;instance_name&#39;</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;{attribute_name} is required.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="n">attribute_name</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;{attribute_name} is required.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">attribute_name</span><span class="o">=</span><span class="n">attribute_name</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">USER_INFO_SUFFIX</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_name</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
-            <span class="s1">&#39;X-API-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">,</span> <span class="s1">&#39;X-USER-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span><span class="p">})</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">USER_INFO_SUFFIX</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_name</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">&#39;X-API-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">,</span> <span class="s">&#39;X-USER-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span><span class="p">})</span>
 
 </div></div>
 <div class="viewcode-block" id="ConnectionMixin"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.ConnectionMixin">[docs]</a><span class="k">class</span> <span class="nc">ConnectionMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -540,14 +540,14 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Sometimes someone will not use super</span>
-        <span class="kn">from</span> <span class="nn">syncano.models.registry</span> <span class="kn">import</span> <span class="n">registry</span>  <span class="c1"># TODO: refactor this;</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_connection&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">or</span> <span class="n">registry</span><span class="o">.</span><span class="n">connection</span><span class="p">()</span>
+        <span class="c"># Sometimes someone will not use super</span>
+        <span class="kn">from</span> <span class="nn">syncano.models.registry</span> <span class="kn">import</span> <span class="n">registry</span>  <span class="c"># TODO: refactor this;</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;_connection&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">or</span> <span class="n">registry</span><span class="o">.</span><span class="n">connection</span><span class="p">()</span>
 
     <span class="nd">@connection.setter</span>
     <span class="k">def</span> <span class="nf">connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Connection</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;&quot;connection&quot; needs to be a Syncano Connection instance.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s">&#39;&quot;connection&quot; needs to be a Syncano Connection instance.&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connection</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@connection.deleter</span>

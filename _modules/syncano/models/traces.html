@@ -126,7 +126,7 @@
           <div role="main">
             
   <h1>Source code for syncano.models.traces</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fields</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Model</span>
 <span class="kn">from</span> <span class="nn">.custom_response</span> <span class="kn">import</span> <span class="n">CustomResponseMixin</span>
 <span class="kn">from</span> <span class="nn">.incentives</span> <span class="kn">import</span> <span class="n">Schedule</span><span class="p">,</span> <span class="n">Script</span><span class="p">,</span> <span class="n">ScriptEndpoint</span><span class="p">,</span> <span class="n">Trigger</span>
@@ -141,11 +141,11 @@
 <span class="sd">    :ivar duration: :class:`~syncano.models.fields.IntegerField`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">STATUS_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Success&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;success&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Failure&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;failure&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Timeout&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;timeout&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Processing&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;processing&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Pending&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;pending&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Success&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;success&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Failure&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;failure&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Timeout&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;timeout&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Processing&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;processing&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Pending&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;pending&#39;</span><span class="p">},</span>
     <span class="p">)</span>
 
     <span class="n">status</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">STATUS_CHOICES</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
@@ -157,13 +157,13 @@
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">parent</span> <span class="o">=</span> <span class="n">Script</span>
         <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/traces/{id}/&#39;</span><span class="p">,</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/traces/{id}/&#39;</span><span class="p">,</span>
             <span class="p">},</span>
-            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/traces/&#39;</span><span class="p">,</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/traces/&#39;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
@@ -177,10 +177,10 @@
 <span class="sd">    :ivar duration: :class:`~syncano.models.fields.IntegerField`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">STATUS_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Success&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;success&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Failure&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;failure&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Timeout&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;timeout&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Pending&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;pending&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Success&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;success&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Failure&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;failure&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Timeout&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;timeout&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Pending&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;pending&#39;</span><span class="p">},</span>
     <span class="p">)</span>
 
     <span class="n">status</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">STATUS_CHOICES</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
@@ -192,13 +192,13 @@
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">parent</span> <span class="o">=</span> <span class="n">Schedule</span>
         <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/traces/{id}/&#39;</span><span class="p">,</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/traces/{id}/&#39;</span><span class="p">,</span>
             <span class="p">},</span>
-            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/traces/&#39;</span><span class="p">,</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/traces/&#39;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
@@ -212,13 +212,13 @@
 <span class="sd">    :ivar duration: :class:`~syncano.models.fields.IntegerField`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">STATUS_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Success&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;success&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Failure&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;failure&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Timeout&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;timeout&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Pending&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;pending&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Success&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;success&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Failure&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;failure&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Timeout&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;timeout&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Pending&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;pending&#39;</span><span class="p">},</span>
     <span class="p">)</span>
     <span class="n">LINKS</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;detail&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;self&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;detail&#39;</span><span class="p">,</span> <span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;self&#39;</span><span class="p">},</span>
     <span class="p">)</span>
 
     <span class="n">status</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">STATUS_CHOICES</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
@@ -230,13 +230,13 @@
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">parent</span> <span class="o">=</span> <span class="n">Trigger</span>
         <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/traces/{id}/&#39;</span><span class="p">,</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/traces/{id}/&#39;</span><span class="p">,</span>
             <span class="p">},</span>
-            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/traces/&#39;</span><span class="p">,</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/traces/&#39;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
@@ -250,10 +250,10 @@
 <span class="sd">    :ivar duration: :class:`~syncano.models.fields.IntegerField`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">STATUS_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Success&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;success&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Failure&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;failure&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Timeout&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;timeout&#39;</span><span class="p">},</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Pending&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;pending&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Success&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;success&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Failure&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;failure&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Timeout&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;timeout&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">&#39;display_name&#39;</span><span class="p">:</span> <span class="s">&#39;Pending&#39;</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">:</span> <span class="s">&#39;pending&#39;</span><span class="p">},</span>
     <span class="p">)</span>
 
     <span class="n">status</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">STATUS_CHOICES</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
@@ -265,13 +265,13 @@
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
         <span class="n">parent</span> <span class="o">=</span> <span class="n">ScriptEndpoint</span>
         <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/traces/{id}/&#39;</span><span class="p">,</span>
+            <span class="s">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/traces/{id}/&#39;</span><span class="p">,</span>
             <span class="p">},</span>
-            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/traces/&#39;</span><span class="p">,</span>
+            <span class="s">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s">&#39;path&#39;</span><span class="p">:</span> <span class="s">&#39;/traces/&#39;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span>
 </pre></div></div>
