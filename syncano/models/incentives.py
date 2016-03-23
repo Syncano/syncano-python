@@ -261,7 +261,8 @@ class ScriptEndpoint(Model):
         connection = self._get_connection(**payload)
 
         response = connection.request('POST', endpoint, **{'data': payload})
-        if 'result' in response and 'stdout' in response['result']:
+
+        if isinstance(response, dict) and 'result' in response and 'stdout' in response['result']:
             response.update({'instance_name': self.instance_name,
                              'script_name': self.name})
             return ScriptEndpointTrace(**response)

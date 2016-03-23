@@ -432,6 +432,7 @@ class LinksWrapper(object):
         try:
             return super(LinksWrapper, self).__getattribute__(item)
         except AttributeError:
+            item = item.replace('_', '-')
             if item not in self.links_dict or item in self.ignored_links:
                 raise
             return self.links_dict[item]

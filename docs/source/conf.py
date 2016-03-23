@@ -17,9 +17,10 @@ import sys
 from os.path import abspath, dirname
 
 import sphinx_rtd_theme
-from syncano.models.fields import RelatedManagerField
 
 sys.path.insert(1, dirname(dirname(dirname(abspath(__file__)))))
+from syncano.models.fields import RelatedManagerField
+
 
 needs_sphinx = '1.0'
 extensions = [
