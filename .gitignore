@@ -12,3 +12,4 @@ coverage
 tests
 .DS_Store
 dist
+.tox
