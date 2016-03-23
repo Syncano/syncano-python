@@ -1,0 +1,428 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>syncano.models.channels &mdash; Syncano 4.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 4.0.0 documentation" href="../index.html"/>
+        <link rel="up" title="syncano.models" href="syncano.models.html"/>
+        <link rel="next" title="syncano.models.classes" href="syncano.models.classes.html"/>
+        <link rel="prev" title="syncano.models.billing" href="syncano.models.billing.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="syncano.html">Syncano references</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="syncano.html">Syncano references</a> &raquo;</li>
+      
+          <li><a href="syncano.models.html">syncano.models</a> &raquo;</li>
+      
+    <li>syncano.models.channels</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/refs/syncano.models.channels.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="module-syncano.models.channels">
+<span id="syncano-models-channels"></span><h1>syncano.models.channels<a class="headerlink" href="#module-syncano.models.channels" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="syncano.models.channels.PollThread">
+<em class="property">class </em><tt class="descname">PollThread</tt><big>(</big><em>connection</em>, <em>endpoint</em>, <em>callback</em>, <em>error=None</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/channels.html#PollThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.channels.PollThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></tt></p>
+<dl class="method">
+<dt id="syncano.models.channels.PollThread.request">
+<tt class="descname">request</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/channels.html#PollThread.request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.channels.PollThread.request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.channels.PollThread.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/channels.html#PollThread.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.channels.PollThread.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.channels.PollThread.stop">
+<tt class="descname">stop</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/channels.html#PollThread.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.channels.PollThread.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.channels.Channel">
+<em class="property">class </em><tt class="descname">Channel</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/channels.html#Channel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.channels.Channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>OO wrapper around channels <a href="#id1"><span class="problematic" id="id2">`link http://docs.syncano.io/docs/realtime-communication`_</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>type</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>group</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+<li><strong>group_permissions</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>other_permissions</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>custom_publish</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.BooleanField" title="syncano.models.fields.BooleanField"><tt class="xref py py-class docutils literal"><span class="pre">BooleanField</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><strong>Channel</strong> has two special methods called <tt class="docutils literal"><span class="pre">publish</span></tt> and <tt class="docutils literal"><span class="pre">poll</span></tt>.
+First one will send message to the channel:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">channel</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s1">&#39;channel-name&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">channel</span><span class="o">.</span><span class="n">publish</span><span class="p">({</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>second one will create <a class="reference external" href="http://en.wikipedia.org/wiki/Push_technology#Long_polling">long polling</a> connection which will listen for messages:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="k">print</span> <span class="n">message</span>
+<span class="gp">... </span>   <span class="k">return</span> <span class="bp">True</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">channel</span> <span class="o">=</span> <span class="n">Channel</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s1">&#39;channel-name&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">channel</span><span class="o">.</span><span class="n">poll</span><span class="p">(</span><span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<dl class="attribute">
+<dt id="syncano.models.channels.Channel.TYPE_CHOICES">
+<tt class="descname">TYPE_CHOICES</tt><em class="property"> = ({'display_name': 'Default', 'value': 'default'}, {'display_name': 'Separate rooms', 'value': 'separate_rooms'})</em><a class="headerlink" href="#syncano.models.channels.Channel.TYPE_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Channel.PERMISSIONS_CHOICES">
+<tt class="descname">PERMISSIONS_CHOICES</tt><em class="property"> = ({'display_name': 'None', 'value': 'none'}, {'display_name': 'Subscribe', 'value': 'subscribe'}, {'display_name': 'Publish', 'value': 'publish'})</em><a class="headerlink" href="#syncano.models.channels.Channel.PERMISSIONS_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Channel.name">
+<tt class="descname">name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Channel.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Channel.type">
+<tt class="descname">type</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Channel.type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Channel.group">
+<tt class="descname">group</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Channel.group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Channel.group_permissions">
+<tt class="descname">group_permissions</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Channel.group_permissions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Channel.other_permissions">
+<tt class="descname">other_permissions</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Channel.other_permissions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Channel.custom_publish">
+<tt class="descname">custom_publish</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Channel.custom_publish" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Channel.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Channel.links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.channels.Channel.poll">
+<tt class="descname">poll</tt><big>(</big><em>room=None</em>, <em>last_id=None</em>, <em>callback=None</em>, <em>error=None</em>, <em>timeout=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/channels.html#Channel.poll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.channels.Channel.poll" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.channels.Channel.publish">
+<tt class="descname">publish</tt><big>(</big><em>payload</em>, <em>room=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/channels.html#Channel.publish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.channels.Channel.publish" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Channel.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.channels.Channel.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">ChannelDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Channel.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Channel.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Channel.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Channel.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Channel.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.channels.Channel.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.channels.Message">
+<em class="property">class </em><tt class="descname">Message</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/channels.html#Message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.channels.Message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>OO wrapper around channel hisotry <a href="#id3"><span class="problematic" id="id4">`link http://docs.syncano.io/docs/realtime-communication`_</span></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>room</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>action</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>author</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.JSONField" title="syncano.models.fields.JSONField"><tt class="xref py py-class docutils literal"><span class="pre">JSONField</span></tt></a></li>
+<li><strong>metadata</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.JSONField" title="syncano.models.fields.JSONField"><tt class="xref py py-class docutils literal"><span class="pre">JSONField</span></tt></a></li>
+<li><strong>payload</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.JSONField" title="syncano.models.fields.JSONField"><tt class="xref py py-class docutils literal"><span class="pre">JSONField</span></tt></a></li>
+<li><strong>created_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="syncano.models.channels.Message.ACTION_CHOICES">
+<tt class="descname">ACTION_CHOICES</tt><em class="property"> = ({'display_name': 'custom', 'value': 0}, {'display_name': 'create', 'value': 1}, {'display_name': 'update', 'value': 2}, {'display_name': 'delete', 'value': 3})</em><a class="headerlink" href="#syncano.models.channels.Message.ACTION_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Message.room">
+<tt class="descname">room</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Message.room" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Message.action">
+<tt class="descname">action</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Message.action" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Message.author">
+<tt class="descname">author</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Message.author" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Message.metadata">
+<tt class="descname">metadata</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Message.metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Message.payload">
+<tt class="descname">payload</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Message.payload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Message.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Message.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Message.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.channels.Message.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">MessageDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Message.channel_name">
+<tt class="descname">channel_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Message.channel_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Message.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Message.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Message.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Message.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Message.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.channels.Message.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.channels.Message.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.channels.Message.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="syncano.models.classes.html" class="btn btn-neutral float-right" title="syncano.models.classes"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="syncano.models.billing.html" class="btn btn-neutral" title="syncano.models.billing"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'4.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

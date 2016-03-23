@@ -83,7 +83,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../interacting.html#environmental-variables">Environmental variables</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../models.html">Available models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../refs/syncano.html">Syncano references</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../refs/syncano.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../refs/syncano.html#submodules">Submodules</a></li>
@@ -129,7 +128,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="n">__title__</span> <span class="o">=</span> <span class="s1">&#39;Syncano Python&#39;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;4.2.0&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;5.0.0&#39;</span>
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Daniel Kopka, Michal Kobus, and Sebastian Opalczynski&quot;</span>
 <span class="n">__credits__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Daniel Kopka&quot;</span><span class="p">,</span>
                <span class="s2">&quot;Michal Kobus&quot;</span><span class="p">,</span>
@@ -191,13 +190,13 @@
 <span class="sd">    :return: A models registry</span>
 
 <span class="sd">    Usage::</span>
+
 <span class="sd">        # Admin login</span>
 <span class="sd">        connection = syncano.connect(email=&#39;&#39;, password=&#39;&#39;)</span>
 <span class="sd">        # OR</span>
 <span class="sd">        connection = syncano.connect(api_key=&#39;&#39;)</span>
 <span class="sd">        # OR</span>
-<span class="sd">        connection = syncano.connect(social_backend=&#39;github&#39;,</span>
-<span class="sd">                                     token=&#39;sfdsdfsdf&#39;)</span>
+<span class="sd">        connection = syncano.connect(social_backend=&#39;github&#39;, token=&#39;sfdsdfsdf&#39;)</span>
 
 <span class="sd">        # User login</span>
 <span class="sd">        connection = syncano.connect(username=&#39;&#39;, password=&#39;&#39;, api_key=&#39;&#39;, instance_name=&#39;&#39;)</span>
@@ -212,7 +211,7 @@
     <span class="n">instance</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">INSTANCE</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">registry</span><span class="o">.</span><span class="n">set_default_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+        <span class="n">registry</span><span class="o">.</span><span class="n">set_used_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">registry</span></div>
 </pre></div>
 

@@ -30,8 +30,8 @@
   
     <link rel="top" title="Syncano 4.0.0 documentation" href="../index.html"/>
         <link rel="up" title="syncano.models" href="syncano.models.html"/>
-        <link rel="next" title="syncano.models.options" href="syncano.models.options.html"/>
-        <link rel="prev" title="syncano.models.fields" href="syncano.models.fields.html"/> 
+        <link rel="next" title="syncano.models.accounts" href="syncano.models.accounts.html"/>
+        <link rel="prev" title="syncano.models" href="syncano.models.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -85,7 +85,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../interacting.html#environmental-variables">Environmental variables</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../models.html">Available models</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="syncano.html">Syncano references</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="syncano.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="syncano.html#submodules">Submodules</a></li>
@@ -145,19 +144,13 @@
 </dd></dl>
 
 <dl class="class">
-<dt id="syncano.models.manager.RelatedManagerDescriptor">
-<em class="property">class </em><tt class="descname">RelatedManagerDescriptor</tt><big>(</big><em>field</em>, <em>name</em>, <em>endpoint</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#RelatedManagerDescriptor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.RelatedManagerDescriptor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-</dd></dl>
-
-<dl class="class">
 <dt id="syncano.models.manager.Manager">
 <em class="property">class </em><tt class="descname">Manager</tt><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="syncano.connection.html#syncano.connection.ConnectionMixin" title="syncano.connection.ConnectionMixin"><tt class="xref py py-class docutils literal"><span class="pre">syncano.connection.ConnectionMixin</span></tt></a></p>
 <p>Base class responsible for all ORM (<tt class="docutils literal"><span class="pre">please</span></tt>) actions.</p>
 <dl class="attribute">
 <dt id="syncano.models.manager.Manager.BATCH_URI">
-<tt class="descname">BATCH_URI</tt><em class="property"> = '/v1/instances/{name}/batch/'</em><a class="headerlink" href="#syncano.models.manager.Manager.BATCH_URI" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">BATCH_URI</tt><em class="property"> = '/v1.1/instances/{name}/batch/'</em><a class="headerlink" href="#syncano.models.manager.Manager.BATCH_URI" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -171,59 +164,61 @@
 <dd><p>A convenience method for making a batch request. Only create, update and delete manager method are supported.
 Batch request are limited to 50. So the args length should be equal or less than 50.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>klass = instance.classes.get(name=&#39;some_class&#39;)
-
-Object.please.batch(
-    klass.objects.as_batch().delete(id=652),
-    klass.objects.as_batch().delete(id=653),
-    ...
-)
-
-and::
-
-Object.please.batch(
-    klass.objects.as_batch().update(id=652, arg=&#39;some_b&#39;),
-    klass.objects.as_batch().update(id=653, arg=&#39;some_b&#39;),
-    ...
-)
-
-and::
-Object.please.batch(
-    klass.objects.as_batch().create(arg=&#39;some_c&#39;),
-    klass.objects.as_batch().create(arg=&#39;some_c&#39;),
-    ...
-)
-and::
-
-Object.please.batch(
-    klass.objects.as_batch().delete(id=653),
-    klass.objects.as_batch().update(id=652, arg=&#39;some_a&#39;),
-    klass.objects.as_batch().create(arg=&#39;some_c&#39;),
-    ...
-)
-
-are posible.
-
-But::
-Object.please.batch(
-    klass.objects.as_batch().get_or_create(id=653, arg=&#39;some_a&#39;)
-)
-
-will not work as expected.
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">klass</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">)</span>
+<span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">652</span><span class="p">),</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">653</span><span class="p">),</span>
+    <span class="o">...</span>
+<span class="p">)</span>
 </pre></div>
 </div>
+<p>and:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">652</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="s1">&#39;some_b&#39;</span><span class="p">),</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">653</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="s1">&#39;some_b&#39;</span><span class="p">),</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>and:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="s1">&#39;some_c&#39;</span><span class="p">),</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="s1">&#39;some_c&#39;</span><span class="p">),</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>and:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">653</span><span class="p">),</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">652</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="s1">&#39;some_a&#39;</span><span class="p">),</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="s1">&#39;some_c&#39;</span><span class="p">),</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>are posible.</p>
+<p>But:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">653</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="s1">&#39;some_a&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>will not work as expected.</p>
 <p>Some snippet for working with instance users:</p>
-<p>instance = Instance.please.get(name=&#8217;Nabuchodonozor&#8217;)</p>
-<dl class="docutils">
-<dt>model_users = instance.users.batch(</dt>
-<dd>instance.users.as_batch().delete(id=7),
-instance.users.as_batch().update(id=9, username=&#8217;username_a&#8217;),
-instance.users.as_batch().create(username=&#8217;username_b&#8217;, password=&#8216;5432&#8217;),
-...</dd>
-</dl>
-<p>)</p>
-<p>And sample response will be:
-[{u&#8217;code&#8217;: 204}, &lt;User: 9&gt;, &lt;User: 11&gt;, ...]</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Nabuchodonozor&#39;</span><span class="p">)</span>
+<span class="n">model_users</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
+    <span class="n">instance</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">7</span><span class="p">),</span>
+    <span class="n">instance</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="s1">&#39;username_a&#39;</span><span class="p">),</span>
+    <span class="n">instance</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;username_b&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;5432&#39;</span><span class="p">),</span>
+    <span class="o">...</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>And sample response will be:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>[{u&#39;code&#39;: 204}, &lt;User: 9&gt;, &lt;User: 11&gt;, ...]
+</pre></div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -258,20 +253,17 @@ found resource to delete);</td>
 <dt id="syncano.models.manager.Manager.bulk_create">
 <tt class="descname">bulk_create</tt><big>(</big><em>*objects</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.bulk_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.bulk_create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates many new instances based on provided list of objects.</p>
-<dl class="docutils">
-<dt>Usage::</dt>
-<dd><p class="first">instance = Instance.please.get(name=&#8217;instance_a&#8217;)</p>
-<dl class="docutils">
-<dt>instances = instance.users.bulk_create(</dt>
-<dd>User(username=&#8217;user_a&#8217;, password=&#8216;1234&#8217;),
-User(username=&#8217;user_b&#8217;, password=&#8216;4321&#8217;)</dd>
-</dl>
-<p class="last">)</p>
-</dd>
-</dl>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">This method is restricted to handle 50 objects at once.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;instance_a&#39;</span><span class="p">)</span>
+<span class="n">instances</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">bulk_create</span><span class="p">(</span>
+    <span class="n">User</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;user_a&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;1234&#39;</span><span class="p">),</span>
+    <span class="n">User</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;user_b&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;4321&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Warning:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>This method is restricted to handle 50 objects at once.
+</pre></div>
 </div>
 </dd></dl>
 
@@ -568,27 +560,27 @@ classes = Class.please.list(instance_name=&#8217;test-one&#8217;)</dd>
 </dd></dl>
 
 <dl class="class">
-<dt id="syncano.models.manager.CodeBoxManager">
-<em class="property">class </em><tt class="descname">CodeBoxManager</tt><a class="reference internal" href="../_modules/syncano/models/manager.html#CodeBoxManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.CodeBoxManager" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.manager.ScriptManager">
+<em class="property">class </em><tt class="descname">ScriptManager</tt><a class="reference internal" href="../_modules/syncano/models/manager.html#ScriptManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ScriptManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.manager.Manager</span></tt></a></p>
 <p>Custom <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a>
-class for <tt class="xref py py-class docutils literal"><span class="pre">CodeBox</span></tt> model.</p>
+class for <tt class="xref py py-class docutils literal"><span class="pre">Script</span></tt> model.</p>
 <dl class="method">
-<dt id="syncano.models.manager.CodeBoxManager.run">
-<tt class="descname">run</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#CodeBoxManager.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.CodeBoxManager.run" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.manager.ScriptManager.run">
+<tt class="descname">run</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ScriptManager.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ScriptManager.run" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="syncano.models.manager.WebhookManager">
-<em class="property">class </em><tt class="descname">WebhookManager</tt><a class="reference internal" href="../_modules/syncano/models/manager.html#WebhookManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.WebhookManager" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.manager.ScriptEndpointManager">
+<em class="property">class </em><tt class="descname">ScriptEndpointManager</tt><a class="reference internal" href="../_modules/syncano/models/manager.html#ScriptEndpointManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ScriptEndpointManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.manager.Manager</span></tt></a></p>
 <p>Custom <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a>
-class for <tt class="xref py py-class docutils literal"><span class="pre">Webhook</span></tt> model.</p>
+class for <tt class="xref py py-class docutils literal"><span class="pre">ScriptEndpoint</span></tt> model.</p>
 <dl class="method">
-<dt id="syncano.models.manager.WebhookManager.run">
-<tt class="descname">run</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#WebhookManager.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.WebhookManager.run" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.manager.ScriptEndpointManager.run">
+<tt class="descname">run</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ScriptEndpointManager.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ScriptEndpointManager.run" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -618,12 +610,12 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Object
 <dt id="syncano.models.manager.ObjectManager.count">
 <tt class="descname">count</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.count" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the queryset count;</p>
-<dl class="docutils">
-<dt>Usage::</dt>
-<dd>Object.please.list(instance_name=&#8217;raptor&#8217;, class_name=&#8217;some_class&#8217;).filter(id__gt=600).count()
-Object.please.list(instance_name=&#8217;raptor&#8217;, class_name=&#8217;some_class&#8217;).count()
-Object.please.all(instance_name=&#8217;raptor&#8217;, class_name=&#8217;some_class&#8217;).count()</dd>
-</dl>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">id__gt</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -637,13 +629,13 @@ Object.please.all(instance_name=&#8217;raptor&#8217;, class_name=&#8217;some_cla
 <dl class="method">
 <dt id="syncano.models.manager.ObjectManager.with_count">
 <tt class="descname">with_count</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.with_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.with_count" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the queryset count;</p>
-<dl class="docutils">
-<dt>Usage::</dt>
-<dd>Object.please.list(instance_name=&#8217;raptor&#8217;, class_name=&#8217;some_class&#8217;).filter(id__gt=600).with_count()
-Object.please.list(instance_name=&#8217;raptor&#8217;, class_name=&#8217;some_class&#8217;).with_count(page_size=30)
-Object.please.all(instance_name=&#8217;raptor&#8217;, class_name=&#8217;some_class&#8217;).with_count()</dd>
-</dl>
+<dd><p>Return the queryset with count;</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">id__gt</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span><span class="o">.</span><span class="n">with_count</span><span class="p">()</span>
+<span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">with_count</span><span class="p">(</span><span class="n">page_size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">with_count</span><span class="p">()</span>
+</pre></div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -670,15 +662,24 @@ Object.please.all(instance_name=&#8217;raptor&#8217;, class_name=&#8217;some_cla
 <dt id="syncano.models.manager.ObjectManager.bulk_create">
 <tt class="descname">bulk_create</tt><big>(</big><em>*objects</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.bulk_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.bulk_create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates many new objects.
-Usage:
-created_objects = Object.please.bulk_create(</p>
-<blockquote>
-<div>Object(instance_name=&#8217;instance_a&#8217;, class_name=&#8217;some_class&#8217;, title=&#8217;one&#8217;),
-Object(instance_name=&#8217;instance_a&#8217;, class_name=&#8217;some_class&#8217;, title=&#8217;two&#8217;),
-Object(instance_name=&#8217;instance_a&#8217;, class_name=&#8217;some_class&#8217;, title=&#8217;three&#8217;)</div></blockquote>
-<p>)
-:param objects: a list of the instances of data objects to be created;
-:return: a created and populated list of objects; When error occurs a plain dict is returned in that place;</p>
+Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">created_objects</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">bulk_create</span><span class="p">(</span>
+    <span class="n">Object</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;instance_a&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;one&#39;</span><span class="p">),</span>
+    <span class="n">Object</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;instance_a&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;two&#39;</span><span class="p">),</span>
+    <span class="n">Object</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;instance_a&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;three&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>objects</strong> &#8211; a list of the instances of data objects to be created;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a created and populated list of objects; When error occurs a plain dict is returned in that place;</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -824,10 +825,10 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Schema
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="syncano.models.options.html" class="btn btn-neutral float-right" title="syncano.models.options"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="syncano.models.accounts.html" class="btn btn-neutral float-right" title="syncano.models.accounts"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="syncano.models.fields.html" class="btn btn-neutral" title="syncano.models.fields"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="syncano.models.html" class="btn btn-neutral" title="syncano.models"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

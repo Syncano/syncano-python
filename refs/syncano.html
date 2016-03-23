@@ -30,7 +30,7 @@
   
     <link rel="top" title="Syncano 4.0.0 documentation" href="../index.html"/>
         <link rel="next" title="syncano.models" href="syncano.models.html"/>
-        <link rel="prev" title="Available models" href="../models.html"/> 
+        <link rel="prev" title="Interacting with Syncano" href="../interacting.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -84,7 +84,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../interacting.html#environmental-variables">Environmental variables</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../models.html">Available models</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Syncano references</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
@@ -133,11 +132,21 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="syncano.models.html">syncano.models</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="syncano.models.html#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="syncano.models.base.html">syncano.models.base</a></li>
-<li class="toctree-l3"><a class="reference internal" href="syncano.models.fields.html">syncano.models.fields</a></li>
 <li class="toctree-l3"><a class="reference internal" href="syncano.models.manager.html">syncano.models.manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="syncano.models.accounts.html">syncano.models.accounts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="syncano.models.archetypes.html">syncano.models.archetypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="syncano.models.billing.html">syncano.models.billing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="syncano.models.channels.html">syncano.models.channels</a></li>
+<li class="toctree-l3"><a class="reference internal" href="syncano.models.classes.html">syncano.models.classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="syncano.models.custom_response.html">syncano.models.custom_response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="syncano.models.data_views.html">syncano.models.data_views</a></li>
+<li class="toctree-l3"><a class="reference internal" href="syncano.models.incentives.html">syncano.models.incentives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="syncano.models.instances.html">syncano.models.instances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="syncano.models.fields.html">syncano.models.fields</a></li>
 <li class="toctree-l3"><a class="reference internal" href="syncano.models.options.html">syncano.models.options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="syncano.models.push_notification.html">syncano.models.push_notification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="syncano.models.registry.html">syncano.models.registry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="syncano.models.traces.html">syncano.models.traces</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="syncano.models.html#module-syncano.models">Module contents</a></li>
@@ -185,22 +194,20 @@
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Usage::</dt>
-<dd><p class="first"># Admin login
-connection = syncano.connect(email=&#8217;&#8216;, password=&#8217;&#8216;)
-# OR
-connection = syncano.connect(api_key=&#8217;&#8216;)
-# OR
-connection = syncano.connect(social_backend=&#8217;github&#8217;,</p>
-<blockquote>
-<div>token=&#8217;sfdsdfsdf&#8217;)</div></blockquote>
-<p class="last"># User login
-connection = syncano.connect(username=&#8217;&#8216;, password=&#8217;&#8216;, api_key=&#8217;&#8216;, instance_name=&#8217;&#8216;)
-# OR
-connection = syncano.connect(user_key=&#8217;&#8216;, api_key=&#8217;&#8216;, instance_name=&#8217;&#8216;)</p>
-</dd>
-</dl>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Admin login</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c1"># OR</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c1"># OR</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">social_backend</span><span class="o">=</span><span class="s1">&#39;github&#39;</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s1">&#39;sfdsdfsdf&#39;</span><span class="p">)</span>
+
+<span class="c1"># User login</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="c1"># OR</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">user_key</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -215,7 +222,7 @@ connection = syncano.connect(user_key=&#8217;&#8216;, api_key=&#8217;&#8216;, in
         <a href="syncano.models.html" class="btn btn-neutral float-right" title="syncano.models"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../models.html" class="btn btn-neutral" title="Available models"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../interacting.html" class="btn btn-neutral" title="Interacting with Syncano"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

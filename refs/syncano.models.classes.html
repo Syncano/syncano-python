@@ -1,0 +1,500 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>syncano.models.classes &mdash; Syncano 4.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 4.0.0 documentation" href="../index.html"/>
+        <link rel="up" title="syncano.models" href="syncano.models.html"/>
+        <link rel="next" title="syncano.models.custom_response" href="syncano.models.custom_response.html"/>
+        <link rel="prev" title="syncano.models.channels" href="syncano.models.channels.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="syncano.html">Syncano references</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="syncano.html">Syncano references</a> &raquo;</li>
+      
+          <li><a href="syncano.models.html">syncano.models</a> &raquo;</li>
+      
+    <li>syncano.models.classes</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/refs/syncano.models.classes.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="module-syncano.models.classes">
+<span id="syncano-models-classes"></span><h1>syncano.models.classes<a class="headerlink" href="#module-syncano.models.classes" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="syncano.models.classes.Class">
+<em class="property">class </em><tt class="descname">Class</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/classes.html#Class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.classes.Class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>OO wrapper around instance classes <a class="reference external" href="http://docs.syncano.com/docs/classes">link</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>description</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>objects_count</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.Field" title="syncano.models.fields.Field"><tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt></a></li>
+<li><strong>schema</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.SchemaField" title="syncano.models.fields.SchemaField"><tt class="xref py py-class docutils literal"><span class="pre">SchemaField</span></tt></a></li>
+<li><strong>links</strong> &#8211; <tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></li>
+<li><strong>status</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.Field" title="syncano.models.fields.Field"><tt class="xref py py-class docutils literal"><span class="pre">Field</span></tt></a></li>
+<li><strong>metadata</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.JSONField" title="syncano.models.fields.JSONField"><tt class="xref py py-class docutils literal"><span class="pre">JSONField</span></tt></a></li>
+<li><strong>revision</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+<li><strong>expected_revision</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+<li><strong>updated_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+<li><strong>created_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+<li><strong>group</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+<li><strong>group_permissions</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>other_permissions</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>objects</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.RelatedManagerField" title="syncano.models.fields.RelatedManagerField"><tt class="xref py py-class docutils literal"><span class="pre">RelatedManagerField</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This model is special because each related <tt class="xref py py-class docutils literal"><span class="pre">Object</span></tt> will be
+<strong>dynamically populated</strong> with fields defined in schema attribute.</p>
+</div>
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.PERMISSIONS_CHOICES">
+<tt class="descname">PERMISSIONS_CHOICES</tt><em class="property"> = ({'display_name': 'None', 'value': 'none'}, {'display_name': 'Read', 'value': 'read'}, {'display_name': 'Create objects', 'value': 'create_objects'})</em><a class="headerlink" href="#syncano.models.classes.Class.PERMISSIONS_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.name">
+<tt class="descname">name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.description">
+<tt class="descname">description</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.objects_count">
+<tt class="descname">objects_count</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.objects_count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.schema">
+<tt class="descname">schema</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.schema" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.status">
+<tt class="descname">status</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.metadata">
+<tt class="descname">metadata</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.revision">
+<tt class="descname">revision</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.revision" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.expected_revision">
+<tt class="descname">expected_revision</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.expected_revision" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.updated_at">
+<tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.group">
+<tt class="descname">group</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.group_permissions">
+<tt class="descname">group_permissions</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.group_permissions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.other_permissions">
+<tt class="descname">other_permissions</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.other_permissions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.objects">
+<tt class="descname">objects</tt><a class="headerlink" href="#syncano.models.classes.Class.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.classes.Class.save">
+<tt class="descname">save</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/classes.html#Class.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.classes.Class.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.classes.Class.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">ClassDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Class.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Class.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.classes.Class.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.classes.Object">
+<em class="property">class </em><tt class="descname">Object</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/classes.html#Object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.classes.Object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>OO wrapper around data objects <a class="reference external" href="http://docs.syncano.com/docs/data-objects">link</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>revision</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+<li><strong>created_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+<li><strong>updated_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+<li><strong>owner</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+<li><strong>owner_permissions</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>group</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.IntegerField" title="syncano.models.fields.IntegerField"><tt class="xref py py-class docutils literal"><span class="pre">IntegerField</span></tt></a></li>
+<li><strong>group_permissions</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>other_permissions</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>channel</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>channel_room</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This model is special because each instance will be <strong>dynamically populated</strong>
+with fields defined in related <tt class="xref py py-class docutils literal"><span class="pre">Class</span></tt> schema attribute.</p>
+</div>
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.PERMISSIONS_CHOICES">
+<tt class="descname">PERMISSIONS_CHOICES</tt><em class="property"> = ({'display_name': 'None', 'value': 'none'}, {'display_name': 'Read', 'value': 'read'}, {'display_name': 'Write', 'value': 'write'}, {'display_name': 'Full', 'value': 'full'})</em><a class="headerlink" href="#syncano.models.classes.Object.PERMISSIONS_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.revision">
+<tt class="descname">revision</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Object.revision" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Object.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.updated_at">
+<tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Object.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.owner">
+<tt class="descname">owner</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Object.owner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.owner_permissions">
+<tt class="descname">owner_permissions</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Object.owner_permissions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.group">
+<tt class="descname">group</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Object.group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.group_permissions">
+<tt class="descname">group_permissions</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Object.group_permissions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.other_permissions">
+<tt class="descname">other_permissions</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Object.other_permissions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.channel">
+<tt class="descname">channel</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Object.channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.channel_room">
+<tt class="descname">channel_room</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Object.channel_room" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.classes.Object.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="syncano.models.classes.Object.create_subclass">
+<em class="property">classmethod </em><tt class="descname">create_subclass</tt><big>(</big><em>name</em>, <em>schema</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/classes.html#Object.create_subclass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.classes.Object.create_subclass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="syncano.models.classes.Object.get_or_create_subclass">
+<em class="property">classmethod </em><tt class="descname">get_or_create_subclass</tt><big>(</big><em>name</em>, <em>schema</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/classes.html#Object.get_or_create_subclass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.classes.Object.get_or_create_subclass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="syncano.models.classes.Object.get_subclass_name">
+<em class="property">classmethod </em><tt class="descname">get_subclass_name</tt><big>(</big><em>instance_name</em>, <em>class_name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/classes.html#Object.get_subclass_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.classes.Object.get_subclass_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="syncano.models.classes.Object.get_class_schema">
+<em class="property">classmethod </em><tt class="descname">get_class_schema</tt><big>(</big><em>instance_name</em>, <em>class_name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/classes.html#Object.get_class_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.classes.Object.get_class_schema" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="syncano.models.classes.Object.get_subclass_model">
+<em class="property">classmethod </em><tt class="descname">get_subclass_model</tt><big>(</big><em>instance_name</em>, <em>class_name</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/classes.html#Object.get_subclass_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.classes.Object.get_subclass_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates custom <tt class="xref py py-class docutils literal"><span class="pre">Object</span></tt> sub-class definition based
+on passed <strong>instance_name</strong> and <strong>class_name</strong>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.classes.Object.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">ObjectDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.class_name">
+<tt class="descname">class_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Object.class_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Object.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Object.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.classes.Object.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.classes.Object.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.classes.DataObjectMixin">
+<em class="property">class </em><tt class="descname">DataObjectMixin</tt><a class="reference internal" href="../_modules/syncano/models/classes.html#DataObjectMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.classes.DataObjectMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="classmethod">
+<dt id="syncano.models.classes.DataObjectMixin.get_class_object">
+<em class="property">classmethod </em><tt class="descname">get_class_object</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/classes.html#DataObjectMixin.get_class_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.classes.DataObjectMixin.get_class_object" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="syncano.models.custom_response.html" class="btn btn-neutral float-right" title="syncano.models.custom_response"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="syncano.models.channels.html" class="btn btn-neutral" title="syncano.models.channels"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'4.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

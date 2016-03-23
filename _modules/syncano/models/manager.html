@@ -83,7 +83,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#environmental-variables">Environmental variables</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Available models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../refs/syncano.html">Syncano references</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#submodules">Submodules</a></li>
@@ -163,43 +162,10 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 
 </div>
-<div class="viewcode-block" id="RelatedManagerDescriptor"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.RelatedManagerDescriptor">[docs]</a><span class="k">class</span> <span class="nc">RelatedManagerDescriptor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">field</span> <span class="o">=</span> <span class="n">field</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="n">endpoint</span>
-
-    <span class="k">def</span> <span class="nf">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">instance</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;RelatedManager is accessible only via {0} instances.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">owner</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
-
-        <span class="n">links</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">links</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">None</span>
-
-        <span class="n">path</span> <span class="o">=</span> <span class="n">links</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">None</span>
-
-        <span class="n">Model</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">get_model_by_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Model</span><span class="o">.</span><span class="n">please</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">Model</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
-
-        <span class="n">properties</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_endpoint_properties</span><span class="p">(</span><span class="s1">&#39;detail&#39;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;Instance&#39;</span><span class="p">:</span>
-            <span class="n">registry</span><span class="o">.</span><span class="n">set_last_used_instance</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">))</span>
-        <span class="n">properties</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span> <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">]</span>
-
-        <span class="k">return</span> <span class="n">method</span><span class="p">(</span><span class="o">*</span><span class="n">properties</span><span class="p">)</span>
-
-</div>
 <div class="viewcode-block" id="Manager"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager">[docs]</a><span class="k">class</span> <span class="nc">Manager</span><span class="p">(</span><span class="n">ConnectionMixin</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Base class responsible for all ORM (``please``) actions.&quot;&quot;&quot;</span>
 
-    <span class="n">BATCH_URI</span> <span class="o">=</span> <span class="s1">&#39;/v1/instances/{name}/batch/&#39;</span>
+    <span class="n">BATCH_URI</span> <span class="o">=</span> <span class="s1">&#39;/v1.1/instances/{name}/batch/&#39;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">None</span>
@@ -237,15 +203,19 @@
     <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterator</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="k">def</span> <span class="nf">__nonzero__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">return</span> <span class="bp">True</span>
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">False</span>
 
-    <span class="k">def</span> <span class="nf">__nonzero__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
-        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -289,14 +259,13 @@
 <span class="sd">        Usage::</span>
 
 <span class="sd">            klass = instance.classes.get(name=&#39;some_class&#39;)</span>
-
 <span class="sd">            Object.please.batch(</span>
 <span class="sd">                klass.objects.as_batch().delete(id=652),</span>
 <span class="sd">                klass.objects.as_batch().delete(id=653),</span>
 <span class="sd">                ...</span>
 <span class="sd">            )</span>
 
-<span class="sd">            and::</span>
+<span class="sd">        and::</span>
 
 <span class="sd">            Object.please.batch(</span>
 <span class="sd">                klass.objects.as_batch().update(id=652, arg=&#39;some_b&#39;),</span>
@@ -304,13 +273,15 @@
 <span class="sd">                ...</span>
 <span class="sd">            )</span>
 
-<span class="sd">            and::</span>
+<span class="sd">        and::</span>
+
 <span class="sd">            Object.please.batch(</span>
 <span class="sd">                klass.objects.as_batch().create(arg=&#39;some_c&#39;),</span>
 <span class="sd">                klass.objects.as_batch().create(arg=&#39;some_c&#39;),</span>
 <span class="sd">                ...</span>
 <span class="sd">            )</span>
-<span class="sd">            and::</span>
+
+<span class="sd">        and::</span>
 
 <span class="sd">            Object.please.batch(</span>
 <span class="sd">                klass.objects.as_batch().delete(id=653),</span>
@@ -319,28 +290,29 @@
 <span class="sd">                ...</span>
 <span class="sd">            )</span>
 
-<span class="sd">            are posible.</span>
+<span class="sd">        are posible.</span>
 
-<span class="sd">            But::</span>
+<span class="sd">        But::</span>
+
 <span class="sd">            Object.please.batch(</span>
 <span class="sd">                klass.objects.as_batch().get_or_create(id=653, arg=&#39;some_a&#39;)</span>
 <span class="sd">            )</span>
 
-<span class="sd">            will not work as expected.</span>
+<span class="sd">        will not work as expected.</span>
 
-<span class="sd">        Some snippet for working with instance users:</span>
+<span class="sd">        Some snippet for working with instance users::</span>
 
-<span class="sd">        instance = Instance.please.get(name=&#39;Nabuchodonozor&#39;)</span>
+<span class="sd">            instance = Instance.please.get(name=&#39;Nabuchodonozor&#39;)</span>
+<span class="sd">            model_users = instance.users.batch(</span>
+<span class="sd">                instance.users.as_batch().delete(id=7),</span>
+<span class="sd">                instance.users.as_batch().update(id=9, username=&#39;username_a&#39;),</span>
+<span class="sd">                instance.users.as_batch().create(username=&#39;username_b&#39;, password=&#39;5432&#39;),</span>
+<span class="sd">                ...</span>
+<span class="sd">            )</span>
 
-<span class="sd">        model_users = instance.users.batch(</span>
-<span class="sd">            instance.users.as_batch().delete(id=7),</span>
-<span class="sd">            instance.users.as_batch().update(id=9, username=&#39;username_a&#39;),</span>
-<span class="sd">            instance.users.as_batch().create(username=&#39;username_b&#39;, password=&#39;5432&#39;),</span>
-<span class="sd">            ...</span>
-<span class="sd">        )</span>
+<span class="sd">        And sample response will be::</span>
 
-<span class="sd">        And sample response will be:</span>
-<span class="sd">        [{u&#39;code&#39;: 204}, &lt;User: 9&gt;, &lt;User: 11&gt;, ...]</span>
+<span class="sd">            [{u&#39;code&#39;: 204}, &lt;User: 9&gt;, &lt;User: 11&gt;, ...]</span>
 
 <span class="sd">        :param args: a arg is on of the: klass.objects.as_batch().create(...), klass.objects.as_batch().update(...),</span>
 <span class="sd">         klass.objects.as_batch().delete(...)</span>
@@ -364,7 +336,7 @@
 
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
             <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">BATCH_URI</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">registry</span><span class="o">.</span><span class="n">last_used_instance</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">BATCH_URI</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">registry</span><span class="o">.</span><span class="n">instance_name</span><span class="p">),</span>
             <span class="o">**</span><span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;requests&#39;</span><span class="p">:</span> <span class="n">requests</span><span class="p">}}</span>
         <span class="p">)</span>
 
@@ -396,13 +368,19 @@
 
 <span class="sd">        are equivalent.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">attrs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
-        <span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;is_lazy&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_lazy</span><span class="p">})</span>
-        <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_instance</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;is_lazy&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_lazy</span><span class="p">})</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_instance</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;Instance&#39;</span><span class="p">:</span>
+            <span class="n">registry</span><span class="o">.</span><span class="n">set_used_instance</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
         <span class="n">saved_instance</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_lazy</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">instance</span>
+
         <span class="k">return</span> <span class="n">saved_instance</span>
 </div>
 <div class="viewcode-block" id="Manager.bulk_create"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.bulk_create">[docs]</a>    <span class="k">def</span> <span class="nf">bulk_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">objects</span><span class="p">):</span>
@@ -410,14 +388,15 @@
 <span class="sd">        Creates many new instances based on provided list of objects.</span>
 
 <span class="sd">        Usage::</span>
-<span class="sd">            instance = Instance.please.get(name=&#39;instance_a&#39;)</span>
 
+<span class="sd">            instance = Instance.please.get(name=&#39;instance_a&#39;)</span>
 <span class="sd">            instances = instance.users.bulk_create(</span>
 <span class="sd">                User(username=&#39;user_a&#39;, password=&#39;1234&#39;),</span>
 <span class="sd">                User(username=&#39;user_b&#39;, password=&#39;4321&#39;)</span>
 <span class="sd">            )</span>
 
-<span class="sd">        .. warning::</span>
+<span class="sd">        Warning::</span>
+
 <span class="sd">            This method is restricted to handle 50 objects at once.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ModelBulkCreate</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">process</span><span class="p">()</span>
@@ -474,7 +453,7 @@
 
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
             <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">BATCH_URI</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">registry</span><span class="o">.</span><span class="n">last_used_instance</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">BATCH_URI</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">registry</span><span class="o">.</span><span class="n">instance_name</span><span class="p">),</span>
             <span class="o">**</span><span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;requests&#39;</span><span class="p">:</span> <span class="n">requests</span><span class="p">}}</span>
         <span class="p">)</span>
 
@@ -652,7 +631,7 @@
 
         <span class="n">serialized</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to_native</span><span class="p">()</span>
 
-        <span class="n">serialized</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">serialized</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
+        <span class="n">serialized</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">serialized</span><span class="p">)</span>
                       <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">serialized</span><span class="p">)</span>
@@ -842,7 +821,7 @@
     <span class="k">def</span> <span class="nf">_get_serialized_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
         <span class="n">serialized</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to_native</span><span class="p">()</span>
-        <span class="n">serialized</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">serialized</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span>
+        <span class="n">serialized</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">serialized</span><span class="p">)</span>
                       <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">serialized</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">serialized</span>
@@ -898,7 +877,6 @@
 
         <span class="n">properties</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
         <span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-
         <span class="k">return</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">properties</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_serialize</span> <span class="k">else</span> <span class="n">data</span>
 </div>
 <div class="viewcode-block" id="Manager.build_request"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.build_request">[docs]</a>    <span class="k">def</span> <span class="nf">build_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
@@ -983,19 +961,17 @@
     <span class="k">def</span> <span class="nf">_get_endpoint_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">default</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">}</span>
         <span class="n">defaults</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">defaults</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;instance_name&#39;</span><span class="p">):</span>
-            <span class="n">registry</span><span class="o">.</span><span class="n">set_last_used_instance</span><span class="p">(</span><span class="n">defaults</span><span class="p">[</span><span class="s1">&#39;instance_name&#39;</span><span class="p">])</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">defaults</span><span class="p">),</span> <span class="n">defaults</span>
 
 </div>
-<div class="viewcode-block" id="CodeBoxManager"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.CodeBoxManager">[docs]</a><span class="k">class</span> <span class="nc">CodeBoxManager</span><span class="p">(</span><span class="n">Manager</span><span class="p">):</span>
+<div class="viewcode-block" id="ScriptManager"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ScriptManager">[docs]</a><span class="k">class</span> <span class="nc">ScriptManager</span><span class="p">(</span><span class="n">Manager</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom :class:`~syncano.models.manager.Manager`</span>
-<span class="sd">    class for :class:`~syncano.models.base.CodeBox` model.</span>
+<span class="sd">    class for :class:`~syncano.models.base.Script` model.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@clone</span>
-<div class="viewcode-block" id="CodeBoxManager.run"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.CodeBoxManager.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ScriptManager.run"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ScriptManager.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">payload</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;payload&#39;</span><span class="p">,</span> <span class="p">{})</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
@@ -1007,17 +983,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_serialize</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">CodeBoxTrace</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">ScriptTrace</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="WebhookManager"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.WebhookManager">[docs]</a><span class="k">class</span> <span class="nc">WebhookManager</span><span class="p">(</span><span class="n">Manager</span><span class="p">):</span>
+<div class="viewcode-block" id="ScriptEndpointManager"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ScriptEndpointManager">[docs]</a><span class="k">class</span> <span class="nc">ScriptEndpointManager</span><span class="p">(</span><span class="n">Manager</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom :class:`~syncano.models.manager.Manager`</span>
-<span class="sd">    class for :class:`~syncano.models.base.Webhook` model.</span>
+<span class="sd">    class for :class:`~syncano.models.base.ScriptEndpoint` model.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@clone</span>
-<div class="viewcode-block" id="WebhookManager.run"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.WebhookManager.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ScriptEndpointManager.run"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ScriptEndpointManager.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">payload</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;payload&#39;</span><span class="p">,</span> <span class="p">{})</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
@@ -1031,7 +1007,7 @@
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
 
         <span class="c1"># Workaround for circular import</span>
-        <span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">WebhookTrace</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">ScriptEndpointTrace</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)</span>
 
 </div></div>
 <div class="viewcode-block" id="ObjectManager"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager">[docs]</a><span class="k">class</span> <span class="nc">ObjectManager</span><span class="p">(</span><span class="n">Manager</span><span class="p">):</span>
@@ -1059,9 +1035,11 @@
 <span class="sd">        Return the queryset count;</span>
 
 <span class="sd">        Usage::</span>
+
 <span class="sd">            Object.please.list(instance_name=&#39;raptor&#39;, class_name=&#39;some_class&#39;).filter(id__gt=600).count()</span>
 <span class="sd">            Object.please.list(instance_name=&#39;raptor&#39;, class_name=&#39;some_class&#39;).count()</span>
 <span class="sd">            Object.please.all(instance_name=&#39;raptor&#39;, class_name=&#39;some_class&#39;).count()</span>
+
 <span class="sd">        :return: The count of the returned objects: count = DataObjects.please.list(...).count();</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;GET&#39;</span>
@@ -1075,12 +1053,14 @@
     <span class="nd">@clone</span>
 <div class="viewcode-block" id="ObjectManager.with_count"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.with_count">[docs]</a>    <span class="k">def</span> <span class="nf">with_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return the queryset count;</span>
+<span class="sd">        Return the queryset with count;</span>
 
 <span class="sd">        Usage::</span>
+
 <span class="sd">            Object.please.list(instance_name=&#39;raptor&#39;, class_name=&#39;some_class&#39;).filter(id__gt=600).with_count()</span>
 <span class="sd">            Object.please.list(instance_name=&#39;raptor&#39;, class_name=&#39;some_class&#39;).with_count(page_size=30)</span>
 <span class="sd">            Object.please.all(instance_name=&#39;raptor&#39;, class_name=&#39;some_class&#39;).with_count()</span>
+
 <span class="sd">        :param page_size: The size of the pagination; Default to 20;</span>
 <span class="sd">        :return: The tuple with objects and the count: objects, count = DataObjects.please.list(...).with_count();</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1136,12 +1116,14 @@
 <div class="viewcode-block" id="ObjectManager.bulk_create"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.bulk_create">[docs]</a>    <span class="k">def</span> <span class="nf">bulk_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">objects</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates many new objects.</span>
-<span class="sd">        Usage:</span>
-<span class="sd">        created_objects = Object.please.bulk_create(</span>
-<span class="sd">            Object(instance_name=&#39;instance_a&#39;, class_name=&#39;some_class&#39;, title=&#39;one&#39;),</span>
-<span class="sd">            Object(instance_name=&#39;instance_a&#39;, class_name=&#39;some_class&#39;, title=&#39;two&#39;),</span>
-<span class="sd">            Object(instance_name=&#39;instance_a&#39;, class_name=&#39;some_class&#39;, title=&#39;three&#39;)</span>
-<span class="sd">        )</span>
+<span class="sd">        Usage::</span>
+
+<span class="sd">            created_objects = Object.please.bulk_create(</span>
+<span class="sd">                Object(instance_name=&#39;instance_a&#39;, class_name=&#39;some_class&#39;, title=&#39;one&#39;),</span>
+<span class="sd">                Object(instance_name=&#39;instance_a&#39;, class_name=&#39;some_class&#39;, title=&#39;two&#39;),</span>
+<span class="sd">                Object(instance_name=&#39;instance_a&#39;, class_name=&#39;some_class&#39;, title=&#39;three&#39;)</span>
+<span class="sd">            )</span>
+
 <span class="sd">        :param objects: a list of the instances of data objects to be created;</span>
 <span class="sd">        :return: a created and populated list of objects; When error occurs a plain dict is returned in that place;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
