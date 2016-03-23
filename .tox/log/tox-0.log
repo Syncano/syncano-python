@@ -1,0 +1,95 @@
+actionid: tox
+msg: packaging
+cmdargs: ['/home/ubuntu/virtualenvs/venv-2.7.5/bin/python', local('/home/ubuntu/syncano-python/setup.py'), 'sdist', '--formats=zip', '--dist-dir', local('/home/ubuntu/syncano-python/.tox/dist')]
+env: None
+
+running sdist
+running egg_info
+writing pbr to syncano.egg-info/pbr.json
+writing requirements to syncano.egg-info/requires.txt
+writing syncano.egg-info/PKG-INFO
+writing top-level names to syncano.egg-info/top_level.txt
+writing dependency_links to syncano.egg-info/dependency_links.txt
+reading manifest file 'syncano.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+writing manifest file 'syncano.egg-info/SOURCES.txt'
+running check
+creating syncano-5.0.0
+creating syncano-5.0.0/syncano
+creating syncano-5.0.0/syncano.egg-info
+creating syncano-5.0.0/syncano/models
+making hard links in syncano-5.0.0...
+hard linking MANIFEST.in -> syncano-5.0.0
+hard linking README.rst -> syncano-5.0.0
+hard linking setup.cfg -> syncano-5.0.0
+hard linking setup.py -> syncano-5.0.0
+hard linking syncano/__init__.py -> syncano-5.0.0/syncano
+hard linking syncano/connection.py -> syncano-5.0.0/syncano
+hard linking syncano/exceptions.py -> syncano-5.0.0/syncano
+hard linking syncano/release_utils.py -> syncano-5.0.0/syncano
+hard linking syncano/utils.py -> syncano-5.0.0/syncano
+hard linking syncano.egg-info/PKG-INFO -> syncano-5.0.0/syncano.egg-info
+hard linking syncano.egg-info/SOURCES.txt -> syncano-5.0.0/syncano.egg-info
+hard linking syncano.egg-info/dependency_links.txt -> syncano-5.0.0/syncano.egg-info
+hard linking syncano.egg-info/not-zip-safe -> syncano-5.0.0/syncano.egg-info
+hard linking syncano.egg-info/pbr.json -> syncano-5.0.0/syncano.egg-info
+hard linking syncano.egg-info/requires.txt -> syncano-5.0.0/syncano.egg-info
+hard linking syncano.egg-info/top_level.txt -> syncano-5.0.0/syncano.egg-info
+hard linking syncano/models/__init__.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/accounts.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/archetypes.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/base.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/billing.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/bulk.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/channels.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/classes.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/custom_response.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/data_views.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/fields.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/incentives.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/instances.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/manager.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/options.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/push_notification.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/registry.py -> syncano-5.0.0/syncano/models
+hard linking syncano/models/traces.py -> syncano-5.0.0/syncano/models
+copying setup.cfg -> syncano-5.0.0
+Writing syncano-5.0.0/setup.cfg
+creating .tox/dist
+creating '.tox/dist/syncano-5.0.0.zip' and adding 'syncano-5.0.0' to it
+adding 'syncano-5.0.0/MANIFEST.in'
+adding 'syncano-5.0.0/README.rst'
+adding 'syncano-5.0.0/setup.py'
+adding 'syncano-5.0.0/PKG-INFO'
+adding 'syncano-5.0.0/setup.cfg'
+adding 'syncano-5.0.0/syncano/__init__.py'
+adding 'syncano-5.0.0/syncano/connection.py'
+adding 'syncano-5.0.0/syncano/exceptions.py'
+adding 'syncano-5.0.0/syncano/release_utils.py'
+adding 'syncano-5.0.0/syncano/utils.py'
+adding 'syncano-5.0.0/syncano/models/__init__.py'
+adding 'syncano-5.0.0/syncano/models/accounts.py'
+adding 'syncano-5.0.0/syncano/models/archetypes.py'
+adding 'syncano-5.0.0/syncano/models/base.py'
+adding 'syncano-5.0.0/syncano/models/billing.py'
+adding 'syncano-5.0.0/syncano/models/bulk.py'
+adding 'syncano-5.0.0/syncano/models/channels.py'
+adding 'syncano-5.0.0/syncano/models/classes.py'
+adding 'syncano-5.0.0/syncano/models/custom_response.py'
+adding 'syncano-5.0.0/syncano/models/data_views.py'
+adding 'syncano-5.0.0/syncano/models/fields.py'
+adding 'syncano-5.0.0/syncano/models/incentives.py'
+adding 'syncano-5.0.0/syncano/models/instances.py'
+adding 'syncano-5.0.0/syncano/models/manager.py'
+adding 'syncano-5.0.0/syncano/models/options.py'
+adding 'syncano-5.0.0/syncano/models/push_notification.py'
+adding 'syncano-5.0.0/syncano/models/registry.py'
+adding 'syncano-5.0.0/syncano/models/traces.py'
+adding 'syncano-5.0.0/syncano.egg-info/PKG-INFO'
+adding 'syncano-5.0.0/syncano.egg-info/SOURCES.txt'
+adding 'syncano-5.0.0/syncano.egg-info/dependency_links.txt'
+adding 'syncano-5.0.0/syncano.egg-info/not-zip-safe'
+adding 'syncano-5.0.0/syncano.egg-info/pbr.json'
+adding 'syncano-5.0.0/syncano.egg-info/requires.txt'
+adding 'syncano-5.0.0/syncano.egg-info/top_level.txt'
+removing 'syncano-5.0.0' (and everything under it)

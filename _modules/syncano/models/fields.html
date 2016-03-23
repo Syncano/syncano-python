@@ -83,7 +83,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#environmental-variables">Environmental variables</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../models.html">Available models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../refs/syncano.html">Syncano references</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#submodules">Submodules</a></li>
@@ -137,10 +136,24 @@
 <span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoFieldError</span><span class="p">,</span> <span class="n">SyncanoValueError</span>
 <span class="kn">from</span> <span class="nn">syncano.utils</span> <span class="kn">import</span> <span class="n">force_text</span>
 
-<span class="kn">from</span> <span class="nn">.manager</span> <span class="kn">import</span> <span class="n">RelatedManagerDescriptor</span><span class="p">,</span> <span class="n">SchemaManager</span>
+<span class="kn">from</span> <span class="nn">.manager</span> <span class="kn">import</span> <span class="n">SchemaManager</span>
 <span class="kn">from</span> <span class="nn">.registry</span> <span class="kn">import</span> <span class="n">registry</span>
 
 
+<div class="viewcode-block" id="JSONToPythonMixin"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.JSONToPythonMixin">[docs]</a><span class="k">class</span> <span class="nc">JSONToPythonMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="JSONToPythonMixin.to_python"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.JSONToPythonMixin.to_python">[docs]</a>    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Invalid value: can not be parsed&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+</div></div>
 <div class="viewcode-block" id="Field"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.Field">[docs]</a><span class="k">class</span> <span class="nc">Field</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Base class for all field types.&quot;&quot;&quot;</span>
 
@@ -189,6 +202,8 @@
     <span class="k">def</span> <span class="nf">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Field</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">creation_counter</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">creation_counter</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">creation_counter</span> <span class="o">&lt;</span> <span class="n">other</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
     <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
@@ -285,6 +300,27 @@
         <span class="p">)</span>
 
         <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;ValidationError&#39;</span><span class="p">,</span> <span class="n">error_class</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="RelatedManagerField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.RelatedManagerField">[docs]</a><span class="k">class</span> <span class="nc">RelatedManagerField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="s1">&#39;list&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">RelatedManagerField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="n">endpoint</span>
+
+    <span class="k">def</span> <span class="nf">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">instance</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;RelatedManager is accessible only via {0} instances.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">owner</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
+
+        <span class="n">Model</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">get_model_by_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Model</span><span class="o">.</span><span class="n">please</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">Model</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_endpoint_properties</span><span class="p">(</span><span class="s1">&#39;detail&#39;</span><span class="p">)</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span> <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">method</span><span class="p">(</span><span class="o">*</span><span class="n">properties</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RelatedManagerField.contribute_to_class"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.RelatedManagerField.contribute_to_class">[docs]</a>    <span class="k">def</span> <span class="nf">contribute_to_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 
 </div></div>
 <div class="viewcode-block" id="PrimaryKeyField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.PrimaryKeyField">[docs]</a><span class="k">class</span> <span class="nc">PrimaryKeyField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
@@ -514,25 +550,37 @@
         <span class="k">return</span> <span class="n">ret</span>
 
 </div></div>
-<div class="viewcode-block" id="HyperlinkedField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.HyperlinkedField">[docs]</a><span class="k">class</span> <span class="nc">HyperlinkedField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+<div class="viewcode-block" id="LinksWrapper"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.LinksWrapper">[docs]</a><span class="k">class</span> <span class="nc">LinksWrapper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">links_dict</span><span class="p">,</span> <span class="n">ignored_links</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">links_dict</span> <span class="o">=</span> <span class="n">links_dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignored_links</span> <span class="o">=</span> <span class="n">ignored_links</span>
+
+    <span class="k">def</span> <span class="nf">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">LinksWrapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__getattribute__</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">item</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">links_dict</span> <span class="ow">or</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignored_links</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">links_dict</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
+
+<div class="viewcode-block" id="LinksWrapper.to_native"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.LinksWrapper.to_native">[docs]</a>    <span class="k">def</span> <span class="nf">to_native</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">links_dict</span>
+
+</div></div>
+<div class="viewcode-block" id="LinksField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.LinksField">[docs]</a><span class="k">class</span> <span class="nc">LinksField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
     <span class="n">query_allowed</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="n">IGNORED_LINKS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;self&#39;</span><span class="p">,</span> <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">links</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;links&#39;</span><span class="p">,</span> <span class="p">[])</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">HyperlinkedField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LinksField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="HyperlinkedField.contribute_to_class"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.HyperlinkedField.contribute_to_class">[docs]</a>    <span class="k">def</span> <span class="nf">contribute_to_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">HyperlinkedField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">contribute_to_class</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">link</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-            <span class="n">endpoint</span> <span class="o">=</span> <span class="n">link</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">IGNORED_LINKS</span><span class="p">:</span>
-                <span class="k">continue</span>
-
-            <span class="nb">setattr</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">RelatedManagerDescriptor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">))</span>
+<div class="viewcode-block" id="LinksField.to_python"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.LinksField.to_python">[docs]</a>    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">LinksWrapper</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">IGNORED_LINKS</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="LinksField.to_native"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.LinksField.to_native">[docs]</a>    <span class="k">def</span> <span class="nf">to_native</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span>
 
 </div></div>
 <div class="viewcode-block" id="ModelField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.ModelField">[docs]</a><span class="k">class</span> <span class="nc">ModelField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
@@ -603,7 +651,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">value</span><span class="p">}</span>
 
 </div></div>
-<div class="viewcode-block" id="JSONField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.JSONField">[docs]</a><span class="k">class</span> <span class="nc">JSONField</span><span class="p">(</span><span class="n">WritableField</span><span class="p">):</span>
+<div class="viewcode-block" id="JSONField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.JSONField">[docs]</a><span class="k">class</span> <span class="nc">JSONField</span><span class="p">(</span><span class="n">JSONToPythonMixin</span><span class="p">,</span> <span class="n">WritableField</span><span class="p">):</span>
     <span class="n">query_allowed</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="n">schema</span> <span class="o">=</span> <span class="bp">None</span>
 
@@ -619,14 +667,6 @@
             <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="JSONField.to_python"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.JSONField.to_python">[docs]</a>    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">return</span>
-
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">value</span>
-</div>
 <div class="viewcode-block" id="JSONField.to_native"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.JSONField.to_native">[docs]</a>    <span class="k">def</span> <span class="nf">to_native</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">return</span>
@@ -634,6 +674,47 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">value</span>
+
+</div></div>
+<div class="viewcode-block" id="ArrayField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.ArrayField">[docs]</a><span class="k">class</span> <span class="nc">ArrayField</span><span class="p">(</span><span class="n">JSONToPythonMixin</span><span class="p">,</span> <span class="n">WritableField</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArrayField.validate"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.ArrayField.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">model_instance</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ArrayField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">model_instance</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">required</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Expected an array&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Expected an array&#39;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span> <span class="o">+</span> <span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span>
+                    <span class="s1">&#39;Currently supported types for array items are: string types, bool, float and int&#39;</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="ObjectField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.ObjectField">[docs]</a><span class="k">class</span> <span class="nc">ObjectField</span><span class="p">(</span><span class="n">JSONToPythonMixin</span><span class="p">,</span> <span class="n">WritableField</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ObjectField.validate"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.ObjectField.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">model_instance</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ObjectField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">model_instance</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">required</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Expected an object&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Expected an object&#39;</span><span class="p">)</span>
 
 </div></div>
 <div class="viewcode-block" id="SchemaField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.SchemaField">[docs]</a><span class="k">class</span> <span class="nc">SchemaField</span><span class="p">(</span><span class="n">JSONField</span><span class="p">):</span>
@@ -659,7 +740,9 @@
                         <span class="s1">&#39;boolean&#39;</span><span class="p">,</span>
                         <span class="s1">&#39;datetime&#39;</span><span class="p">,</span>
                         <span class="s1">&#39;file&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;reference&#39;</span>
+                        <span class="s1">&#39;reference&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;array&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;object&#39;</span><span class="p">,</span>
                     <span class="p">],</span>
                 <span class="p">},</span>
                 <span class="s1">&#39;order_index&#39;</span><span class="p">:</span> <span class="p">{</span>
@@ -738,10 +821,12 @@
     <span class="s1">&#39;field&#39;</span><span class="p">:</span> <span class="n">Field</span><span class="p">,</span>
     <span class="s1">&#39;writable&#39;</span><span class="p">:</span> <span class="n">WritableField</span><span class="p">,</span>
     <span class="s1">&#39;endpoint&#39;</span><span class="p">:</span> <span class="n">EndpointField</span><span class="p">,</span>
-    <span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="n">HyperlinkedField</span><span class="p">,</span>
+    <span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="n">LinksField</span><span class="p">,</span>
     <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="n">ModelField</span><span class="p">,</span>
     <span class="s1">&#39;json&#39;</span><span class="p">:</span> <span class="n">JSONField</span><span class="p">,</span>
     <span class="s1">&#39;schema&#39;</span><span class="p">:</span> <span class="n">SchemaField</span><span class="p">,</span>
+    <span class="s1">&#39;array&#39;</span><span class="p">:</span> <span class="n">ArrayField</span><span class="p">,</span>
+    <span class="s1">&#39;object&#39;</span><span class="p">:</span> <span class="n">ObjectField</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
 

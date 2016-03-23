@@ -1,0 +1,273 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>syncano.models.data_views &mdash; Syncano 4.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 4.0.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="syncano" href="../../syncano.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../../index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../refs/syncano.html">Syncano references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../syncano.html">syncano</a> &raquo;</li>
+      
+    <li>syncano.models.data_views</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for syncano.models.data_views</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">.instances</span> <span class="kn">import</span> <span class="n">Instance</span>
+
+
+<span class="k">class</span> <span class="nc">EndpointData</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="EndpointData"><a class="viewcode-back" href="../../../refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData">[docs]</a><span class="sd">    :ivar name: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar description: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar query: :class:`~syncano.models.fields.SchemaField`</span>
+<span class="sd">    :ivar class_name: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar excluded_fields: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar expand: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar order_by: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar page_size: :class:`~syncano.models.fields.IntegerField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">PERMISSIONS_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;none&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Read&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;read&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Write&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;write&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Full&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;full&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="n">query</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">class_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class name&#39;</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="s1">&#39;class&#39;</span><span class="p">)</span>
+
+    <span class="n">excluded_fields</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">expand</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">order_by</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">page_size</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">LinksField</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;put&#39;</span><span class="p">,</span> <span class="s1">&#39;patch&#39;</span><span class="p">,</span> <span class="s1">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/endpoints/data/{name}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/endpoints/data/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;get&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/endpoints/data/{name}/get/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;rename&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/endpoints/data/{name}/rename/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;clear_cache&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/endpoints/data/{name}/clear_cache/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">rename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_name</span><span class="p">):</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_data</span><span class="p">()</span>
+<div class="viewcode-block" id="EndpointData.rename"><a class="viewcode-back" href="../../../refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.rename">[docs]</a>        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;rename&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+                                  <span class="n">endpoint</span><span class="p">,</span>
+                                  <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;new_name&#39;</span><span class="p">:</span> <span class="n">new_name</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">clear_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_data</span><span class="p">()</span></div>
+<div class="viewcode-block" id="EndpointData.clear_cache"><a class="viewcode-back" href="../../../refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.clear_cache">[docs]</a>        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;clear_cache&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_data</span><span class="p">()</span></div>
+<div class="viewcode-block" id="EndpointData.get"><a class="viewcode-back" href="../../../refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.get">[docs]</a>        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">endpoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+            <span class="n">endpoint</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;next&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;objects&#39;</span><span class="p">]:</span>
+                <span class="k">yield</span> <span class="n">obj</span>
+</pre></div></div></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'4.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

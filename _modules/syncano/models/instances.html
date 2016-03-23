@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>syncano.models.instances &mdash; Syncano 4.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 4.0.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="syncano" href="../../syncano.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../../index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../refs/syncano.html">Syncano references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../syncano.html">syncano</a> &raquo;</li>
+      
+    <li>syncano.models.instances</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for syncano.models.instances</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Model</span>
+
+
+<span class="k">class</span> <span class="nc">Instance</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Instance"><a class="viewcode-back" href="../../../refs/syncano.models.instances.html#syncano.models.instances.Instance">[docs]</a><span class="sd">    OO wrapper around instances `link &lt;http://docs.syncano.com/docs/getting-started-with-syncano#adding-an-instance&gt;`_.</span>
+
+<span class="sd">    :ivar name: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar description: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar role: :class:`~syncano.models.fields.Field`</span>
+<span class="sd">    :ivar owner: :class:`~syncano.models.fields.ModelField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    :ivar metadata: :class:`~syncano.models.fields.JSONField`</span>
+<span class="sd">    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    :ivar api_keys: :class:`~syncano.models.fields.RelatedManagerField`</span>
+<span class="sd">    :ivar users: :class:`~syncano.models.fields.RelatedManagerField`</span>
+<span class="sd">    :ivar admins: :class:`~syncano.models.fields.RelatedManagerField`</span>
+<span class="sd">    :ivar scripts: :class:`~syncano.models.fields.RelatedManagerField`</span>
+<span class="sd">    :ivar script_endpoints: :class:`~syncano.models.fields.RelatedManagerField`</span>
+<span class="sd">    :ivar templates: :class:`~syncano.models.fields.RelatedManagerField`</span>
+<span class="sd">    :ivar triggers: :class:`~syncano.models.fields.RelatedManagerField`</span>
+<span class="sd">    :ivar schedules: :class:`~syncano.models.fields.RelatedManagerField`</span>
+<span class="sd">    :ivar classes: :class:`~syncano.models.fields.RelatedManagerField`</span>
+<span class="sd">    :ivar invitations: :class:`~syncano.models.fields.RelatedManagerField`</span>
+<span class="sd">    :ivar gcm_devices: :class:`~syncano.models.fields.RelatedManagerField`</span>
+<span class="sd">    :ivar gcm_messages: :class:`~syncano.models.fields.RelatedManagerField`</span>
+<span class="sd">    :ivar apns_devices: :class:`~syncano.models.fields.RelatedManagerField`</span>
+<span class="sd">    :ivar apns_messages: :class:`~syncano.models.fields.RelatedManagerField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">role</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">owner</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ModelField</span><span class="p">(</span><span class="s1">&#39;Admin&#39;</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">LinksField</span><span class="p">()</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="c1"># user related fields;</span>
+    <span class="n">api_keys</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;ApiKey&#39;</span><span class="p">)</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;User&#39;</span><span class="p">)</span>
+    <span class="n">admins</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;Admin&#39;</span><span class="p">)</span>
+    <span class="n">groups</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;Group&#39;</span><span class="p">)</span>
+
+    <span class="c1"># snippets and data fields;</span>
+    <span class="n">scripts</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;Script&#39;</span><span class="p">)</span>
+    <span class="n">script_endpoints</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;ScriptEndpoint&#39;</span><span class="p">)</span>
+    <span class="n">templates</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;ResponseTemplate&#39;</span><span class="p">)</span>
+
+    <span class="n">triggers</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;Trigger&#39;</span><span class="p">)</span>
+    <span class="n">schedules</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;Schedule&#39;</span><span class="p">)</span>
+    <span class="n">classes</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;Class&#39;</span><span class="p">)</span>
+    <span class="n">invitations</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;InstanceInvitation&#39;</span><span class="p">)</span>
+
+    <span class="c1"># push notifications fields;</span>
+    <span class="n">gcm_devices</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;GCMDevice&#39;</span><span class="p">)</span>
+    <span class="n">gcm_messages</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;GCMMessage&#39;</span><span class="p">)</span>
+    <span class="n">apns_devices</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;APNSDevice&#39;</span><span class="p">)</span>
+    <span class="n">apns_messages</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelatedManagerField</span><span class="p">(</span><span class="s1">&#39;APNSMessage&#39;</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;delete&#39;</span><span class="p">,</span> <span class="s1">&#39;patch&#39;</span><span class="p">,</span> <span class="s1">&#39;put&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/v1.1/instances/{name}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/v1.1/instances/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">rename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Instance.rename"><a class="viewcode-back" href="../../../refs/syncano.models.instances.html#syncano.models.instances.Instance.rename">[docs]</a><span class="sd">        A method for changing the instance name;</span>
+
+<span class="sd">        :param new_name: the new name for the instance;</span>
+<span class="sd">        :return: a populated Instance object;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rename_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">rename</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;new_name&#39;</span><span class="p">:</span> <span class="n">new_name</span><span class="p">}</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">rename_path</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+
+<span class="k">class</span> <span class="nc">ApiKey</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span></div></div>
+<div class="viewcode-block" id="ApiKey"><a class="viewcode-back" href="../../../refs/syncano.models.instances.html#syncano.models.instances.ApiKey">[docs]</a><span class="sd">    OO wrapper around instance api keys `link &lt;http://docs.syncano.com/docs/authentication&gt;`_.</span>
+
+<span class="sd">    :ivar api_key: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar allow_user_create: :class:`~syncano.models.fields.BooleanField`</span>
+<span class="sd">    :ivar ignore_acl: :class:`~syncano.models.fields.BooleanField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">api_key</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">allow_user_create</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">ignore_acl</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">allow_anonymous_read</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">LinksField</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/api_keys/{id}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/api_keys/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+
+<span class="k">class</span> <span class="nc">InstanceInvitation</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span></div>
+<div class="viewcode-block" id="InstanceInvitation"><a class="viewcode-back" href="../../../refs/syncano.models.instances.html#syncano.models.instances.InstanceInvitation">[docs]</a><span class="sd">    OO wrapper around instance</span>
+<span class="sd">    invitations `link &lt;http://docs.syncano.com/docs/administrators#inviting-administrators&gt;`_.</span>
+
+<span class="sd">    :ivar email: :class:`~syncano.models.fields.EmailField`</span>
+<span class="sd">    :ivar role: :class:`~syncano.models.fields.ChoiceField`</span>
+<span class="sd">    :ivar key: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar state: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
+<span class="sd">    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">.accounts</span> <span class="kn">import</span> <span class="n">Admin</span>
+
+    <span class="n">email</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">254</span><span class="p">)</span>
+    <span class="n">role</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">Admin</span><span class="o">.</span><span class="n">ROLE_CHOICES</span><span class="p">)</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">LinksField</span><span class="p">()</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Invitation&#39;</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/invitations/{id}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/invitations/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+</pre></div></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'4.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

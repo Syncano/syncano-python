@@ -1,0 +1,672 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>syncano.models.push_notification &mdash; Syncano 4.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 4.0.0 documentation" href="../index.html"/>
+        <link rel="up" title="syncano.models" href="syncano.models.html"/>
+        <link rel="next" title="syncano.models.registry" href="syncano.models.registry.html"/>
+        <link rel="prev" title="syncano.models.options" href="syncano.models.options.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="syncano.html">Syncano references</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="syncano.html">Syncano references</a> &raquo;</li>
+      
+          <li><a href="syncano.models.html">syncano.models</a> &raquo;</li>
+      
+    <li>syncano.models.push_notification</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/refs/syncano.models.push_notification.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="module-syncano.models.push_notification">
+<span id="syncano-models-push-notification"></span><h1>syncano.models.push_notification<a class="headerlink" href="#module-syncano.models.push_notification" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="syncano.models.push_notification.DeviceBase">
+<em class="property">class </em><tt class="descname">DeviceBase</tt><a class="reference internal" href="../_modules/syncano/models/push_notification.html#DeviceBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.DeviceBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Base abstract class for GCM and APNS Devices;</p>
+<dl class="attribute">
+<dt id="syncano.models.push_notification.DeviceBase.LINKS">
+<tt class="descname">LINKS</tt><em class="property"> = ({'type': 'detail', 'name': 'self'},)</em><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.LINKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.DeviceBase.registration_id">
+<tt class="descname">registration_id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.registration_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.DeviceBase.device_id">
+<tt class="descname">device_id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.device_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.DeviceBase.is_active">
+<tt class="descname">is_active</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.is_active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.DeviceBase.label">
+<tt class="descname">label</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.DeviceBase.user">
+<tt class="descname">user</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.DeviceBase.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.DeviceBase.updated_at">
+<tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.push_notification.DeviceBase.Meta">
+<em class="property">class </em><tt class="descname">Meta</tt><a class="reference internal" href="../_modules/syncano/models/push_notification.html#DeviceBase.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="syncano.models.push_notification.DeviceBase.Meta.abstract">
+<tt class="descname">abstract</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.Meta.abstract" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.push_notification.DeviceBase.is_new">
+<tt class="descclassname">DeviceBase.</tt><tt class="descname">is_new</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/push_notification.html#DeviceBase.is_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.is_new" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.push_notification.GCMDevice">
+<em class="property">class </em><tt class="descname">GCMDevice</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/push_notification.html#GCMDevice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.GCMDevice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.push_notification.DeviceBase" title="syncano.models.push_notification.DeviceBase"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.push_notification.DeviceBase</span></tt></a>, <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>Model which handles the Google Cloud Message Device.
+CORE supports only Create, Delete and Read;</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>Create a new Device:
+gcm_device = GCMDevice(
+    label=&#39;example label&#39;,
+    registration_id=86152312314401555,
+    user_id=u.id,
+    device_id=&#39;10000000001&#39;,
+)
+
+gcm_device.save()
+
+Read:
+gcm_device = GCMDevice.please.get(registration_id=86152312314401554)
+
+Delete:
+gcm_device.delete()
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">another save on the same object will always fail (altering the Device data is currently not possible);</p>
+</div>
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMDevice.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.push_notification.GCMDevice.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">GCMDeviceDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMDevice.LINKS">
+<tt class="descname">LINKS</tt><em class="property"> = ({'type': 'detail', 'name': 'self'},)</em><a class="headerlink" href="#syncano.models.push_notification.GCMDevice.LINKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMDevice.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMDevice.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMDevice.device_id">
+<tt class="descname">device_id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMDevice.device_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMDevice.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMDevice.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMDevice.is_active">
+<tt class="descname">is_active</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMDevice.is_active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMDevice.label">
+<tt class="descname">label</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMDevice.label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMDevice.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMDevice.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMDevice.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.push_notification.GCMDevice.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMDevice.registration_id">
+<tt class="descname">registration_id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMDevice.registration_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMDevice.updated_at">
+<tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMDevice.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMDevice.user">
+<tt class="descname">user</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMDevice.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.push_notification.APNSDevice">
+<em class="property">class </em><tt class="descname">APNSDevice</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/push_notification.html#APNSDevice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.APNSDevice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.push_notification.DeviceBase" title="syncano.models.push_notification.DeviceBase"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.push_notification.DeviceBase</span></tt></a>, <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>Model which handles the Apple Push Notification Server Device.
+CORE supports only Create, Delete and Read;</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>Create a new Device:
+apns_device = APNSDevice(
+    label=&#39;example label&#39;,
+    registration_id=&#39;4719084371920471208947120984731208947910827409128470912847120894&#39;,
+    user_id=u.id,
+    device_id=&#39;7189d7b9-4dea-4ecc-aa59-8cc61a20608a&#39;,
+)
+apns_device.save()
+
+Read:
+apns_device =
+    APNSDevice.please.get(registration_id=&#39;4719084371920471208947120984731208947910827409128470912847120894&#39;)
+
+Delete:
+apns_device.delete()
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">another save on the same object will always fail (altering the Device data is currently not possible);</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Also note the different format (from GCM) of registration_id required by APNS; the device_id have different
+format too.</p>
+</div>
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSDevice.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.push_notification.APNSDevice.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">APNSDeviceDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSDevice.LINKS">
+<tt class="descname">LINKS</tt><em class="property"> = ({'type': 'detail', 'name': 'self'},)</em><a class="headerlink" href="#syncano.models.push_notification.APNSDevice.LINKS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSDevice.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSDevice.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSDevice.device_id">
+<tt class="descname">device_id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSDevice.device_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSDevice.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSDevice.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSDevice.is_active">
+<tt class="descname">is_active</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSDevice.is_active" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSDevice.label">
+<tt class="descname">label</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSDevice.label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSDevice.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSDevice.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSDevice.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.push_notification.APNSDevice.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSDevice.registration_id">
+<tt class="descname">registration_id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSDevice.registration_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSDevice.updated_at">
+<tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSDevice.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSDevice.user">
+<tt class="descname">user</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSDevice.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.push_notification.MessageBase">
+<em class="property">class </em><tt class="descname">MessageBase</tt><a class="reference internal" href="../_modules/syncano/models/push_notification.html#MessageBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.MessageBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Base abstract class for GCM and APNS Messages;</p>
+<dl class="attribute">
+<dt id="syncano.models.push_notification.MessageBase.status">
+<tt class="descname">status</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.MessageBase.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.MessageBase.content">
+<tt class="descname">content</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.MessageBase.content" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.MessageBase.result">
+<tt class="descname">result</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.MessageBase.result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.MessageBase.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.MessageBase.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.MessageBase.updated_at">
+<tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.MessageBase.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.push_notification.MessageBase.Meta">
+<em class="property">class </em><tt class="descname">Meta</tt><a class="reference internal" href="../_modules/syncano/models/push_notification.html#MessageBase.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.MessageBase.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="syncano.models.push_notification.MessageBase.Meta.abstract">
+<tt class="descname">abstract</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.push_notification.MessageBase.Meta.abstract" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.push_notification.GCMMessage">
+<em class="property">class </em><tt class="descname">GCMMessage</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/push_notification.html#GCMMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.GCMMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.push_notification.MessageBase" title="syncano.models.push_notification.MessageBase"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.push_notification.MessageBase</span></tt></a>, <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>Model which handles the Google Cloud Messaging Message.
+Only creating and reading is allowed.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>Create a new Message:
+
+message = GCMMessage(
+    content={
+        &#39;registration_ids&#39;: [gcm_device.registration_id],  # maximum 1000 elements;
+        &#39;data&#39;: {
+            &#39;example_data_one&#39;: 1,
+            &#39;example_data_two&#39;: 2,
+        }
+    }
+)
+message.save()
+
+
+Read:
+
+gcm_message = GCMMessage.please.get(id=1)
+
+Debugging:
+
+gcm_message.status - on of the (scheduled, error, partially_delivered, delivered)
+gcm_message.result - a result from GCM server;
+</pre></div>
+</div>
+<p>The data parameter is passed as-it-is to the GCM server; Base checking is made on syncano CORE;
+For more details read the GCM documentation;</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Every save after initial one will raise an error;</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The altering of existing Message is not possible. It also not possible to delete message.</p>
+</div>
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMMessage.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.push_notification.GCMMessage.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">GCMMessageDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMMessage.content">
+<tt class="descname">content</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMMessage.content" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMMessage.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMMessage.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMMessage.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMMessage.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMMessage.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMMessage.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMMessage.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMMessage.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMMessage.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.push_notification.GCMMessage.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMMessage.result">
+<tt class="descname">result</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMMessage.result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMMessage.status">
+<tt class="descname">status</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMMessage.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMMessage.updated_at">
+<tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMMessage.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.push_notification.APNSMessage">
+<em class="property">class </em><tt class="descname">APNSMessage</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/push_notification.html#APNSMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.APNSMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.push_notification.MessageBase" title="syncano.models.push_notification.MessageBase"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.push_notification.MessageBase</span></tt></a>, <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>Model which handles the Apple Push Notification Server Message.
+Only creating and reading is allowed.</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>Create new Message:
+apns_message = APNSMessage(
+    content={
+        &#39;registration_ids&#39;: [gcm_device.registration_id],
+        &#39;aps&#39;: {&#39;alert&#39;: &#39;test alert&#39;},
+    }
+)
+
+apns_message.save()
+
+Read:
+
+apns_message = APNSMessage.please.get(id=1)
+
+Debugging:
+
+apns_message.status - one of the following: scheduled, error, partially_delivered, delivered;
+apns_message.result - a result from APNS server;
+</pre></div>
+</div>
+<p>The &#8216;aps&#8217; data is send &#8216;as-it-is&#8217; to APNS, some validation is made on syncano CORE;
+For more details read the APNS documentation;</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Every save after initial one will raise an error;</p>
+</div>
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSMessage.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.push_notification.APNSMessage.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">APNSMessageDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSMessage.content">
+<tt class="descname">content</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSMessage.content" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSMessage.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSMessage.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSMessage.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSMessage.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSMessage.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSMessage.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSMessage.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSMessage.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSMessage.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.push_notification.APNSMessage.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSMessage.result">
+<tt class="descname">result</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSMessage.result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSMessage.status">
+<tt class="descname">status</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSMessage.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSMessage.updated_at">
+<tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSMessage.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="syncano.models.registry.html" class="btn btn-neutral float-right" title="syncano.models.registry"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="syncano.models.options.html" class="btn btn-neutral" title="syncano.models.options"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'4.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

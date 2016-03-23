@@ -1,0 +1,578 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>syncano.models.accounts &mdash; Syncano 4.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 4.0.0 documentation" href="../index.html"/>
+        <link rel="up" title="syncano.models" href="syncano.models.html"/>
+        <link rel="next" title="syncano.models.archetypes" href="syncano.models.archetypes.html"/>
+        <link rel="prev" title="syncano.models.manager" href="syncano.models.manager.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="syncano.html">Syncano references</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="syncano.html">Syncano references</a> &raquo;</li>
+      
+          <li><a href="syncano.models.html">syncano.models</a> &raquo;</li>
+      
+    <li>syncano.models.accounts</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/refs/syncano.models.accounts.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="module-syncano.models.accounts">
+<span id="syncano-models-accounts"></span><h1>syncano.models.accounts<a class="headerlink" href="#module-syncano.models.accounts" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="syncano.models.accounts.Admin">
+<em class="property">class </em><tt class="descname">Admin</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/accounts.html#Admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.accounts.Admin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>OO wrapper around instance admins <a class="reference external" href="http://docs.syncano.com/docs/administrators">link</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>first_name</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>last_name</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>email</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.EmailField" title="syncano.models.fields.EmailField"><tt class="xref py py-class docutils literal"><span class="pre">EmailField</span></tt></a></li>
+<li><strong>role</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.ChoiceField" title="syncano.models.fields.ChoiceField"><tt class="xref py py-class docutils literal"><span class="pre">ChoiceField</span></tt></a></li>
+<li><strong>links</strong> &#8211; <tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="syncano.models.accounts.Admin.ROLE_CHOICES">
+<tt class="descname">ROLE_CHOICES</tt><em class="property"> = ({'display_name': 'full', 'value': 'full'}, {'display_name': 'write', 'value': 'write'}, {'display_name': 'read', 'value': 'read'})</em><a class="headerlink" href="#syncano.models.accounts.Admin.ROLE_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Admin.first_name">
+<tt class="descname">first_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Admin.first_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Admin.last_name">
+<tt class="descname">last_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Admin.last_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Admin.email">
+<tt class="descname">email</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Admin.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Admin.role">
+<tt class="descname">role</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Admin.role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Admin.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Admin.links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Admin.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.accounts.Admin.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">AdminDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Admin.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Admin.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Admin.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Admin.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Admin.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Admin.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Admin.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.accounts.Admin.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.accounts.Profile">
+<em class="property">class </em><tt class="descname">Profile</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/accounts.html#Profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.accounts.Profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.models.classes.html#syncano.models.classes.DataObjectMixin" title="syncano.models.classes.DataObjectMixin"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.classes.DataObjectMixin</span></tt></a>, <a class="reference internal" href="syncano.models.classes.html#syncano.models.classes.Object" title="syncano.models.classes.Object"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.classes.Object</span></tt></a></p>
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.PREDEFINED_CLASS_NAME">
+<tt class="descname">PREDEFINED_CLASS_NAME</tt><em class="property"> = 'user_profile'</em><a class="headerlink" href="#syncano.models.accounts.Profile.PREDEFINED_CLASS_NAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.PERMISSIONS_CHOICES">
+<tt class="descname">PERMISSIONS_CHOICES</tt><em class="property"> = ({'display_name': 'None', 'value': 'none'}, {'display_name': 'Read', 'value': 'read'}, {'display_name': 'Write', 'value': 'write'}, {'display_name': 'Full', 'value': 'full'})</em><a class="headerlink" href="#syncano.models.accounts.Profile.PERMISSIONS_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.owner">
+<tt class="descname">owner</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Profile.owner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.owner_permissions">
+<tt class="descname">owner_permissions</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Profile.owner_permissions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.group">
+<tt class="descname">group</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Profile.group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.group_permissions">
+<tt class="descname">group_permissions</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Profile.group_permissions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.other_permissions">
+<tt class="descname">other_permissions</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Profile.other_permissions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.channel">
+<tt class="descname">channel</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Profile.channel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.channel_room">
+<tt class="descname">channel_room</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Profile.channel_room" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Profile.links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Profile.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.updated_at">
+<tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Profile.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.accounts.Profile.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.accounts.Profile.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">ProfileDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.class_name">
+<tt class="descname">class_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Profile.class_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Profile.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Profile.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Profile.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Profile.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.accounts.User">
+<em class="property">class </em><tt class="descname">User</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/accounts.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.accounts.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>OO wrapper around users <a class="reference external" href="http://docs.syncano.com/docs/user-management">link</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>username</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>password</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>user_key</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>links</strong> &#8211; <tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></li>
+<li><strong>created_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+<li><strong>updated_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="syncano.models.accounts.User.username">
+<tt class="descname">username</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.User.username" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.User.password">
+<tt class="descname">password</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.User.password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.User.user_key">
+<tt class="descname">user_key</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.User.user_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.User.profile">
+<tt class="descname">profile</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.User.profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.User.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.User.links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.User.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.User.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.User.updated_at">
+<tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.User.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.accounts.User.reset_key">
+<tt class="descname">reset_key</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/accounts.html#User.reset_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.accounts.User.reset_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.accounts.User.add_to_group">
+<tt class="descname">add_to_group</tt><big>(</big><em>group_id</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/accounts.html#User.add_to_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.accounts.User.add_to_group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.accounts.User.list_groups">
+<tt class="descname">list_groups</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/accounts.html#User.list_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.accounts.User.list_groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.accounts.User.group_details">
+<tt class="descname">group_details</tt><big>(</big><em>group_id</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/accounts.html#User.group_details"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.accounts.User.group_details" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.accounts.User.remove_from_group">
+<tt class="descname">remove_from_group</tt><big>(</big><em>group_id</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/accounts.html#User.remove_from_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.accounts.User.remove_from_group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.User.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.accounts.User.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">UserDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.User.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.User.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.User.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.User.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.User.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.User.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.User.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.accounts.User.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.accounts.Group">
+<em class="property">class </em><tt class="descname">Group</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/accounts.html#Group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.accounts.Group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>OO wrapper around groups <a class="reference external" href="http://docs.syncano.com/docs/groups">link</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>label</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>description</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>links</strong> &#8211; <tt class="xref py py-class docutils literal"><span class="pre">HyperlinkedField</span></tt></li>
+<li><strong>created_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+<li><strong>updated_at</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.DateTimeField" title="syncano.models.fields.DateTimeField"><tt class="xref py py-class docutils literal"><span class="pre">DateTimeField</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="syncano.models.accounts.Group.label">
+<tt class="descname">label</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Group.label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Group.description">
+<tt class="descname">description</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Group.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Group.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Group.links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Group.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Group.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Group.updated_at">
+<tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Group.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.accounts.Group.list_users">
+<tt class="descname">list_users</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/accounts.html#Group.list_users"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.accounts.Group.list_users" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.accounts.Group.add_user">
+<tt class="descname">add_user</tt><big>(</big><em>user_id</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/accounts.html#Group.add_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.accounts.Group.add_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.accounts.Group.user_details">
+<tt class="descname">user_details</tt><big>(</big><em>user_id</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/accounts.html#Group.user_details"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.accounts.Group.user_details" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.accounts.Group.delete_user">
+<tt class="descname">delete_user</tt><big>(</big><em>user_id</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/accounts.html#Group.delete_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.accounts.Group.delete_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Group.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.accounts.Group.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">GroupDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Group.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Group.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Group.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Group.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Group.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.accounts.Group.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.accounts.Group.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.accounts.Group.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="syncano.models.archetypes.html" class="btn btn-neutral float-right" title="syncano.models.archetypes"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="syncano.models.manager.html" class="btn btn-neutral" title="syncano.models.manager"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'4.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>syncano.models.channels &mdash; Syncano 4.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 4.0.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="syncano" href="../../syncano.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../../index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../refs/syncano.html">Syncano references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../syncano.html">syncano</a> &raquo;</li>
+      
+    <li>syncano.models.channels</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for syncano.models.channels</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">Timeout</span>
+<span class="kn">from</span> <span class="nn">syncano</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">.instances</span> <span class="kn">import</span> <span class="n">Instance</span>
+
+
+<div class="viewcode-block" id="PollThread"><a class="viewcode-back" href="../../../refs/syncano.models.channels.html#syncano.models.channels.PollThread">[docs]</a><span class="k">class</span> <span class="nc">PollThread</span><span class="p">(</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span> <span class="o">=</span> <span class="n">connection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="n">endpoint</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callback</span> <span class="o">=</span> <span class="n">callback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="n">error</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">abort</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_id</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;last_id&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">room</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;room&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PollThread</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> created.&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;PollThread: </span><span class="si">%s</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">getName</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">six</span><span class="o">.</span><span class="n">u</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+<div class="viewcode-block" id="PollThread.request"><a class="viewcode-back" href="../../../refs/syncano.models.channels.html#syncano.models.channels.PollThread.request">[docs]</a>    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;timeout&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
+            <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;last_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_id</span><span class="p">,</span> <span class="s1">&#39;room&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">room</span><span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="PollThread.run"><a class="viewcode-back" href="../../../refs/syncano.models.channels.html#syncano.models.channels.PollThread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">abort</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">Timeout</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> Timeout.&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="bp">None</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> Error &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> Message &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">last_id</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">Message</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="PollThread.stop"><a class="viewcode-back" href="../../../refs/syncano.models.channels.html#syncano.models.channels.PollThread.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">abort</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callback</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="bp">None</span>
+
+</div></div>
+<div class="viewcode-block" id="Channel"><a class="viewcode-back" href="../../../refs/syncano.models.channels.html#syncano.models.channels.Channel">[docs]</a><span class="k">class</span> <span class="nc">Channel</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    .. _long polling: http://en.wikipedia.org/wiki/Push_technology#Long_polling</span>
+
+<span class="sd">    OO wrapper around channels `link http://docs.syncano.io/docs/realtime-communication`_.</span>
+
+<span class="sd">    :ivar name: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar type: :class:`~syncano.models.fields.ChoiceField`</span>
+<span class="sd">    :ivar group: :class:`~syncano.models.fields.IntegerField`</span>
+<span class="sd">    :ivar group_permissions: :class:`~syncano.models.fields.ChoiceField`</span>
+<span class="sd">    :ivar other_permissions: :class:`~syncano.models.fields.ChoiceField`</span>
+<span class="sd">    :ivar custom_publish: :class:`~syncano.models.fields.BooleanField`</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        **Channel** has two special methods called ``publish`` and ``poll``.</span>
+<span class="sd">        First one will send message to the channel::</span>
+
+<span class="sd">            &gt;&gt;&gt; channel = Channel.please.get(&#39;instance-name&#39;, &#39;channel-name&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; channel.publish({&quot;x&quot;: 1})</span>
+
+<span class="sd">        second one will create `long polling`_ connection which will listen for messages::</span>
+
+<span class="sd">            &gt;&gt;&gt; def callback(message=None):</span>
+<span class="sd">            ...    print message</span>
+<span class="sd">            ...    return True</span>
+
+<span class="sd">            &gt;&gt;&gt; channel = Channel.please.get(&#39;instance-name&#39;, &#39;channel-name&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; channel.poll(callback=callback)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TYPE_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Default&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;default&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Separate rooms&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;separate_rooms&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">PERMISSIONS_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;none&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Subscribe&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;subscribe&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Publish&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;publish&#39;</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="nb">type</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">TYPE_CHOICES</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">)</span>
+    <span class="n">group</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;group id&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">group_permissions</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">PERMISSIONS_CHOICES</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+    <span class="n">other_permissions</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">PERMISSIONS_CHOICES</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+    <span class="n">custom_publish</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">LinksField</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;put&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;patch&#39;</span><span class="p">,</span> <span class="s1">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/channels/{name}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/channels/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;poll&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/channels/{name}/poll/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;publish&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/channels/{name}/publish/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;history&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/channels/{name}/history/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="Channel.poll"><a class="viewcode-back" href="../../../refs/syncano.models.channels.html#syncano.models.channels.Channel.poll">[docs]</a>    <span class="k">def</span> <span class="nf">poll</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">last_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_data</span><span class="p">()</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;poll&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
+
+        <span class="n">thread</span> <span class="o">=</span> <span class="n">PollThread</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+                            <span class="n">last_id</span><span class="o">=</span><span class="n">last_id</span><span class="p">,</span> <span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;poll_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">thread</span><span class="o">.</span><span class="n">stop</span>
+</div>
+<div class="viewcode-block" id="Channel.publish"><a class="viewcode-back" href="../../../refs/syncano.models.channels.html#syncano.models.channels.Channel.publish">[docs]</a>    <span class="k">def</span> <span class="nf">publish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">room</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_data</span><span class="p">()</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;publish&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">Message</span><span class="p">(</span><span class="n">payload</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">room</span><span class="o">=</span><span class="n">room</span><span class="p">)</span><span class="o">.</span><span class="n">to_native</span><span class="p">()}</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">request</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Message</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Message"><a class="viewcode-back" href="../../../refs/syncano.models.channels.html#syncano.models.channels.Message">[docs]</a><span class="k">class</span> <span class="nc">Message</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around channel hisotry `link http://docs.syncano.io/docs/realtime-communication`_.</span>
+
+<span class="sd">    :ivar room: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar action: :class:`~syncano.models.fields.ChoiceField`</span>
+<span class="sd">    :ivar author: :class:`~syncano.models.fields.JSONField`</span>
+<span class="sd">    :ivar metadata: :class:`~syncano.models.fields.JSONField`</span>
+<span class="sd">    :ivar payload: :class:`~syncano.models.fields.JSONField`</span>
+<span class="sd">    :ivar created_at: :class:`~syncano.models.fields.DateTimeField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ACTION_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;custom&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;create&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;update&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;delete&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">},</span>
+    <span class="p">)</span>
+
+    <span class="n">room</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">ACTION_CHOICES</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">()</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Channel</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/history/{pk}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/history/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'4.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

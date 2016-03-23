@@ -1,0 +1,317 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>syncano.models.custom_response &mdash; Syncano 4.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 4.0.0 documentation" href="../index.html"/>
+        <link rel="up" title="syncano.models" href="syncano.models.html"/>
+        <link rel="next" title="syncano.models.data_views" href="syncano.models.data_views.html"/>
+        <link rel="prev" title="syncano.models.classes" href="syncano.models.classes.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="syncano.html">Syncano references</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="syncano.html">Syncano references</a> &raquo;</li>
+      
+          <li><a href="syncano.models.html">syncano.models</a> &raquo;</li>
+      
+    <li>syncano.models.custom_response</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/refs/syncano.models.custom_response.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="module-syncano.models.custom_response">
+<span id="syncano-models-custom-response"></span><h1>syncano.models.custom_response<a class="headerlink" href="#module-syncano.models.custom_response" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="syncano.models.custom_response.CustomResponseHandler">
+<em class="property">class </em><tt class="descname">CustomResponseHandler</tt><a class="reference internal" href="../_modules/syncano/models/custom_response.html#CustomResponseHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_response.CustomResponseHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>A helper class which allows to define and maintain custom response handlers.</p>
+<p>Consider an example:
+Script code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">set_response</span><span class="p">(</span><span class="n">HttpResponse</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="s1">&#39;{&quot;one&quot;: 1}&#39;</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>When suitable ScriptTrace is used:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>trace = ScriptTrace.please.get(id=&lt;code_box_trace_id&gt;, script=&lt;script_id&gt;)
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Then trace object will have a content attribute, which will be a dict created from json (simple: json.loads under</dt>
+<dd>the hood);</dd>
+</dl>
+<p>So this is possible:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">trace</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>And the trace.content is equal to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;one&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The handler can be easily overwrite:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">custom_handler</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;content&#39;</span><span class="p">])[</span><span class="s1">&#39;one&#39;</span><span class="p">]</span>
+
+<span class="n">trace</span><span class="o">.</span><span class="n">response_handler</span><span class="o">.</span><span class="n">overwrite_handler</span><span class="p">(</span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="n">custom_handler</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or globally:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ScriptTrace</span><span class="o">.</span><span class="n">response_handler</span><span class="o">.</span><span class="n">overwrite_handler</span><span class="p">(</span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="n">custom_handler</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Then trace.content is equal to::</dt>
+<dd>1</dd>
+<dt>Currently supported content_types (but any handler can be defined):</dt>
+<dd><ul class="first last simple">
+<li>application/json</li>
+<li>text/plain</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="syncano.models.custom_response.CustomResponseHandler.register_handler">
+<tt class="descname">register_handler</tt><big>(</big><em>content_type</em>, <em>handler</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_response.html#CustomResponseHandler.register_handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_response.CustomResponseHandler.register_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.custom_response.CustomResponseHandler.overwrite_handler">
+<tt class="descname">overwrite_handler</tt><big>(</big><em>content_type</em>, <em>handler</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_response.html#CustomResponseHandler.overwrite_handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_response.CustomResponseHandler.overwrite_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.custom_response.CustomResponseHandler.process_response">
+<tt class="descname">process_response</tt><big>(</big><em>response</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_response.html#CustomResponseHandler.process_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_response.CustomResponseHandler.process_response" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="syncano.models.custom_response.CustomResponseHandler.json_handler">
+<em class="property">static </em><tt class="descname">json_handler</tt><big>(</big><em>response</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_response.html#CustomResponseHandler.json_handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_response.CustomResponseHandler.json_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="syncano.models.custom_response.CustomResponseHandler.plain_handler">
+<em class="property">static </em><tt class="descname">plain_handler</tt><big>(</big><em>response</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_response.html#CustomResponseHandler.plain_handler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_response.CustomResponseHandler.plain_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.custom_response.CustomResponseMixin">
+<em class="property">class </em><tt class="descname">CustomResponseMixin</tt><a class="reference internal" href="../_modules/syncano/models/custom_response.html#CustomResponseMixin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_response.CustomResponseMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="docutils">
+<dt>A mixin which extends the Script and ScriptEndpoint traces (and any other Model - if used) with following fields:</dt>
+<dd><ul class="first last simple">
+<li>content - This is the response data if set_response is used in Script code, otherwise it is the &#8216;stdout&#8217; field;</li>
+<li>content_type - The content_type specified by the user in Script code;</li>
+<li>status_code - The status_code specified by the user in Script code;</li>
+<li>error - An error which can occur when code is executed: the stderr response field;</li>
+</ul>
+</dd>
+</dl>
+<p>To process the content based on content_type this Mixin uses the CustomResponseHandler - see the docs there.</p>
+<dl class="attribute">
+<dt id="syncano.models.custom_response.CustomResponseMixin.response_handler">
+<tt class="descname">response_handler</tt><em class="property"> = &lt;syncano.models.custom_response.CustomResponseHandler object at 0x2ad3fd0&gt;</em><a class="headerlink" href="#syncano.models.custom_response.CustomResponseMixin.response_handler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_response.CustomResponseMixin.content">
+<tt class="descname">content</tt><a class="reference internal" href="../_modules/syncano/models/custom_response.html#CustomResponseMixin.content"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_response.CustomResponseMixin.content" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_response.CustomResponseMixin.status_code">
+<tt class="descname">status_code</tt><a class="reference internal" href="../_modules/syncano/models/custom_response.html#CustomResponseMixin.status_code"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_response.CustomResponseMixin.status_code" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_response.CustomResponseMixin.error">
+<tt class="descname">error</tt><a class="reference internal" href="../_modules/syncano/models/custom_response.html#CustomResponseMixin.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_response.CustomResponseMixin.error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_response.CustomResponseMixin.content_type">
+<tt class="descname">content_type</tt><a class="reference internal" href="../_modules/syncano/models/custom_response.html#CustomResponseMixin.content_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_response.CustomResponseMixin.content_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="syncano.models.data_views.html" class="btn btn-neutral float-right" title="syncano.models.data_views"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="syncano.models.classes.html" class="btn btn-neutral" title="syncano.models.classes"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'4.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
