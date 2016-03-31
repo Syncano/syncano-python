@@ -1,26 +1,16 @@
 import json
 from copy import deepcopy
-from functools import wraps
 
 import six
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoRequestError, SyncanoValidationError, SyncanoValueError
 from syncano.models.bulk import ModelBulkCreate, ObjectBulkCreate
+from syncano.models.manager_mixins import IncrementMixin, clone
 
 from .registry import registry
 
 # The maximum number of items to display in a Manager.__repr__
 REPR_OUTPUT_SIZE = 20
-
-
-def clone(func):
-    """Decorator which will ensure that we are working on copy of ``self``.
-    """
-    @wraps(func)
-    def inner(self, *args, **kwargs):
-        self = self._clone()
-        return func(self, *args, **kwargs)
-    return inner
 
 
 class ManagerDescriptor(object):
@@ -882,7 +872,7 @@ class ScriptEndpointManager(Manager):
         return registry.ScriptEndpointTrace(**response)
 
 
-class ObjectManager(Manager):
+class ObjectManager(IncrementMixin, Manager):
     """
     Custom :class:`~syncano.models.manager.Manager`
     class for :class:`~syncano.models.base.Object` model.
