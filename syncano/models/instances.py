@@ -157,3 +157,13 @@ class InstanceInvitation(Model):
                 'path': '/invitations/',
             }
         }
+
+    def resend(self):
+        """
+        Resend the invitation.
+        :return: InstanceInvitation instance;
+        """
+        resend_path = self.links.resend
+        connection = self._get_connection()
+        connection.request('POST', resend_path)  # empty response here: 204 no content
+        return self
