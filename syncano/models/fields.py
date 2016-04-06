@@ -39,6 +39,7 @@ class Field(object):
     has_endpoint_data = False
 
     query_allowed = True
+    allow_increment = False
 
     creation_counter = 0
 
@@ -220,6 +221,7 @@ class StringField(WritableField):
 
 
 class IntegerField(WritableField):
+    allow_increment = True
 
     def to_python(self, value):
         value = super(IntegerField, self).to_python(value)
@@ -245,6 +247,7 @@ class ReferenceField(IntegerField):
 
 
 class FloatField(WritableField):
+    allow_increment = True
 
     def to_python(self, value):
         value = super(FloatField, self).to_python(value)
