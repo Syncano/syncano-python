@@ -8,6 +8,7 @@ from . import fields
 from .base import Model
 from .instances import Instance
 from .manager import ScriptEndpointManager, ScriptManager
+from .mixins import RenameMixin
 
 
 class Script(Model):
@@ -284,7 +285,7 @@ class ScriptEndpoint(Model):
         self.public_link = response['public_link']
 
 
-class ResponseTemplate(Model):
+class ResponseTemplate(RenameMixin, Model):
     """
     OO wrapper around templates.
 
@@ -330,3 +331,11 @@ class ResponseTemplate(Model):
 
         connection = self._get_connection()
         return connection.request('POST', endpoint, data={'context': context})
+
+    def rename(self, new_name):
+        rename_path = self.links.rename
+        data = {'new_name': new_name}
+        connection = self._get_connection()
+        response = connection.request('POST', rename_path, data=data)
+        self.to_python(response)
+        return self
