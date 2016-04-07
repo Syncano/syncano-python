@@ -15,3 +15,4 @@ run_it.py
 syncano.egg-info
 .tox/*
 test
+.python-version
