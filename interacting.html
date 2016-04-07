@@ -130,8 +130,8 @@
 <div class="section" id="creating-a-connection">
 <h2>Creating a Connection<a class="headerlink" href="#creating-a-connection" title="Permalink to this headline">¶</a></h2>
 <p>In each example I&#8217;ll be assuming that you have configured connection to <cite>syncano</cite>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s">&#39;YOUR_EMAIL&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;YOUR_PASSWORD&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s1">&#39;YOUR_EMAIL&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;YOUR_PASSWORD&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -139,11 +139,11 @@
 <h2>Accessing models<a class="headerlink" href="#accessing-models" title="Permalink to this headline">¶</a></h2>
 <p>All models are defined in <tt class="xref py py-mod docutils literal"><span class="pre">syncano.models.base</span></tt> but <tt class="docutils literal"><span class="pre">syncano</span></tt> simplifies access to them
 by attaching all of them directly to <tt class="docutils literal"><span class="pre">connection</span></tt>. Thus:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">syncano.models.base</span> <span class="kn">import</span> <span class="n">Instance</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">syncano.models.base</span> <span class="kn">import</span> <span class="n">Instance</span>
 </pre></div>
 </div>
 <p>and:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">Instance</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">Instance</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Instance</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">Instance</span>
 </pre></div>
 </div>
 <p>are equivalent.</p>
@@ -155,7 +155,7 @@ and an instance of that class represents a particular record in this endpoint.</
 <p>To create an object, instantiate it using <strong>keyword arguments</strong> to the model class,
 then call <tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt> to save it to the <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt>.</p>
 <p>Here’s an example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -172,7 +172,7 @@ To create and save <strong>multiple objects</strong> in a single step, use the <
 <p>To save changes to an object that’s already in the <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt>, use <tt class="xref py py-meth docutils literal"><span class="pre">save()</span></tt>.
 Regarding our <strong>instance</strong> from previous example,
 this example changes its description and updates its record in the <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s">&#39;new description&#39;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;new description&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -188,9 +188,9 @@ Syncano doesn’t hit the API until you explicitly call <tt class="xref py py-me
 <p>To retrieve objects from <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt>, construct a query via a <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a> on your model class.</p>
 <p>Each model has only one <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a>, and it’s called <strong>please</strong> by default.
 Access it directly via the model class, like so:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span>
 <span class="go">[&lt;Instance: test&gt;, &lt;Instance: test-two&gt;, &#39;...(remaining elements truncated)...&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Foo&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;Bar&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Foo&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Bar&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">i</span><span class="o">.</span><span class="n">please</span>
 <span class="go">Traceback:</span>
 <span class="gp">...</span>
@@ -208,7 +208,7 @@ to enforce a separation between “table-level” operations and “record-level
 <p>The simplest way to retrieve objects from a <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> is to get all of them.
 To do this, use the <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.all" title="syncano.models.manager.Manager.all"><tt class="xref py py-meth docutils literal"><span class="pre">all()</span></tt></a> or <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.list" title="syncano.models.manager.Manager.list"><tt class="xref py py-meth docutils literal"><span class="pre">list()</span></tt></a>
 method on a <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 </pre></div>
@@ -226,7 +226,7 @@ just executes current query.</p>
 <p><a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a> is lazy – the act of creating a <strong>Manager</strong> doesn’t involve any API activity.
 You can stack Manager methods all day long, and Syncano won’t actually run the API call until the <strong>Manager</strong> is evaluated.
 Take a look at this example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">query</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s">&#39;test-instance&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">query</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s1">&#39;test-instance&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
 </pre></div>
@@ -239,7 +239,7 @@ In general, the results of a <a class="reference internal" href="refs/syncano.mo
 <p>If you know there is only one object that matches your API call,
 you can use the <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.get" title="syncano.models.manager.Manager.get"><tt class="xref py py-meth docutils literal"><span class="pre">get()</span></tt></a> method on a <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a>
 which returns the object directly:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;instance-name&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This performs a <strong>GET</strong> request to <tt class="docutils literal"><span class="pre">Syncano</span> <span class="pre">API</span></tt> details endpoint behind the scenes.</p>
@@ -258,7 +258,7 @@ alias for <a class="reference internal" href="refs/syncano.models.manager.html#s
 <p>The delete method, conveniently, is named <tt class="xref py py-meth docutils literal"><span class="pre">delete()</span></tt>.
 This method immediately deletes the object and has no return value.
 Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -269,11 +269,11 @@ Example:</p>
 <p>Use a subset of Python’s array-slicing syntax to limit your
 <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a> to a certain number of results.</p>
 <p>For example, this returns the first 5 objects:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>This returns the sixth through tenth objects:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Negative indexing (i.e. <strong>Instance.please.all()[-1]</strong>) is not supported.</p>
@@ -294,11 +294,11 @@ is a special manager method  called <a class="reference internal" href="refs/syn
 a few additional arguments to resolve endpoint URL.</p>
 <p>For example <tt class="xref py py-class docutils literal"><span class="pre">ApiKey</span></tt> is related to <tt class="xref py py-class docutils literal"><span class="pre">Instance</span></tt> and
 its URL patter looks like this:</p>
-<div class="highlight-python"><div class="highlight"><pre>/v1/instances/{instance_name}/api_keys/{id}
+<div class="highlight-python"><div class="highlight"><pre><span></span>/v1/instances/{instance_name}/api_keys/{id}
 </pre></div>
 </div>
 <p>This example will not work:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ApiKey</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ApiKey</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 <span class="go">Traceback:</span>
 <span class="gp">...</span>
 <span class="go">SyncanoValueError: Request property &quot;instance_name&quot; is required.</span>
@@ -306,9 +306,9 @@ its URL patter looks like this:</p>
 </div>
 <p>So how to fix that? We need to provide <tt class="docutils literal"><span class="pre">instance_name</span></tt> as an argument
 to <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.list" title="syncano.models.manager.Manager.list"><tt class="xref py py-meth docutils literal"><span class="pre">list()</span></tt></a> method:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ApiKey</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ApiKey</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
 <span class="go">[&lt;ApiKey 1&gt;...]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ApiKey</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ApiKey</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
 <span class="go">[&lt;ApiKey 1&gt;...]</span>
 </pre></div>
 </div>
@@ -324,7 +324,7 @@ method can be invoked like any other Python function i.e <tt class="docutils lit
 <h2>Backward relations<a class="headerlink" href="#backward-relations" title="Permalink to this headline">¶</a></h2>
 <p>For example <tt class="xref py py-class docutils literal"><span class="pre">Instance</span></tt> has related <tt class="xref py py-class docutils literal"><span class="pre">ApiKey</span></tt> model so
 all <tt class="xref py py-class docutils literal"><span class="pre">Instance</span></tt> objects will have backward relation to list of <tt class="xref py py-class docutils literal"><span class="pre">ApiKey</span></tt>&#8216;s:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">api_keys</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 <span class="go">[&lt;ApiKey 1&gt;...]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">api_keys</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -341,7 +341,7 @@ all <tt class="xref py py-class docutils literal"><span class="pre">Instance</sp
 <h2>Falling back to raw JSON<a class="headerlink" href="#falling-back-to-raw-json" title="Permalink to this headline">¶</a></h2>
 <p>If you find yourself needing to work on raw JSON data instead of Python objects just use
 <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.raw" title="syncano.models.manager.Manager.raw"><tt class="xref py py-meth docutils literal"><span class="pre">raw()</span></tt></a> method:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 <span class="go">[&lt;Instance: test&gt;, &lt;Instance: test-two&gt;, &#39;...(remaining elements truncated)...&#39;]</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span><span class="o">.</span><span class="n">raw</span><span class="p">()</span>
@@ -350,7 +350,7 @@ all <tt class="xref py py-class docutils literal"><span class="pre">Instance</sp
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">raw</span><span class="p">()</span>
 <span class="go">[{u&#39;name&#39;: u&#39;test-one&#39;...}]</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">raw</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">raw</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
 <span class="go">{u&#39;name&#39;: u&#39;test-one&#39;...}</span>
 </pre></div>
 </div>
@@ -358,12 +358,12 @@ all <tt class="xref py py-class docutils literal"><span class="pre">Instance</sp
 <div class="section" id="environmental-variables">
 <h2>Environmental variables<a class="headerlink" href="#environmental-variables" title="Permalink to this headline">¶</a></h2>
 <p>Some settings can be overwritten via environmental variables e.g:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">export </span><span class="nv">SYNCANO_LOGLEVEL</span><span class="o">=</span>DEBUG
-<span class="nv">$ </span><span class="nb">export </span><span class="nv">SYNCANO_APIROOT</span><span class="o">=</span><span class="s1">&#39;https://127.0.0.1/&#39;</span>
-<span class="nv">$ </span><span class="nb">export </span><span class="nv">SYNCANO_EMAIL</span><span class="o">=</span>admin@syncano.com
-<span class="nv">$ </span><span class="nb">export </span><span class="nv">SYNCANO_PASSWORD</span><span class="o">=</span>dummy
-<span class="nv">$ </span><span class="nb">export </span><span class="nv">SYNCANO_APIKEY</span><span class="o">=</span>dummy123
-<span class="nv">$ </span><span class="nb">export </span><span class="nv">SYNCANO_INSTANCE</span><span class="o">=</span><span class="nb">test</span>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nb">export</span> <span class="nv">SYNCANO_LOGLEVEL</span><span class="o">=</span>DEBUG
+$ <span class="nb">export</span> <span class="nv">SYNCANO_APIROOT</span><span class="o">=</span><span class="s1">&#39;https://127.0.0.1/&#39;</span>
+$ <span class="nb">export</span> <span class="nv">SYNCANO_EMAIL</span><span class="o">=</span>admin@syncano.com
+$ <span class="nb">export</span> <span class="nv">SYNCANO_PASSWORD</span><span class="o">=</span>dummy
+$ <span class="nb">export</span> <span class="nv">SYNCANO_APIKEY</span><span class="o">=</span>dummy123
+$ <span class="nb">export</span> <span class="nv">SYNCANO_INSTANCE</span><span class="o">=</span><span class="nb">test</span>
 </pre></div>
 </div>
 <div class="admonition warning">

@@ -131,12 +131,6 @@
             
   <div class="section" id="module-syncano.models.manager">
 <span id="syncano-models-manager"></span><h1>syncano.models.manager<a class="headerlink" href="#module-syncano.models.manager" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="syncano.models.manager.clone">
-<tt class="descname">clone</tt><big>(</big><em>func</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.clone" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decorator which will ensure that we are working on copy of <tt class="docutils literal"><span class="pre">self</span></tt>.</p>
-</dd></dl>
-
 <dl class="class">
 <dt id="syncano.models.manager.ManagerDescriptor">
 <em class="property">class </em><tt class="descname">ManagerDescriptor</tt><big>(</big><em>manager</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ManagerDescriptor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ManagerDescriptor" title="Permalink to this definition">¶</a></dt>
@@ -164,7 +158,7 @@
 <dd><p>A convenience method for making a batch request. Only create, update and delete manager method are supported.
 Batch request are limited to 50. So the args length should be equal or less than 50.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">klass</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;some_class&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">klass</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">)</span>
 <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
     <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">652</span><span class="p">),</span>
     <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">653</span><span class="p">),</span>
@@ -173,50 +167,50 @@ Batch request are limited to 50. So the args length should be equal or less than
 </pre></div>
 </div>
 <p>and:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
-    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">652</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="s">&#39;some_b&#39;</span><span class="p">),</span>
-    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">653</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="s">&#39;some_b&#39;</span><span class="p">),</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">652</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="s1">&#39;some_b&#39;</span><span class="p">),</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">653</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="s1">&#39;some_b&#39;</span><span class="p">),</span>
     <span class="o">...</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>and:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
-    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="s">&#39;some_c&#39;</span><span class="p">),</span>
-    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="s">&#39;some_c&#39;</span><span class="p">),</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="s1">&#39;some_c&#39;</span><span class="p">),</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="s1">&#39;some_c&#39;</span><span class="p">),</span>
     <span class="o">...</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>and:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
     <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">653</span><span class="p">),</span>
-    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">652</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="s">&#39;some_a&#39;</span><span class="p">),</span>
-    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="s">&#39;some_c&#39;</span><span class="p">),</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">652</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="s1">&#39;some_a&#39;</span><span class="p">),</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="s1">&#39;some_c&#39;</span><span class="p">),</span>
     <span class="o">...</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>are posible.</p>
 <p>But:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
-    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">653</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="s">&#39;some_a&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
+    <span class="n">klass</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">653</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="s1">&#39;some_a&#39;</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>will not work as expected.</p>
 <p>Some snippet for working with instance users:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Nabuchodonozor&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Nabuchodonozor&#39;</span><span class="p">)</span>
 <span class="n">model_users</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span>
     <span class="n">instance</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">7</span><span class="p">),</span>
-    <span class="n">instance</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="s">&#39;username_a&#39;</span><span class="p">),</span>
-    <span class="n">instance</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;username_b&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;5432&#39;</span><span class="p">),</span>
+    <span class="n">instance</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="s1">&#39;username_a&#39;</span><span class="p">),</span>
+    <span class="n">instance</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">as_batch</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;username_b&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;5432&#39;</span><span class="p">),</span>
     <span class="o">...</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>And sample response will be:</p>
-<div class="highlight-python"><div class="highlight"><pre>[{u&#39;code&#39;: 204}, &lt;User: 9&gt;, &lt;User: 11&gt;, ...]
+<div class="highlight-python"><div class="highlight"><pre><span></span>[{u&#39;code&#39;: 204}, &lt;User: 9&gt;, &lt;User: 11&gt;, ...]
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -238,11 +232,11 @@ found resource to delete);</td>
 <dt id="syncano.models.manager.Manager.create">
 <tt class="descname">create</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>A convenience method for creating an object and saving it all in one step. Thus:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;description&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;description&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>and:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;description&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;description&#39;</span><span class="p">)</span>
 <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -254,15 +248,15 @@ found resource to delete);</td>
 <tt class="descname">bulk_create</tt><big>(</big><em>*objects</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.bulk_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.bulk_create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates many new instances based on provided list of objects.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;instance_a&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;instance_a&#39;</span><span class="p">)</span>
 <span class="n">instances</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">bulk_create</span><span class="p">(</span>
-    <span class="n">User</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;user_a&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;1234&#39;</span><span class="p">),</span>
-    <span class="n">User</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;user_b&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;4321&#39;</span><span class="p">)</span>
+    <span class="n">User</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;user_a&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;1234&#39;</span><span class="p">),</span>
+    <span class="n">User</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;user_b&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;4321&#39;</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 <p>Warning:</p>
-<div class="highlight-python"><div class="highlight"><pre>This method is restricted to handle 50 objects at once.
+<div class="highlight-python"><div class="highlight"><pre><span></span>This method is restricted to handle 50 objects at once.
 </pre></div>
 </div>
 </dd></dl>
@@ -272,8 +266,8 @@ found resource to delete);</td>
 <tt class="descname">get</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the object matching the given lookup parameters.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
-<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -283,7 +277,7 @@ found resource to delete);</td>
 <tt class="descname">in_bulk</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.in_bulk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.in_bulk" title="Permalink to this definition">¶</a></dt>
 <dd><p>A method which allows to bulk get objects;</p>
 <p>Use:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">response</span> <span class="o">=</span> <span class="n">Classes</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">in_bulk</span><span class="p">([</span><span class="s">&#39;test_class&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">response</span> <span class="o">=</span> <span class="n">Classes</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">in_bulk</span><span class="p">([</span><span class="s1">&#39;test_class&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>response is:</p>
@@ -315,8 +309,8 @@ found resource to delete);</td>
 <tt class="descname">detail</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.detail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.detail" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper around <tt class="docutils literal"><span class="pre">get</span></tt> method.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">detail</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
-<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">detail</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">detail</span><span class="p">(</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">detail</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -329,15 +323,15 @@ lookup parameters, creating one if necessary.</p>
 <p>Returns a tuple of <strong>(object, created)</strong>, where <strong>object</strong> is the retrieved or
 <strong>created</strong> object and created is a boolean specifying whether a new object was created.</p>
 <p>This is meant as a shortcut to boilerplatish code. For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
-    <span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">Instance</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
-    <span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
     <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The above example can be rewritten using <strong>get_or_create()</strong> like so:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">defaults</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;test&#39;</span><span class="p">})</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instance</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">defaults</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;test&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -348,8 +342,8 @@ lookup parameters, creating one if necessary.</p>
 <dd><p>Removes single instance based on provided arguments.
 Returns None if deletion went fine.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
-<span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
+<span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -375,10 +369,10 @@ Returns None if deletion went fine.</p>
 </ol>
 </div></blockquote>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">objects</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="n">INSTANCE_NAME</span><span class="p">,</span>
-                     <span class="n">class_name</span><span class="o">=</span><span class="s">&#39;someclass&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="s">&#39;103&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">objects</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="n">INSTANCE_NAME</span><span class="p">,</span>
+                     <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;someclass&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="s1">&#39;103&#39;</span><span class="p">)</span>
 <span class="n">objects</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="n">INSTANCE_NAME</span><span class="p">,</span>
-                     <span class="n">class_name</span><span class="o">=</span><span class="s">&#39;someclass&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="s">&#39;103&#39;</span><span class="p">)</span>
+                     <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;someclass&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="s1">&#39;103&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The return value is a list of objects;</p>
@@ -396,11 +390,11 @@ Returns None if deletion went fine.</p>
 </div></blockquote>
 <p>The <strong>data</strong> is a dictionary of (field, value) pairs used to update the object.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;new one&#39;</span><span class="p">)</span>
-<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;new one&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;new one&#39;</span><span class="p">)</span>
+<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;new one&#39;</span><span class="p">)</span>
 
-<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;new one&#39;</span><span class="p">})</span>
-<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;description&#39;</span><span class="p">:</span> <span class="s">&#39;new one&#39;</span><span class="p">})</span>
+<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;new one&#39;</span><span class="p">})</span>
+<span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;new one&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -415,17 +409,17 @@ is a boolean specifying whether a new object was created.</p>
 <p>The <strong>update_or_create</strong> method tries to fetch an object from Syncano API based on the given kwargs.
 If a match is found, it updates the fields passed in the defaults dictionary.</p>
 <p>This is meant as a shortcut to boilerplatish code. For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
-    <span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">updated_values</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">updated_values</span><span class="p">)</span>
 <span class="k">except</span> <span class="n">Instance</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
-    <span class="n">updated_values</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;test-one&#39;</span><span class="p">})</span>
+    <span class="n">updated_values</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;test-one&#39;</span><span class="p">})</span>
     <span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="o">**</span><span class="n">updated_values</span><span class="p">)</span>
     <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>This pattern gets quite unwieldy as the number of fields in a model goes up.
 The above example can be rewritten using <strong>update_or_create()</strong> like so:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">,</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instance</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update_or_create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">,</span>
                                                      <span class="n">defaults</span><span class="o">=</span><span class="n">updated_values</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -436,7 +430,7 @@ The above example can be rewritten using <strong>update_or_create()</strong> lik
 <tt class="descname">all</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a copy of the current <tt class="docutils literal"><span class="pre">Manager</span></tt> with limit removed.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -457,8 +451,8 @@ classes = Class.please.list(instance_name=&#8217;test-one&#8217;)</dd>
 <tt class="descname">first</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.first"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.first" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the first object matched by the lookup parameters or None, if there is no matching object.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
-<span class="n">classes</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">first</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+<span class="n">classes</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">first</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -468,7 +462,7 @@ classes = Class.please.list(instance_name=&#8217;test-one&#8217;)</dd>
 <tt class="descname">page_size</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.page_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.page_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets page size.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">page_size</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">page_size</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -478,8 +472,8 @@ classes = Class.please.list(instance_name=&#8217;test-one&#8217;)</dd>
 <tt class="descname">limit</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.limit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.limit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets limit of returned objects.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">classes</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;test-one&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">classes</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -489,7 +483,7 @@ classes = Class.please.list(instance_name=&#8217;test-one&#8217;)</dd>
 <tt class="descname">ordering</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.ordering"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.ordering" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets order of returned objects.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">ordering</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">ordering</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -499,7 +493,7 @@ classes = Class.please.list(instance_name=&#8217;test-one&#8217;)</dd>
 <tt class="descname">raw</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.raw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables serialization. <tt class="docutils literal"><span class="pre">request</span></tt> method will return raw Python types.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span><span class="o">.</span><span class="n">raw</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span><span class="o">.</span><span class="n">raw</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instances</span>
 <span class="go">[{&#39;description&#39;: &#39;new one&#39;, &#39;name&#39;: &#39;test-one&#39;...}...]</span>
 </pre></div>
@@ -511,7 +505,7 @@ classes = Class.please.list(instance_name=&#8217;test-one&#8217;)</dd>
 <tt class="descname">template</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#Manager.template"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.Manager.template" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disables serialization. <tt class="docutils literal"><span class="pre">request</span></tt> method will return raw text.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span><span class="o">.</span><span class="n">template</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">instances</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">()</span><span class="o">.</span><span class="n">template</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instances</span>
 <span class="go">u&#39;text&#39;</span>
 </pre></div>
@@ -588,7 +582,7 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Script
 <dl class="class">
 <dt id="syncano.models.manager.ObjectManager">
 <em class="property">class </em><tt class="descname">ObjectManager</tt><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.manager.Manager</span></tt></a></p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">syncano.models.manager_mixins.IncrementMixin</span></tt>, <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.manager.Manager</span></tt></a></p>
 <p>Custom <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a>
 class for <tt class="xref py py-class docutils literal"><span class="pre">Object</span></tt> model.</p>
 <dl class="attribute">
@@ -611,9 +605,9 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Object
 <tt class="descname">count</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.count" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the queryset count;</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">id__gt</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-<span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-<span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">id__gt</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -631,9 +625,9 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Object
 <tt class="descname">with_count</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.with_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.with_count" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the queryset with count;</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">id__gt</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span><span class="o">.</span><span class="n">with_count</span><span class="p">()</span>
-<span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">with_count</span><span class="p">(</span><span class="n">page_size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">with_count</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">id__gt</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span><span class="o">.</span><span class="n">with_count</span><span class="p">()</span>
+<span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">with_count</span><span class="p">(</span><span class="n">page_size</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;raptor&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">with_count</span><span class="p">()</span>
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -653,7 +647,7 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Object
 <tt class="descname">filter</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Special method just for data object <tt class="xref py py-class docutils literal"><span class="pre">Object</span></tt> model.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">objects</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;class-name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">henryk__gte</span><span class="o">=</span><span class="s">&#39;hello&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">objects</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s1">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s1">&#39;class-name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">henryk__gte</span><span class="o">=</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -663,10 +657,10 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Object
 <tt class="descname">bulk_create</tt><big>(</big><em>*objects</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.bulk_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.bulk_create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates many new objects.
 Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">created_objects</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">bulk_create</span><span class="p">(</span>
-    <span class="n">Object</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;instance_a&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s">&#39;some_class&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;one&#39;</span><span class="p">),</span>
-    <span class="n">Object</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;instance_a&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s">&#39;some_class&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;two&#39;</span><span class="p">),</span>
-    <span class="n">Object</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s">&#39;instance_a&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s">&#39;some_class&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;three&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">created_objects</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">bulk_create</span><span class="p">(</span>
+    <span class="n">Object</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;instance_a&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;one&#39;</span><span class="p">),</span>
+    <span class="n">Object</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;instance_a&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;two&#39;</span><span class="p">),</span>
+    <span class="n">Object</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;instance_a&#39;</span><span class="p">,</span> <span class="n">class_name</span><span class="o">=</span><span class="s1">&#39;some_class&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;three&#39;</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -687,7 +681,7 @@ Usage:</p>
 <tt class="descname">fields</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.fields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Special method just for data object <tt class="xref py py-class docutils literal"><span class="pre">Object</span></tt> model.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">objects</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;class-name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;id&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">objects</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s1">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s1">&#39;class-name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -697,7 +691,7 @@ Usage:</p>
 <tt class="descname">exclude</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.exclude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.exclude" title="Permalink to this definition">¶</a></dt>
 <dd><p>Special method just for data object <tt class="xref py py-class docutils literal"><span class="pre">Object</span></tt> model.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">objects</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s">&#39;class-name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="s">&#39;avatar&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">objects</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s1">&#39;instance-name&#39;</span><span class="p">,</span> <span class="s1">&#39;class-name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="s1">&#39;avatar&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -712,11 +706,11 @@ Usage:</p>
 <tt class="descname">order_by</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager.order_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager.order_by" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets ordering field of returned objects.</p>
 <p>Usage:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># ASC order</span>
-<span class="n">instances</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># ASC order</span>
+<span class="n">instances</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
 
-<span class="c"># DESC order</span>
-<span class="n">instances</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-name&#39;</span><span class="p">)</span>
+<span class="c1"># DESC order</span>
+<span class="n">instances</span> <span class="o">=</span> <span class="n">Object</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;-name&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

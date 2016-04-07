@@ -148,6 +148,11 @@
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Base class for all field types.</p>
 <dl class="attribute">
+<dt id="syncano.models.fields.Field.allow_increment">
+<tt class="descname">allow_increment</tt><em class="property"> = False</em><a class="headerlink" href="#syncano.models.fields.Field.allow_increment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="syncano.models.fields.Field.default">
 <tt class="descname">default</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.fields.Field.default" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -300,6 +305,11 @@
 <dt id="syncano.models.fields.IntegerField">
 <em class="property">class </em><tt class="descname">IntegerField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#IntegerField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.IntegerField" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.WritableField" title="syncano.models.fields.WritableField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.WritableField</span></tt></a></p>
+<dl class="attribute">
+<dt id="syncano.models.fields.IntegerField.allow_increment">
+<tt class="descname">allow_increment</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.fields.IntegerField.allow_increment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="syncano.models.fields.IntegerField.to_python">
 <tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#IntegerField.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.IntegerField.to_python" title="Permalink to this definition">¶</a></dt>
@@ -322,6 +332,11 @@
 <dt id="syncano.models.fields.FloatField">
 <em class="property">class </em><tt class="descname">FloatField</tt><big>(</big><em>name=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#FloatField"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.FloatField" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.WritableField" title="syncano.models.fields.WritableField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.WritableField</span></tt></a></p>
+<dl class="attribute">
+<dt id="syncano.models.fields.FloatField.allow_increment">
+<tt class="descname">allow_increment</tt><em class="property"> = True</em><a class="headerlink" href="#syncano.models.fields.FloatField.allow_increment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="syncano.models.fields.FloatField.to_python">
 <tt class="descname">to_python</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/fields.html#FloatField.to_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.fields.FloatField.to_python" title="Permalink to this definition">¶</a></dt>
@@ -346,7 +361,7 @@
 <dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.StringField</span></tt></a></p>
 <dl class="attribute">
 <dt id="syncano.models.fields.SlugField.regex">
-<tt class="descname">regex</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x2b75b97d1670&gt;</em><a class="headerlink" href="#syncano.models.fields.SlugField.regex" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">regex</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x1ec2be8&gt;</em><a class="headerlink" href="#syncano.models.fields.SlugField.regex" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -362,7 +377,7 @@
 <dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.StringField</span></tt></a></p>
 <dl class="attribute">
 <dt id="syncano.models.fields.EmailField.regex">
-<tt class="descname">regex</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x2b75b7e36e90&gt;</em><a class="headerlink" href="#syncano.models.fields.EmailField.regex" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">regex</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x1c180c0&gt;</em><a class="headerlink" href="#syncano.models.fields.EmailField.regex" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -389,12 +404,12 @@
 <dd><p>Bases: <a class="reference internal" href="#syncano.models.fields.WritableField" title="syncano.models.fields.WritableField"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.fields.WritableField</span></tt></a></p>
 <dl class="attribute">
 <dt id="syncano.models.fields.DateField.date_regex">
-<tt class="descname">date_regex</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x2b75b8edcae0&gt;</em><a class="headerlink" href="#syncano.models.fields.DateField.date_regex" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">date_regex</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x1d85a10&gt;</em><a class="headerlink" href="#syncano.models.fields.DateField.date_regex" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
 <dt id="syncano.models.fields.DateField.re">
-<tt class="descname">re</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x2b75b8edcae0&gt;</em><a class="headerlink" href="#syncano.models.fields.DateField.re" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">re</tt><em class="property"> = &lt;_sre.SRE_Pattern object at 0x1d85a10&gt;</em><a class="headerlink" href="#syncano.models.fields.DateField.re" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

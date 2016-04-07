@@ -126,7 +126,7 @@
           <div role="main">
             
   <h1>Source code for syncano.models.custom_response</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">json</span>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
 
 <span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoException</span>
 
@@ -176,17 +176,17 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handlers</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_handler</span><span class="p">(</span><span class="s">&#39;application/json&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">json_handler</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_handler</span><span class="p">(</span><span class="s">&#39;plain/text&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">plain_handler</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_handler</span><span class="p">(</span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">json_handler</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_handler</span><span class="p">(</span><span class="s1">&#39;plain/text&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">plain_handler</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CustomResponseHandler.register_handler"><a class="viewcode-back" href="../../../refs/syncano.models.custom_response.html#syncano.models.custom_response.CustomResponseHandler.register_handler">[docs]</a>    <span class="k">def</span> <span class="nf">register_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content_type</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">content_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">handlers</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">SyncanoException</span><span class="p">(</span><span class="s">&#39;Handler &quot;{}&quot; already defined. User overwrite_handler instead.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">content_type</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">SyncanoException</span><span class="p">(</span><span class="s1">&#39;Handler &quot;{}&quot; already defined. User overwrite_handler instead.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">content_type</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handlers</span><span class="p">[</span><span class="n">content_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">handler</span>
 </div>
 <div class="viewcode-block" id="CustomResponseHandler.overwrite_handler"><a class="viewcode-back" href="../../../refs/syncano.models.custom_response.html#syncano.models.custom_response.CustomResponseHandler.overwrite_handler">[docs]</a>    <span class="k">def</span> <span class="nf">overwrite_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content_type</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">content_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">handlers</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">SyncanoException</span><span class="p">(</span><span class="s">&#39;Handler &quot;{}&quot; not defined. User register_handler instead.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">content_type</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">SyncanoException</span><span class="p">(</span><span class="s1">&#39;Handler &quot;{}&quot; not defined. User register_handler instead.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">content_type</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handlers</span><span class="p">[</span><span class="n">content_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">handler</span>
 </div>
 <div class="viewcode-block" id="CustomResponseHandler.process_response"><a class="viewcode-back" href="../../../refs/syncano.models.custom_response.html#syncano.models.custom_response.CustomResponseHandler.process_response">[docs]</a>    <span class="k">def</span> <span class="nf">process_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
@@ -200,27 +200,27 @@
     <span class="k">def</span> <span class="nf">_find_content_type</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
-        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;response&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;content_type&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;response&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content_type&#39;</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_default_handler</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">None</span>
 
-        <span class="k">if</span> <span class="s">&#39;response&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s">&#39;response&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s">&#39;stdout&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s">&#39;stdout&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;response&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;stdout&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;stdout&#39;</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">response</span>
 
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="CustomResponseHandler.json_handler"><a class="viewcode-back" href="../../../refs/syncano.models.custom_response.html#syncano.models.custom_response.CustomResponseHandler.json_handler">[docs]</a>    <span class="k">def</span> <span class="nf">json_handler</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s">&#39;response&#39;</span><span class="p">][</span><span class="s">&#39;content&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;content&#39;</span><span class="p">])</span>
 </div>
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="CustomResponseHandler.plain_handler"><a class="viewcode-back" href="../../../refs/syncano.models.custom_response.html#syncano.models.custom_response.CustomResponseHandler.plain_handler">[docs]</a>    <span class="k">def</span> <span class="nf">plain_handler</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s">&#39;response&#39;</span><span class="p">][</span><span class="s">&#39;content&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;content&#39;</span><span class="p">]</span>
 
 </div></div>
 <div class="viewcode-block" id="CustomResponseMixin"><a class="viewcode-back" href="../../../refs/syncano.models.custom_response.html#syncano.models.custom_response.CustomResponseMixin">[docs]</a><span class="k">class</span> <span class="nc">CustomResponseMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -242,15 +242,15 @@
 </div>
     <span class="nd">@property</span>
 <div class="viewcode-block" id="CustomResponseMixin.status_code"><a class="viewcode-back" href="../../../refs/syncano.models.custom_response.html#syncano.models.custom_response.CustomResponseMixin.status_code">[docs]</a>    <span class="k">def</span> <span class="nf">status_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;response&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;status&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;response&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;status&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="k">else</span> <span class="bp">None</span>
 </div>
     <span class="nd">@property</span>
 <div class="viewcode-block" id="CustomResponseMixin.error"><a class="viewcode-back" href="../../../refs/syncano.models.custom_response.html#syncano.models.custom_response.CustomResponseMixin.error">[docs]</a>    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;stderr&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="k">else</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;stderr&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="k">else</span> <span class="bp">None</span>
 </div>
     <span class="nd">@property</span>
 <div class="viewcode-block" id="CustomResponseMixin.content_type"><a class="viewcode-back" href="../../../refs/syncano.models.custom_response.html#syncano.models.custom_response.CustomResponseMixin.content_type">[docs]</a>    <span class="k">def</span> <span class="nf">content_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;response&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;content_type&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="k">else</span> <span class="bp">None</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;response&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content_type&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="k">else</span> <span class="bp">None</span></div></div>
 </pre></div>
 
           </div>

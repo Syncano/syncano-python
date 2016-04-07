@@ -134,7 +134,7 @@
 <dl class="class">
 <dt id="syncano.models.instances.Instance">
 <em class="property">class </em><tt class="descname">Instance</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/instances.html#Instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.instances.Instance" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">syncano.models.mixins.RenameMixin</span></tt>, <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
 <p>OO wrapper around instances <a class="reference external" href="http://docs.syncano.com/docs/getting-started-with-syncano#adding-an-instance">link</a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -282,22 +282,6 @@
 <dt id="syncano.models.instances.Instance.apns_messages">
 <tt class="descname">apns_messages</tt><a class="headerlink" href="#syncano.models.instances.Instance.apns_messages" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="method">
-<dt id="syncano.models.instances.Instance.rename">
-<tt class="descname">rename</tt><big>(</big><em>new_name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/instances.html#Instance.rename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.instances.Instance.rename" title="Permalink to this definition">¶</a></dt>
-<dd><p>A method for changing the instance name;</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_name</strong> &#8211; the new name for the instance;</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a populated Instance object;</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
 
 <dl class="attribute">
 <dt id="syncano.models.instances.Instance.DoesNotExist">
@@ -451,6 +435,13 @@ invitations <a class="reference external" href="http://docs.syncano.com/docs/adm
 <dt id="syncano.models.instances.InstanceInvitation.updated_at">
 <tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.instances.InstanceInvitation.updated_at" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.instances.InstanceInvitation.resend">
+<tt class="descname">resend</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/instances.html#InstanceInvitation.resend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.instances.InstanceInvitation.resend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resend the invitation.
+:return: InstanceInvitation instance;</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="syncano.models.instances.InstanceInvitation.Admin">

@@ -138,11 +138,11 @@
 <p>A helper class which allows to define and maintain custom response handlers.</p>
 <p>Consider an example:
 Script code:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">set_response</span><span class="p">(</span><span class="n">HttpResponse</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="s">&#39;{&quot;one&quot;: 1}&#39;</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s">&#39;application/json&#39;</span><span class="p">))</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">set_response</span><span class="p">(</span><span class="n">HttpResponse</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="s1">&#39;{&quot;one&quot;: 1}&#39;</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>When suitable ScriptTrace is used:</p>
-<div class="highlight-python"><div class="highlight"><pre>trace = ScriptTrace.please.get(id=&lt;code_box_trace_id&gt;, script=&lt;script_id&gt;)
+<div class="highlight-python"><div class="highlight"><pre><span></span>trace = ScriptTrace.please.get(id=&lt;code_box_trace_id&gt;, script=&lt;script_id&gt;)
 </pre></div>
 </div>
 <dl class="docutils">
@@ -150,22 +150,22 @@ Script code:</p>
 <dd>the hood);</dd>
 </dl>
 <p>So this is possible:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">trace</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="s">&#39;one&#39;</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">trace</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>And the trace.content is equal to:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;one&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;one&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>The handler can be easily overwrite:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">custom_handler</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s">&#39;response&#39;</span><span class="p">][</span><span class="s">&#39;content&#39;</span><span class="p">])[</span><span class="s">&#39;one&#39;</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">custom_handler</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;response&#39;</span><span class="p">][</span><span class="s1">&#39;content&#39;</span><span class="p">])[</span><span class="s1">&#39;one&#39;</span><span class="p">]</span>
 
-<span class="n">trace</span><span class="o">.</span><span class="n">response_handler</span><span class="o">.</span><span class="n">overwrite_handler</span><span class="p">(</span><span class="s">&#39;application/json&#39;</span><span class="p">,</span> <span class="n">custom_handler</span><span class="p">)</span>
+<span class="n">trace</span><span class="o">.</span><span class="n">response_handler</span><span class="o">.</span><span class="n">overwrite_handler</span><span class="p">(</span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="n">custom_handler</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>or globally:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ScriptTrace</span><span class="o">.</span><span class="n">response_handler</span><span class="o">.</span><span class="n">overwrite_handler</span><span class="p">(</span><span class="s">&#39;application/json&#39;</span><span class="p">,</span> <span class="n">custom_handler</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ScriptTrace</span><span class="o">.</span><span class="n">response_handler</span><span class="o">.</span><span class="n">overwrite_handler</span><span class="p">(</span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="n">custom_handler</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="docutils">
@@ -222,7 +222,7 @@ Script code:</p>
 <p>To process the content based on content_type this Mixin uses the CustomResponseHandler - see the docs there.</p>
 <dl class="attribute">
 <dt id="syncano.models.custom_response.CustomResponseMixin.response_handler">
-<tt class="descname">response_handler</tt><em class="property"> = &lt;syncano.models.custom_response.CustomResponseHandler object at 0x2b75b98833d0&gt;</em><a class="headerlink" href="#syncano.models.custom_response.CustomResponseMixin.response_handler" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">response_handler</tt><em class="property"> = &lt;syncano.models.custom_response.CustomResponseHandler object at 0x20793d0&gt;</em><a class="headerlink" href="#syncano.models.custom_response.CustomResponseMixin.response_handler" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
