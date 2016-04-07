@@ -122,6 +122,7 @@ class Schedule(Model):
     interval_sec = fields.IntegerField(read_only=False, required=False)
     crontab = fields.StringField(max_length=40, required=False)
     payload = fields.StringField(required=False)
+    timezone = fields.StringField(required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
     scheduled_next = fields.DateTimeField(read_only=True, required=False)
     links = fields.LinksField()
