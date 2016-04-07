@@ -2,9 +2,10 @@
 
 from . import fields
 from .base import Model
+from .mixins import RenameMixin
 
 
-class Instance(Model):
+class Instance(RenameMixin, Model):
     """
     OO wrapper around instances `link <http://docs.syncano.com/docs/getting-started-with-syncano#adding-an-instance>`_.
 
@@ -75,20 +76,6 @@ class Instance(Model):
             }
         }
 
-    def rename(self, new_name):
-        """
-        A method for changing the instance name;
-
-        :param new_name: the new name for the instance;
-        :return: a populated Instance object;
-        """
-        rename_path = self.links.rename
-        data = {'new_name': new_name}
-        connection = self._get_connection()
-        response = connection.request('POST', rename_path, data=data)
-        self.to_python(response)
-        return self
-
 
 class ApiKey(Model):
     """
@@ -157,3 +144,13 @@ class InstanceInvitation(Model):
                 'path': '/invitations/',
             }
         }
+
+    def resend(self):
+        """
+        Resend the invitation.
+        :return: InstanceInvitation instance;
+        """
+        resend_path = self.links.resend
+        connection = self._get_connection()
+        connection.request('POST', resend_path)  # empty response here: 204 no content
+        return self

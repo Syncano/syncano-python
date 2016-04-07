@@ -309,6 +309,62 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
         author_one.delete()
         author_two.delete()
 
+    def test_increment_and_decrement_on_integer(self):
+        author = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.author.name,
+            first_name='john', last_name='doe')
+
+        book = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.book.name,
+            name='test', description='test', quantity=10, cost=10.5,
+            published_at=datetime.now(), author=author, available=True)
+
+        incremented_book = Object.please.increment(
+            'quantity',
+            5,
+            id=book.id,
+            class_name=self.book.name,
+        )
+
+        self.assertEqual(incremented_book.quantity, 15)
+
+        decremented_book = Object.please.decrement(
+            'quantity',
+            7,
+            id=book.id,
+            class_name=self.book.name,
+        )
+
+        self.assertEqual(decremented_book.quantity, 8)
+
+    def test_increment_and_decrement_on_float(self):
+        author = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.author.name,
+            first_name='john', last_name='doe')
+
+        book = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.book.name,
+            name='test', description='test', quantity=10, cost=10.5,
+            published_at=datetime.now(), author=author, available=True)
+
+        incremented_book = Object.please.increment(
+            'cost',
+            5.5,
+            id=book.id,
+            class_name=self.book.name,
+        )
+
+        self.assertEqual(incremented_book.cost, 16)
+
+        decremented_book = Object.please.decrement(
+            'cost',
+            7.6,
+            id=book.id,
+            class_name=self.book.name,
+        )
+
+        self.assertEqual(decremented_book.cost, 8.4)
+
 
 class ScriptIntegrationTest(InstanceMixin, IntegrationTest):
     model = Script
