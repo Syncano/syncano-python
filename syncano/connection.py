@@ -408,7 +408,7 @@ class Connection(object):
     def _check_batch_files(cls, data):
         if 'requests' in data:  # batch requests
             for request in data['requests']:
-                per_request_files = request['body'].pop('files', {})
+                per_request_files = request.pop('body', {}).pop('files', {})
                 if per_request_files:
                     raise SyncanoValueError('Batch do not support files upload.')
 
