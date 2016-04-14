@@ -233,7 +233,13 @@ class Connection(object):
         :raises SyncanoRequestError: if something went wrong during the request
         """
         data = kwargs.get('data', {})
-        files = data.pop('files', None)
+        files = data.pop('files', {})
+
+        if 'requests' in data:  # batch requests
+            for request in data['requests']:
+                per_request_files = request['body'].pop('files', {})
+                if per_request_files:
+                    raise SyncanoValueError('Batch do not support files upload.')
 
         if files is None:
             files = {k: v for k, v in six.iteritems(data) if hasattr(v, 'read')}
