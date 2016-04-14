@@ -233,7 +233,7 @@ class Connection(object):
         :raises SyncanoRequestError: if something went wrong during the request
         """
         data = kwargs.get('data', {})
-        files = data.pop('files', {})
+        files = data.pop('files', None)
 
         self._check_batch_files(data)
 
