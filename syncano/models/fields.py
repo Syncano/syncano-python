@@ -674,14 +674,15 @@ class PushJSONField(JSONField):
             return
 
         if not isinstance(value, six.string_types):
-            value.update({
-                'environment': PUSH_ENV,
-            })
+            if 'environment' not in value:
+                value.update({
+                    'environment': PUSH_ENV,
+                })
             value = json.dumps(value)
         return value
 
 
-GeoPointStruct = namedtuple('GeoPointHelper', ['longitude', 'latitude'])
+GeoPointStruct = namedtuple('GeoPointHelper', ['latitude', 'longitude'])
 
 
 class GeoPoint(Field):
@@ -705,10 +706,8 @@ class GeoPoint(Field):
         if value is None:
             return
 
-        geo_struct = {'longitude': value[0], 'latitude': value[1]}
-
-        if not isinstance(value, six.string_types):
-            geo_struct = json.dumps(geo_struct)
+        geo_struct = {'latitude': value[0], 'longitude': value[1]}
+        geo_struct = json.dumps(geo_struct)
 
         return geo_struct
 
@@ -726,19 +725,19 @@ class GeoPoint(Field):
         latitude = None
 
         if isinstance(value, dict):
-            longitude = value.get('longitude')
             latitude = value.get('latitude')
+            longitude = value.get('longitude')
         elif isinstance(value, (tuple, list)):
             try:
-                longitude = value[0]
-                latitude = value[1]
+                latitude = value[0]
+                longitude = value[1]
             except IndexError:
                 raise SyncanoValueError('Can not parse the geo struct.')
 
         if not longitude or not latitude:
             raise SyncanoValueError('Expected the `longitude` and `latitude` fields.')
 
-        return GeoPointStruct(longitude, latitude)
+        return GeoPointStruct(latitude, longitude)
 
 
 MAPPING = {
