@@ -65,11 +65,9 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
 
         self.assertIn('<table>', template_response[0])  # all() returns a list (precise: iterator)
         self.assertIn('user_profile', template_response[0])
-        self.assertTrue(isinstance(template_response, basestring))
 
     def test_render_on_endpoint_one_elem(self):
         template_response = Class.please.template('objects_html_table').get(name='user_profile')
 
         self.assertIn('<table>', template_response)
         self.assertIn('user_profile', template_response)
-        self.assertTrue(isinstance(template_response, basestring))
