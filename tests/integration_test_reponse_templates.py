@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from syncano.models import ResponseTemplate
+from syncano.models import Class, ResponseTemplate
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 
@@ -59,3 +59,17 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
         template = template.rename(new_name=new_name)
 
         self.assertEqual(template.name, new_name)
+
+    def test_render_on_endpoint_list(self):
+        template_response = Class.please.template('objects_html_table').all()
+
+        self.assertIn('<table>', template_response)
+        self.assertIn('user_profile', template_response)
+        self.assertTrue(isinstance(template_response, basestring))
+
+    def test_render_on_endpoint_one_elem(self):
+        template_response = Class.please.template('objects_html_table').get(name='user_profile')
+
+        self.assertIn('<table>', template_response)
+        self.assertIn('user_profile', template_response)
+        self.assertTrue(isinstance(template_response, basestring))

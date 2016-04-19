@@ -727,7 +727,6 @@ class Manager(ConnectionMixin):
     def serialize(self, data, model=None):
         """Serializes passed data to related :class:`~syncano.models.base.Model` class."""
         model = model or self.model
-
         if data == '':
             return
 
@@ -777,7 +776,7 @@ class Manager(ConnectionMixin):
                 raise self.model.DoesNotExist("{} not found.".format(obj_id))
             raise
 
-        if 'next' not in response:
+        if 'next' not in response and not self._template:
             return self.serialize(response)
 
         return response
@@ -799,6 +798,9 @@ class Manager(ConnectionMixin):
         response = self._get_response()
         results = 0
         while True:
+            if self._template:
+                yield response
+                break
             objects = response.get('objects')
             next_url = response.get('next')
 
