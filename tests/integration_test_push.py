@@ -69,7 +69,7 @@ class PushNotificationTest(PushIntegrationTest):
         device = GCMDevice(
             instance_name=self.instance.name,
             label='example label',
-            registration_id=86152312314401555,
+            registration_id=86152312314401666,
             device_id='10000000001',
         )
         self._test_device(device, GCMDevice.please)
@@ -78,7 +78,7 @@ class PushNotificationTest(PushIntegrationTest):
         device = APNSDevice(
             instance_name=self.instance.name,
             label='example label',
-            registration_id='4719084371920471208947120984731208947910827409128470912847120894',
+            registration_id='4719084371920471208947120984731208947910827409128470912847120222',
             device_id='7189d7b9-4dea-4ecc-aa59-8cc61a20608a',
         )
 
