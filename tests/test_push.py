@@ -35,7 +35,7 @@ class ScriptTestCase(unittest.TestCase):
             data={"registration_id": '86152312314401555', "device_id": "10000000001", "is_active": True,
                   "label": "example label"}
         )
-        model.created_at = datetime.now()  # to Falsify is_new()
+        model.links = 'something'  # to Falsify is_new()
         model.delete()
         connection_mock.request.assert_called_with(
             'DELETE', '/v1.1/instances/test/push_notifications/gcm/devices/86152312314401555/'
@@ -69,7 +69,7 @@ class ScriptTestCase(unittest.TestCase):
                   "label": "example label"}
         )
 
-        model.created_at = datetime.now()  # to Falsify is_new()
+        model.links = 'something'  # to Falsify is_new()
         model.delete()
         connection_mock.request.assert_called_with(
             'DELETE', '/v1.1/instances/test/push_notifications/apns/devices/86152312314401555/'
