@@ -249,3 +249,79 @@ class APNSMessage(MessageBase, Model):
                 'path': '/push_notifications/apns/messages/',
             }
         }
+
+
+class GCMConfig(Model):
+    """
+    A model which stores information with GCM Push keys;
+
+    Usage::
+
+        Add (modify) new keys:
+        gcm_config = GCMConfig(production_api_key='ccc', development_api_key='ddd')
+        gcm_config.save()
+
+        or:
+        gcm_config = GCMConfig().please.get()
+        gcm_config.production_api_key = 'ccc'
+        gcm_config.development_api_key = 'ddd'
+        gcm_config.save()
+
+    """
+    production_api_key = fields.StringField(required=False)
+    development_api_key = fields.StringField(required=False)
+
+    def is_new(self):
+        return False  # this is predefined - never will be new
+
+    class Meta:
+        parent = Instance
+        endpoints = {
+            'list': {
+                'methods': ['get', 'put'],
+                'path': '/push_notifications/gcm/config/',
+            },
+            'detail': {
+                'methods': ['get', 'put'],
+                'path': '/push_notifications/gcm/config/',
+            },
+        }
+
+
+class APNSConfig(Model):
+    """
+    A model which stores information with APNS Push certificates;
+
+    Usage::
+
+        Add (modify) new keys:
+        cert_file = open('cert_file.p12', 'r')
+        apns_config = APNSConfig(development_certificate=cert_file)
+        apns_config.save()
+        cert_file.close()
+
+    """
+    production_certificate_name = fields.StringField(required=False)
+    production_certificate = fields.FileField(required=False)
+    production_bundle_identifier = fields.StringField(required=False)
+    production_expiration_date = fields.DateField(read_only=True)
+    development_certificate_name = fields.StringField(required=False)
+    development_certificate = fields.FileField(required=False)
+    development_bundle_identifier = fields.StringField(required=False)
+    development_expiration_date = fields.DateField(read_only=True)
+
+    def is_new(self):
+        return False  # this is predefined - never will be new
+
+    class Meta:
+        parent = Instance
+        endpoints = {
+            'list': {
+                'methods': ['get', 'put'],
+                'path': '/push_notifications/apns/config/',
+            },
+            'detail': {
+                'methods': ['get', 'put'],
+                'path': '/push_notifications/apns/config/',
+            },
+        }
