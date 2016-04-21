@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
 import unittest
-from datetime import datetime
 
 from mock import mock
 from syncano.models import APNSDevice, APNSMessage, GCMDevice, GCMMessage
