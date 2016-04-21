@@ -295,7 +295,7 @@ class APNSConfig(Model):
     Usage::
 
         Add (modify) new keys:
-        cert_file = open('cert_file.p12', 'r')
+        cert_file = open('cert_file.p12', 'rb')
         apns_config = APNSConfig(development_certificate=cert_file)
         apns_config.save()
         cert_file.close()
