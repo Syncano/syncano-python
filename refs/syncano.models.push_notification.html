@@ -167,6 +167,11 @@
 <dd></dd></dl>
 
 <dl class="attribute">
+<dt id="syncano.models.push_notification.DeviceBase.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
 <dt id="syncano.models.push_notification.DeviceBase.created_at">
 <tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.created_at" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -187,9 +192,12 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.push_notification.DeviceBase.is_new">
-<tt class="descclassname">DeviceBase.</tt><tt class="descname">is_new</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/push_notification.html#DeviceBase.is_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.is_new" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="syncano.models.push_notification.DeviceBase.send_message">
+<tt class="descclassname">DeviceBase.</tt><tt class="descname">send_message</tt><big>(</big><em>content</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/push_notification.html#DeviceBase.send_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.DeviceBase.send_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>A method which allows to send message directly to the device;
+:param contet: Message content structure - object like;
+:return:</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -215,11 +223,11 @@ gcm_device = GCMDevice.please.get(registration_id=86152312314401554)
 
 Delete:
 gcm_device.delete()
+
+Update:
+gcm_device.label = &#39;some new label&#39;
+gcm_device.save()
 </pre></div>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">another save on the same object will always fail (altering the Device data is currently not possible);</p>
 </div>
 <dl class="attribute">
 <dt id="syncano.models.push_notification.GCMDevice.DoesNotExist">
@@ -255,6 +263,11 @@ gcm_device.delete()
 <dl class="attribute">
 <dt id="syncano.models.push_notification.GCMDevice.label">
 <tt class="descname">label</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMDevice.label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMDevice.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMDevice.links" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -306,11 +319,11 @@ apns_device =
 
 Delete:
 apns_device.delete()
+
+Update:
+apns_device.label = &#39;some new label&#39;
+apns_device.save()
 </pre></div>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">another save on the same object will always fail (altering the Device data is currently not possible);</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -351,6 +364,11 @@ format too.</p>
 <dl class="attribute">
 <dt id="syncano.models.push_notification.APNSDevice.label">
 <tt class="descname">label</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSDevice.label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSDevice.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSDevice.links" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -598,6 +616,152 @@ For more details read the APNS documentation;</p>
 <dl class="attribute">
 <dt id="syncano.models.push_notification.APNSMessage.updated_at">
 <tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSMessage.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.push_notification.GCMConfig">
+<em class="property">class </em><tt class="descname">GCMConfig</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/push_notification.html#GCMConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.GCMConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>A model which stores information with GCM Push keys;</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>Add (modify) new keys:
+gcm_config = GCMConfig(production_api_key=&#39;ccc&#39;, development_api_key=&#39;ddd&#39;)
+gcm_config.save()
+
+or:
+gcm_config = GCMConfig().please.get()
+gcm_config.production_api_key = &#39;ccc&#39;
+gcm_config.development_api_key = &#39;ddd&#39;
+gcm_config.save()
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMConfig.production_api_key">
+<tt class="descname">production_api_key</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMConfig.production_api_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMConfig.development_api_key">
+<tt class="descname">development_api_key</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMConfig.development_api_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.push_notification.GCMConfig.is_new">
+<tt class="descname">is_new</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/push_notification.html#GCMConfig.is_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.GCMConfig.is_new" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMConfig.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.push_notification.GCMConfig.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">GCMConfigDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMConfig.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMConfig.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMConfig.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMConfig.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMConfig.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.GCMConfig.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.GCMConfig.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.push_notification.GCMConfig.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.push_notification.APNSConfig">
+<em class="property">class </em><tt class="descname">APNSConfig</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/push_notification.html#APNSConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.APNSConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>A model which stores information with APNS Push certificates;</p>
+<p>Usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>Add (modify) new keys:
+cert_file = open(&#39;cert_file.p12&#39;, &#39;rb&#39;)
+apns_config = APNSConfig(development_certificate=cert_file)
+apns_config.save()
+cert_file.close()
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSConfig.production_certificate_name">
+<tt class="descname">production_certificate_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSConfig.production_certificate_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSConfig.production_certificate">
+<tt class="descname">production_certificate</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSConfig.production_certificate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSConfig.production_bundle_identifier">
+<tt class="descname">production_bundle_identifier</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSConfig.production_bundle_identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSConfig.production_expiration_date">
+<tt class="descname">production_expiration_date</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSConfig.production_expiration_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSConfig.development_certificate_name">
+<tt class="descname">development_certificate_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSConfig.development_certificate_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSConfig.development_certificate">
+<tt class="descname">development_certificate</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSConfig.development_certificate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSConfig.development_bundle_identifier">
+<tt class="descname">development_bundle_identifier</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSConfig.development_bundle_identifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSConfig.development_expiration_date">
+<tt class="descname">development_expiration_date</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSConfig.development_expiration_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.push_notification.APNSConfig.is_new">
+<tt class="descname">is_new</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/push_notification.html#APNSConfig.is_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.push_notification.APNSConfig.is_new" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSConfig.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.push_notification.APNSConfig.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">APNSConfigDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSConfig.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSConfig.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSConfig.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSConfig.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSConfig.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.push_notification.APNSConfig.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.push_notification.APNSConfig.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.push_notification.APNSConfig.please" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

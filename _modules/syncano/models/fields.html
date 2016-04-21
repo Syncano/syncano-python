@@ -563,10 +563,15 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">LinksWrapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__getattribute__</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-            <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">item</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">links_dict</span> <span class="ow">or</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignored_links</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
                 <span class="k">raise</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">links_dict</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
+
+            <span class="k">return</span> <span class="n">value</span>
 
 <div class="viewcode-block" id="LinksWrapper.to_native"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.LinksWrapper.to_native">[docs]</a>    <span class="k">def</span> <span class="nf">to_native</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">links_dict</span>
@@ -800,9 +805,10 @@
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
-            <span class="n">value</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
-                <span class="s1">&#39;environment&#39;</span><span class="p">:</span> <span class="n">PUSH_ENV</span><span class="p">,</span>
-            <span class="p">})</span>
+            <span class="k">if</span> <span class="s1">&#39;environment&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                <span class="n">value</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                    <span class="s1">&#39;environment&#39;</span><span class="p">:</span> <span class="n">PUSH_ENV</span><span class="p">,</span>
+                <span class="p">})</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">value</span>
 

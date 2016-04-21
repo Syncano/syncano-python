@@ -399,7 +399,7 @@
             <span class="c1"># remove &#39;data&#39; and &#39;content-type&#39; to avoid &quot;ValueError: Data must not be a string.&quot;</span>
             <span class="n">params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
             <span class="n">params</span><span class="p">[</span><span class="s1">&#39;headers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;content-type&#39;</span><span class="p">)</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">files</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_apns_cert_files</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">201</span><span class="p">:</span>
                 <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;{}{}/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">content</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
@@ -529,8 +529,22 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">USER_INFO_SUFFIX</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_name</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
             <span class="s1">&#39;X-API-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">,</span> <span class="s1">&#39;X-USER-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span><span class="p">})</span>
+</div>
+    <span class="k">def</span> <span class="nf">_process_apns_cert_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">files</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="n">file_name</span> <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">keys</span><span class="p">()]:</span>
+            <span class="c1"># remove certificates files (which are bool - True if cert exist, False otherwise)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">files</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                <span class="n">files</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                <span class="k">continue</span>
 
-</div></div>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;production_certificate&#39;</span><span class="p">,</span> <span class="s1">&#39;development_certificate&#39;</span><span class="p">]:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="s1">&#39;application/x-pkcs12&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Expires&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span><span class="p">})</span>
+                <span class="n">files</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">files</span>
+
+</div>
 <div class="viewcode-block" id="ConnectionMixin"><a class="viewcode-back" href="../../refs/syncano.connection.html#syncano.connection.ConnectionMixin">[docs]</a><span class="k">class</span> <span class="nc">ConnectionMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Injects connection attribute with support of basic validation.&quot;&quot;&quot;</span>
 
