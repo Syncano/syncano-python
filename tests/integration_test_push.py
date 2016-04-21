@@ -13,7 +13,8 @@ class PushIntegrationTest(IntegrationTest):
         super(PushIntegrationTest, cls).setUpClass()
 
         cls.gcm_config = GCMConfig(
-            development_api_key=uuid.uuid4().hex
+            development_api_key=uuid.uuid4().hex,
+            instance_name=cls.instance.name
         )
         cls.gcm_config.save()
 
@@ -21,7 +22,8 @@ class PushIntegrationTest(IntegrationTest):
             cls.apns_config = APNSConfig(
                 development_certificate=cert,
                 development_certificate_name='test',
-                development_bundle_identifier='test1234'
+                development_bundle_identifier='test1234',
+                instance_name=cls.instance.name
             )
             cls.apns_config.save()
 
