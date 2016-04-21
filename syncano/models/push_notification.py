@@ -18,14 +18,28 @@ class DeviceBase(object):
     label = fields.StringField(max_length=80)
     user = fields.IntegerField(required=False)
 
+    links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
     class Meta:
         abstract = True
 
-    def is_new(self):
-        return self.created_at is None
+    def send_message(self, content):
+        """
+        A method which allows to send message directly to the device;
+        :param contet: Message content structure - object like;
+        :return:
+        """
+        print(self.links.links_dict)
+        send_message_path = self.links.send_message
+        data = {
+            'content': content
+        }
+        connection = self._get_connection()
+        response = connection.request('POST', send_message_path, data=data)
+        self.to_python(response)
+        return self
 
 
 class GCMDevice(DeviceBase, Model):
@@ -51,9 +65,9 @@ class GCMDevice(DeviceBase, Model):
         Delete:
         gcm_device.delete()
 
-    .. note::
-
-        another save on the same object will always fail (altering the Device data is currently not possible);
+        Update:
+        gcm_device.label = 'some new label'
+        gcm_device.save()
 
     """
 
@@ -61,11 +75,11 @@ class GCMDevice(DeviceBase, Model):
         parent = Instance
         endpoints = {
             'detail': {
-                'methods': ['delete', 'get'],
+                'methods': ['delete', 'get', 'put', 'patch'],
                 'path': '/push_notifications/gcm/devices/{registration_id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['post', 'get'],
                 'path': '/push_notifications/gcm/devices/',
             }
         }
@@ -94,9 +108,9 @@ class APNSDevice(DeviceBase, Model):
         Delete:
         apns_device.delete()
 
-    .. note::
-
-        another save on the same object will always fail (altering the Device data is currently not possible);
+        Update:
+        apns_device.label = 'some new label'
+        apns_device.save()
 
     .. note::
 
@@ -108,11 +122,11 @@ class APNSDevice(DeviceBase, Model):
         parent = Instance
         endpoints = {
             'detail': {
-                'methods': ['delete', 'get'],
+                'methods': ['delete', 'get', 'put', 'patch'],
                 'path': '/push_notifications/apns/devices/{registration_id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['post', 'get'],
                 'path': '/push_notifications/apns/devices/',
             }
         }
@@ -234,4 +248,80 @@ class APNSMessage(MessageBase, Model):
                 'methods': ['get'],
                 'path': '/push_notifications/apns/messages/',
             }
+        }
+
+
+class GCMConfig(Model):
+    """
+    A model which stores information with GCM Push keys;
+
+    Usage::
+
+        Add (modify) new keys:
+        gcm_config = GCMConfig(production_api_key='ccc', development_api_key='ddd')
+        gcm_config.save()
+
+        or:
+        gcm_config = GCMConfig().please.get()
+        gcm_config.production_api_key = 'ccc'
+        gcm_config.development_api_key = 'ddd'
+        gcm_config.save()
+
+    """
+    production_api_key = fields.StringField(required=False)
+    development_api_key = fields.StringField(required=False)
+
+    def is_new(self):
+        return False  # this is predefined - never will be new
+
+    class Meta:
+        parent = Instance
+        endpoints = {
+            'list': {
+                'methods': ['get', 'put'],
+                'path': '/push_notifications/gcm/config/',
+            },
+            'detail': {
+                'methods': ['get', 'put'],
+                'path': '/push_notifications/gcm/config/',
+            },
+        }
+
+
+class APNSConfig(Model):
+    """
+    A model which stores information with APNS Push certificates;
+
+    Usage::
+
+        Add (modify) new keys:
+        cert_file = open('cert_file.p12', 'rb')
+        apns_config = APNSConfig(development_certificate=cert_file)
+        apns_config.save()
+        cert_file.close()
+
+    """
+    production_certificate_name = fields.StringField(required=False)
+    production_certificate = fields.FileField(required=False)
+    production_bundle_identifier = fields.StringField(required=False)
+    production_expiration_date = fields.DateField(read_only=True)
+    development_certificate_name = fields.StringField(required=False)
+    development_certificate = fields.FileField(required=False)
+    development_bundle_identifier = fields.StringField(required=False)
+    development_expiration_date = fields.DateField(read_only=True)
+
+    def is_new(self):
+        return False  # this is predefined - never will be new
+
+    class Meta:
+        parent = Instance
+        endpoints = {
+            'list': {
+                'methods': ['get', 'put'],
+                'path': '/push_notifications/apns/config/',
+            },
+            'detail': {
+                'methods': ['get', 'put'],
+                'path': '/push_notifications/apns/config/',
+            },
         }
