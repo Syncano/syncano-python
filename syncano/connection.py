@@ -404,7 +404,7 @@ class Connection(object):
 
     def _process_apns_cert_files(self, files):
         files = files.copy()
-        for key in files.keys():
+        for key in [file_name for file_name in files.keys()]:
             # remove certificates files (which are bool - True if cert exist, False otherwise)
             value = files[key]
             if isinstance(value, bool):

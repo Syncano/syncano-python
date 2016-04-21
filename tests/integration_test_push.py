@@ -18,7 +18,7 @@ class PushIntegrationTest(InstanceMixin, IntegrationTest):
         )
         cls.gcm_config.save()
 
-        with open('tests/certificates/ApplePushDevelopment.p12', 'r') as cert:
+        with open('tests/certificates/ApplePushDevelopment.p12', 'rb') as cert:
             cls.apns_config = APNSConfig(
                 development_certificate=cert,
                 development_certificate_name='test',
