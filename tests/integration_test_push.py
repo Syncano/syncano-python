@@ -88,14 +88,14 @@ class PushNotificationTest(PushIntegrationTest):
 
         self.assertEqual(0, len(list(GCMMessage.please.all())))
 
-        self.gcm_device.send_message(contet={'environment': self.environment, 'data': {'c': 'more_c'}})
+        self.gcm_device.send_message(content={'environment': self.environment, 'data': {'c': 'more_c'}})
 
         self.assertEqual(1, len(list(GCMMessage.please.all())))
 
     def test_send_message_apns(self):
         self.assertEqual(0, len(list(APNSMessage.please.all())))
 
-        self.apns_device.send_message(contet={'environment': 'development', 'aps': {'alert': 'alert test'}})
+        self.apns_device.send_message(content={'environment': 'development', 'aps': {'alert': 'alert test'}})
 
         self.assertEqual(1, len(list(APNSMessage.please.all())))
 
@@ -127,11 +127,9 @@ class PushNotificationTest(PushIntegrationTest):
 
     def _test_device(self, device, manager):
 
-        self.assertFalse(manager.all(instance_name=self.instance.name))
-
         device.save()
 
-        self.assertEqual(len(list(manager.all(instance_name=self.instance.name,))), 1)
+        self.assertEqual(len(list(manager.all(instance_name=self.instance.name,))), 2)
 
         # test get:
         device_ = manager.get(instance_name=self.instance.name, registration_id=device.registration_id)
@@ -149,8 +147,6 @@ class PushNotificationTest(PushIntegrationTest):
         self.assertEqual(new_label, device_.label)
 
         device.delete()
-
-        self.assertFalse(manager.all(instance_name=self.instance.name))
 
     def _test_message(self, message, manager):
         self.assertFalse(manager.all(instance_name=self.instance.name))
