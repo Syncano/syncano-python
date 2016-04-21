@@ -63,6 +63,14 @@ class PushNotificationTest(InstanceMixin, IntegrationTest):
         self.assertEqual(device_.registration_id, device.registration_id)
         self.assertEqual(device_.device_id, device.device_id)
 
+        # test update:
+        new_label = 'totally new label'
+        device.label = new_label
+        device.save()
+
+        device_ = manager.get(instance_name=self.instance.name, registration_id=device.registration_id)
+        self.assertEqual(new_label, device_.label)
+
         device.delete()
 
         self.assertFalse(manager.all(instance_name=self.instance.name))

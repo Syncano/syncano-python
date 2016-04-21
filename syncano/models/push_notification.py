@@ -18,14 +18,28 @@ class DeviceBase(object):
     label = fields.StringField(max_length=80)
     user = fields.IntegerField(required=False)
 
+    links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
 
     class Meta:
         abstract = True
 
-    def is_new(self):
-        return self.created_at is None
+    def send_message(self, content):
+        """
+        A method which allows to send message directly to the device;
+        :param contet: Message content structure - object like;
+        :return:
+        """
+        print(self.links.links_dict)
+        send_message_path = self.links.send_message
+        data = {
+            'content': content
+        }
+        connection = self._get_connection()
+        response = connection.request('POST', send_message_path, data=data)
+        self.to_python(response)
+        return self
 
 
 class GCMDevice(DeviceBase, Model):
@@ -51,9 +65,9 @@ class GCMDevice(DeviceBase, Model):
         Delete:
         gcm_device.delete()
 
-    .. note::
-
-        another save on the same object will always fail (altering the Device data is currently not possible);
+        Update:
+        gcm_device.label = 'some new label'
+        gcm_device.save()
 
     """
 
@@ -61,11 +75,11 @@ class GCMDevice(DeviceBase, Model):
         parent = Instance
         endpoints = {
             'detail': {
-                'methods': ['delete', 'get'],
+                'methods': ['delete', 'get', 'put', 'patch'],
                 'path': '/push_notifications/gcm/devices/{registration_id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['post', 'get'],
                 'path': '/push_notifications/gcm/devices/',
             }
         }
@@ -94,9 +108,9 @@ class APNSDevice(DeviceBase, Model):
         Delete:
         apns_device.delete()
 
-    .. note::
-
-        another save on the same object will always fail (altering the Device data is currently not possible);
+        Update:
+        apns_device.label = 'some new label'
+        apns_device.save()
 
     .. note::
 
@@ -108,11 +122,11 @@ class APNSDevice(DeviceBase, Model):
         parent = Instance
         endpoints = {
             'detail': {
-                'methods': ['delete', 'get'],
+                'methods': ['delete', 'get', 'put', 'patch'],
                 'path': '/push_notifications/apns/devices/{registration_id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['post', 'get'],
                 'path': '/push_notifications/apns/devices/',
             }
         }
