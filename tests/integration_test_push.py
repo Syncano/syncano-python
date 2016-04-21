@@ -6,7 +6,7 @@ from syncano.models import APNSConfig, APNSDevice, APNSMessage, GCMConfig, GCMDe
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 
-class PushIntegrationTest(IntegrationTest):
+class PushIntegrationTest(InstanceMixin, IntegrationTest):
 
     @classmethod
     def setUpClass(cls):
@@ -45,7 +45,7 @@ class PushIntegrationTest(IntegrationTest):
         cls.apns_device.save()
 
 
-class PushNotificationTest(InstanceMixin, PushIntegrationTest):
+class PushNotificationTest(PushIntegrationTest):
 
     def test_gcm_config_update(self):
         gcm_config = GCMConfig.please.get()
