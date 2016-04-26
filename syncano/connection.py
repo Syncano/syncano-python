@@ -235,6 +235,8 @@ class Connection(object):
         data = kwargs.get('data', {})
         files = data.pop('files', None)
 
+        self._check_batch_files(data)
+
         if files is None:
             files = {k: v for k, v in six.iteritems(data) if hasattr(v, 'read')}
             if data:
@@ -401,6 +403,14 @@ class Connection(object):
 
         return self.make_request('GET', self.USER_INFO_SUFFIX.format(name=self.instance_name), headers={
             'X-API-KEY': self.api_key, 'X-USER-KEY': self.user_key})
+
+    @classmethod
+    def _check_batch_files(cls, data):
+        if 'requests' in data:  # batch requests
+            for request in data['requests']:
+                per_request_files = request.get('body', {}).get('files', {})
+                if per_request_files:
+                    raise SyncanoValueError('Batch do not support files upload.')
 
     def _process_apns_cert_files(self, files):
         files = files.copy()

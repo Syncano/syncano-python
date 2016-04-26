@@ -1,5 +1,6 @@
 import json
 import re
+from collections import namedtuple
 from datetime import date, datetime
 
 import six
@@ -623,6 +624,7 @@ class SchemaField(JSONField):
                         'reference',
                         'array',
                         'object',
+                        'geopoint',
                     ],
                 },
                 'order_index': {
@@ -685,6 +687,64 @@ class PushJSONField(JSONField):
         return value
 
 
+GeoPointStruct = namedtuple('GeoPointHelper', ['latitude', 'longitude'])
+
+
+class GeoPoint(Field):
+
+    def validate(self, value, model_instance):
+        super(GeoPoint, self).validate(value, model_instance)
+
+        if not self.required and not value:
+            return
+
+        if isinstance(value, six.string_types):
+            try:
+                value = json.loads(value)
+            except (ValueError, TypeError):
+                raise SyncanoValueError('Expected an object')
+
+        if not isinstance(value, GeoPointStruct):
+            raise SyncanoValueError('Expected an GeoPointStruct')
+
+    def to_native(self, value):
+        if value is None:
+            return
+
+        geo_struct = {'latitude': value[0], 'longitude': value[1]}
+        geo_struct = json.dumps(geo_struct)
+
+        return geo_struct
+
+    def to_python(self, value):
+        if value is None:
+            return
+
+        if isinstance(value, six.string_types):
+            try:
+                value = json.loads(value)
+            except (ValueError, TypeError):
+                raise SyncanoValueError('Invalid value: can not be parsed.')
+
+        longitude = None
+        latitude = None
+
+        if isinstance(value, dict):
+            latitude = value.get('latitude')
+            longitude = value.get('longitude')
+        elif isinstance(value, (tuple, list)):
+            try:
+                latitude = value[0]
+                longitude = value[1]
+            except IndexError:
+                raise SyncanoValueError('Can not parse the geo struct.')
+
+        if not longitude or not latitude:
+            raise SyncanoValueError('Expected the `longitude` and `latitude` fields.')
+
+        return GeoPointStruct(latitude, longitude)
+
+
 MAPPING = {
     'string': StringField,
     'text': StringField,
@@ -708,4 +768,5 @@ MAPPING = {
     'schema': SchemaField,
     'array': ArrayField,
     'object': ObjectField,
+    'geopoint': GeoPoint,
 }
