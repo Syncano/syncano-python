@@ -47,13 +47,13 @@ class GeoPointApiTest(InstanceMixin, IntegrationTest):
 
     def test_filtering_on_geo_pint_near_miles(self):
         objects = Object.please.list(class_name="city").filter(
-                geo_point__near={
-                    "latitude": 52.2297,
-                    "longitude": 21.0122,
-                    "distance": 10,
-                    "unit": GeoPoint.MILES
-                }
-            )
+            geo_point__near={
+                "latitude": 52.2297,
+                "longitude": 21.0122,
+                "distance": 10,
+                "unit": GeoPoint.MILES
+            }
+        )
         result_list = self._prepare_result_list(objects)
         self.assertListEqual(result_list, self.list_warsaw)
 
