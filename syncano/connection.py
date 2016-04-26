@@ -273,7 +273,7 @@ class Connection(object):
             # remove 'data' and 'content-type' to avoid "ValueError: Data must not be a string."
             params.pop('data')
             params['headers'].pop('content-type')
-            params['files'] = files
+            params['files'] = self._process_apns_cert_files(files)
 
             if response.status_code == 201:
                 url = '{}{}/'.format(url, content['id'])
@@ -411,6 +411,20 @@ class Connection(object):
                 per_request_files = request.get('body', {}).get('files', {})
                 if per_request_files:
                     raise SyncanoValueError('Batch do not support files upload.')
+
+    def _process_apns_cert_files(self, files):
+        files = files.copy()
+        for key in [file_name for file_name in files.keys()]:
+            # remove certificates files (which are bool - True if cert exist, False otherwise)
+            value = files[key]
+            if isinstance(value, bool):
+                files.pop(key)
+                continue
+
+            if key in ['production_certificate', 'development_certificate']:
+                value = (value.name, value, 'application/x-pkcs12', {'Expires': '0'})
+                files[key] = value
+        return files
 
 
 class ConnectionMixin(object):

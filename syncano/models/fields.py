@@ -436,10 +436,15 @@ class LinksWrapper(object):
         try:
             return super(LinksWrapper, self).__getattribute__(item)
         except AttributeError:
-            item = item.replace('_', '-')
-            if item not in self.links_dict or item in self.ignored_links:
+            value = self.links_dict.get(item)
+            if not value:
+                item = item.replace('_', '-')
+                value = self.links_dict.get(item)
+
+            if not value:
                 raise
-            return self.links_dict[item]
+
+            return value
 
     def to_native(self):
         return self.links_dict
