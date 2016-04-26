@@ -882,7 +882,7 @@ class ObjectManager(IncrementMixin, Manager):
     LOOKUP_SEPARATOR = '__'
     ALLOWED_LOOKUPS = [
         'gt', 'gte', 'lt', 'lte',
-        'eq', 'neq', 'exists', 'in',
+        'eq', 'neq', 'exists', 'in', 'near'
     ]
 
     def __init__(self):

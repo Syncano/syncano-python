@@ -63,6 +63,7 @@ class AllFieldsModel(models.Model):
     schema_field = models.SchemaField()
     array_field = models.ArrayField()
     object_field = models.ObjectField()
+    geo_field = models.GeoPoint()
 
     class Meta:
         endpoints = {
@@ -571,3 +572,22 @@ class ObjectFieldTestCase(BaseTestCase):
 
         self.field.to_python({'raz': 1, 'dwa': 2})
         self.field.to_python('{"raz": 1, "dwa": 2}')
+
+
+class GeoPointTestCase(BaseTestCase):
+    field_name = 'geo_field'
+
+    def test_validate(self):
+
+        with self.assertRaises(SyncanoValueError):
+            self.field.validate(12, self.instance)
+
+        self.field.validate((52.12, 12.02), self.instance)
+        self.field.validate({'latitude': 52.12, 'longitude': 12.02}, self.instance)
+
+    def test_to_python(self):
+        with self.assertRaises(SyncanoValueError):
+            self.field.to_python(12)
+
+        self.field.to_python((52.12, 12.02))
+        self.field.to_python({'latitude': 52.12, 'longitude': 12.02})
