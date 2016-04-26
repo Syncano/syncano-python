@@ -5,6 +5,7 @@ from functools import wraps
 from time import mktime
 
 import six
+from models import GeoPoint
 from syncano import models
 from syncano.exceptions import SyncanoValidationError, SyncanoValueError
 from syncano.models.manager import SchemaManager
@@ -582,8 +583,7 @@ class GeoPointTestCase(BaseTestCase):
         with self.assertRaises(SyncanoValueError):
             self.field.validate(12, self.instance)
 
-        self.field.validate((52.12, 12.02), self.instance)
-        self.field.validate({'latitude': 52.12, 'longitude': 12.02}, self.instance)
+        self.field.validate(GeoPoint.GeoPointStruct(**{'latitude': 52.12, 'longitude': 12.02}), self.instance)
 
     def test_to_python(self):
         with self.assertRaises(SyncanoValueError):
