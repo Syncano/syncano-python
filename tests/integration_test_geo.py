@@ -39,7 +39,7 @@ class GeoPointApiTest(InstanceMixin, IntegrationTest):
 
         for distance, cities in six.iteritems(distances):
             objects = Object.please.list(instance_name=self.instance.name, class_name="city").filter(
-                geo_point__near={
+                location__near={
                     "latitude": 52.2297,
                     "longitude": 21.0122,
                     "distance": distance,
@@ -51,9 +51,9 @@ class GeoPointApiTest(InstanceMixin, IntegrationTest):
 
             self.assertListEqual(result_list, cities)
 
-    def test_filtering_on_geo_pint_near_miles(self):
+    def test_filtering_on_geo_point_near_miles(self):
         objects = Object.please.list(instance_name=self.instance.name, class_name="city").filter(
-            geo_point__near={
+            location__near={
                 "latitude": 52.2297,
                 "longitude": 21.0122,
                 "distance": 10,
@@ -64,16 +64,16 @@ class GeoPointApiTest(InstanceMixin, IntegrationTest):
         self.assertListEqual(result_list, self.list_warsaw)
 
     def test_filtering_on_geo_point_exists(self):
-        objects = Object.please.list(instance_name=self.instance.name, class_name="geo_klass").filter(
-            geo_point__exists=True
+        objects = Object.please.list(instance_name=self.instance.name, class_name="city").filter(
+            location__exists=True
         )
 
         result_list = [o.city for o in objects]
 
         self.assertListEqual(result_list, self.list_warsaw_berlin_paris)
 
-        objects = Object.please.list(instance_name=self.instance.name, class_name="geo_klass").filter(
-            geo_point__exists=False
+        objects = Object.please.list(instance_name=self.instance.name, class_name="city").filter(
+            location__exists=False
         )
 
         result_list = self._prepare_result_list(objects)
