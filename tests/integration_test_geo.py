@@ -8,6 +8,8 @@ class GeoPointApiTest(InstanceMixin, IntegrationTest):
 
     @classmethod
     def setUpClass(cls):
+        super(GeoPointApiTest, cls).setUpClass()
+
         cls.city_model = Class.please.create(instance_name=cls.instance.name, name='city', schema=[
             {"name": "city", "type": "string"},
             {"name": "location", "type": "geopoint", "filter_index": True},
