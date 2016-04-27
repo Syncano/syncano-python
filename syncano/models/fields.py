@@ -686,36 +686,52 @@ class PushJSONField(JSONField):
         return value
 
 
-class GeoPoint(Field):
+class GeoPoint(object):
+
+    def __init__(self, latitude, longitude):
+        self.latitude = latitude
+        self.longitude = longitude
+
+    def __str__(self):
+        return "GeoPoint(latitude={}, longitude={})".format(self.latitude, self.longitude)
+
+    def __repr__(self):
+        return "GeoPoint(latitude={}, longitude={})".format(self.latitude, self.longitude)
+
+    def to_native(self):
+        geo_struct_dump = {'latitude': self.latitude, 'longitude': self.longitude}
+        return geo_struct_dump
+
+
+class GeoLookup(object):
 
     KILOMETERS = '_in_kilometers'
     MILES = '_in_miles'
 
-    class GeoPointStruct(object):
+    def __init__(self, geo_point, distance, unit=None):
+        if not isinstance(geo_point, GeoPoint):
+            raise SyncanoValueError('GeoPoint expected.')
 
-        def __init__(self, latitude=None, longitude=None, distance=None, unit=None):
-            if not latitude and not longitude:
-                raise SyncanoValueError('Provide latitude and longitude')
-            self.latitude = latitude
-            self.longitude = longitude
-            self.distance = distance
-            self.unit = unit if unit in [GeoPoint.MILES, GeoPoint.KILOMETERS] else GeoPoint.KILOMETERS
+        if unit is not None and unit not in [self.KILOMETERS, self.MILES]:
+            raise SyncanoValueError('Possible `unit` values: GeoLookup.MILES, GeoLookup.KILOMETERS')
 
-        def __str__(self):
-            return "GeoPoint(latitude={}, longitude={})".format(self.latitude, self.longitude)
+        self.geo_point = geo_point
+        self.distance = distance
+        self.unit = unit or self.KILOMETERS
 
-        def __repr__(self):
-            return "GeoPoint(latitude={}, longitude={})".format(self.latitude, self.longitude)
+    def to_native(self):
+        distance_key = 'distance_'.format(self.unit)
+        return {
+            'latitude': self.geo_point.latitude,
+            'longitude': self.geo_point.longitude,
+            distance_key: self.distance
+        }
 
-        def to_native(self):
-            geo_struct_dump = {'latitude': self.latitude, 'longitude': self.longitude}
-            if self.distance is not None:
-                distance_key = 'distance' + self.unit
-                geo_struct_dump[distance_key] = self.distance
-            return geo_struct_dump
+
+class GeoPointField(Field):
 
     def validate(self, value, model_instance):
-        super(GeoPoint, self).validate(value, model_instance)
+        super(GeoPointField, self).validate(value, model_instance)
 
         if not self.required and not value:
             return
@@ -726,8 +742,8 @@ class GeoPoint(Field):
             except (ValueError, TypeError):
                 raise SyncanoValueError('Expected an object')
 
-        if not isinstance(value, GeoPoint.GeoPointStruct):
-            raise SyncanoValueError('Expected an GeoPointStruct')
+        if not isinstance(value, GeoPoint):
+            raise SyncanoValueError('Expected an GeoPoint')
 
     def to_native(self, value):
         if value is None:
@@ -737,7 +753,7 @@ class GeoPoint(Field):
             return value  # exists lookup
 
         if isinstance(value, dict):
-            value = GeoPoint.GeoPointStruct(**value)
+            value = GeoPoint(latitude=value['latitude'], longitude=value['longitude'])
 
         geo_struct = value.to_native()
         geo_struct = json.dumps(geo_struct)
@@ -748,16 +764,28 @@ class GeoPoint(Field):
         """
         Returns field's value prepared for usage in HTTP request query.
         """
-        super(GeoPoint, self).to_query(value, lookup_type)
+        super(GeoPointField, self).to_query(value, lookup_type)
 
         if lookup_type not in ['near', 'exists']:
             raise SyncanoValueError('Lookup {} not supported for geopoint field'.format(lookup_type))
 
-        if isinstance(value, dict):
-            value = GeoPoint.GeoPointStruct(**value)
-            return value.to_native()
+        if lookup_type in ['exists']:
+            if isinstance(value, bool):
+                return value
+            else:
+                raise SyncanoValueError('Bool expected in {} lookup.'.format(lookup_type))
 
-        return value
+        if isinstance(value, dict):
+            value = GeoLookup(
+                GeoPoint(latitude=value['latitude'], longitude=value['longitude']),
+                distance=value['distance'],
+                unit=value.get('unit')
+            )
+
+        if not isinstance(value, GeoLookup):
+            raise SyncanoValueError('Expected GeoLookup.')
+
+        return value.to_native()
 
     def to_python(self, value):
         if value is None:
@@ -785,7 +813,7 @@ class GeoPoint(Field):
         if not longitude or not latitude:
             raise SyncanoValueError('Expected the `longitude` and `latitude` fields.')
 
-        return GeoPoint.GeoPointStruct(latitude=latitude, longitude=longitude)
+        return GeoPoint(latitude=latitude, longitude=longitude)
 
 
 MAPPING = {
@@ -811,5 +839,5 @@ MAPPING = {
     'schema': SchemaField,
     'array': ArrayField,
     'object': ObjectField,
-    'geopoint': GeoPoint,
+    'geopoint': GeoPointField,
 }

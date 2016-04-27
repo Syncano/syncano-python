@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import six
-from syncano.models import Class, GeoPoint, Object
+from syncano.models import Class, GeoLookup, GeoPoint, Object
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 
@@ -43,7 +43,7 @@ class GeoPointApiTest(InstanceMixin, IntegrationTest):
                     "latitude": 52.2297,
                     "longitude": 21.0122,
                     "distance": distance,
-                    "unit": GeoPoint.KILOMETERS
+                    "unit": GeoLookup.KILOMETERS
                 }
             )
 
@@ -57,8 +57,15 @@ class GeoPointApiTest(InstanceMixin, IntegrationTest):
                 "latitude": 52.2297,
                 "longitude": 21.0122,
                 "distance": 10,
-                "unit": GeoPoint.MILES
+                "unit": GeoLookup.MILES
             }
+        )
+        result_list = self._prepare_result_list(objects)
+        self.assertListEqual(result_list, self.list_warsaw)
+
+    def test_filtering_on_geo_point_near_with_another_syntax(self):
+        objects = Object.please.list(instance_name=self.instance.name, class_name="city").filter(
+            location__near=GeoLookup(GeoPoint(52.2297, 21.0122), distance=10, unit=GeoLookup.MILES)
         )
         result_list = self._prepare_result_list(objects)
         self.assertListEqual(result_list, self.list_warsaw)

@@ -63,7 +63,7 @@ class AllFieldsModel(models.Model):
     schema_field = models.SchemaField()
     array_field = models.ArrayField()
     object_field = models.ObjectField()
-    geo_field = models.GeoPoint()
+    geo_field = models.GeoPointField()
 
     class Meta:
         endpoints = {
@@ -582,7 +582,7 @@ class GeoPointTestCase(BaseTestCase):
         with self.assertRaises(SyncanoValueError):
             self.field.validate(12, self.instance)
 
-        self.field.validate(models.GeoPoint.GeoPointStruct(**{'latitude': 52.12, 'longitude': 12.02}), self.instance)
+        self.field.validate(models.GeoPoint(latitude=52.12, longitude=12.02), self.instance)
 
     def test_to_python(self):
         with self.assertRaises(SyncanoValueError):
