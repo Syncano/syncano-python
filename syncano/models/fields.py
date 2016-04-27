@@ -720,7 +720,7 @@ class GeoLookup(object):
         self.unit = unit or self.KILOMETERS
 
     def to_native(self):
-        distance_key = 'distance_'.format(self.unit)
+        distance_key = 'distance{}'.format(self.unit)
         return {
             'latitude': self.geo_point.latitude,
             'longitude': self.geo_point.longitude,
