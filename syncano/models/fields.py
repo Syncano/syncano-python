@@ -622,6 +622,7 @@ class SchemaField(JSONField):
                         'datetime',
                         'file',
                         'reference',
+                        'relation',
                         'array',
                         'object',
                         'geopoint',
@@ -745,12 +746,58 @@ class GeoPoint(Field):
         return GeoPointStruct(latitude, longitude)
 
 
+class RelationValidatorMixin(object):
+    
+    def validate(self, value, model_instance):
+        super(RelationValidatorMixin, self).validate(value, model_instance)
+        self._validate(value)
+
+    @classmethod
+    def _validate(cls, value):
+        value = cls._make_list(value)
+        all_ints = all([isinstance(x, int) for x in value])
+        from archetypes import Model
+        all_objects = all([isinstance(obj, Model) for obj in value])
+        object_types = [type(obj) for obj in value]
+        if len(set(object_types)) != 1:
+            raise SyncanoValueError("All objects should be the same type.")
+
+        if (all_ints and all_objects) or (not all_ints and not all_objects):
+            raise SyncanoValueError("List elements should be objects or integers.")
+
+    @classmethod
+    def _make_list(cls, value):
+        if not isinstance(value, (list, tuple)):
+            value = [value]
+        return value
+
+
+class RelationField(RelationValidatorMixin, WritableField):
+
+    def to_python(self, value):
+        if isinstance(value, dict) and 'type' in value and 'value' in value:
+            value = value['value']
+
+        if not isinstance(value, (list, tuple)):
+            return [value]
+
+        return value
+
+    def to_native(self, value):
+        if not isinstance(value, (list, tuple)):
+            value = [value]
+
+        self._validate(value)
+        return value
+
+
 MAPPING = {
     'string': StringField,
     'text': StringField,
     'file': FileField,
     'ref': StringField,
     'reference': ReferenceField,
+    'relation': RelationField,
     'integer': IntegerField,
     'float': FloatField,
     'boolean': BooleanField,

@@ -110,3 +110,12 @@ class IncrementMixin(object):
             return True
 
         return False
+
+
+class RelationMixin(object):
+
+    def add(self):
+        pass
+
+    def remove(self):
+        pass
