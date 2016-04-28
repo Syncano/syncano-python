@@ -590,3 +590,4 @@ class GeoPointTestCase(BaseTestCase):
 
         self.field.to_python((52.12, 12.02))
         self.field.to_python({'latitude': 52.12, 'longitude': 12.02})
+        self.field.to_python(models.GeoPoint(52.12, 12.02))

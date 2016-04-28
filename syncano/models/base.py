@@ -9,3 +9,4 @@ from .data_views import *  # NOQA
 from .incentives import *  # NOQA
 from .traces import *  # NOQA
 from .push_notification import *  # NOQA
+from .geo import *  # NOQA

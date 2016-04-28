@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import six
-from syncano.models import Class, GeoLookup, GeoPoint, Object
+from syncano.exceptions import SyncanoValueError
+from syncano.models import Class, Distance, GeoPoint, Object
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 
@@ -10,19 +11,19 @@ class GeoPointApiTest(InstanceMixin, IntegrationTest):
     def setUpClass(cls):
         super(GeoPointApiTest, cls).setUpClass()
 
-        cls.city_model = Class.please.create(instance_name=cls.instance.name, name='city', schema=[
-            {"name": "city", "type": "string"},
-            {"name": "location", "type": "geopoint", "filter_index": True},
-        ])
+        cls.city_model = Class.please.create(
+            instance_name=cls.instance.name,
+            name='city',
+            schema=[
+                {"name": "city", "type": "string"},
+                {"name": "location", "type": "geopoint", "filter_index": True},
+            ]
+        )
 
-        cls.warsaw = Object.please.create(instance_name=cls.instance.name,
-                                          class_name='city', location=(52.2240698, 20.9942933), city='Warsaw')
-        cls.paris = Object.please.create(instance_name=cls.instance.name,
-                                         class_name='city', location=(52.4731384, 13.5425588), city='Berlin')
-        cls.berlin = Object.please.create(instance_name=cls.instance.name,
-                                          class_name='city', location=(48.8589101, 2.3125377), city='Paris')
-        cls.london = Object.please.create(instance_name=cls.instance.name,
-                                          class_name='city', city='London')
+        cls.warsaw = cls.city_model.objects.create(location=(52.2240698, 20.9942933), city='Warsaw')
+        cls.paris = cls.city_model.objects.create(location=(52.4731384, 13.5425588), city='Berlin')
+        cls.berlin = cls.city_model.objects.create(location=(48.8589101, 2.3125377), city='Paris')
+        cls.london = cls.city_model.objects.create(city='London')
 
         cls.list_london = ['London']
         cls.list_warsaw = ['Warsaw']
@@ -42,8 +43,7 @@ class GeoPointApiTest(InstanceMixin, IntegrationTest):
                 location__near={
                     "latitude": 52.2297,
                     "longitude": 21.0122,
-                    "distance": distance,
-                    "unit": GeoLookup.KILOMETERS
+                    "kilometers": distance,
                 }
             )
 
@@ -56,22 +56,27 @@ class GeoPointApiTest(InstanceMixin, IntegrationTest):
             location__near={
                 "latitude": 52.2297,
                 "longitude": 21.0122,
-                "distance": 10,
-                "unit": GeoLookup.MILES
+                "miles": 10,
             }
         )
         result_list = self._prepare_result_list(objects)
         self.assertListEqual(result_list, self.list_warsaw)
 
     def test_filtering_on_geo_point_near_with_another_syntax(self):
-        objects = Object.please.list(instance_name=self.instance.name, class_name="city").filter(
-            location__near=GeoLookup(GeoPoint(52.2297, 21.0122), distance=10, unit=GeoLookup.MILES)
+        objects = self.city_model.objects.filter(
+            location__near=(GeoPoint(52.2297, 21.0122), Distance(kilometers=10))
+        )
+        result_list = self._prepare_result_list(objects)
+        self.assertListEqual(result_list, self.list_warsaw)
+
+        objects = self.city_model.objects.filter(
+            location__near=(GeoPoint(52.2297, 21.0122), Distance(miles=10))
         )
         result_list = self._prepare_result_list(objects)
         self.assertListEqual(result_list, self.list_warsaw)
 
     def test_filtering_on_geo_point_exists(self):
-        objects = Object.please.list(instance_name=self.instance.name, class_name="city").filter(
+        objects = self.city_model.objects.filter(
             location__exists=True
         )
 
@@ -79,13 +84,24 @@ class GeoPointApiTest(InstanceMixin, IntegrationTest):
 
         self.assertListEqual(result_list, self.list_warsaw_berlin_paris)
 
-        objects = Object.please.list(instance_name=self.instance.name, class_name="city").filter(
+        objects = self.city_model.objects.filter(
             location__exists=False
         )
 
         result_list = self._prepare_result_list(objects)
 
         self.assertListEqual(result_list, self.list_london)
+
+    def test_distance_fail(self):
+        with self.assertRaises(SyncanoValueError):
+            self.city_model.objects.filter(
+                location__near=(GeoPoint(52.2297, 21.0122), Distance(miles=10, kilometers=20))
+            )
+
+        with self.assertRaises(SyncanoValueError):
+            self.city_model.objects.filter(
+                location__near=(GeoPoint(52.2297, 21.0122), Distance())
+            )
 
     def _prepare_result_list(self, objects):
         return [o.city for o in objects]

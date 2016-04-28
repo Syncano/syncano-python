@@ -8,6 +8,7 @@ from syncano import PUSH_ENV, logger
 from syncano.exceptions import SyncanoFieldError, SyncanoValueError
 from syncano.utils import force_text
 
+from .geo import Distance, GeoPoint
 from .manager import SchemaManager
 from .registry import registry
 
@@ -686,48 +687,6 @@ class PushJSONField(JSONField):
         return value
 
 
-class GeoPoint(object):
-
-    def __init__(self, latitude, longitude):
-        self.latitude = latitude
-        self.longitude = longitude
-
-    def __str__(self):
-        return "GeoPoint(latitude={}, longitude={})".format(self.latitude, self.longitude)
-
-    def __repr__(self):
-        return "GeoPoint(latitude={}, longitude={})".format(self.latitude, self.longitude)
-
-    def to_native(self):
-        geo_struct_dump = {'latitude': self.latitude, 'longitude': self.longitude}
-        return geo_struct_dump
-
-
-class GeoLookup(object):
-
-    KILOMETERS = '_in_kilometers'
-    MILES = '_in_miles'
-
-    def __init__(self, geo_point, distance, unit=None):
-        if not isinstance(geo_point, GeoPoint):
-            raise SyncanoValueError('GeoPoint expected.')
-
-        if unit is not None and unit not in [self.KILOMETERS, self.MILES]:
-            raise SyncanoValueError('Possible `unit` values: GeoLookup.MILES, GeoLookup.KILOMETERS')
-
-        self.geo_point = geo_point
-        self.distance = distance
-        self.unit = unit or self.KILOMETERS
-
-    def to_native(self):
-        distance_key = 'distance{}'.format(self.unit)
-        return {
-            'latitude': self.geo_point.latitude,
-            'longitude': self.geo_point.longitude,
-            distance_key: self.distance
-        }
-
-
 class GeoPointField(Field):
 
     def validate(self, value, model_instance):
@@ -755,7 +714,11 @@ class GeoPointField(Field):
         if isinstance(value, dict):
             value = GeoPoint(latitude=value['latitude'], longitude=value['longitude'])
 
-        geo_struct = value.to_native()
+        if isinstance(value, tuple):
+            geo_struct = value[0].to_native()
+        else:
+            geo_struct = value.to_native()
+
         geo_struct = json.dumps(geo_struct)
 
         return geo_struct
@@ -776,27 +739,47 @@ class GeoPointField(Field):
                 raise SyncanoValueError('Bool expected in {} lookup.'.format(lookup_type))
 
         if isinstance(value, dict):
-            value = GeoLookup(
-                GeoPoint(latitude=value['latitude'], longitude=value['longitude']),
-                distance=value['distance'],
-                unit=value.get('unit')
+            value = (
+                GeoPoint(latitude=value.pop('latitude'), longitude=value.pop('longitude')),
+                Distance(**value)
             )
 
-        if not isinstance(value, GeoLookup):
-            raise SyncanoValueError('Expected GeoLookup.')
+        if len(value) != 2 or not isinstance(value[0], GeoPoint) or not isinstance(value[1], Distance):
+            raise SyncanoValueError('This lookup should be a tuple with GeoPoint and Distance: '
+                                    '<field_name>__near=(GeoPoint(52.12, 22.12), Distance(kilometers=100))')
 
-        return value.to_native()
+        query_dict = value[0].to_native()
+        query_dict.update(value[1].to_native())
+
+        return query_dict
 
     def to_python(self, value):
         if value is None:
             return
 
+        value = self._process_string_types(value)
+
+        if isinstance(value, GeoPoint):
+            return value
+
+        latitude, longitude = self._process_value(value)
+
+        if not latitude or not longitude:
+            raise SyncanoValueError('Expected the `longitude` and `latitude` fields.')
+
+        return GeoPoint(latitude=latitude, longitude=longitude)
+
+    @classmethod
+    def _process_string_types(cls, value):
         if isinstance(value, six.string_types):
             try:
-                value = json.loads(value)
+                return json.loads(value)
             except (ValueError, TypeError):
                 raise SyncanoValueError('Invalid value: can not be parsed.')
+        return value
 
+    @classmethod
+    def _process_value(cls, value):
         longitude = None
         latitude = None
 
@@ -808,12 +791,9 @@ class GeoPointField(Field):
                 latitude = value[0]
                 longitude = value[1]
             except IndexError:
-                raise SyncanoValueError('Can not parse the geo struct.')
+                raise SyncanoValueError('Can not parse the geo point.')
 
-        if not longitude or not latitude:
-            raise SyncanoValueError('Expected the `longitude` and `latitude` fields.')
-
-        return GeoPoint(latitude=latitude, longitude=longitude)
+        return latitude, longitude
 
 
 MAPPING = {
