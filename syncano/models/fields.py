@@ -702,7 +702,7 @@ class GeoPointField(Field):
                 raise SyncanoValueError('Expected an object')
 
         if not isinstance(value, GeoPoint):
-            raise SyncanoValueError('Expected an GeoPoint')
+            raise SyncanoValueError('Expected a GeoPoint')
 
     def to_native(self, value):
         if value is None:

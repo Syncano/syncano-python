@@ -8,9 +8,6 @@ class GeoPoint(object):
         self.latitude = latitude
         self.longitude = longitude
 
-    def __str__(self):
-        return "GeoPoint(latitude={}, longitude={})".format(self.latitude, self.longitude)
-
     def __repr__(self):
         return "GeoPoint(latitude={}, longitude={})".format(self.latitude, self.longitude)
 
