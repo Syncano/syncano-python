@@ -11,6 +11,7 @@ from syncano.utils import force_text
 
 from .manager import SchemaManager
 from .registry import registry
+from .relations import RelationManager, RelationValidatorMixin
 
 
 class JSONToPythonMixin(object):
@@ -746,33 +747,10 @@ class GeoPoint(Field):
         return GeoPointStruct(latitude, longitude)
 
 
-class RelationValidatorMixin(object):
-    
-    def validate(self, value, model_instance):
-        super(RelationValidatorMixin, self).validate(value, model_instance)
-        self._validate(value)
-
-    @classmethod
-    def _validate(cls, value):
-        value = cls._make_list(value)
-        all_ints = all([isinstance(x, int) for x in value])
-        from archetypes import Model
-        all_objects = all([isinstance(obj, Model) for obj in value])
-        object_types = [type(obj) for obj in value]
-        if len(set(object_types)) != 1:
-            raise SyncanoValueError("All objects should be the same type.")
-
-        if (all_ints and all_objects) or (not all_ints and not all_objects):
-            raise SyncanoValueError("List elements should be objects or integers.")
-
-    @classmethod
-    def _make_list(cls, value):
-        if not isinstance(value, (list, tuple)):
-            value = [value]
-        return value
-
-
 class RelationField(RelationValidatorMixin, WritableField):
+
+    def __call__(self, instance, field_name):
+        return RelationManager(instance=instance, field_name=field_name)
 
     def to_python(self, value):
         if isinstance(value, dict) and 'type' in value and 'value' in value:

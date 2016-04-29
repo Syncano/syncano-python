@@ -235,6 +235,9 @@ class Model(six.with_metaclass(ModelMetaclass)):
                 value = data[field_name]
                 setattr(self, field.name, value)
 
+            if isinstance(field, fields.RelationField):
+                setattr(self, "{}_set".format(field_name), field(instance=self, field_name=field_name))
+
     def to_native(self):
         """Converts the current instance to raw data which
         can be serialized to JSON and send to API.
