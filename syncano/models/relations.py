@@ -12,7 +12,7 @@ class RelationValidatorMixin(object):
     def _validate(cls, value):
         value = cls._make_list(value)
         all_ints = all([isinstance(x, int) for x in value])
-        from archetypes import Model
+        from .archetypes import Model
         all_objects = all([isinstance(obj, Model) for obj in value])
         object_types = [type(obj) for obj in value]
         if len(set(object_types)) != 1:

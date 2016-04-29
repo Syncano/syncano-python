@@ -34,7 +34,7 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
         self.assertListEqual(book.authors, authors_list_ids)
 
     def test_object_list(self):
-        authors_list_ids = [self.prus, self.coehlo]
+        authors_list_ids = [self.prus.id, self.coehlo.id]
         book = self.book.objects.create(authors=authors_list_ids, title='Strange title')
         self.assertListEqual(book.authors, authors_list_ids)
 
@@ -45,15 +45,15 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
         self.assertListEqual(self.lalka.authors, [self.lem.id, self.coehlo.id])
 
     def test_related_field_add(self):
-        self.lalka.authors_set.add(self.coehlo)
-        self.assertListEqual(self.lalka.authors, [self.prus.id, self.coehlo.id])
+        self.niezwyciezony.authors_set.add(self.coehlo)
+        self.assertListEqual(self.niezwyciezony.authors, [self.lem.id, self.coehlo.id])
 
         self.niezwyciezony.authors_set.add(self.prus.id, self.coehlo.id)
         self.assertListEqual(self.niezwyciezony.authors, [self.lem.id, self.prus.id, self.coehlo.id])
 
     def test_related_field_remove(self):
-        self.lalka.authors_set.remove(self.prus)
-        self.assertListEqual(self.lalka.authors, [])
+        self.brida.authors_set.remove(self.coehlo)
+        self.assertListEqual(self.brida.authors, [])
 
-        self.lalka.authors_set.remove(self.prus, self.lem, self.coehlo)
-        self.assertListEqual(self.lalka.authors, [self.prus.id, self.lem.id, self.coehlo.id])
+        self.niezwyciezony.authors_set.remove(self.prus, self.lem, self.coehlo)
+        self.assertListEqual(self.niezwyciezony.authors, [])
