@@ -753,6 +753,9 @@ class RelationField(RelationValidatorMixin, WritableField):
         return RelationManager(instance=instance, field_name=field_name)
 
     def to_python(self, value):
+        if not value:
+            return None
+
         if isinstance(value, dict) and 'type' in value and 'value' in value:
             value = value['value']
 
@@ -762,6 +765,9 @@ class RelationField(RelationValidatorMixin, WritableField):
         return value
 
     def to_native(self, value):
+        if not value:
+            return None
+
         if not isinstance(value, (list, tuple)):
             value = [value]
 
