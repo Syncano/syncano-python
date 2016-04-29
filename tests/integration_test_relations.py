@@ -31,25 +31,25 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
     def test_integers_list(self):
         authors_list_ids = [self.prus.id, self.coehlo.id]
         book = self.book.objects.create(authors=authors_list_ids, title='Strange title')
-        self.assertCountEqual(book.authors, authors_list_ids)
+        self.assertListEqual(sorted(book.authors), sorted(authors_list_ids))
 
     def test_object_list(self):
         authors_list_ids = [self.prus.id, self.coehlo.id]
         book = self.book.objects.create(authors=authors_list_ids, title='Strange title')
-        self.assertCountEqual(book.authors, authors_list_ids)
+        self.assertListEqual(sorted(book.authors), sorted(authors_list_ids))
 
     def test_object_assign(self):
         self.lalka.authors = [self.lem, self.coehlo]
         self.lalka.save()
 
-        self.assertCountEqual(self.lalka.authors, [self.lem.id, self.coehlo.id])
+        self.assertListEqual(sorted(self.lalka.authors), sorted([self.lem.id, self.coehlo.id]))
 
     def test_related_field_add(self):
         self.niezwyciezony.authors_set.add(self.coehlo)
-        self.assertCountEqual(self.niezwyciezony.authors, [self.lem.id, self.coehlo.id])
+        self.assertListEqual(sorted(self.niezwyciezony.authors), sorted([self.lem.id, self.coehlo.id]))
 
         self.niezwyciezony.authors_set.add(self.prus.id, self.coehlo.id)
-        self.assertCountEqual(self.niezwyciezony.authors, [self.lem.id, self.prus.id, self.coehlo.id])
+        self.assertListEqual(sorted(self.niezwyciezony.authors), sorted([self.lem.id, self.prus.id, self.coehlo.id]))
 
     def test_related_field_remove(self):
         self.brida.authors_set.remove(self.coehlo)
