@@ -765,7 +765,8 @@ class RelationField(RelationValidatorMixin, WritableField):
         if not isinstance(value, (list, tuple)):
             value = [value]
 
-        self._validate(value)
+        if self._validate(value):
+            value = [obj.id for obj in value]
         return value
 
 
