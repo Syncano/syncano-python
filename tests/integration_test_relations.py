@@ -30,12 +30,12 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
 
     def test_integers_list(self):
         authors_list_ids = [self.prus.id, self.coehlo.id]
-        book = self.book.object.create(authors=authors_list_ids, title='Strange title')
+        book = self.book.objects.create(authors=authors_list_ids, title='Strange title')
         self.assertListEqual(book.authors, authors_list_ids)
 
     def test_object_list(self):
         authors_list_ids = [self.prus, self.coehlo]
-        book = self.book.object.create(authors=authors_list_ids, title='Strange title')
+        book = self.book.objects.create(authors=authors_list_ids, title='Strange title')
         self.assertListEqual(book.authors, authors_list_ids)
 
     def test_object_assign(self):
