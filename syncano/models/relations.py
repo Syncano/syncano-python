@@ -41,30 +41,21 @@ class RelationManager(RelationValidatorMixin):
         self.field_name = field_name
 
     def add(self, *args):
-        if self._validate(args):
-            value_ids = [obj.id for obj in args]
-        else:
-            value_ids = args
-
-        connection = self.instance._meta.connection
-
-        data = {self.field_name: {'_add': value_ids}}
-        meta = self.instance._meta
-        update_path = meta.get_endpoint(name='detail')['path']
-        update_path = update_path.format(**self.instance.get_endpoint_data())
-        response = connection.request('PATCH', update_path, data=data)
-        self.instance.to_python(response)
+        self._add_or_remove(args)
 
     def remove(self, *args):
-        if self._validate(args):
-            value_ids = [obj.id for obj in args]
+        self._add_or_remove(args, operation='_remove')
+
+    def _add_or_remove(self, id_list, operation='_add'):
+        if self._validate(id_list):
+            value_ids = [obj.id for obj in id_list]
         else:
-            value_ids = args
+            value_ids = id_list
 
-        connection = self.instance._meta.connection
-
-        data = {self.field_name: {'_remove': value_ids}}
         meta = self.instance._meta
+        connection = meta.connection
+
+        data = {self.field_name: {operation: value_ids}}
         update_path = meta.get_endpoint(name='detail')['path']
         update_path = update_path.format(**self.instance.get_endpoint_data())
         response = connection.request('PATCH', update_path, data=data)
