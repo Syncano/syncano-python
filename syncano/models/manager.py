@@ -954,6 +954,7 @@ class ObjectManager(IncrementMixin, Manager):
 
         for field_name, value in six.iteritems(kwargs):
             lookup = 'eq'
+            model_name = None
 
             if self.LOOKUP_SEPARATOR in field_name:
                 model_name, field_name, lookup = self._get_lookup_attributes(field_name)
