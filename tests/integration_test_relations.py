@@ -61,18 +61,18 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
     def test_related_field_lookup_contains(self):
         filtered_books = self.book.objects.list().filter(authors__contains=[self.prus])
 
-        self.assertEqual(len(filtered_books), 1)
+        self.assertEqual(len(list(filtered_books)), 1)
 
         for book in filtered_books:
             self.assertEqual(book.title, self.lalka.title)
 
     def test_related_field_lookup_contains_fail(self):
         filtered_books = self.book.objects.list().filter(authors__contains=[self.prus, self.lem])
-        self.assertEqual(len(filtered_books), 0)
+        self.assertEqual(len(list(filtered_books)), 0)
 
     def test_related_field_lookup_is(self):
         filtered_books = self.book.objects.list().filter(authors__name__startswith='Stan')
 
-        self.assertEqual(len(filtered_books), 1)
+        self.assertEqual(len(list(filtered_books)), 1)
         for book in filtered_books:
             self.assertEqual(book.title, self.niezwyciezony.title)
