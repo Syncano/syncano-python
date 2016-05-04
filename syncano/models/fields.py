@@ -138,7 +138,7 @@ class Field(object):
         """
         return value
 
-    def to_query(self, value, lookup_type):
+    def to_query(self, value, lookup_type, **kwargs):
         """
         Returns field's value prepared for usage in HTTP request query.
         """
@@ -725,11 +725,11 @@ class GeoPointField(Field):
 
         return geo_struct
 
-    def to_query(self, value, lookup_type):
+    def to_query(self, value, lookup_type, **kwargs):
         """
         Returns field's value prepared for usage in HTTP request query.
         """
-        super(GeoPointField, self).to_query(value, lookup_type)
+        super(GeoPointField, self).to_query(value, lookup_type, **kwargs)
 
         if lookup_type not in ['near', 'exists']:
             raise SyncanoValueError('Lookup {} not supported for geopoint field'.format(lookup_type))
@@ -816,8 +816,25 @@ class RelationField(RelationValidatorMixin, WritableField):
 
         return value
 
-    def to_query(self, value, lookup_type):
-        pass
+    def to_query(self, value, lookup_type, related_field_name=None, related_field_lookup=None, **kwargs):
+
+        if not self.query_allowed:
+            raise self.ValidationError('Query on this field is not supported.')
+
+        if lookup_type not in ['contains', 'is']:
+            raise SyncanoValueError('Lookup {} not supported for relation field.'.format(lookup_type))
+
+        query_dict = {}
+
+        if lookup_type == 'contains':
+            if self._validate(value):
+                value = [obj.id for obj in value]
+            query_dict = value
+
+        if lookup_type == 'is':
+            query_dict = {related_field_name: {"_{0}".format(related_field_lookup): value}}
+
+        return query_dict
 
     def to_native(self, value):
         if not value:

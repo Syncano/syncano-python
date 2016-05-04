@@ -882,7 +882,8 @@ class ObjectManager(IncrementMixin, Manager):
     LOOKUP_SEPARATOR = '__'
     ALLOWED_LOOKUPS = [
         'gt', 'gte', 'lt', 'lte',
-        'eq', 'neq', 'exists', 'in', 'near'
+        'eq', 'neq', 'exists', 'in', 'startswith',
+        'near', 'is', 'contains',
     ]
 
     def __init__(self):
@@ -955,27 +956,56 @@ class ObjectManager(IncrementMixin, Manager):
             lookup = 'eq'
 
             if self.LOOKUP_SEPARATOR in field_name:
-                field_name, lookup = field_name.split(self.LOOKUP_SEPARATOR, 1)
-
-            if field_name not in model._meta.field_names:
-                allowed = ', '.join(model._meta.field_names)
-                raise SyncanoValueError('Invalid field name "{0}" allowed are {1}.'.format(field_name, allowed))
-
-            if lookup not in self.ALLOWED_LOOKUPS:
-                allowed = ', '.join(self.ALLOWED_LOOKUPS)
-                raise SyncanoValueError('Invalid lookup type "{0}" allowed are {1}.'.format(lookup, allowed))
+                model_name, field_name, lookup = self._get_lookup_attributes(field_name)
 
             for field in model._meta.fields:
                 if field.name == field_name:
                     break
 
-            query.setdefault(field_name, {})
-            query[field_name]['_{0}'.format(lookup)] = field.to_query(value, lookup)
+            self._validate_lookup(model, model_name, field_name, lookup, field)
+
+            query_main_lookup, query_main_field = self._get_main_lookup(model_name, field_name, lookup)
+
+            query.setdefault(query_main_field, {})
+            query[query_main_field]['_{0}'.format(query_main_lookup)] = field.to_query(
+                value,
+                query_main_lookup,
+                related_field_name=field_name,
+                related_field_lookup=lookup,
+            )
 
         self.query['query'] = json.dumps(query)
         self.method = 'GET'
         self.endpoint = 'list'
         return self
+
+    def _get_lookup_attributes(self, field_name):
+        try:
+            model_name, field_name, lookup = field_name.split(self.LOOKUP_SEPARATOR, 2)
+        except ValueError:
+            model_name = None
+            field_name, lookup = field_name.split(self.LOOKUP_SEPARATOR, 1)
+
+        return model_name, field_name, lookup
+
+    def _validate_lookup(self, model, model_name, field_name, lookup, field):
+        if not model_name and field_name not in model._meta.field_names:
+            allowed = ', '.join(model._meta.field_names)
+            raise SyncanoValueError('Invalid field name "{0}" allowed are {1}.'.format(field_name, allowed))
+
+        if lookup not in self.ALLOWED_LOOKUPS:
+            allowed = ', '.join(self.ALLOWED_LOOKUPS)
+            raise SyncanoValueError('Invalid lookup type "{0}" allowed are {1}.'.format(lookup, allowed))
+
+        if model_name and field.__class__.__name__ != 'RelationField':
+            raise SyncanoValueError('Lookup supported only for RelationField.')
+
+    @classmethod
+    def _get_main_lookup(cls, model_name, field_name, lookup):
+        if model_name:
+            return 'is', model_name
+        else:
+            return lookup, field_name
 
     def bulk_create(self, *objects):
         """
