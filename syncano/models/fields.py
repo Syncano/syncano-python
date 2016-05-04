@@ -748,6 +748,7 @@ class GeoPoint(Field):
 
 
 class RelationField(RelationValidatorMixin, WritableField):
+    query_allowed = True
 
     def __call__(self, instance, field_name):
         return RelationManager(instance=instance, field_name=field_name)
@@ -763,6 +764,9 @@ class RelationField(RelationValidatorMixin, WritableField):
             return [value]
 
         return value
+
+    def to_query(self, value, lookup_type):
+        pass
 
     def to_native(self, value):
         if not value:
