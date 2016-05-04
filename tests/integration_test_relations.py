@@ -17,7 +17,7 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
 
         cls.book = Class.please.create(name="book", schema=[
             {"name": "title", "type": "string", "filter_index": True},
-            {"name": "authors", "type": "relation", "target": "author"},
+            {"name": "authors", "type": "relation", "target": "author", "filter_index": True},
         ])
 
         cls.prus = cls.author.objects.create(name='Bolesław Prus', birthday=1847)
@@ -59,7 +59,7 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
         self.assertEqual(self.niezwyciezony.authors, None)
 
     def test_related_field_lookup_contains(self):
-        filtered_books = self.book.objects.list().filter(author__contains=[self.prus])
+        filtered_books = self.book.objects.list().filter(authors__contains=[self.prus])
 
         self.assertEqual(len(filtered_books), 1)
 
@@ -67,11 +67,11 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
             self.assertEqual(book.title, self.lalka.title)
 
     def test_related_field_lookup_contains_fail(self):
-        filtered_books = self.book.objects.list().filter(author__contains=[self.prus, self.lem])
+        filtered_books = self.book.objects.list().filter(authors__contains=[self.prus, self.lem])
         self.assertEqual(len(filtered_books), 0)
 
     def test_related_field_lookup_is(self):
-        filtered_books = self.book.objects.list().filter(author__name__startswith='Stan')
+        filtered_books = self.book.objects.list().filter(authors__name__startswith='Stan')
 
         self.assertEqual(len(filtered_books), 1)
         for book in filtered_books:
