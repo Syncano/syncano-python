@@ -47,6 +47,8 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
         self.lalka.save()
 
         self.assertListEqual(sorted(self.lalka.authors), sorted([self.lem.id, self.coehlo.id]))
+        self.lalka.authors = [self.prus]
+        self.lalka.save()
 
     def test_related_field_add(self):
         self.niezwyciezony.authors_set.add(self.coehlo)
@@ -65,8 +67,10 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
         self.niezwyciezony.authors_set.remove(self.prus, self.lem, self.coehlo)
         self.assertEqual(self.niezwyciezony.authors, None)
 
-        self.niezwyciezony.authors_set.add(self.lem)
-        self.brida.authors_set.add(self.coehlo)
+        self.niezwyciezony.authors = [self.lem]
+        self.niezwyciezony.save()
+        self.brida.authors = [self.coehlo]
+        self.brida.save()
 
     def test_related_field_lookup_contains(self):
         filtered_books = self.book.objects.list().filter(authors__contains=[self.prus])
