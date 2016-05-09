@@ -11,6 +11,7 @@ from syncano.utils import force_text
 from .geo import Distance, GeoPoint
 from .manager import SchemaManager
 from .registry import registry
+from .relations import RelationManager, RelationValidatorMixin
 
 
 class JSONToPythonMixin(object):
@@ -137,7 +138,7 @@ class Field(object):
         """
         return value
 
-    def to_query(self, value, lookup_type):
+    def to_query(self, value, lookup_type, **kwargs):
         """
         Returns field's value prepared for usage in HTTP request query.
         """
@@ -622,6 +623,7 @@ class SchemaField(JSONField):
                         'datetime',
                         'file',
                         'reference',
+                        'relation',
                         'array',
                         'object',
                         'geopoint',
@@ -723,11 +725,11 @@ class GeoPointField(Field):
 
         return geo_struct
 
-    def to_query(self, value, lookup_type):
+    def to_query(self, value, lookup_type, **kwargs):
         """
         Returns field's value prepared for usage in HTTP request query.
         """
-        super(GeoPointField, self).to_query(value, lookup_type)
+        super(GeoPointField, self).to_query(value, lookup_type, **kwargs)
 
         if lookup_type not in ['near', 'exists']:
             raise SyncanoValueError('Lookup {} not supported for geopoint field'.format(lookup_type))
@@ -796,12 +798,63 @@ class GeoPointField(Field):
         return latitude, longitude
 
 
+class RelationField(RelationValidatorMixin, WritableField):
+    query_allowed = True
+
+    def __call__(self, instance, field_name):
+        return RelationManager(instance=instance, field_name=field_name)
+
+    def to_python(self, value):
+        if not value:
+            return None
+
+        if isinstance(value, dict) and 'type' in value and 'value' in value:
+            value = value['value']
+
+        if not isinstance(value, (list, tuple)):
+            return [value]
+
+        return value
+
+    def to_query(self, value, lookup_type, related_field_name=None, related_field_lookup=None, **kwargs):
+
+        if not self.query_allowed:
+            raise self.ValidationError('Query on this field is not supported.')
+
+        if lookup_type not in ['contains', 'is']:
+            raise SyncanoValueError('Lookup {} not supported for relation field.'.format(lookup_type))
+
+        query_dict = {}
+
+        if lookup_type == 'contains':
+            if self._validate(value):
+                value = [obj.id for obj in value]
+            query_dict = value
+
+        if lookup_type == 'is':
+            query_dict = {related_field_name: {"_{0}".format(related_field_lookup): value}}
+
+        return query_dict
+
+    def to_native(self, value):
+        if not value:
+            return None
+
+        if not isinstance(value, (list, tuple)):
+            value = [value]
+
+        if self._validate(value):
+            value = [obj.id for obj in value]
+        return value
+
+
 MAPPING = {
     'string': StringField,
     'text': StringField,
     'file': FileField,
     'ref': StringField,
     'reference': ReferenceField,
+    'relation': RelationField,
     'integer': IntegerField,
     'float': FloatField,
     'boolean': BooleanField,
