@@ -6,15 +6,24 @@ class RelationValidatorMixin(object):
 
     def validate(self, value, model_instance):
         super(RelationValidatorMixin, self).validate(value, model_instance)
-        self._validate(value)
+        self._check_relation_value(value)
 
     @classmethod
-    def _validate(cls, value):
-        value = cls._make_list(value)
-        all_ints = all([isinstance(x, int) for x in value])
+    def _check_relation_value(cls, value):
+        if value is None:
+            return False
+
+        if '_add' in value or '_remove' in value:
+            check_value = value.get('_add') or value.get('_remove')
+        else:
+            check_value = value
+
+        check_value = cls._make_list(check_value)
+
+        all_ints = all([isinstance(x, int) for x in check_value])
         from .archetypes import Model
-        all_objects = all([isinstance(obj, Model) for obj in value])
-        object_types = [type(obj) for obj in value]
+        all_objects = all([isinstance(obj, Model) for obj in check_value])
+        object_types = [type(obj) for obj in check_value]
         if len(set(object_types)) != 1:
             raise SyncanoValueError("All objects should be the same type.")
 
@@ -47,7 +56,7 @@ class RelationManager(RelationValidatorMixin):
         self._add_or_remove(args, operation='_remove')
 
     def _add_or_remove(self, id_list, operation='_add'):
-        if self._validate(id_list):
+        if self._check_relation_value(id_list):
             value_ids = [obj.id for obj in id_list]
         else:
             value_ids = id_list

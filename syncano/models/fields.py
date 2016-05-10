@@ -811,6 +811,9 @@ class RelationField(RelationValidatorMixin, WritableField):
         if isinstance(value, dict) and 'type' in value and 'value' in value:
             value = value['value']
 
+        if isinstance(value, dict) and ('_add' in value or '_remove' in value):
+            return value
+
         if not isinstance(value, (list, tuple)):
             return [value]
 
@@ -827,7 +830,7 @@ class RelationField(RelationValidatorMixin, WritableField):
         query_dict = {}
 
         if lookup_type == 'contains':
-            if self._validate(value):
+            if self._check_relation_value(value):
                 value = [obj.id for obj in value]
             query_dict = value
 
@@ -840,10 +843,13 @@ class RelationField(RelationValidatorMixin, WritableField):
         if not value:
             return None
 
+        if isinstance(value, dict) and ('_add' in value or '_remove' in value):
+            return value
+
         if not isinstance(value, (list, tuple)):
             value = [value]
 
-        if self._validate(value):
+        if self._check_relation_value(value):
             value = [obj.id for obj in value]
         return value
 
