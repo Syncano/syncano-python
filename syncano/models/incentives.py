@@ -38,17 +38,10 @@ class Script(Model):
             >>> s.run(variable_one=1, variable_two=2)
     """
 
-    RUNTIME_CHOICES = (
-        {'display_name': 'nodejs', 'value': 'nodejs'},
-        {'display_name': 'python', 'value': 'python'},
-        {'display_name': 'ruby', 'value': 'ruby'},
-        {'display_name': 'golang', 'value': 'golang'},
-    )
-
     label = fields.StringField(max_length=80)
     description = fields.StringField(required=False)
     source = fields.StringField()
-    runtime_name = fields.ChoiceField(choices=RUNTIME_CHOICES)
+    runtime_name = fields.StringField()
     config = fields.Field(required=False)
     links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
@@ -75,6 +68,10 @@ class Script(Model):
                 'methods': ['post'],
                 'path': '/snippets/scripts/{id}/run/',
             },
+            'runtimes': {
+                'methods': ['get'],
+                'path': '/snippets/scripts/runtimes/'
+            }
         }
 
     def run(self, **payload):

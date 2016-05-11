@@ -849,6 +849,37 @@ class ScriptManager(Manager):
         response = self.request()
         return registry.ScriptTrace(**response)
 
+    @clone
+    def get_runtimes(self):
+        """
+        Method which get available runtimes from CORE;
+        :return:
+        """
+        self.method = 'GET'
+        self.endpoint = 'runtimes'
+        self._serialize = False
+        response = self.request()
+
+        class RuntimeChoices(object):
+
+            def __init__(self, choices):
+                self._choices = {}
+                for choice in choices:
+                    self._choices[choice.upper()] = choice
+                    setattr(self, choice.upper(), choice)
+
+            def __repr__(self):
+                repr = ""
+                for key, value in six.iteritems(self._choices):
+                    repr += '{name}.{attr} = "{value}"\n'.format(
+                        name=self.__class__.__name__,
+                        attr=key,
+                        value=value
+                    )
+                return repr
+
+        return RuntimeChoices(choices=response.keys())
+
 
 class ScriptEndpointManager(Manager):
     """
