@@ -600,6 +600,7 @@ class ObjectField(JSONToPythonMixin, WritableField):
 
 
 class SchemaField(JSONField):
+    required = False
     query_allowed = False
     not_indexable_types = ['text', 'file']
     schema = {
@@ -646,6 +647,9 @@ class SchemaField(JSONField):
     }
 
     def validate(self, value, model_instance):
+        if value is None:
+            return
+
         if isinstance(value, SchemaManager):
             value = value.schema
 
