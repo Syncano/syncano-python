@@ -98,8 +98,8 @@ class Field(object):
 
     def __set__(self, instance, value):
         if self.read_only and value and instance._raw_data.get(self.name):
-            logger.warning('Field "{0}"" is read only, '
-                           'your changes will not be saved.'.format(self.name))
+            logger.debug('Field "{0}"" is read only, '
+                         'your changes will not be saved.'.format(self.name))
 
         instance._raw_data[self.name] = self.to_python(value)
 
@@ -600,6 +600,7 @@ class ObjectField(JSONToPythonMixin, WritableField):
 
 
 class SchemaField(JSONField):
+    required = False
     query_allowed = False
     not_indexable_types = ['text', 'file']
     schema = {
@@ -646,6 +647,9 @@ class SchemaField(JSONField):
     }
 
     def validate(self, value, model_instance):
+        if value is None:
+            return
+
         if isinstance(value, SchemaManager):
             value = value.schema
 

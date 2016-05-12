@@ -31,7 +31,6 @@ class DeviceBase(object):
         :param contet: Message content structure - object like;
         :return:
         """
-        print(self.links.links_dict)
         send_message_path = self.links.send_message
         data = {
             'content': content
