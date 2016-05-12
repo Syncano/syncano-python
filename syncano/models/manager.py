@@ -828,6 +828,26 @@ class Manager(ConnectionMixin):
         return self.model._meta.resolve_endpoint(self.endpoint, defaults), defaults
 
 
+class RuntimeChoices(object):
+    _choices = {}
+
+    def __init__(self, choices):
+        for choice in choices:
+            runtime_name = choice.upper().replace('.', '_')
+            self._choices[runtime_name] = choice
+            setattr(self, runtime_name, choice)
+
+    def __repr__(self):
+        repr_str = ""
+        for key, value in six.iteritems(self._choices):
+            repr_str += '{name}.{attr} = "{value}"\n'.format(
+                name=self.__class__.__name__,
+                attr=key,
+                value=value
+            )
+        return repr_str
+
+
 class ScriptManager(Manager):
     """
     Custom :class:`~syncano.models.manager.Manager`
@@ -852,33 +872,13 @@ class ScriptManager(Manager):
     @clone
     def get_runtimes(self):
         """
-        Method which get available runtimes from CORE;
+        Method which get available runtimes from Syncano API;
         :return:
         """
         self.method = 'GET'
         self.endpoint = 'runtimes'
         self._serialize = False
         response = self.request()
-
-        class RuntimeChoices(object):
-
-            _choices = {}
-
-            def __init__(self, choices):
-                for choice in choices:
-                    runtime_name = choice.upper().replace('.', '_')
-                    self._choices[runtime_name] = choice
-                    setattr(self, runtime_name, choice)
-
-            def __repr__(self):
-                repr_str = ""
-                for key, value in six.iteritems(self._choices):
-                    repr_str += '{name}.{attr} = "{value}"\n'.format(
-                        name=self.__class__.__name__,
-                        attr=key,
-                        value=value
-                    )
-                return repr_str
 
         return RuntimeChoices(choices=response.keys())
 
