@@ -84,10 +84,6 @@ class Script(Model):
                 'methods': ['post'],
                 'path': '/snippets/scripts/{id}/run/',
             },
-            'runtimes': {
-                'methods': ['get'],
-                'path': '/snippets/scripts/runtimes/'
-            }
         }
 
     def run(self, **payload):
