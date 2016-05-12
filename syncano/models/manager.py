@@ -866,8 +866,9 @@ class ScriptManager(Manager):
 
             def __init__(self, choices):
                 for choice in choices:
-                    self._choices[choice.upper()] = choice
-                    setattr(self, choice.upper(), choice)
+                    runtime_name = choice.upper().replace('.', '_')
+                    self._choices[runtime_name] = choice
+                    setattr(self, runtime_name, choice)
 
             def __repr__(self):
                 repr_str = ""
