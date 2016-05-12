@@ -862,21 +862,22 @@ class ScriptManager(Manager):
 
         class RuntimeChoices(object):
 
+            _choices = {}
+
             def __init__(self, choices):
-                self._choices = {}
                 for choice in choices:
                     self._choices[choice.upper()] = choice
                     setattr(self, choice.upper(), choice)
 
             def __repr__(self):
-                repr = ""
+                repr_str = ""
                 for key, value in six.iteritems(self._choices):
-                    repr += '{name}.{attr} = "{value}"\n'.format(
+                    repr_str += '{name}.{attr} = "{value}"\n'.format(
                         name=self.__class__.__name__,
                         attr=key,
                         value=value
                     )
-                return repr
+                return repr_str
 
         return RuntimeChoices(choices=response.keys())
 
