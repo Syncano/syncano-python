@@ -11,6 +11,22 @@ from .manager import ScriptEndpointManager, ScriptManager
 from .mixins import RenameMixin
 
 
+class RuntimeChoices(object):
+    """
+    Store available Script runtimes;
+    """
+    PYTHON = 'python'
+    PYTHON_V4_2 = 'python_library_v4.2'  # python old library;
+    PYTHON_V5_0 = 'python_library_v5.0'  # python >5.0 library not backward compatible;
+    NODEJS = 'nodejs'
+    NODEJS_V0_4 = 'nodejs_library_v0.4'  # nodejs old library;
+    NODEJS_V1_0 = 'nodejs_library_v1.0'  # nodejs >1.0 library, not backward compatible;
+    GOLANG = 'golang'
+    SWIFT = 'swift'
+    PHP = 'php'
+    RUBY = 'ruby'
+
+
 class Script(Model):
     """
     OO wrapper around scripts `link <http://docs.syncano.com/docs/snippets-scripts>`_.
