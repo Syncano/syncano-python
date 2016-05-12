@@ -42,7 +42,7 @@ class Script(Model):
     description = fields.StringField(required=False)
     source = fields.StringField()
     runtime_name = fields.StringField()
-    config = fields.Field(required=False)
+    config = fields.JSONField(required=False)
     links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
