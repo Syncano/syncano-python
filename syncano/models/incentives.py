@@ -11,6 +11,22 @@ from .manager import ScriptEndpointManager, ScriptManager
 from .mixins import RenameMixin
 
 
+class RuntimeChoices(object):
+    """
+    Store available Script runtimes;
+    """
+    PYTHON = 'python'
+    PYTHON_V4_2 = 'python_library_v4.2'  # python old library;
+    PYTHON_V5_0 = 'python_library_v5.0'  # python >5.0 library not backward compatible;
+    NODEJS = 'nodejs'
+    NODEJS_V0_4 = 'nodejs_library_v0.4'  # nodejs old library;
+    NODEJS_V1_0 = 'nodejs_library_v1.0'  # nodejs >1.0 library, not backward compatible;
+    GOLANG = 'golang'
+    SWIFT = 'swift'
+    PHP = 'php'
+    RUBY = 'ruby'
+
+
 class Script(Model):
     """
     OO wrapper around scripts `link <http://docs.syncano.com/docs/snippets-scripts>`_.
@@ -38,18 +54,11 @@ class Script(Model):
             >>> s.run(variable_one=1, variable_two=2)
     """
 
-    RUNTIME_CHOICES = (
-        {'display_name': 'nodejs', 'value': 'nodejs'},
-        {'display_name': 'python', 'value': 'python'},
-        {'display_name': 'ruby', 'value': 'ruby'},
-        {'display_name': 'golang', 'value': 'golang'},
-    )
-
     label = fields.StringField(max_length=80)
     description = fields.StringField(required=False)
     source = fields.StringField()
-    runtime_name = fields.ChoiceField(choices=RUNTIME_CHOICES)
-    config = fields.Field(required=False)
+    runtime_name = fields.StringField()
+    config = fields.JSONField(required=False)
     links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
@@ -122,6 +131,7 @@ class Schedule(Model):
     interval_sec = fields.IntegerField(read_only=False, required=False)
     crontab = fields.StringField(max_length=40, required=False)
     payload = fields.StringField(required=False)
+    timezone = fields.StringField(required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
     scheduled_next = fields.DateTimeField(read_only=True, required=False)
     links = fields.LinksField()

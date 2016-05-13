@@ -47,7 +47,7 @@ class Class(Model):
     description = fields.StringField(read_only=False, required=False)
     objects_count = fields.Field(read_only=True, required=False)
 
-    schema = fields.SchemaField(read_only=False, required=True)
+    schema = fields.SchemaField(read_only=False)
     links = fields.LinksField()
     status = fields.Field()
     metadata = fields.JSONField(read_only=False, required=False)

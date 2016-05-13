@@ -206,8 +206,6 @@ to :meth:`~syncano.models.manager.Manager.list` method::
 
     >>> ApiKey.please.list(instance_name='test-one')
     [<ApiKey 1>...]
-    >>> ApiKey.please.list('test-one')
-    [<ApiKey 1>...]
 
 This performs a **GET** request to ``/v1/instances/test-one/api_keys/``.
 
@@ -226,7 +224,7 @@ all :class:`~syncano.models.base.Instance` objects will have backward relation t
     >>> instance = Instance.please.get('test-one')
     >>> instance.api_keys.list()
     [<ApiKey 1>...]
-    >>> instance.api_keys.get(1)
+    >>> instance.api_keys.get(id=1)
     <ApiKey 1>
 
 .. note::

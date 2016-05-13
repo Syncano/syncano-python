@@ -8,8 +8,10 @@ from syncano import PUSH_ENV, logger
 from syncano.exceptions import SyncanoFieldError, SyncanoValueError
 from syncano.utils import force_text
 
+from .geo import Distance, GeoPoint
 from .manager import SchemaManager
 from .registry import registry
+from .relations import RelationManager, RelationValidatorMixin
 
 
 class JSONToPythonMixin(object):
@@ -96,8 +98,8 @@ class Field(object):
 
     def __set__(self, instance, value):
         if self.read_only and value and instance._raw_data.get(self.name):
-            logger.warning('Field "{0}"" is read only, '
-                           'your changes will not be saved.'.format(self.name))
+            logger.debug('Field "{0}"" is read only, '
+                         'your changes will not be saved.'.format(self.name))
 
         instance._raw_data[self.name] = self.to_python(value)
 
@@ -136,7 +138,7 @@ class Field(object):
         """
         return value
 
-    def to_query(self, value, lookup_type):
+    def to_query(self, value, lookup_type, **kwargs):
         """
         Returns field's value prepared for usage in HTTP request query.
         """
@@ -598,6 +600,7 @@ class ObjectField(JSONToPythonMixin, WritableField):
 
 
 class SchemaField(JSONField):
+    required = False
     query_allowed = False
     not_indexable_types = ['text', 'file']
     schema = {
@@ -621,8 +624,10 @@ class SchemaField(JSONField):
                         'datetime',
                         'file',
                         'reference',
+                        'relation',
                         'array',
                         'object',
+                        'geopoint',
                     ],
                 },
                 'order_index': {
@@ -642,6 +647,9 @@ class SchemaField(JSONField):
     }
 
     def validate(self, value, model_instance):
+        if value is None:
+            return
+
         if isinstance(value, SchemaManager):
             value = value.schema
 
@@ -685,12 +693,178 @@ class PushJSONField(JSONField):
         return value
 
 
+class GeoPointField(Field):
+
+    def validate(self, value, model_instance):
+        super(GeoPointField, self).validate(value, model_instance)
+
+        if not self.required and not value:
+            return
+
+        if isinstance(value, six.string_types):
+            try:
+                value = json.loads(value)
+            except (ValueError, TypeError):
+                raise SyncanoValueError('Expected an object')
+
+        if not isinstance(value, GeoPoint):
+            raise SyncanoValueError('Expected a GeoPoint')
+
+    def to_native(self, value):
+        if value is None:
+            return
+
+        if isinstance(value, bool):
+            return value  # exists lookup
+
+        if isinstance(value, dict):
+            value = GeoPoint(latitude=value['latitude'], longitude=value['longitude'])
+
+        if isinstance(value, tuple):
+            geo_struct = value[0].to_native()
+        else:
+            geo_struct = value.to_native()
+
+        geo_struct = json.dumps(geo_struct)
+
+        return geo_struct
+
+    def to_query(self, value, lookup_type, **kwargs):
+        """
+        Returns field's value prepared for usage in HTTP request query.
+        """
+        super(GeoPointField, self).to_query(value, lookup_type, **kwargs)
+
+        if lookup_type not in ['near', 'exists']:
+            raise SyncanoValueError('Lookup {} not supported for geopoint field'.format(lookup_type))
+
+        if lookup_type in ['exists']:
+            if isinstance(value, bool):
+                return value
+            else:
+                raise SyncanoValueError('Bool expected in {} lookup.'.format(lookup_type))
+
+        if isinstance(value, dict):
+            value = (
+                GeoPoint(latitude=value.pop('latitude'), longitude=value.pop('longitude')),
+                Distance(**value)
+            )
+
+        if len(value) != 2 or not isinstance(value[0], GeoPoint) or not isinstance(value[1], Distance):
+            raise SyncanoValueError('This lookup should be a tuple with GeoPoint and Distance: '
+                                    '<field_name>__near=(GeoPoint(52.12, 22.12), Distance(kilometers=100))')
+
+        query_dict = value[0].to_native()
+        query_dict.update(value[1].to_native())
+
+        return query_dict
+
+    def to_python(self, value):
+        if value is None:
+            return
+
+        value = self._process_string_types(value)
+
+        if isinstance(value, GeoPoint):
+            return value
+
+        latitude, longitude = self._process_value(value)
+
+        if not latitude or not longitude:
+            raise SyncanoValueError('Expected the `longitude` and `latitude` fields.')
+
+        return GeoPoint(latitude=latitude, longitude=longitude)
+
+    @classmethod
+    def _process_string_types(cls, value):
+        if isinstance(value, six.string_types):
+            try:
+                return json.loads(value)
+            except (ValueError, TypeError):
+                raise SyncanoValueError('Invalid value: can not be parsed.')
+        return value
+
+    @classmethod
+    def _process_value(cls, value):
+        longitude = None
+        latitude = None
+
+        if isinstance(value, dict):
+            latitude = value.get('latitude')
+            longitude = value.get('longitude')
+        elif isinstance(value, (tuple, list)):
+            try:
+                latitude = value[0]
+                longitude = value[1]
+            except IndexError:
+                raise SyncanoValueError('Can not parse the geo point.')
+
+        return latitude, longitude
+
+
+class RelationField(RelationValidatorMixin, WritableField):
+    query_allowed = True
+
+    def __call__(self, instance, field_name):
+        return RelationManager(instance=instance, field_name=field_name)
+
+    def to_python(self, value):
+        if not value:
+            return None
+
+        if isinstance(value, dict) and 'type' in value and 'value' in value:
+            value = value['value']
+
+        if isinstance(value, dict) and ('_add' in value or '_remove' in value):
+            return value
+
+        if not isinstance(value, (list, tuple)):
+            return [value]
+
+        return value
+
+    def to_query(self, value, lookup_type, related_field_name=None, related_field_lookup=None, **kwargs):
+
+        if not self.query_allowed:
+            raise self.ValidationError('Query on this field is not supported.')
+
+        if lookup_type not in ['contains', 'is']:
+            raise SyncanoValueError('Lookup {} not supported for relation field.'.format(lookup_type))
+
+        query_dict = {}
+
+        if lookup_type == 'contains':
+            if self._check_relation_value(value):
+                value = [obj.id for obj in value]
+            query_dict = value
+
+        if lookup_type == 'is':
+            query_dict = {related_field_name: {"_{0}".format(related_field_lookup): value}}
+
+        return query_dict
+
+    def to_native(self, value):
+        if not value:
+            return None
+
+        if isinstance(value, dict) and ('_add' in value or '_remove' in value):
+            return value
+
+        if not isinstance(value, (list, tuple)):
+            value = [value]
+
+        if self._check_relation_value(value):
+            value = [obj.id for obj in value]
+        return value
+
+
 MAPPING = {
     'string': StringField,
     'text': StringField,
     'file': FileField,
     'ref': StringField,
     'reference': ReferenceField,
+    'relation': RelationField,
     'integer': IntegerField,
     'float': FloatField,
     'boolean': BooleanField,
@@ -708,4 +882,5 @@ MAPPING = {
     'schema': SchemaField,
     'array': ArrayField,
     'object': ObjectField,
+    'geopoint': GeoPointField,
 }
