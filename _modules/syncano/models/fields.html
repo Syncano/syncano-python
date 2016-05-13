@@ -136,8 +136,10 @@
 <span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoFieldError</span><span class="p">,</span> <span class="n">SyncanoValueError</span>
 <span class="kn">from</span> <span class="nn">syncano.utils</span> <span class="kn">import</span> <span class="n">force_text</span>
 
+<span class="kn">from</span> <span class="nn">.geo</span> <span class="kn">import</span> <span class="n">Distance</span><span class="p">,</span> <span class="n">GeoPoint</span>
 <span class="kn">from</span> <span class="nn">.manager</span> <span class="kn">import</span> <span class="n">SchemaManager</span>
 <span class="kn">from</span> <span class="nn">.registry</span> <span class="kn">import</span> <span class="n">registry</span>
+<span class="kn">from</span> <span class="nn">.relations</span> <span class="kn">import</span> <span class="n">RelationManager</span><span class="p">,</span> <span class="n">RelationValidatorMixin</span>
 
 
 <div class="viewcode-block" id="JSONToPythonMixin"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.JSONToPythonMixin">[docs]</a><span class="k">class</span> <span class="nc">JSONToPythonMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -224,8 +226,8 @@
 
     <span class="k">def</span> <span class="nf">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_only</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">and</span> <span class="n">instance</span><span class="o">.</span><span class="n">_raw_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Field &quot;{0}&quot;&quot; is read only, &#39;</span>
-                           <span class="s1">&#39;your changes will not be saved.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Field &quot;{0}&quot;&quot; is read only, &#39;</span>
+                         <span class="s1">&#39;your changes will not be saved.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
 
         <span class="n">instance</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
@@ -264,7 +266,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">value</span>
 </div>
-<div class="viewcode-block" id="Field.to_query"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.Field.to_query">[docs]</a>    <span class="k">def</span> <span class="nf">to_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">lookup_type</span><span class="p">):</span>
+<div class="viewcode-block" id="Field.to_query"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.Field.to_query">[docs]</a>    <span class="k">def</span> <span class="nf">to_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">lookup_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns field&#39;s value prepared for usage in HTTP request query.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -726,6 +728,7 @@
 
 </div></div>
 <div class="viewcode-block" id="SchemaField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.SchemaField">[docs]</a><span class="k">class</span> <span class="nc">SchemaField</span><span class="p">(</span><span class="n">JSONField</span><span class="p">):</span>
+    <span class="n">required</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="n">query_allowed</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="n">not_indexable_types</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;file&#39;</span><span class="p">]</span>
     <span class="n">schema</span> <span class="o">=</span> <span class="p">{</span>
@@ -749,8 +752,10 @@
                         <span class="s1">&#39;datetime&#39;</span><span class="p">,</span>
                         <span class="s1">&#39;file&#39;</span><span class="p">,</span>
                         <span class="s1">&#39;reference&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;relation&#39;</span><span class="p">,</span>
                         <span class="s1">&#39;array&#39;</span><span class="p">,</span>
                         <span class="s1">&#39;object&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;geopoint&#39;</span><span class="p">,</span>
                     <span class="p">],</span>
                 <span class="p">},</span>
                 <span class="s1">&#39;order_index&#39;</span><span class="p">:</span> <span class="p">{</span>
@@ -770,6 +775,9 @@
     <span class="p">}</span>
 
 <div class="viewcode-block" id="SchemaField.validate"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.SchemaField.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">model_instance</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">SchemaManager</span><span class="p">):</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">schema</span>
 
@@ -813,12 +821,178 @@
         <span class="k">return</span> <span class="n">value</span>
 
 </div></div>
+<div class="viewcode-block" id="GeoPointField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.GeoPointField">[docs]</a><span class="k">class</span> <span class="nc">GeoPointField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GeoPointField.validate"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.GeoPointField.validate">[docs]</a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">model_instance</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GeoPointField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">model_instance</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">required</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Expected an object&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">GeoPoint</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Expected a GeoPoint&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="GeoPointField.to_native"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.GeoPointField.to_native">[docs]</a>    <span class="k">def</span> <span class="nf">to_native</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>  <span class="c1"># exists lookup</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">GeoPoint</span><span class="p">(</span><span class="n">latitude</span><span class="o">=</span><span class="n">value</span><span class="p">[</span><span class="s1">&#39;latitude&#39;</span><span class="p">],</span> <span class="n">longitude</span><span class="o">=</span><span class="n">value</span><span class="p">[</span><span class="s1">&#39;longitude&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">geo_struct</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_native</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">geo_struct</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">to_native</span><span class="p">()</span>
+
+        <span class="n">geo_struct</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">geo_struct</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">geo_struct</span>
+</div>
+<div class="viewcode-block" id="GeoPointField.to_query"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.GeoPointField.to_query">[docs]</a>    <span class="k">def</span> <span class="nf">to_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">lookup_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns field&#39;s value prepared for usage in HTTP request query.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GeoPointField</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">to_query</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">lookup_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">lookup_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;near&#39;</span><span class="p">,</span> <span class="s1">&#39;exists&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Lookup {} not supported for geopoint field&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookup_type</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">lookup_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;exists&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Bool expected in {} lookup.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookup_type</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">GeoPoint</span><span class="p">(</span><span class="n">latitude</span><span class="o">=</span><span class="n">value</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;latitude&#39;</span><span class="p">),</span> <span class="n">longitude</span><span class="o">=</span><span class="n">value</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;longitude&#39;</span><span class="p">)),</span>
+                <span class="n">Distance</span><span class="p">(</span><span class="o">**</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">GeoPoint</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Distance</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;This lookup should be a tuple with GeoPoint and Distance: &#39;</span>
+                                    <span class="s1">&#39;&lt;field_name&gt;__near=(GeoPoint(52.12, 22.12), Distance(kilometers=100))&#39;</span><span class="p">)</span>
+
+        <span class="n">query_dict</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_native</span><span class="p">()</span>
+        <span class="n">query_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">to_native</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">query_dict</span>
+</div>
+<div class="viewcode-block" id="GeoPointField.to_python"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.GeoPointField.to_python">[docs]</a>    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_string_types</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">GeoPoint</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">latitude</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">longitude</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Expected the `longitude` and `latitude` fields.&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">GeoPoint</span><span class="p">(</span><span class="n">latitude</span><span class="o">=</span><span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="o">=</span><span class="n">longitude</span><span class="p">)</span>
+</div>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_process_string_types</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Invalid value: can not be parsed.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_process_value</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">longitude</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">latitude</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">latitude</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;latitude&#39;</span><span class="p">)</span>
+            <span class="n">longitude</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;longitude&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">latitude</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">longitude</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Can not parse the geo point.&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span>
+
+</div>
+<div class="viewcode-block" id="RelationField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.RelationField">[docs]</a><span class="k">class</span> <span class="nc">RelationField</span><span class="p">(</span><span class="n">RelationValidatorMixin</span><span class="p">,</span> <span class="n">WritableField</span><span class="p">):</span>
+    <span class="n">query_allowed</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">field_name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">RelationManager</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">instance</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="n">field_name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RelationField.to_python"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.RelationField.to_python">[docs]</a>    <span class="k">def</span> <span class="nf">to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;type&#39;</span> <span class="ow">in</span> <span class="n">value</span> <span class="ow">and</span> <span class="s1">&#39;value&#39;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;_add&#39;</span> <span class="ow">in</span> <span class="n">value</span> <span class="ow">or</span> <span class="s1">&#39;_remove&#39;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">value</span>
+</div>
+<div class="viewcode-block" id="RelationField.to_query"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.RelationField.to_query">[docs]</a>    <span class="k">def</span> <span class="nf">to_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">lookup_type</span><span class="p">,</span> <span class="n">related_field_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">related_field_lookup</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">query_allowed</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s1">&#39;Query on this field is not supported.&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">lookup_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;contains&#39;</span><span class="p">,</span> <span class="s1">&#39;is&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Lookup {} not supported for relation field.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookup_type</span><span class="p">))</span>
+
+        <span class="n">query_dict</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="n">lookup_type</span> <span class="o">==</span> <span class="s1">&#39;contains&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_relation_value</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">value</span><span class="p">]</span>
+            <span class="n">query_dict</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">if</span> <span class="n">lookup_type</span> <span class="o">==</span> <span class="s1">&#39;is&#39;</span><span class="p">:</span>
+            <span class="n">query_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">related_field_name</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;_{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">related_field_lookup</span><span class="p">):</span> <span class="n">value</span><span class="p">}}</span>
+
+        <span class="k">return</span> <span class="n">query_dict</span>
+</div>
+<div class="viewcode-block" id="RelationField.to_native"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.RelationField.to_native">[docs]</a>    <span class="k">def</span> <span class="nf">to_native</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;_add&#39;</span> <span class="ow">in</span> <span class="n">value</span> <span class="ow">or</span> <span class="s1">&#39;_remove&#39;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_relation_value</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">value</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+</div></div>
 <span class="n">MAPPING</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;string&#39;</span><span class="p">:</span> <span class="n">StringField</span><span class="p">,</span>
     <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">StringField</span><span class="p">,</span>
     <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="n">FileField</span><span class="p">,</span>
     <span class="s1">&#39;ref&#39;</span><span class="p">:</span> <span class="n">StringField</span><span class="p">,</span>
     <span class="s1">&#39;reference&#39;</span><span class="p">:</span> <span class="n">ReferenceField</span><span class="p">,</span>
+    <span class="s1">&#39;relation&#39;</span><span class="p">:</span> <span class="n">RelationField</span><span class="p">,</span>
     <span class="s1">&#39;integer&#39;</span><span class="p">:</span> <span class="n">IntegerField</span><span class="p">,</span>
     <span class="s1">&#39;float&#39;</span><span class="p">:</span> <span class="n">FloatField</span><span class="p">,</span>
     <span class="s1">&#39;boolean&#39;</span><span class="p">:</span> <span class="n">BooleanField</span><span class="p">,</span>
@@ -836,6 +1010,7 @@
     <span class="s1">&#39;schema&#39;</span><span class="p">:</span> <span class="n">SchemaField</span><span class="p">,</span>
     <span class="s1">&#39;array&#39;</span><span class="p">:</span> <span class="n">ArrayField</span><span class="p">,</span>
     <span class="s1">&#39;object&#39;</span><span class="p">:</span> <span class="n">ObjectField</span><span class="p">,</span>
+    <span class="s1">&#39;geopoint&#39;</span><span class="p">:</span> <span class="n">GeoPointField</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
 

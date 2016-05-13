@@ -855,7 +855,6 @@
 <div class="viewcode-block" id="Manager.serialize"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.Manager.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Serializes passed data to related :class:`~syncano.models.base.Model` class.&quot;&quot;&quot;</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
-
         <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
             <span class="k">return</span>
 
@@ -905,7 +904,7 @@
                 <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">(</span><span class="s2">&quot;{} not found.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj_id</span><span class="p">))</span>
             <span class="k">raise</span>
 
-        <span class="k">if</span> <span class="s1">&#39;next&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;next&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">response</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">response</span>
@@ -927,6 +926,9 @@
         <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_response</span><span class="p">()</span>
         <span class="n">results</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">response</span>
+                <span class="k">break</span>
             <span class="n">objects</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;objects&#39;</span><span class="p">)</span>
             <span class="n">next_url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;next&#39;</span><span class="p">)</span>
 
@@ -1008,7 +1010,8 @@
     <span class="n">LOOKUP_SEPARATOR</span> <span class="o">=</span> <span class="s1">&#39;__&#39;</span>
     <span class="n">ALLOWED_LOOKUPS</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s1">&#39;gt&#39;</span><span class="p">,</span> <span class="s1">&#39;gte&#39;</span><span class="p">,</span> <span class="s1">&#39;lt&#39;</span><span class="p">,</span> <span class="s1">&#39;lte&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;eq&#39;</span><span class="p">,</span> <span class="s1">&#39;neq&#39;</span><span class="p">,</span> <span class="s1">&#39;exists&#39;</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;eq&#39;</span><span class="p">,</span> <span class="s1">&#39;neq&#39;</span><span class="p">,</span> <span class="s1">&#39;exists&#39;</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="s1">&#39;startswith&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;near&#39;</span><span class="p">,</span> <span class="s1">&#39;is&#39;</span><span class="p">,</span> <span class="s1">&#39;contains&#39;</span><span class="p">,</span>
     <span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1079,30 +1082,60 @@
 
         <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">lookup</span> <span class="o">=</span> <span class="s1">&#39;eq&#39;</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="bp">None</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">LOOKUP_SEPARATOR</span> <span class="ow">in</span> <span class="n">field_name</span><span class="p">:</span>
-                <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span> <span class="o">=</span> <span class="n">field_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">LOOKUP_SEPARATOR</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">field_names</span><span class="p">:</span>
-                <span class="n">allowed</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">field_names</span><span class="p">)</span>
-                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Invalid field name &quot;{0}&quot; allowed are {1}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">allowed</span><span class="p">))</span>
-
-            <span class="k">if</span> <span class="n">lookup</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ALLOWED_LOOKUPS</span><span class="p">:</span>
-                <span class="n">allowed</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ALLOWED_LOOKUPS</span><span class="p">)</span>
-                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Invalid lookup type &quot;{0}&quot; allowed are {1}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookup</span><span class="p">,</span> <span class="n">allowed</span><span class="p">))</span>
+                <span class="n">model_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_lookup_attributes</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">field_name</span><span class="p">:</span>
                     <span class="k">break</span>
 
-            <span class="n">query</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="n">query</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s1">&#39;_{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookup</span><span class="p">)]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">to_query</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">lookup</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_validate_lookup</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+
+            <span class="n">query_main_lookup</span><span class="p">,</span> <span class="n">query_main_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_main_lookup</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span><span class="p">)</span>
+
+            <span class="n">query</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">query_main_field</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">query</span><span class="p">[</span><span class="n">query_main_field</span><span class="p">][</span><span class="s1">&#39;_{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">query_main_lookup</span><span class="p">)]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">to_query</span><span class="p">(</span>
+                <span class="n">value</span><span class="p">,</span>
+                <span class="n">query_main_lookup</span><span class="p">,</span>
+                <span class="n">related_field_name</span><span class="o">=</span><span class="n">field_name</span><span class="p">,</span>
+                <span class="n">related_field_lookup</span><span class="o">=</span><span class="n">lookup</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;GET&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s1">&#39;list&#39;</span>
         <span class="k">return</span> <span class="bp">self</span>
 </div>
+    <span class="k">def</span> <span class="nf">_get_lookup_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">model_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span> <span class="o">=</span> <span class="n">field_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">LOOKUP_SEPARATOR</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span> <span class="o">=</span> <span class="n">field_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">LOOKUP_SEPARATOR</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span>
+
+    <span class="k">def</span> <span class="nf">_validate_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">model_name</span> <span class="ow">and</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">field_names</span><span class="p">:</span>
+            <span class="n">allowed</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">field_names</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Invalid field name &quot;{0}&quot; allowed are {1}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">allowed</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">lookup</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ALLOWED_LOOKUPS</span><span class="p">:</span>
+            <span class="n">allowed</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ALLOWED_LOOKUPS</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Invalid lookup type &quot;{0}&quot; allowed are {1}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lookup</span><span class="p">,</span> <span class="n">allowed</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">model_name</span> <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">!=</span> <span class="s1">&#39;RelationField&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Lookup supported only for RelationField.&#39;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_main_lookup</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">model_name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;is&#39;</span><span class="p">,</span> <span class="n">model_name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">lookup</span><span class="p">,</span> <span class="n">field_name</span>
+
 <div class="viewcode-block" id="ObjectManager.bulk_create"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.bulk_create">[docs]</a>    <span class="k">def</span> <span class="nf">bulk_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">objects</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates many new objects.</span>

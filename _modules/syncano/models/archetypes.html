@@ -361,6 +361,9 @@
                 <span class="n">value</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">fields</span><span class="o">.</span><span class="n">RelationField</span><span class="p">):</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;{}_set&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field_name</span><span class="p">),</span> <span class="n">field</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="n">field_name</span><span class="p">))</span>
+
     <span class="k">def</span> <span class="nf">to_native</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Converts the current instance to raw data which</span></div>
 <div class="viewcode-block" id="Model.to_native"><a class="viewcode-back" href="../../../refs/syncano.models.archetypes.html#syncano.models.archetypes.Model.to_native">[docs]</a><span class="sd">        can be serialized to JSON and send to API.</span>

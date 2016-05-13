@@ -308,8 +308,6 @@ its URL patter looks like this:</p>
 to <a class="reference internal" href="refs/syncano.models.manager.html#syncano.models.manager.Manager.list" title="syncano.models.manager.Manager.list"><tt class="xref py py-meth docutils literal"><span class="pre">list()</span></tt></a> method:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ApiKey</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
 <span class="go">[&lt;ApiKey 1&gt;...]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ApiKey</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
-<span class="go">[&lt;ApiKey 1&gt;...]</span>
 </pre></div>
 </div>
 <p>This performs a <strong>GET</strong> request to <tt class="docutils literal"><span class="pre">/v1/instances/test-one/api_keys/</span></tt>.</p>
@@ -327,7 +325,7 @@ all <tt class="xref py py-class docutils literal"><span class="pre">Instance</sp
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test-one&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">api_keys</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 <span class="go">[&lt;ApiKey 1&gt;...]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">api_keys</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">api_keys</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">&lt;ApiKey 1&gt;</span>
 </pre></div>
 </div>

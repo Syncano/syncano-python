@@ -182,15 +182,16 @@ is an excellent tool that lets you easily manage your virtual environments.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="s1">&#39;YOUR_EMAIL&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;YOUR_PASSWORD&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>If you want to connect directly to chosen instance you can use <tt class="xref py py-func docutils literal"><span class="pre">connect_instance()</span></tt> function:</p>
+<p>If you want to use instance in connection you can use <a class="reference internal" href="refs/syncano.html#syncano.connect" title="syncano.connect"><tt class="xref py py-func docutils literal"><span class="pre">connect()</span></tt></a> function,
+then you can omit the instance_name in other calls:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect_instance</span><span class="p">(</span><span class="s1">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="s1">&#39;YOUR_EMAIL&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;YOUR_PASSWORD&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="s1">&#39;YOUR_EMAIL&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;YOUR_PASSWORD&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If you have obtained your <tt class="docutils literal"><span class="pre">Account</span> <span class="pre">Key</span></tt> from the website you can omit <tt class="docutils literal"><span class="pre">email</span></tt> &amp; <tt class="docutils literal"><span class="pre">password</span></tt> and pass <tt class="docutils literal"><span class="pre">Account</span> <span class="pre">Key</span></tt> directly to connection:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">syncano</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s1">&#39;YOUR_API_KEY&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect_instance</span><span class="p">(</span><span class="s1">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s1">&#39;YOUR_API_KEY&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">connection</span> <span class="o">=</span> <span class="n">syncano</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;instance_name&#39;</span><span class="p">,</span> <span class="n">api_key</span><span class="o">=</span><span class="s1">&#39;YOUR_API_KEY&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -236,8 +237,8 @@ and add a <tt class="xref py py-class docutils literal"><span class="pre">ApiKey
 </div>
 <div class="section" id="next-steps">
 <h2>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
-<p>If you&#8217;d like more information on interacting with Syncano, check out the <a class="reference internal" href="interacting.html#interacting"><em>interacting tutorial</em></a> or if you
-want to know what kind of models are available check out the <em class="xref std std-ref">available models</em> list.</p>
+<p>If you&#8217;d like more information on interacting with Syncano, check out the <a class="reference internal" href="interacting.html#interacting"><em>interacting tutorial</em></a>
+or if you want to know what kind of models are available check out the <em class="xref std std-ref">available models</em> list.</p>
 </div>
 </div>
 

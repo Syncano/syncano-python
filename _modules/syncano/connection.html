@@ -363,6 +363,8 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">{})</span>
         <span class="n">files</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;files&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_batch_files</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">files</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s1">&#39;read&#39;</span><span class="p">)}</span>
             <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
@@ -530,6 +532,14 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">USER_INFO_SUFFIX</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_name</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
             <span class="s1">&#39;X-API-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">,</span> <span class="s1">&#39;X-USER-KEY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_key</span><span class="p">})</span>
 </div>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_check_batch_files</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;requests&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>  <span class="c1"># batch requests</span>
+            <span class="k">for</span> <span class="n">request</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;requests&#39;</span><span class="p">]:</span>
+                <span class="n">per_request_files</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;files&#39;</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="k">if</span> <span class="n">per_request_files</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Batch do not support files upload.&#39;</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">_process_apns_cert_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
         <span class="n">files</span> <span class="o">=</span> <span class="n">files</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="n">file_name</span> <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">keys</span><span class="p">()]:</span>

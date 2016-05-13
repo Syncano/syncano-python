@@ -132,6 +132,63 @@
   <div class="section" id="module-syncano.models.incentives">
 <span id="syncano-models-incentives"></span><h1>syncano.models.incentives<a class="headerlink" href="#module-syncano.models.incentives" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
+<dt id="syncano.models.incentives.RuntimeChoices">
+<em class="property">class </em><tt class="descname">RuntimeChoices</tt><a class="reference internal" href="../_modules/syncano/models/incentives.html#RuntimeChoices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.incentives.RuntimeChoices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Store available Script runtimes;</p>
+<dl class="attribute">
+<dt id="syncano.models.incentives.RuntimeChoices.PYTHON">
+<tt class="descname">PYTHON</tt><em class="property"> = 'python'</em><a class="headerlink" href="#syncano.models.incentives.RuntimeChoices.PYTHON" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.incentives.RuntimeChoices.PYTHON_V4_2">
+<tt class="descname">PYTHON_V4_2</tt><em class="property"> = 'python_library_v4.2'</em><a class="headerlink" href="#syncano.models.incentives.RuntimeChoices.PYTHON_V4_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.incentives.RuntimeChoices.PYTHON_V5_0">
+<tt class="descname">PYTHON_V5_0</tt><em class="property"> = 'python_library_v5.0'</em><a class="headerlink" href="#syncano.models.incentives.RuntimeChoices.PYTHON_V5_0" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.incentives.RuntimeChoices.NODEJS">
+<tt class="descname">NODEJS</tt><em class="property"> = 'nodejs'</em><a class="headerlink" href="#syncano.models.incentives.RuntimeChoices.NODEJS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.incentives.RuntimeChoices.NODEJS_V0_4">
+<tt class="descname">NODEJS_V0_4</tt><em class="property"> = 'nodejs_library_v0.4'</em><a class="headerlink" href="#syncano.models.incentives.RuntimeChoices.NODEJS_V0_4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.incentives.RuntimeChoices.NODEJS_V1_0">
+<tt class="descname">NODEJS_V1_0</tt><em class="property"> = 'nodejs_library_v1.0'</em><a class="headerlink" href="#syncano.models.incentives.RuntimeChoices.NODEJS_V1_0" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.incentives.RuntimeChoices.GOLANG">
+<tt class="descname">GOLANG</tt><em class="property"> = 'golang'</em><a class="headerlink" href="#syncano.models.incentives.RuntimeChoices.GOLANG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.incentives.RuntimeChoices.SWIFT">
+<tt class="descname">SWIFT</tt><em class="property"> = 'swift'</em><a class="headerlink" href="#syncano.models.incentives.RuntimeChoices.SWIFT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.incentives.RuntimeChoices.PHP">
+<tt class="descname">PHP</tt><em class="property"> = 'php'</em><a class="headerlink" href="#syncano.models.incentives.RuntimeChoices.PHP" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.incentives.RuntimeChoices.RUBY">
+<tt class="descname">RUBY</tt><em class="property"> = 'ruby'</em><a class="headerlink" href="#syncano.models.incentives.RuntimeChoices.RUBY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="syncano.models.incentives.Script">
 <em class="property">class </em><tt class="descname">Script</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/incentives.html#Script"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.incentives.Script" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
@@ -169,11 +226,6 @@
 </pre></div>
 </div>
 </div>
-<dl class="attribute">
-<dt id="syncano.models.incentives.Script.RUNTIME_CHOICES">
-<tt class="descname">RUNTIME_CHOICES</tt><em class="property"> = ({'display_name': 'nodejs', 'value': 'nodejs'}, {'display_name': 'python', 'value': 'python'}, {'display_name': 'ruby', 'value': 'ruby'}, {'display_name': 'golang', 'value': 'golang'})</em><a class="headerlink" href="#syncano.models.incentives.Script.RUNTIME_CHOICES" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="attribute">
 <dt id="syncano.models.incentives.Script.label">
 <tt class="descname">label</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.incentives.Script.label" title="Permalink to this definition">¶</a></dt>
@@ -304,6 +356,11 @@
 <dl class="attribute">
 <dt id="syncano.models.incentives.Schedule.payload">
 <tt class="descname">payload</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.incentives.Schedule.payload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.incentives.Schedule.timezone">
+<tt class="descname">timezone</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.incentives.Schedule.timezone" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
