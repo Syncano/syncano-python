@@ -5,7 +5,7 @@ import six
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoRequestError, SyncanoValidationError, SyncanoValueError
 from syncano.models.bulk import ModelBulkCreate, ObjectBulkCreate
-from syncano.models.manager_mixins import IncrementMixin, clone
+from syncano.models.manager_mixins import ArrayOperationsMixin, IncrementMixin, clone
 
 from .registry import registry
 
@@ -874,7 +874,7 @@ class ScriptEndpointManager(Manager):
         return registry.ScriptEndpointTrace(**response)
 
 
-class ObjectManager(IncrementMixin, Manager):
+class ObjectManager(IncrementMixin, ArrayOperationsMixin, Manager):
     """
     Custom :class:`~syncano.models.manager.Manager`
     class for :class:`~syncano.models.base.Object` model.
