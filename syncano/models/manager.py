@@ -884,6 +884,10 @@ class ObjectManager(IncrementMixin, Manager):
         'gt', 'gte', 'lt', 'lte',
         'eq', 'neq', 'exists', 'in',
         'near', 'is', 'contains',
+        'startswith', 'endswith',
+        'contains', 'istartswith',
+        'iendswith', 'icontains',
+        'ieq', 'near',
     ]
 
     def __init__(self):
@@ -990,13 +994,12 @@ class ObjectManager(IncrementMixin, Manager):
         return model_name, field_name, lookup
 
     def _validate_lookup(self, model, model_name, field_name, lookup, field):
+
         if not model_name and field_name not in model._meta.field_names:
             allowed = ', '.join(model._meta.field_names)
             raise SyncanoValueError('Invalid field name "{0}" allowed are {1}.'.format(field_name, allowed))
 
-        allowed_lookups = set(self.ALLOWED_LOOKUPS + field.field_lookups)
-
-        if lookup not in allowed_lookups:
+        if lookup not in self.ALLOWED_LOOKUPS:
             allowed = ', '.join(self.ALLOWED_LOOKUPS)
             raise SyncanoValueError('Invalid lookup type "{0}" allowed are {1}.'.format(lookup, allowed))
 

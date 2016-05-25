@@ -21,7 +21,7 @@ class StringFilteringTest(InstanceMixin, IntegrationTest):
 
     def test_starstwith(self):
         self._test_filter({'title__startswith': 'Some'})
-        self._test_filter({'title__istartswith': 'omes'})
+        self._test_filter({'title__istartswith': 'some'})
 
     def test_endswith(self):
         self._test_filter({'title__endswith': 'tle'})
