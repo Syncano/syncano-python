@@ -44,6 +44,7 @@ class Field(object):
     allow_increment = False
 
     creation_counter = 0
+    field_lookups = []
 
     def __init__(self, name=None, **kwargs):
         self.name = name
@@ -213,6 +214,16 @@ class EndpointField(WritableField):
 
 
 class StringField(WritableField):
+
+    field_lookups = [
+        'startswith',
+        'endswith',
+        'contains',
+        'istartswith',
+        'iendswith',
+        'icontains',
+        'ieq',
+    ]
 
     def to_python(self, value):
         value = super(StringField, self).to_python(value)
@@ -695,6 +706,8 @@ class PushJSONField(JSONField):
 
 class GeoPointField(Field):
 
+    field_lookups = ['near', 'exists']
+
     def validate(self, value, model_instance):
         super(GeoPointField, self).validate(value, model_instance)
 
@@ -735,7 +748,7 @@ class GeoPointField(Field):
         """
         super(GeoPointField, self).to_query(value, lookup_type, **kwargs)
 
-        if lookup_type not in ['near', 'exists']:
+        if lookup_type not in self.field_lookups:
             raise SyncanoValueError('Lookup {} not supported for geopoint field'.format(lookup_type))
 
         if lookup_type in ['exists']:
@@ -804,6 +817,7 @@ class GeoPointField(Field):
 
 class RelationField(RelationValidatorMixin, WritableField):
     query_allowed = True
+    field_lookups = ['contains', 'is']
 
     def __call__(self, instance, field_name):
         return RelationManager(instance=instance, field_name=field_name)
@@ -828,7 +842,7 @@ class RelationField(RelationValidatorMixin, WritableField):
         if not self.query_allowed:
             raise self.ValidationError('Query on this field is not supported.')
 
-        if lookup_type not in ['contains', 'is']:
+        if lookup_type not in self.field_lookups:
             raise SyncanoValueError('Lookup {} not supported for relation field.'.format(lookup_type))
 
         query_dict = {}
