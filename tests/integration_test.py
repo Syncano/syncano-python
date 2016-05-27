@@ -375,7 +375,7 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
         book = Object.please.add(
             'array',
             [11],
-            class_name='book',
+            class_name=self.book.name,
             id=book.id
         )
 
@@ -390,7 +390,7 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
         book = Object.please.remove(
             'array',
             [10],
-            class_name='book',
+            class_name=self.book.name,
             id=book.id
         )
 
@@ -405,7 +405,7 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
         book = Object.please.add_unique(
             'array',
             [10],
-            class_name='book',
+            class_name=self.book.name,
             id=book.id
         )
 
@@ -414,7 +414,7 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
         book = Object.please.add_unique(
             'array',
             [11],
-            class_name='book',
+            class_name=self.book.name,
             id=book.id
         )
 
