@@ -156,7 +156,7 @@ class Object(Model):
 
     @classmethod
     def _get_instance_name(cls, kwargs):
-        return kwargs.get('instance_name')
+        return kwargs.get('instance_name') or registry.instance_name
 
     @classmethod
     def _get_class_name(cls, kwargs):
