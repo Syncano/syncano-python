@@ -117,6 +117,10 @@ class User(Model):
                 'methods': ['post'],
                 'path': '/users/{id}/reset_key/',
             },
+            'auth': {
+                'methods': ['post'],
+                'path': '/user/auth/',
+            },
             'list': {
                 'methods': ['get'],
                 'path': '/users/',
@@ -132,6 +136,18 @@ class User(Model):
         endpoint = self._meta.resolve_endpoint('reset_key', properties)
         connection = self._get_connection()
         return connection.request('POST', endpoint)
+
+    def auth(self):
+        properties = self.get_endpoint_data()
+        endpoint = self._meta.resolve_endpoint('auth', properties)
+        connection = self._get_connection()
+
+        data = {
+            'username': connection.username,
+            'password' : connection.password
+        }
+
+        return connection.request('POST', endpoint, data=data)
 
     def _user_groups_method(self, group_id=None, method='GET'):
         properties = self.get_endpoint_data()
