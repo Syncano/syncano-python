@@ -1,10 +1,10 @@
+from syncano.exceptions import SyncanoValueError
+
 from . import fields
 from .base import Model
 from .classes import Class, DataObjectMixin, Object
 from .instances import Instance
 from .manager import ObjectManager
-
-from syncano.exceptions import SyncanoValueError
 
 
 class Admin(Model):
