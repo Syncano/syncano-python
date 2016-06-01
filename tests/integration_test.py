@@ -267,7 +267,11 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
             name='test', description='test', quantity=10, cost=10.5,
             published_at=datetime.now(), author=author, available=True)
 
+        book_direct = Object(class_name=self.book.name, quantity=15, cost=7.5)
+        book_direct.save()
+
         book.delete()
+        book_direct.delete()
         author.delete()
 
     def test_update(self):
