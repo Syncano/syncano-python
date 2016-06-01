@@ -1,10 +1,10 @@
-
-
 from . import fields
 from .base import Model
 from .classes import Class, DataObjectMixin, Object
 from .instances import Instance
 from .manager import ObjectManager
+
+from syncano.exceptions import SyncanoValueError
 
 
 class Admin(Model):
@@ -137,14 +137,17 @@ class User(Model):
         connection = self._get_connection()
         return connection.request('POST', endpoint)
 
-    def auth(self):
+    def auth(self, username=None, password=None):
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('auth', properties)
         connection = self._get_connection()
 
+        if not (username and password):
+            raise SyncanoValueError('You need provide username and password!')
+
         data = {
-            'username': connection.username,
-            'password': connection.password
+            'username': username,
+            'password': password
         }
 
         return connection.request('POST', endpoint, data=data)
