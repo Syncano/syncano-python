@@ -572,10 +572,16 @@ class ArrayField(JSONToPythonMixin, WritableField):
             except (ValueError, TypeError):
                 raise SyncanoValueError('Expected an array')
 
-        if not isinstance(value, list):
+        if isinstance(value, dict):
+            if len(value) != 1 or len(set(value.keys()).intersection(['_add', '_remove', '_addunique'])) != 1:
+                raise SyncanoValueError('Wrong value: one operation at the time.')
+
+        elif not isinstance(value, list):
             raise SyncanoValueError('Expected an array')
 
-        for element in value:
+        value_to_check = value if isinstance(value, list) else value.values()[0]
+
+        for element in value_to_check:
             if not isinstance(element, six.string_types + (bool, int, float)):
                 raise SyncanoValueError(
                     'Currently supported types for array items are: string types, bool, float and int')

@@ -231,6 +231,7 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
                 {'type': 'float', 'name': 'cost'},
                 {'type': 'boolean', 'name': 'available'},
                 {'type': 'datetime', 'name': 'published_at'},
+                {'type': 'array', 'name': 'array'},
                 {'type': 'file', 'name': 'cover'},
                 {'type': 'reference', 'name': 'author',
                  'order_index': True, 'filter_index': True, 'target': cls.author.name},
@@ -368,6 +369,60 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
         )
 
         self.assertEqual(decremented_book.cost, 8.4)
+
+    def test_add_array(self):
+        book = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.book.name,
+            name='test', description='test', quantity=10, cost=10.5,
+            published_at=datetime.now(), available=True, array=[10])
+
+        book = Object.please.add(
+            'array',
+            [11],
+            class_name=self.book.name,
+            id=book.id
+        )
+
+        self.assertEqual(book.array, [10, 11])
+
+    def test_remove_array(self):
+        book = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.book.name,
+            name='test', description='test', quantity=10, cost=10.5,
+            published_at=datetime.now(), available=True, array=[10])
+
+        book = Object.please.remove(
+            'array',
+            [10],
+            class_name=self.book.name,
+            id=book.id
+        )
+
+        self.assertEqual(book.array, [])
+
+    def test_addunique_array(self):
+        book = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.book.name,
+            name='test', description='test', quantity=10, cost=10.5,
+            published_at=datetime.now(), available=True, array=[10])
+
+        book = Object.please.add_unique(
+            'array',
+            [10],
+            class_name=self.book.name,
+            id=book.id
+        )
+
+        self.assertEqual(book.array, [10])
+
+        book = Object.please.add_unique(
+            'array',
+            [11],
+            class_name=self.book.name,
+            id=book.id
+        )
+
+        self.assertEqual(book.array, [10, 11])
 
 
 class ScriptIntegrationTest(InstanceMixin, IntegrationTest):
