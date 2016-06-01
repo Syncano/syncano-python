@@ -21,6 +21,10 @@ class UserProfileTest(InstanceMixin, IntegrationTest):
             '{}UserProfileObject'.format(self.instance.name.title())
         )
 
+    def test_auth(self):
+        self.assertTrue(self.user.profile)
+        self.assertTrue(User().auth())
+
     def test_profile_klass(self):
         klass = self.user.profile.get_class_object()
         self.assertTrue(klass)
