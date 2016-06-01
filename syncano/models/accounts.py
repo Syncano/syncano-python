@@ -144,7 +144,7 @@ class User(Model):
 
         data = {
             'username': connection.username,
-            'password' : connection.password
+            'password': connection.password
         }
 
         return connection.request('POST', endpoint, data=data)
