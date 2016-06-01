@@ -882,8 +882,12 @@ class ObjectManager(IncrementMixin, ArrayOperationsMixin, Manager):
     LOOKUP_SEPARATOR = '__'
     ALLOWED_LOOKUPS = [
         'gt', 'gte', 'lt', 'lte',
-        'eq', 'neq', 'exists', 'in', 'startswith',
+        'eq', 'neq', 'exists', 'in',
         'near', 'is', 'contains',
+        'startswith', 'endswith',
+        'contains', 'istartswith',
+        'iendswith', 'icontains',
+        'ieq', 'near',
     ]
 
     def __init__(self):
@@ -990,6 +994,7 @@ class ObjectManager(IncrementMixin, ArrayOperationsMixin, Manager):
         return model_name, field_name, lookup
 
     def _validate_lookup(self, model, model_name, field_name, lookup, field):
+
         if not model_name and field_name not in model._meta.field_names:
             allowed = ', '.join(model._meta.field_names)
             raise SyncanoValueError('Invalid field name "{0}" allowed are {1}.'.format(field_name, allowed))
