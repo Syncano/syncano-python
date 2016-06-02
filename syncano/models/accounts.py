@@ -143,7 +143,7 @@ class User(Model):
         connection = self._get_connection()
 
         if not (username and password):
-            raise SyncanoValueError('You need provide username and password!')
+            raise SyncanoValueError('You need provide username and password.')
 
         data = {
             'username': username,
