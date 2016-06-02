@@ -1,4 +1,4 @@
-
+from syncano.exceptions import SyncanoValueError
 
 from . import fields
 from .base import Model
@@ -117,6 +117,10 @@ class User(Model):
                 'methods': ['post'],
                 'path': '/users/{id}/reset_key/',
             },
+            'auth': {
+                'methods': ['post'],
+                'path': '/user/auth/',
+            },
             'list': {
                 'methods': ['get'],
                 'path': '/users/',
@@ -132,6 +136,21 @@ class User(Model):
         endpoint = self._meta.resolve_endpoint('reset_key', properties)
         connection = self._get_connection()
         return connection.request('POST', endpoint)
+
+    def auth(self, username=None, password=None):
+        properties = self.get_endpoint_data()
+        endpoint = self._meta.resolve_endpoint('auth', properties)
+        connection = self._get_connection()
+
+        if not (username and password):
+            raise SyncanoValueError('You need provide username and password.')
+
+        data = {
+            'username': username,
+            'password': password
+        }
+
+        return connection.request('POST', endpoint, data=data)
 
     def _user_groups_method(self, group_id=None, method='GET'):
         properties = self.get_endpoint_data()
