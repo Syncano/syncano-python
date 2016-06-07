@@ -1,4 +1,4 @@
-from syncano.exceptions import SyncanoValueError, SyncanoRequestError, UserNotFound
+from syncano.exceptions import SyncanoRequestError, SyncanoValueError, UserNotFound
 
 from . import fields
 from .base import Model
