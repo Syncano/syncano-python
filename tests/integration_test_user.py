@@ -49,7 +49,7 @@ class UserTest(InstanceMixin, IntegrationTest):
         super(UserTest, cls).setUpClass()
 
         cls.group = cls.instance.groups.create(
-            name='testgroup'
+            label='testgroup'
         )
 
     def test_if_custom_error_is_raised_on_user_group(self):
