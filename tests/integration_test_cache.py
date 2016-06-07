@@ -8,13 +8,13 @@ class DataEndpointCacheTest(InstanceMixin, IntegrationTest):
     @classmethod
     def setUpClass(cls):
         super(DataEndpointCacheTest, cls).setUpClass()
-        cls.klass = cls.instance.templates.create(
-            instance_name=cls.instance.name,
+        cls.klass = cls.instance.classes.create(
             name='sample_klass',
             schema=[
                 {'name': 'test1', 'type': 'string'},
                 {'name': 'test2', 'type': 'string'}
             ])
+
         cls.data_object = cls.klass.objects.create(
             class_name=cls.klass.name,
             test1='123',
