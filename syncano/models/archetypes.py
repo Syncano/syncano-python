@@ -198,6 +198,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
         """
         for field in self._meta.fields:
             if not field.read_only:
+                # field_name = field.name if not field.mapping else field.mapping
                 value = getattr(self, field.name)
                 field.validate(value, self)
 
@@ -225,10 +226,11 @@ class Model(six.with_metaclass(ModelMetaclass)):
         :type data: dict
         :param data: Raw data
         """
+
         for field in self._meta.fields:
             field_name = field.name
 
-            if field.mapping is not None and self.pk:
+            if field.mapping is not None and not self.is_new():
                 field_name = field.mapping
 
             if field_name in data:
