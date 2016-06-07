@@ -504,7 +504,8 @@ class ModelField(Field):
         super(ModelField, self).validate(value, model_instance)
 
         if not isinstance(value, (self.rel, dict)):
-            raise self.ValidationError('Value needs to be a {0} instance.'.format(self.rel.__name__))
+            if 'UserProfile' not in value.__class__.__name__:
+                raise self.ValidationError('Value needs to be a {0} instance.'.format(self.rel.__name__))
 
         if self.required and isinstance(value, self.rel):
             value.validate()
@@ -533,6 +534,9 @@ class ModelField(Field):
             pk_field = value._meta.pk
             pk_value = getattr(value, pk_field.name)
             return pk_field.to_native(pk_value)
+
+        if 'UserProfile' in value.__class__.__name__:
+            return value.to_native()
 
         return value
 

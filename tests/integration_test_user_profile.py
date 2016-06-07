@@ -36,6 +36,6 @@ class UserProfileTest(InstanceMixin, IntegrationTest):
         self.user.reload()  # force to refresh profile model;
 
         self.user.profile.profile_pic = self.SAMPLE_PROFILE_PIC
-        self.user.profile.save()
+        self.user.save()
         user = User.please.get(id=self.user.id)
         self.assertEqual(user.profile.profile_pic, self.SAMPLE_PROFILE_PIC)
