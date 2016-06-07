@@ -9,6 +9,7 @@ class DataEndpointCacheTest(InstanceMixin, IntegrationTest):
     def setUpClass(cls):
         super(DataEndpointCacheTest, cls).setUpClass()
         cls.klass = cls.instance.templates.create(
+            instance_name=cls.instance.name,
             name='sample_klass',
             schema=[
                 {'name': 'test1', 'type': 'string'},
@@ -53,4 +54,4 @@ class ScriptEndpointCacheTest(InstanceMixin, IntegrationTest):
 
     def test_cache_request(self):
         response = self.script_endpoint.run(cache_key='123456')
-        self.assertEqual(response.result['stdout'], 12)
+        self.assertEqual(response.result['stdout'], '12')
