@@ -46,7 +46,7 @@ class UserTest(InstanceMixin, IntegrationTest):
 
     @classmethod
     def setUpClass(cls):
-        super(UserProfileTest, cls).setUpClass()
+        super(UserTest, cls).setUpClass()
 
         cls.group = cls.instance.groups.create(
             name='testgroup'
