@@ -24,8 +24,7 @@ class DataEndpointCacheTest(InstanceMixin, IntegrationTest):
         cls.data_endpoint = cls.instance.data_endpoints.create(
             name='test_data_endpoint',
             description='test description',
-            class_name=cls.klass.name,
-            query={}
+            class_name=cls.klass.name
         )
 
     def test_cache_request(self):
