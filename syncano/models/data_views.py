@@ -83,12 +83,16 @@ class EndpointData(Model):
         endpoint = self._meta.resolve_endpoint('get', properties)
         connection = self._get_connection()
 
+        kwargs = {}
         params = {}
         if cache_key is not None:
             params = {'cache_key': cache_key}
 
+        if params:
+            kwargs = {'params': params}
+
         while endpoint is not None:
-            response = connection.request('GET', endpoint, params=params)
+            response = connection.request('GET', endpoint, **kwargs)
             endpoint = response.get('next')
             for obj in response['objects']:
                 yield obj

@@ -275,7 +275,11 @@ class ScriptEndpoint(Model):
         if cache_key is not None:
             params = {'cache_key': cache_key}
 
-        response = connection.request('POST', endpoint, **{'data': payload, 'params': params})
+        kwargs = {'data': payload}
+        if params:
+            kwargs.update({'params': params})
+
+        response = connection.request('POST', endpoint, **kwargs)
 
         if isinstance(response, dict) and 'result' in response and 'stdout' in response['result']:
             response.update({'instance_name': self.instance_name,
