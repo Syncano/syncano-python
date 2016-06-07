@@ -1,4 +1,4 @@
-from syncano.exceptions import SyncanoValueError
+from syncano.exceptions import SyncanoValueError, SyncanoRequestError, UserNotFound
 
 from . import fields
 from .base import Model
@@ -214,7 +214,14 @@ class Group(Model):
         if user_id is not None:
             endpoint += '{}/'.format(user_id)
         connection = self._get_connection()
-        return connection.request(method, endpoint)
+        try:
+            response = connection.request(method, endpoint)
+        except SyncanoRequestError as e:
+            if e.status_code == 404:
+                raise UserNotFound(e.status_code, 'User not found.')
+            raise
+
+        return response
 
     def list_users(self):
         return self._group_users_method()
