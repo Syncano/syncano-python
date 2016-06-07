@@ -15,8 +15,10 @@ class DataEndpointCacheTest(InstanceMixin, IntegrationTest):
                 {'name': 'test1', 'type': 'string'},
                 {'name': 'test2', 'type': 'string'}
             ])
-        cls.data_object = cls.instance.templates.create(
-            class_name=cls.klass.name
+        cls.data_object = cls.klass.objects.create(
+            class_name=cls.klass.name,
+            test1='123',
+            test2='321',
         )
 
         cls.data_endpoint = cls.instance.data_endpoints.create(
