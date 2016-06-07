@@ -78,12 +78,17 @@ class EndpointData(Model):
         connection = self._get_connection()
         return connection.request('POST', endpoint)
 
-    def get(self):
+    def get(self, cache_key=None):
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('get', properties)
         connection = self._get_connection()
+
+        params = {}
+        if cache_key is not None:
+            params = {'cache_key': cache_key}
+
         while endpoint is not None:
-            response = connection.request('GET', endpoint)
+            response = connection.request('GET', endpoint, params=params)
             endpoint = response.get('next')
             for obj in response['objects']:
                 yield obj
