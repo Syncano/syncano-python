@@ -28,7 +28,7 @@ class EndpointData(Model):
     name = fields.StringField(max_length=64, primary_key=True)
     description = fields.StringField(required=False)
 
-    query = fields.JSONField(read_only=False)
+    query = fields.JSONField(read_only=False, required=False)
 
     class_name = fields.StringField(label='class name', mapping='class')
 
