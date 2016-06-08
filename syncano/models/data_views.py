@@ -28,7 +28,7 @@ class EndpointData(Model):
     name = fields.StringField(max_length=64, primary_key=True)
     description = fields.StringField(required=False)
 
-    query = fields.JSONField(read_only=False, required=True)
+    query = fields.JSONField(read_only=False, required=False)
 
     class_name = fields.StringField(label='class name', mapping='class')
 
@@ -78,12 +78,21 @@ class EndpointData(Model):
         connection = self._get_connection()
         return connection.request('POST', endpoint)
 
-    def get(self):
+    def get(self, cache_key=None):
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('get', properties)
         connection = self._get_connection()
+
+        kwargs = {}
+        params = {}
+        if cache_key is not None:
+            params = {'cache_key': cache_key}
+
+        if params:
+            kwargs = {'params': params}
+
         while endpoint is not None:
-            response = connection.request('GET', endpoint)
+            response = connection.request('GET', endpoint, **kwargs)
             endpoint = response.get('next')
             for obj in response['objects']:
                 yield obj
