@@ -528,13 +528,17 @@ class ModelField(Field):
         if value is None:
             return
 
-        if isinstance(value, self.rel) or self.is_data_object_mixin:
+        if isinstance(value, self.rel):
             if not self.just_pk:
                 return value.to_native()
 
             pk_field = value._meta.pk
             pk_value = getattr(value, pk_field.name)
             return pk_field.to_native(pk_value)
+
+        if self.is_data_object_mixin:
+            if not self.just_pk and hasattr(value, 'to_native'):
+                return value.to_native()
 
         return value
 
