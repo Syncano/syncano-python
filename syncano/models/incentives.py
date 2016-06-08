@@ -254,7 +254,7 @@ class ScriptEndpoint(Model):
             }
         }
 
-    def run(self, **payload):
+    def run(self, cache_key=None, **payload):
         """
         Usage::
 
@@ -271,7 +271,15 @@ class ScriptEndpoint(Model):
         endpoint = self._meta.resolve_endpoint('run', properties)
         connection = self._get_connection(**payload)
 
-        response = connection.request('POST', endpoint, **{'data': payload})
+        params = {}
+        if cache_key is not None:
+            params = {'cache_key': cache_key}
+
+        kwargs = {'data': payload}
+        if params:
+            kwargs.update({'params': params})
+
+        response = connection.request('POST', endpoint, **kwargs)
 
         if isinstance(response, dict) and 'result' in response and 'stdout' in response['result']:
             response.update({'instance_name': self.instance_name,

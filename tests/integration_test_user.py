@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from syncano.exceptions import UserNotFound
 from syncano.models import User
 from tests.integration_test import InstanceMixin, IntegrationTest
 
@@ -46,3 +47,18 @@ class UserProfileTest(InstanceMixin, IntegrationTest):
         self.user.profile.save()
         user = User.please.get(id=self.user.id)
         self.assertEqual(user.profile.profile_pic, self.ANOTHER_SAMPLE_PROFILE_PIC)
+
+
+class UserTest(InstanceMixin, IntegrationTest):
+
+    @classmethod
+    def setUpClass(cls):
+        super(UserTest, cls).setUpClass()
+
+        cls.group = cls.instance.groups.create(
+            label='testgroup'
+        )
+
+    def test_if_custom_error_is_raised_on_user_group(self):
+        with self.assertRaises(UserNotFound):
+            self.group.user_details(user_id=221)

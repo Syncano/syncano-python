@@ -51,6 +51,7 @@ class Instance(RenameMixin, Model):
     # snippets and data fields;
     scripts = fields.RelatedManagerField('Script')
     script_endpoints = fields.RelatedManagerField('ScriptEndpoint')
+    data_endpoints = fields.RelatedManagerField('EndpointData')
     templates = fields.RelatedManagerField('ResponseTemplate')
 
     triggers = fields.RelatedManagerField('Trigger')
