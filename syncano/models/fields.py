@@ -505,13 +505,11 @@ class ModelField(Field):
         super(ModelField, self).validate(value, model_instance)
 
         if not isinstance(value, (self.rel, dict)):
-            if not self.is_data_object_mixin:
+            if not isinstance(value, (self.rel, dict)) and not self.is_data_object_mixin:
                 raise self.ValidationError('Value needs to be a {0} instance.'.format(self.rel.__name__))
 
-        if self.required and isinstance(value, self.rel):
-            value.validate()
-
-        if self.is_data_object_mixin and hasattr(value, 'validate'):
+        if (self.required and isinstance(value, self.rel))or \
+           (self.is_data_object_mixin and hasattr(value, 'validate')):
             value.validate()
 
     def to_python(self, value):
@@ -539,9 +537,8 @@ class ModelField(Field):
             pk_value = getattr(value, pk_field.name)
             return pk_field.to_native(pk_value)
 
-        if self.is_data_object_mixin:
-            if not self.just_pk and hasattr(value, 'to_native'):
-                return value.to_native()
+        if self.is_data_object_mixin and not self.just_pk and hasattr(value, 'to_native'):
+            return value.to_native()
 
         return value
 
