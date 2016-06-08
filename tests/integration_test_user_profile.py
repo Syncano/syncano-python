@@ -13,6 +13,7 @@ class UserProfileTest(InstanceMixin, IntegrationTest):
             password='jezioro',
         )
         cls.SAMPLE_PROFILE_PIC = 'some_url_here'
+        cls.ANOTHER_SAMPLE_PROFILE_PIC = 'yet_another_url'
 
     def test_profile(self):
         self.assertTrue(self.user.profile)
@@ -37,5 +38,11 @@ class UserProfileTest(InstanceMixin, IntegrationTest):
 
         self.user.profile.profile_pic = self.SAMPLE_PROFILE_PIC
         self.user.save()
+        user = User.please.get(id=self.user.id)
+        self.assertEqual(user.profile.profile_pic, self.SAMPLE_PROFILE_PIC)
+
+        # test save directly on profile
+        self.user.profile.profile_pic = self.ANOTHER_SAMPLE_PROFILE_PIC
+        self.user.profile.save()
         user = User.please.get(id=self.user.id)
         self.assertEqual(user.profile.profile_pic, self.SAMPLE_PROFILE_PIC)

@@ -511,6 +511,9 @@ class ModelField(Field):
         if self.required and isinstance(value, self.rel):
             value.validate()
 
+        if self.is_data_object_mixin and hasattr(value, 'validate'):
+            value.validate()
+
     def to_python(self, value):
 
         if value is None:
