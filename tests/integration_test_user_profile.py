@@ -45,4 +45,4 @@ class UserProfileTest(InstanceMixin, IntegrationTest):
         self.user.profile.profile_pic = self.ANOTHER_SAMPLE_PROFILE_PIC
         self.user.profile.save()
         user = User.please.get(id=self.user.id)
-        self.assertEqual(user.profile.profile_pic, self.SAMPLE_PROFILE_PIC)
+        self.assertEqual(user.profile.profile_pic, self.ANOTHER_SAMPLE_PROFILE_PIC)
