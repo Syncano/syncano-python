@@ -481,6 +481,7 @@ class ModelField(Field):
     def __init__(self, rel, *args, **kwargs):
         self.rel = rel
         self.just_pk = kwargs.pop('just_pk', True)
+        self.is_data_object_mixin = kwargs.pop('is_data_object_mixin', False)
         super(ModelField, self).__init__(*args, **kwargs)
 
     def contribute_to_class(self, cls, name):
@@ -504,7 +505,7 @@ class ModelField(Field):
         super(ModelField, self).validate(value, model_instance)
 
         if not isinstance(value, (self.rel, dict)):
-            if 'UserProfile' not in value.__class__.__name__:
+            if not self.is_data_object_mixin:
                 raise self.ValidationError('Value needs to be a {0} instance.'.format(self.rel.__name__))
 
         if self.required and isinstance(value, self.rel):
@@ -527,16 +528,13 @@ class ModelField(Field):
         if value is None:
             return
 
-        if isinstance(value, self.rel):
+        if isinstance(value, self.rel) or self.is_data_object_mixin:
             if not self.just_pk:
                 return value.to_native()
 
             pk_field = value._meta.pk
             pk_value = getattr(value, pk_field.name)
             return pk_field.to_native(pk_value)
-
-        if 'UserProfile' in value.__class__.__name__:
-            return value.to_native()
 
         return value
 
