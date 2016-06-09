@@ -229,11 +229,11 @@ class Model(six.with_metaclass(ModelMetaclass)):
         for field in self._meta.fields:
             field_name = field.name
 
-            if field.mapping is not None and not self.is_new():
+            if field.mapping is not None:
                 field_name = field.mapping
 
-            if field_name in data:
-                value = data[field_name]
+            if field_name in data or field.name in data:
+                value = data.get(field_name, None) or data.get(field.name, None)
                 setattr(self, field.name, value)
 
             if isinstance(field, fields.RelationField):
