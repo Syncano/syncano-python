@@ -229,10 +229,18 @@ class Model(six.with_metaclass(ModelMetaclass)):
         for field in self._meta.fields:
             field_name = field.name
 
-            if field.mapping is not None:
+            # some explanation needed here:
+            # When data comes from Syncano Platform the 'class' field is there
+            # so to map correctly the 'class' value to the 'class_name' field
+            # the mapping is required.
+            # But. When DataEndpoint (and probably others models with mapping) is created from
+            # syncano LIB directly: DataEndpoint(class_name='some_class')
+            # the data dict has only 'class_name' key - not the 'class',
+            # later the transition between class_name and class is made in to_native on model;
+            if field.mapping is not None and field.mapping in data:
                 field_name = field.mapping
 
-            if field_name in data or field.name in data:
+            if field_name:
                 value = data.get(field_name, None) or data.get(field.name, None)
                 setattr(self, field.name, value)
 
