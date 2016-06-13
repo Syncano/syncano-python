@@ -237,10 +237,10 @@ class Model(six.with_metaclass(ModelMetaclass)):
             # syncano LIB directly: DataEndpoint(class_name='some_class')
             # the data dict has only 'class_name' key - not the 'class',
             # later the transition between class_name and class is made in to_native on model;
-            if field.mapping is not None and field.mapping in data:
+            if field.mapping is not None and field.mapping in data and self.is_new():
                 field_name = field.mapping
 
-            if field_name:
+            if field_name in data:
                 value = data.get(field_name, None) or data.get(field.name, None)
                 setattr(self, field.name, value)
 
