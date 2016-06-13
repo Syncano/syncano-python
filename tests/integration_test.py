@@ -646,7 +646,7 @@ class DataEndpointIntegrationTest(InstanceMixin, IntegrationTest):
 
     def test_mapping_class_name_lib_read(self):
         data_endpoint = self.instance.data_endpoints.get(name='test_data_endpoint')
-        self.assertEqual(data_endpoint.class_name, 'test_data_endpoint')
+        self.assertEqual(data_endpoint.class_name, 'sample_klass')
 
     def test_data_endpoint_filtering(self):
         data_endpoint = self.instance.data_endpoints.get(name='test_data_endpoint')

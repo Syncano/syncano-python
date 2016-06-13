@@ -241,7 +241,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
                 field_name = field.mapping
 
             if field_name in data:
-                value = data.get(field_name, None) or data.get(field.name, None)
+                value = data[field_name]
                 setattr(self, field.name, value)
 
             if isinstance(field, fields.RelationField):

@@ -953,31 +953,7 @@ class ObjectManager(IncrementMixin, ArrayOperationsMixin, Manager):
 
             objects = Object.please.list('instance-name', 'class-name').filter(henryk__gte='hello')
         """
-        query = {}
-        model = self.model.get_subclass_model(**self.properties)
 
-        for field_name, value in six.iteritems(kwargs):
-            lookup = 'eq'
-            model_name = None
-
-            if self.LOOKUP_SEPARATOR in field_name:
-                model_name, field_name, lookup = self._get_lookup_attributes(field_name)
-
-            for field in model._meta.fields:
-                if field.name == field_name:
-                    break
-
-            self._validate_lookup(model, model_name, field_name, lookup, field)
-
-            query_main_lookup, query_main_field = self._get_main_lookup(model_name, field_name, lookup)
-
-            query.setdefault(query_main_field, {})
-            query[query_main_field]['_{0}'.format(query_main_lookup)] = field.to_query(
-                value,
-                query_main_lookup,
-                related_field_name=field_name,
-                related_field_lookup=lookup,
-            )
         query = self._build_query(query_data=kwargs)
         self.query['query'] = json.dumps(query)
         self.method = 'GET'
