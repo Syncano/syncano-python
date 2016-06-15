@@ -1,11 +1,11 @@
-
+import json
 
 from . import fields
-from .base import Model
+from .base import Model, Object
 from .instances import Instance
 
 
-class EndpointData(Model):
+class DataEndpoint(Model):
     """
     :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`
@@ -78,13 +78,17 @@ class EndpointData(Model):
         connection = self._get_connection()
         return connection.request('POST', endpoint)
 
-    def get(self, cache_key=None):
-        properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('get', properties)
+    def get(self, cache_key=None, **kwargs):
         connection = self._get_connection()
+        properties = self.get_endpoint_data()
+        query = Object.please._build_query(query_data=kwargs, class_name=self.class_name)
+
+        endpoint = self._meta.resolve_endpoint('get', properties)
 
         kwargs = {}
         params = {}
+        params.update({'query': json.dumps(query)})
+
         if cache_key is not None:
             params = {'cache_key': cache_key}
 

@@ -953,10 +953,19 @@ class ObjectManager(IncrementMixin, ArrayOperationsMixin, Manager):
 
             objects = Object.please.list('instance-name', 'class-name').filter(henryk__gte='hello')
         """
+
+        query = self._build_query(query_data=kwargs)
+        self.query['query'] = json.dumps(query)
+        self.method = 'GET'
+        self.endpoint = 'list'
+        return self
+
+    def _build_query(self, query_data, **kwargs):
         query = {}
+        self.properties.update(**kwargs)
         model = self.model.get_subclass_model(**self.properties)
 
-        for field_name, value in six.iteritems(kwargs):
+        for field_name, value in six.iteritems(query_data):
             lookup = 'eq'
             model_name = None
 
@@ -978,11 +987,7 @@ class ObjectManager(IncrementMixin, ArrayOperationsMixin, Manager):
                 related_field_name=field_name,
                 related_field_lookup=lookup,
             )
-
-        self.query['query'] = json.dumps(query)
-        self.method = 'GET'
-        self.endpoint = 'list'
-        return self
+        return query
 
     def _get_lookup_attributes(self, field_name):
         try:
