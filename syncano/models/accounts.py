@@ -156,10 +156,24 @@ class User(Model):
     def _user_groups_method(self, group_id=None, method='GET'):
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('groups', properties)
-        if group_id is not None:
+
+        if group_id is not None and method != 'POST':
             endpoint += '{}/'.format(group_id)
         connection = self._get_connection()
-        return connection.request(method, endpoint)
+
+        data = {}
+        if method == 'POST':
+            data = {'group': group_id}
+
+        response = connection.request(method, endpoint, data=data)
+
+        if method == 'DELETE':  # no response here;
+            return
+
+        if 'objects' in response:
+            return [Group(**group_response['group']) for group_response in response['objects']]
+
+        return Group(**response['group'])
 
     def add_to_group(self, group_id):
         return self._user_groups_method(group_id, method='POST')
@@ -212,17 +226,28 @@ class Group(Model):
     def _group_users_method(self, user_id=None, method='GET'):
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('users', properties)
-        if user_id is not None:
+        if user_id is not None and method != 'POST':
             endpoint += '{}/'.format(user_id)
         connection = self._get_connection()
+
+        data = {}
+        if method == 'POST':
+            data = {'user': user_id}
+
         try:
-            response = connection.request(method, endpoint)
+            response = connection.request(method, endpoint, data=data)
         except SyncanoRequestError as e:
             if e.status_code == 404:
                 raise UserNotFound(e.status_code, 'User not found.')
             raise
 
-        return response
+        if method == 'DELETE':
+            return
+
+        if 'objects' in response:
+            return [User(**user_response['user']) for user_response in response['objects']]
+
+        return User(**response['user'])
 
     def list_users(self):
         return self._group_users_method()

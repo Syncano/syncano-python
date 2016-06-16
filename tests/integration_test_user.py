@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from syncano.exceptions import UserNotFound
-from syncano.models import User
+from syncano.models import Group, User
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 
@@ -62,3 +62,55 @@ class UserTest(InstanceMixin, IntegrationTest):
     def test_if_custom_error_is_raised_on_user_group(self):
         with self.assertRaises(UserNotFound):
             self.group.user_details(user_id=221)
+
+    def test_user_group_membership(self):
+        user = User.please.create(
+            username='testa',
+            password='1234'
+        )
+
+        group_test = Group.please.create(label='new_group_a')
+
+        groups = user.list_groups()
+        self.assertListEqual(groups, [])
+
+        group = user.add_to_group(group_id=group_test.id)
+        self.assertEqual(group.id, group_test.id)
+        self.assertEqual(group.label, group_test.label)
+
+        groups = user.list_groups()
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(groups[0].id, group_test.id)
+
+        group = user.group_details(group_id=group_test.id)
+        self.assertEqual(group.id, group_test.id)
+        self.assertEqual(group.label, group_test.label)
+
+        response = user.remove_from_group(group_id=group_test.id)
+        self.assertIsNone(response)
+
+    def test_group_user_membership(self):
+        user_test = User.please.create(
+            username='testa',
+            password='1234'
+        )
+
+        group = Group.please.create(label='new_group_a')
+
+        users = group.list_users()
+        self.assertListEqual(users, [])
+
+        user = group.add_user(user_id=user_test.id)
+        self.assertEqual(user.id, user_test.id)
+        self.assertEqual(user.label, user_test.label)
+
+        users = group.list_users()
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0].id, user_test.id)
+
+        user = group.user_details(user_id=user_test.id)
+        self.assertEqual(user.id, user_test.id)
+        self.assertEqual(user.label, user_test.label)
+
+        response = group.delete_user(user_id=user_test.id)
+        self.assertIsNone(response)
