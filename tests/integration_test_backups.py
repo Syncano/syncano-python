@@ -32,7 +32,7 @@ class BaseBackupTestCase(InstanceMixin, IntegrationTest):
         backup_model = self._get_backup_model(backup_type)
         backup = backup_model.please.get(id=backup_id)
 
-        self.assertEqual(backup.id, self.backup.id)
+        self.assertEqual(backup.id, backup_id)
         self.assertEqual(backup.author.email, self.API_EMAIL)
 
     def _test_backup_list(self, backup_type='full'):
