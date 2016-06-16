@@ -61,6 +61,7 @@ class PartialBackup(Model):
     :ivar status_info: :class:`~syncano.models.fields.StringField`
     :ivar author: :class:`~syncano.models.fields.ModelField`
     :ivar details: :class:`~syncano.models.fields.JSONField`
+    :ivar query_args: :class:`~syncano.models.fields.JSONField`
     :ivar updated_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar created_at: :class:`~syncano.models.fields.DateTimeField`
     :ivar links: :class:`~syncano.models.fields.HyperlinkedField`
