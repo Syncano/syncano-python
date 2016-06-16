@@ -21,7 +21,7 @@ class BaseBackupTestCase(InstanceMixin, IntegrationTest):
             new_backup = backup_model()
         backup_test = new_backup.save()
 
-        backup = Backup.please.get(id=backup_test.id)
+        backup = backup_model.please.get(id=backup_test.id)
         self.assertTrue(backup)
         self.assertEqual(backup.id, backup_test.id)
         self.assertEqual(backup.author.email, self.API_EMAIL)
