@@ -91,18 +91,18 @@ class UserTest(InstanceMixin, IntegrationTest):
 
     def test_group_user_membership(self):
         user_test = User.please.create(
-            username='testa',
+            username='testb',
             password='1234'
         )
 
-        group = Group.please.create(label='new_group_a')
+        group = Group.please.create(label='new_group_b')
 
         users = group.list_users()
         self.assertListEqual(users, [])
 
         user = group.add_user(user_id=user_test.id)
         self.assertEqual(user.id, user_test.id)
-        self.assertEqual(user.label, user_test.label)
+        self.assertEqual(user.username, user_test.username)
 
         users = group.list_users()
         self.assertEqual(len(users), 1)
@@ -110,7 +110,7 @@ class UserTest(InstanceMixin, IntegrationTest):
 
         user = group.user_details(user_id=user_test.id)
         self.assertEqual(user.id, user_test.id)
-        self.assertEqual(user.label, user_test.label)
+        self.assertEqual(user.username, user_test.username)
 
         response = group.delete_user(user_id=user_test.id)
         self.assertIsNone(response)
