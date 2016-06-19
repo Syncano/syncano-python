@@ -10,3 +10,4 @@ from .incentives import *  # NOQA
 from .traces import *  # NOQA
 from .push_notification import *  # NOQA
 from .geo import *  # NOQA
+from .backups import *  # NOQA
