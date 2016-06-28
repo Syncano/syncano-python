@@ -267,7 +267,9 @@ class ScriptEndpoint(Model):
         if self.is_new():
             raise SyncanoValidationError('Method allowed only on existing model.')
 
-        endpoint_name = 'run'
+        properties = self.get_endpoint_data()
+        endpoint_http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('run', properties, endpoint_http_method)
         connection = self._get_connection(**payload)
 
         params = {}
@@ -278,7 +280,7 @@ class ScriptEndpoint(Model):
         if params:
             kwargs.update({'params': params})
 
-        response = self.make_endpoint_request(connection, endpoint_name, 'POST', **kwargs)
+        response = connection.request(endpoint_http_method, endpoint, **kwargs)
 
         if isinstance(response, dict) and 'result' in response and 'stdout' in response['result']:
             response.update({'instance_name': self.instance_name,
@@ -294,11 +296,12 @@ class ScriptEndpoint(Model):
             >>> se = ScriptEndpoint.please.get('instance-name', 'script-name')
             >>> se.reset_link()
         """
-        endpoint_name = 'reset'
+        properties = self.get_endpoint_data()
+        endpoint_http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('reset', properties, endpoint_http_method)
         connection = self._get_connection()
 
-        response = self.make_endpoint_request(connection, endpoint_name, 'POST')
-
+        response = connection.request(endpoint_http_method, endpoint)
         self.public_link = response['public_link']
 
 

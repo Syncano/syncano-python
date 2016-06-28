@@ -275,11 +275,3 @@ class Model(six.with_metaclass(ModelMetaclass)):
             if field.has_endpoint_data:
                 properties[field.name] = getattr(self, field.name)
         return properties
-
-    def make_endpoint_request(self, connection, endpoint_name, http_method, **kwargs):
-        if self._meta.is_http_method_available_for_endpoint(http_method, endpoint_name):
-            properties = self.get_endpoint_data()
-            endpoint = self._meta.resolve_endpoint(endpoint_name, properties)
-            return connection.request(http_method, endpoint, **kwargs)
-        else:
-            raise SyncanoValidationError('HTTP method {0} not allowed for endpoint name "{1}".'.format(http_method, endpoint_name))

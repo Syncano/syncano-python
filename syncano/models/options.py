@@ -3,7 +3,7 @@ from bisect import bisect
 
 import six
 from syncano.connection import ConnectionMixin
-from syncano.exceptions import SyncanoValueError
+from syncano.exceptions import SyncanoValidationError, SyncanoValueError
 from syncano.models.registry import registry
 from syncano.utils import camelcase_to_underscore
 
@@ -133,12 +133,16 @@ class Options(ConnectionMixin):
         endpoint = self.get_endpoint(name)
         return endpoint['methods']
 
-    def resolve_endpoint(self, name, properties):
-        endpoint = self.get_endpoint(name)
+    def resolve_endpoint(self, endpoint_name, properties, http_method=None):
+        if http_method and not self.is_http_method_available_for_endpoint(http_method, endpoint_name):
+            raise SyncanoValidationError(
+                'HTTP method {0} not allowed for endpoint name "{1}".'.format(http_method, endpoint_name)
+            )
+        endpoint = self.get_endpoint(endpoint_name)
 
-        for name in endpoint['properties']:
-            if name not in properties:
-                raise SyncanoValueError('Request property "{0}" is required.'.format(name))
+        for endpoint_name in endpoint['properties']:
+            if endpoint_name not in properties:
+                raise SyncanoValueError('Request property "{0}" is required.'.format(endpoint_name))
 
         return endpoint['path'].format(**properties)
 
