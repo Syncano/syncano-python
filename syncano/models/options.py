@@ -142,6 +142,10 @@ class Options(ConnectionMixin):
 
         return endpoint['path'].format(**properties)
 
+    def is_http_method_available_for_endpoint(self, http_method_name, endpoint_name):
+        available_methods = self.get_endpoint_methods(endpoint_name)
+        return http_method_name.lower() in available_methods
+
     def get_endpoint_query_params(self, name, params):
         properties = self.get_endpoint_properties(name)
         return {k: v for k, v in six.iteritems(params) if k not in properties}
