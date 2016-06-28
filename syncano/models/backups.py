@@ -62,4 +62,3 @@ class Backup(Model):
         }
         connection = self._get_connection()
         connection.request('POST', endpoint, **kwargs)
-
