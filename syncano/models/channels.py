@@ -138,7 +138,7 @@ class Channel(Model):
 
     def poll(self, room=None, last_id=None, callback=None, error=None, timeout=None):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('poll', properties)
+        endpoint = self._meta.resolve_endpoint('poll', properties, 'GET')
         connection = self._get_connection()
 
         thread = PollThread(connection, endpoint, callback, error, timeout=timeout,
@@ -148,10 +148,11 @@ class Channel(Model):
 
     def publish(self, payload, room=None):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('publish', properties)
+        http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('publish', properties, http_method)
         connection = self._get_connection()
         request = {'data': Message(payload=payload, room=room).to_native()}
-        response = connection.request('POST', endpoint, **request)
+        response = connection.request(http_method, endpoint, **request)
         return Message(**response)
 
 

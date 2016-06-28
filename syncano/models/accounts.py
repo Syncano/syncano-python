@@ -134,13 +134,15 @@ class User(Model):
 
     def reset_key(self):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('reset_key', properties)
+        http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('reset_key', properties, http_method)
         connection = self._get_connection()
-        return connection.request('POST', endpoint)
+        return connection.request(http_method, endpoint)
 
     def auth(self, username=None, password=None):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('auth', properties)
+        http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('auth', properties, http_method)
         connection = self._get_connection()
 
         if not (username and password):
@@ -151,11 +153,11 @@ class User(Model):
             'password': password
         }
 
-        return connection.request('POST', endpoint, data=data)
+        return connection.request(http_method, endpoint, data=data)
 
     def _user_groups_method(self, group_id=None, method='GET'):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('groups', properties)
+        endpoint = self._meta.resolve_endpoint('groups', properties, method)
 
         if group_id is not None and method != 'POST':
             endpoint += '{}/'.format(group_id)
@@ -225,7 +227,7 @@ class Group(Model):
 
     def _group_users_method(self, user_id=None, method='GET'):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('users', properties)
+        endpoint = self._meta.resolve_endpoint('users', properties, method)
         if user_id is not None and method != 'POST':
             endpoint += '{}/'.format(user_id)
         connection = self._get_connection()

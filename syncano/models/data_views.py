@@ -66,24 +66,27 @@ class DataEndpoint(Model):
 
     def rename(self, new_name):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('rename', properties)
+        http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('rename', properties, http_method)
         connection = self._get_connection()
-        return connection.request('POST',
+        return connection.request(http_method,
                                   endpoint,
                                   data={'new_name': new_name})
 
     def clear_cache(self):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('clear_cache', properties)
+        http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('clear_cache', properties, http_method)
         connection = self._get_connection()
-        return connection.request('POST', endpoint)
+        return connection.request(http_method, endpoint)
 
     def get(self, cache_key=None, **kwargs):
         connection = self._get_connection()
         properties = self.get_endpoint_data()
         query = Object.please._build_query(query_data=kwargs, class_name=self.class_name)
 
-        endpoint = self._meta.resolve_endpoint('get', properties)
+        http_method = 'GET'
+        endpoint = self._meta.resolve_endpoint('get', properties, http_method)
 
         kwargs = {}
         params = {}
@@ -96,7 +99,7 @@ class DataEndpoint(Model):
             kwargs = {'params': params}
 
         while endpoint is not None:
-            response = connection.request('GET', endpoint, **kwargs)
+            response = connection.request(http_method, endpoint, **kwargs)
             endpoint = response.get('next')
             for obj in response['objects']:
                 yield obj

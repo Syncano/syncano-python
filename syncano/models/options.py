@@ -134,9 +134,9 @@ class Options(ConnectionMixin):
         return endpoint['methods']
 
     def resolve_endpoint(self, endpoint_name, properties, http_method=None):
-        if http_method and not self.is_http_method_available_for_endpoint(http_method, endpoint_name):
+        if http_method and not self.is_http_method_available(http_method, endpoint_name):
             raise SyncanoValidationError(
-                'HTTP method {0} not allowed for endpoint name "{1}".'.format(http_method, endpoint_name)
+                'HTTP method {0} not allowed for endpoint "{1}".'.format(http_method, endpoint_name)
             )
         endpoint = self.get_endpoint(endpoint_name)
 
@@ -146,7 +146,7 @@ class Options(ConnectionMixin):
 
         return endpoint['path'].format(**properties)
 
-    def is_http_method_available_for_endpoint(self, http_method_name, endpoint_name):
+    def is_http_method_available(self, http_method_name, endpoint_name):
         available_methods = self.get_endpoint_methods(endpoint_name)
         return http_method_name.lower() in available_methods
 
