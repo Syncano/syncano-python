@@ -37,7 +37,7 @@ class Admin(Model):
                 'path': '/admins/{id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/admins/',
             }
         }
@@ -76,7 +76,7 @@ class Profile(DataObjectMixin, Object):
                 'path': '/objects/{id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/objects/',
             }
         }
@@ -123,7 +123,7 @@ class User(Model):
                 'path': '/user/auth/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/users/',
             },
             'groups': {
@@ -216,7 +216,7 @@ class Group(Model):
                 'path': '/groups/{id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/groups/',
             },
             'users': {

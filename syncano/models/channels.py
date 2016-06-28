@@ -190,7 +190,7 @@ class Message(Model):
                 'path': '/history/{pk}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/history/',
             },
         }

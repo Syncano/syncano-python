@@ -197,7 +197,7 @@ class GCMMessage(MessageBase, Model):
                 'path': '/push_notifications/gcm/messages/{id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/push_notifications/gcm/messages/',
             }
         }
@@ -244,7 +244,7 @@ class APNSMessage(MessageBase, Model):
                 'path': '/push_notifications/apns/messages/{id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/push_notifications/apns/messages/',
             }
         }
