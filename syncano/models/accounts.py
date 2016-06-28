@@ -127,7 +127,7 @@ class User(Model):
                 'path': '/users/',
             },
             'groups': {
-                'methods': ['get', 'post'],
+                'methods': ['get', 'post', 'delete'],
                 'path': '/users/{id}/groups/',
             }
         }
