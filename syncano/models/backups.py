@@ -45,5 +45,21 @@ class Backup(Model):
             'list': {
                 'methods': ['post', 'get'],
                 'path': '/backups/full/',
+            },
+            'restore': {
+                'methods': ['post'],
+                'path': '/restores/',
             }
         }
+
+    def restore(self):
+        properties = self.get_endpoint_data()
+        endpoint = self._meta.resolve_endpoint('restore', properties)
+        kwargs = {
+            'data': {
+                'backup': self.id
+            }
+        }
+        connection = self._get_connection()
+        connection.request('POST', endpoint, **kwargs)
+
