@@ -45,12 +45,12 @@ class FullBackupTestCase(InstanceMixin, IntegrationTest):
             'There should be only 1 more instance class after new class creation.'
         )
 
-        # wait for backup to be truly saved and restored
+        # wait for backup to be saved
         while backup.status != 'success':
             time.sleep(1)
             backup.reload()
+
         backup.restore()
-        time.sleep(15)
 
         instance.reload()
         classes_count_after_restore = len(list(instance.classes))

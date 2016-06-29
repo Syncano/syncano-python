@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import time
+
 from . import fields
 from .base import Model
 from .instances import Instance
@@ -61,4 +63,9 @@ class Backup(Model):
             }
         }
         connection = self._get_connection()
-        connection.request('POST', endpoint, **kwargs)
+        response = connection.request('POST', endpoint, **kwargs)
+        restore_endpoint = response['links']['self']
+        restore_response = connection.request('GET', restore_endpoint)
+        while restore_response['status'] == 'running':
+            time.sleep(1)
+            restore_response = connection.request('GET', restore_endpoint)
