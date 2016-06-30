@@ -138,7 +138,7 @@ class Channel(Model):
 
     def poll(self, room=None, last_id=None, callback=None, error=None, timeout=None):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('poll', properties, 'GET')
+        endpoint = self._meta.resolve_endpoint('poll', properties, http_method='GET')
         connection = self._get_connection()
 
         thread = PollThread(connection, endpoint, callback, error, timeout=timeout,
