@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import time
-
 from . import fields
 from .base import Model
 from .instances import Instance
@@ -48,24 +46,33 @@ class Backup(Model):
                 'methods': ['post', 'get'],
                 'path': '/backups/full/',
             },
-            'restore': {
-                'methods': ['post'],
-                'path': '/restores/',
-            }
         }
 
-    def restore(self):
-        properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('restore', properties)
-        kwargs = {
-            'data': {
-                'backup': self.id
+    def schedule_restore(self):
+        restore = Restore(backup=self.id).save()
+        return restore
+
+
+class Restore(Model):
+
+    author = fields.ModelField('Admin')
+    status = fields.StringField(read_only=True)
+    status_info = fields.StringField(read_only=True)
+    updated_at = fields.DateTimeField(read_only=True, required=False)
+    created_at = fields.DateTimeField(read_only=True, required=False)
+    links = fields.LinksField()
+    backup = fields.StringField()
+    archive = fields.StringField(read_only=True)
+
+    class Meta:
+        parent = Instance
+        endpoints = {
+            'list': {
+                'methods': ['get', 'post'],
+                'path': '/restores/',
+            },
+            'detail': {
+                'methods': ['get'],
+                'path': '/restores/{id}/',
             }
         }
-        connection = self._get_connection()
-        response = connection.request('POST', endpoint, **kwargs)
-        restore_endpoint = response['links']['self']
-        restore_response = connection.request('GET', restore_endpoint)
-        while restore_response['status'] == 'running':
-            time.sleep(1)
-            restore_response = connection.request('GET', restore_endpoint)

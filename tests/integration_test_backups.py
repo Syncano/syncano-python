@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import time
 
-from syncano.models import Backup, Class, Instance
+from syncano.models import Backup
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 
@@ -29,37 +29,19 @@ class FullBackupTestCase(InstanceMixin, IntegrationTest):
         backups = [backup for backup in Backup.please.list()]
         self.assertTrue(len(backups))  # at least one backup here;
 
-    def _test_backup_restore(self, backup_id):
+    def _test_backup_schedule_restore(self, backup_id):
         backup = Backup.please.get(id=backup_id)
-        instance_name = backup.instance
-        instance = Instance.please.get(name=instance_name)
-        classes_count = len(list(instance.classes))
-
-        test_class = Class(name='testclass')
-        test_class.save()
-        instance.reload()
-        classes_count_after_update = len(list(instance.classes))
-
-        self.assertTrue(
-            classes_count_after_update - classes_count == 1,
-            'There should be only 1 more instance class after new class creation.'
-        )
 
         # wait for backup to be saved
-        while backup.status != 'success':
+        seconds_waited = 0
+        while backup.status in ['scheduled', 'running']:
+            seconds_waited += 1
+            self.assertTrue(seconds_waited < 20, 'Waiting for backup to be saved takes too long.')
             time.sleep(1)
             backup.reload()
 
-        backup.restore()
-
-        instance.reload()
-        classes_count_after_restore = len(list(instance.classes))
-
-        self.assertEqual(
-            classes_count,
-            classes_count_after_restore,
-            'Classes count after restore should be equal to original classes count.'
-        )
+        restore = backup.schedule_restore()
+        self.assertIn(restore.status, ['success', 'scheduled'])
 
     def _test_backup_delete(self, backup_id):
         backup = Backup.please.get(id=backup_id)
@@ -72,5 +54,5 @@ class FullBackupTestCase(InstanceMixin, IntegrationTest):
         backup_id = self._test_backup_create()
         self._test_backup_list()
         self._test_backup_detail(backup_id=backup_id)
-        self._test_backup_restore(backup_id=backup_id)
+        self._test_backup_schedule_restore(backup_id=backup_id)
         self._test_backup_delete(backup_id=backup_id)
