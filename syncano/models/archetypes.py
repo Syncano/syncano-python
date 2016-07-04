@@ -134,7 +134,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
             if 'put' in methods:
                 method = 'PUT'
 
-        endpoint = self._meta.resolve_endpoint(endpoint_name, properties)
+        endpoint = self._meta.resolve_endpoint(endpoint_name, properties, method)
         if 'expected_revision' in kwargs:
             data.update({'expected_revision': kwargs['expected_revision']})
         request = {'data': data}
@@ -171,9 +171,10 @@ class Model(six.with_metaclass(ModelMetaclass)):
             raise SyncanoValidationError('Method allowed only on existing model.')
 
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('detail', properties)
+        http_method = 'DELETE'
+        endpoint = self._meta.resolve_endpoint('detail', properties, http_method)
         connection = self._get_connection(**kwargs)
-        connection.request('DELETE', endpoint)
+        connection.request(http_method, endpoint)
         if self.__class__.__name__ == 'Instance':  # avoid circular import;
             registry.clear_used_instance()
         self._raw_data = {}
@@ -185,9 +186,10 @@ class Model(six.with_metaclass(ModelMetaclass)):
             raise SyncanoValidationError('Method allowed only on existing model.')
 
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('detail', properties)
+        http_method = 'GET'
+        endpoint = self._meta.resolve_endpoint('detail', properties, http_method)
         connection = self._get_connection(**kwargs)
-        response = connection.request('GET', endpoint)
+        response = connection.request(http_method, endpoint)
         self.to_python(response)
 
     def validate(self):

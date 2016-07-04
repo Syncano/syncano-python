@@ -36,7 +36,7 @@ class ScriptTrace(CustomResponseMixin, Model):
                 'path': '/traces/{id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/traces/',
             }
         }
@@ -71,7 +71,7 @@ class ScheduleTrace(Model):
                 'path': '/traces/{id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/traces/',
             }
         }
@@ -109,7 +109,7 @@ class TriggerTrace(Model):
                 'path': '/traces/{id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/traces/',
             }
         }
@@ -144,7 +144,7 @@ class ScriptEndpointTrace(CustomResponseMixin, Model):
                 'path': '/traces/{id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/traces/',
             }
         }

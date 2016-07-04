@@ -100,14 +100,15 @@ class Script(Model):
             raise SyncanoValidationError('Method allowed only on existing model.')
 
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('run', properties)
+        http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('run', properties, http_method)
         connection = self._get_connection(**payload)
         request = {
             'data': {
                 'payload': json.dumps(payload)
             }
         }
-        response = connection.request('POST', endpoint, **request)
+        response = connection.request(http_method, endpoint, **request)
         response.update({'instance_name': self.instance_name, 'script_id': self.id})
         return ScriptTrace(**response)
 
@@ -268,7 +269,8 @@ class ScriptEndpoint(Model):
             raise SyncanoValidationError('Method allowed only on existing model.')
 
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('run', properties)
+        http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('run', properties, http_method)
         connection = self._get_connection(**payload)
 
         params = {}
@@ -279,7 +281,7 @@ class ScriptEndpoint(Model):
         if params:
             kwargs.update({'params': params})
 
-        response = connection.request('POST', endpoint, **kwargs)
+        response = connection.request(http_method, endpoint, **kwargs)
 
         if isinstance(response, dict) and 'result' in response and 'stdout' in response['result']:
             response.update({'instance_name': self.instance_name,
@@ -296,10 +298,11 @@ class ScriptEndpoint(Model):
             >>> se.reset_link()
         """
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('reset', properties)
+        http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('reset', properties, http_method)
         connection = self._get_connection()
 
-        response = connection.request('POST', endpoint)
+        response = connection.request(http_method, endpoint)
         self.public_link = response['public_link']
 
 
@@ -345,10 +348,11 @@ class ResponseTemplate(RenameMixin, Model):
     def render(self, context=None):
         context = context or {}
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('render', properties)
+        http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('render', properties, http_method)
 
         connection = self._get_connection()
-        return connection.request('POST', endpoint, data={'context': context})
+        return connection.request(http_method, endpoint, data={'context': context})
 
     def rename(self, new_name):
         rename_path = self.links.rename
