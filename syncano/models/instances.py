@@ -74,8 +74,27 @@ class Instance(RenameMixin, Model):
             'list': {
                 'methods': ['post', 'get'],
                 'path': '/v1.1/instances/',
+            },
+            'config': {
+                'methods': ['put', 'get'],
+                'path': '/v1.1/instances/{name}/snippets/config/',
             }
         }
+
+    def get_config(self):
+        properties = self.get_endpoint_data()
+        http_method = 'GET'
+        endpoint = self._meta.resolve_endpoint('config', properties, http_method)
+        connection = self._get_connection()
+        return connection.request(http_method, endpoint)['config']
+
+    def set_config(self, config):
+        properties = self.get_endpoint_data()
+        http_method = 'PUT'
+        endpoint = self._meta.resolve_endpoint('config', properties, http_method)
+        data = {'config': config}
+        connection = self._get_connection()
+        connection.request(http_method, endpoint, data=data)
 
 
 class ApiKey(Model):
