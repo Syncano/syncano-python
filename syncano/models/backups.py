@@ -45,5 +45,34 @@ class Backup(Model):
             'list': {
                 'methods': ['post', 'get'],
                 'path': '/backups/full/',
+            },
+        }
+
+    def schedule_restore(self):
+        restore = Restore(backup=self.id).save()
+        return restore
+
+
+class Restore(Model):
+
+    author = fields.ModelField('Admin')
+    status = fields.StringField(read_only=True)
+    status_info = fields.StringField(read_only=True)
+    updated_at = fields.DateTimeField(read_only=True, required=False)
+    created_at = fields.DateTimeField(read_only=True, required=False)
+    links = fields.LinksField()
+    backup = fields.StringField()
+    archive = fields.StringField(read_only=True)
+
+    class Meta:
+        parent = Instance
+        endpoints = {
+            'list': {
+                'methods': ['get', 'post'],
+                'path': '/restores/',
+            },
+            'detail': {
+                'methods': ['get'],
+                'path': '/restores/{id}/',
             }
         }

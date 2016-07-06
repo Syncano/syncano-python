@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import time
+
 from syncano.models import Backup
 from tests.integration_test import InstanceMixin, IntegrationTest
 
@@ -27,6 +29,20 @@ class FullBackupTestCase(InstanceMixin, IntegrationTest):
         backups = [backup for backup in Backup.please.list()]
         self.assertTrue(len(backups))  # at least one backup here;
 
+    def _test_backup_schedule_restore(self, backup_id):
+        backup = Backup.please.get(id=backup_id)
+
+        # wait for backup to be saved
+        seconds_waited = 0
+        while backup.status in ['scheduled', 'running']:
+            seconds_waited += 1
+            self.assertTrue(seconds_waited < 20, 'Waiting for backup to be saved takes too long.')
+            time.sleep(1)
+            backup.reload()
+
+        restore = backup.schedule_restore()
+        self.assertIn(restore.status, ['success', 'scheduled'])
+
     def _test_backup_delete(self, backup_id):
         backup = Backup.please.get(id=backup_id)
         backup.delete()
@@ -38,4 +54,5 @@ class FullBackupTestCase(InstanceMixin, IntegrationTest):
         backup_id = self._test_backup_create()
         self._test_backup_list()
         self._test_backup_detail(backup_id=backup_id)
+        self._test_backup_schedule_restore(backup_id=backup_id)
         self._test_backup_delete(backup_id=backup_id)
