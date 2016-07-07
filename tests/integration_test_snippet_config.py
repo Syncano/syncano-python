@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from syncano.exceptions import SyncanoRequestError
+from syncano.exceptions import SyncanoValueError
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 
@@ -22,5 +22,7 @@ class SnippetConfigTest(InstanceMixin, IntegrationTest):
         self.assertDictContainsSubset(config, saved_config, 'Retrieved config should be equal to saved config.')
 
     def test_update_invalid_config(self):
-        with self.assertRaises(SyncanoRequestError):
+        with self.assertRaises(SyncanoValueError):
             self.instance.set_config('invalid config')
+        with self.assertRaises(SyncanoValueError):
+            self.instance.set_config([1, 2, 3])

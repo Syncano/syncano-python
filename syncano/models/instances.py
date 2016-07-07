@@ -1,4 +1,7 @@
+import json
 
+import six
+from syncano.exceptions import SyncanoValueError
 
 from . import fields
 from .base import Model
@@ -89,6 +92,15 @@ class Instance(RenameMixin, Model):
         return connection.request(http_method, endpoint)['config']
 
     def set_config(self, config):
+        if isinstance(config, six.string_types):
+            try:
+                config = json.loads(config)
+            except (ValueError, TypeError):
+                raise SyncanoValueError('Config string is not a parsable JSON.')
+
+        if not isinstance(config, dict):
+            raise SyncanoValueError('Retrieved Config is not a valid dict object.')
+
         properties = self.get_endpoint_data()
         http_method = 'PUT'
         endpoint = self._meta.resolve_endpoint('config', properties, http_method)
