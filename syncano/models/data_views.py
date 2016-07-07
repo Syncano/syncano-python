@@ -1,5 +1,9 @@
 import json
 
+import six
+from syncano.exceptions import SyncanoValueError
+from syncano.models.incentives import ResponseTemplate
+
 from . import fields
 from .base import Model, Object
 from .instances import Instance
@@ -80,7 +84,7 @@ class DataEndpoint(Model):
         connection = self._get_connection()
         return connection.request(http_method, endpoint)
 
-    def get(self, cache_key=None, **kwargs):
+    def get(self, cache_key=None, response_template=None, **kwargs):
         connection = self._get_connection()
         properties = self.get_endpoint_data()
         query = Object.please._build_query(query_data=kwargs, class_name=self.class_name)
@@ -98,8 +102,28 @@ class DataEndpoint(Model):
         if params:
             kwargs = {'params': params}
 
+        if response_template:
+            template_name = self._get_response_template_name(response_template)
+            kwargs['headers'] = {
+                'X-TEMPLATE-RESPONSE': template_name
+            }
+
         while endpoint is not None:
             response = connection.request(http_method, endpoint, **kwargs)
-            endpoint = response.get('next')
-            for obj in response['objects']:
-                yield obj
+            if isinstance(response, six.string_types):
+                endpoint = None
+                yield response
+            else:
+                endpoint = response.get('next')
+                for obj in response['objects']:
+                    yield obj
+
+    def _get_response_template_name(self, response_template):
+        name = response_template
+        if isinstance(response_template, ResponseTemplate):
+            name = response_template.name
+        if not isinstance(name, six.string_types):
+            raise SyncanoValueError(
+                'Invalid response_template. Must be template\'s name or ResponseTemplate object.'
+            )
+        return name
