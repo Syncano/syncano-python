@@ -26,3 +26,18 @@ class SnippetConfigTest(InstanceMixin, IntegrationTest):
             self.instance.set_config('invalid config')
         with self.assertRaises(SyncanoValueError):
             self.instance.set_config([1, 2, 3])
+
+    def test_update_existing_config(self):
+        config = {
+            'foo': 'bar'
+        }
+        self.instance.set_config(config)
+        saved_config = self.instance.get_config()
+        self.assertIn('foo', saved_config, 'Retrieved config should contain saved key.')
+        new_config = {
+            'new_foo': 'new_bar'
+        }
+        self.instance.set_config(new_config)
+        saved_config = self.instance.get_config()
+        self.assertDictContainsSubset(new_config, saved_config, 'Retrieved config should be equal to saved config.')
+        self.assertNotIn('foo', saved_config, 'Retrieved config should not contain old keys.')
