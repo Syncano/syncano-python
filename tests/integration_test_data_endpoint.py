@@ -13,7 +13,6 @@ class DataEndpointTest(InstanceMixin, IntegrationTest):
             'type': 'string',
             'order_index': True,
             'filter_index': True
-
         }
     ]
 
