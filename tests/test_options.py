@@ -1,6 +1,6 @@
 import unittest
 
-from syncano.exceptions import SyncanoValueError
+from syncano.exceptions import SyncanoValidationError, SyncanoValueError
 from syncano.models import Field, Instance
 from syncano.models.options import Options
 
@@ -149,3 +149,13 @@ class OptionsTestCase(unittest.TestCase):
         path = '/{a}/{b}-{c}/dummy-{d}/'
         properties = self.options.get_path_properties(path)
         self.assertEqual(properties, ['a', 'b'])
+
+    def test_resolve_endpoint_with_missing_http_method(self):
+        properties = {'instance_name': 'test'}
+        with self.assertRaises(SyncanoValidationError):
+            self.options.resolve_endpoint('list', properties, 'DELETE')
+
+    def test_resolve_endpoint_with_specified_http_method(self):
+        properties = {'instance_name': 'test', 'a': 'a', 'b': 'b'}
+        path = self.options.resolve_endpoint('dummy', properties, 'GET')
+        self.assertEqual(path, '/v1.1/instances/test/v1.1/dummy/a/b/')

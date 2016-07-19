@@ -1,11 +1,15 @@
+import json
 
+import six
+from syncano.exceptions import SyncanoValueError
+from syncano.models.incentives import ResponseTemplate
 
 from . import fields
-from .base import Model
+from .base import Model, Object
 from .instances import Instance
 
 
-class EndpointData(Model):
+class DataEndpoint(Model):
     """
     :ivar name: :class:`~syncano.models.fields.StringField`
     :ivar description: :class:`~syncano.models.fields.StringField`
@@ -28,7 +32,7 @@ class EndpointData(Model):
     name = fields.StringField(max_length=64, primary_key=True)
     description = fields.StringField(required=False)
 
-    query = fields.JSONField(read_only=False, required=True)
+    query = fields.JSONField(read_only=False, required=False)
 
     class_name = fields.StringField(label='class name', mapping='class')
 
@@ -66,24 +70,60 @@ class EndpointData(Model):
 
     def rename(self, new_name):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('rename', properties)
+        http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('rename', properties, http_method)
         connection = self._get_connection()
-        return connection.request('POST',
+        return connection.request(http_method,
                                   endpoint,
                                   data={'new_name': new_name})
 
     def clear_cache(self):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('clear_cache', properties)
+        http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('clear_cache', properties, http_method)
         connection = self._get_connection()
-        return connection.request('POST', endpoint)
+        return connection.request(http_method, endpoint)
 
-    def get(self):
-        properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('get', properties)
+    def get(self, cache_key=None, response_template=None, **kwargs):
         connection = self._get_connection()
+        properties = self.get_endpoint_data()
+        query = Object.please._build_query(query_data=kwargs, class_name=self.class_name)
+
+        http_method = 'GET'
+        endpoint = self._meta.resolve_endpoint('get', properties, http_method)
+
+        kwargs = {}
+        params = {}
+        params.update({'query': json.dumps(query)})
+
+        if cache_key is not None:
+            params = {'cache_key': cache_key}
+
+        if params:
+            kwargs = {'params': params}
+
+        if response_template:
+            template_name = self._get_response_template_name(response_template)
+            kwargs['headers'] = {
+                'X-TEMPLATE-RESPONSE': template_name
+            }
+
         while endpoint is not None:
-            response = connection.request('GET', endpoint)
-            endpoint = response.get('next')
-            for obj in response['objects']:
-                yield obj
+            response = connection.request(http_method, endpoint, **kwargs)
+            if isinstance(response, six.string_types):
+                endpoint = None
+                yield response
+            else:
+                endpoint = response.get('next')
+                for obj in response['objects']:
+                    yield obj
+
+    def _get_response_template_name(self, response_template):
+        name = response_template
+        if isinstance(response_template, ResponseTemplate):
+            name = response_template.name
+        if not isinstance(name, six.string_types):
+            raise SyncanoValueError(
+                'Invalid response_template. Must be template\'s name or ResponseTemplate object.'
+            )
+        return name

@@ -134,7 +134,7 @@ class Model(six.with_metaclass(ModelMetaclass)):
             if 'put' in methods:
                 method = 'PUT'
 
-        endpoint = self._meta.resolve_endpoint(endpoint_name, properties)
+        endpoint = self._meta.resolve_endpoint(endpoint_name, properties, method)
         if 'expected_revision' in kwargs:
             data.update({'expected_revision': kwargs['expected_revision']})
         request = {'data': data}
@@ -171,9 +171,10 @@ class Model(six.with_metaclass(ModelMetaclass)):
             raise SyncanoValidationError('Method allowed only on existing model.')
 
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('detail', properties)
+        http_method = 'DELETE'
+        endpoint = self._meta.resolve_endpoint('detail', properties, http_method)
         connection = self._get_connection(**kwargs)
-        connection.request('DELETE', endpoint)
+        connection.request(http_method, endpoint)
         if self.__class__.__name__ == 'Instance':  # avoid circular import;
             registry.clear_used_instance()
         self._raw_data = {}
@@ -185,9 +186,10 @@ class Model(six.with_metaclass(ModelMetaclass)):
             raise SyncanoValidationError('Method allowed only on existing model.')
 
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('detail', properties)
+        http_method = 'GET'
+        endpoint = self._meta.resolve_endpoint('detail', properties, http_method)
         connection = self._get_connection(**kwargs)
-        response = connection.request('GET', endpoint)
+        response = connection.request(http_method, endpoint)
         self.to_python(response)
 
     def validate(self):
@@ -225,10 +227,19 @@ class Model(six.with_metaclass(ModelMetaclass)):
         :type data: dict
         :param data: Raw data
         """
+
         for field in self._meta.fields:
             field_name = field.name
 
-            if field.mapping is not None and self.pk:
+            # some explanation needed here:
+            # When data comes from Syncano Platform the 'class' field is there
+            # so to map correctly the 'class' value to the 'class_name' field
+            # the mapping is required.
+            # But. When DataEndpoint (and probably others models with mapping) is created from
+            # syncano LIB directly: DataEndpoint(class_name='some_class')
+            # the data dict has only 'class_name' key - not the 'class',
+            # later the transition between class_name and class is made in to_native on model;
+            if field.mapping is not None and field.mapping in data and self.is_new():
                 field_name = field.mapping
 
             if field_name in data:

@@ -44,6 +44,7 @@ class Field(object):
     allow_increment = False
 
     creation_counter = 0
+    field_lookups = []
 
     def __init__(self, name=None, **kwargs):
         self.name = name
@@ -213,6 +214,16 @@ class EndpointField(WritableField):
 
 
 class StringField(WritableField):
+
+    field_lookups = [
+        'startswith',
+        'endswith',
+        'contains',
+        'istartswith',
+        'iendswith',
+        'icontains',
+        'ieq',
+    ]
 
     def to_python(self, value):
         value = super(StringField, self).to_python(value)
@@ -470,6 +481,7 @@ class ModelField(Field):
     def __init__(self, rel, *args, **kwargs):
         self.rel = rel
         self.just_pk = kwargs.pop('just_pk', True)
+        self.is_data_object_mixin = kwargs.pop('is_data_object_mixin', False)
         super(ModelField, self).__init__(*args, **kwargs)
 
     def contribute_to_class(self, cls, name):
@@ -493,9 +505,11 @@ class ModelField(Field):
         super(ModelField, self).validate(value, model_instance)
 
         if not isinstance(value, (self.rel, dict)):
-            raise self.ValidationError('Value needs to be a {0} instance.'.format(self.rel.__name__))
+            if not isinstance(value, (self.rel, dict)) and not self.is_data_object_mixin:
+                raise self.ValidationError('Value needs to be a {0} instance.'.format(self.rel.__name__))
 
-        if self.required and isinstance(value, self.rel):
+        if (self.required and isinstance(value, self.rel))or \
+           (self.is_data_object_mixin and hasattr(value, 'validate')):
             value.validate()
 
     def to_python(self, value):
@@ -522,6 +536,9 @@ class ModelField(Field):
             pk_field = value._meta.pk
             pk_value = getattr(value, pk_field.name)
             return pk_field.to_native(pk_value)
+
+        if self.is_data_object_mixin and not self.just_pk and hasattr(value, 'to_native'):
+            return value.to_native()
 
         return value
 
@@ -572,10 +589,16 @@ class ArrayField(JSONToPythonMixin, WritableField):
             except (ValueError, TypeError):
                 raise SyncanoValueError('Expected an array')
 
-        if not isinstance(value, list):
+        if isinstance(value, dict):
+            if len(value) != 1 or len(set(value.keys()).intersection(['_add', '_remove', '_addunique'])) != 1:
+                raise SyncanoValueError('Wrong value: one operation at the time.')
+
+        elif not isinstance(value, list):
             raise SyncanoValueError('Expected an array')
 
-        for element in value:
+        value_to_check = value if isinstance(value, list) else value.values()[0]
+
+        for element in value_to_check:
             if not isinstance(element, six.string_types + (bool, int, float)):
                 raise SyncanoValueError(
                     'Currently supported types for array items are: string types, bool, float and int')
@@ -695,6 +718,8 @@ class PushJSONField(JSONField):
 
 class GeoPointField(Field):
 
+    field_lookups = ['near', 'exists']
+
     def validate(self, value, model_instance):
         super(GeoPointField, self).validate(value, model_instance)
 
@@ -735,7 +760,7 @@ class GeoPointField(Field):
         """
         super(GeoPointField, self).to_query(value, lookup_type, **kwargs)
 
-        if lookup_type not in ['near', 'exists']:
+        if lookup_type not in self.field_lookups:
             raise SyncanoValueError('Lookup {} not supported for geopoint field'.format(lookup_type))
 
         if lookup_type in ['exists']:
@@ -804,6 +829,7 @@ class GeoPointField(Field):
 
 class RelationField(RelationValidatorMixin, WritableField):
     query_allowed = True
+    field_lookups = ['contains', 'is']
 
     def __call__(self, instance, field_name):
         return RelationManager(instance=instance, field_name=field_name)
@@ -828,7 +854,7 @@ class RelationField(RelationValidatorMixin, WritableField):
         if not self.query_allowed:
             raise self.ValidationError('Query on this field is not supported.')
 
-        if lookup_type not in ['contains', 'is']:
+        if lookup_type not in self.field_lookups:
             raise SyncanoValueError('Lookup {} not supported for relation field.'.format(lookup_type))
 
         query_dict = {}

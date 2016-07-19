@@ -5,7 +5,7 @@ import six
 from syncano.connection import ConnectionMixin
 from syncano.exceptions import SyncanoRequestError, SyncanoValidationError, SyncanoValueError
 from syncano.models.bulk import ModelBulkCreate, ObjectBulkCreate
-from syncano.models.manager_mixins import IncrementMixin, clone
+from syncano.models.manager_mixins import ArrayOperationsMixin, IncrementMixin, clone
 
 from .registry import registry
 
@@ -874,7 +874,7 @@ class ScriptEndpointManager(Manager):
         return registry.ScriptEndpointTrace(**response)
 
 
-class ObjectManager(IncrementMixin, Manager):
+class ObjectManager(IncrementMixin, ArrayOperationsMixin, Manager):
     """
     Custom :class:`~syncano.models.manager.Manager`
     class for :class:`~syncano.models.base.Object` model.
@@ -882,8 +882,12 @@ class ObjectManager(IncrementMixin, Manager):
     LOOKUP_SEPARATOR = '__'
     ALLOWED_LOOKUPS = [
         'gt', 'gte', 'lt', 'lte',
-        'eq', 'neq', 'exists', 'in', 'startswith',
+        'eq', 'neq', 'exists', 'in',
         'near', 'is', 'contains',
+        'startswith', 'endswith',
+        'contains', 'istartswith',
+        'iendswith', 'icontains',
+        'ieq', 'near',
     ]
 
     def __init__(self):
@@ -949,10 +953,19 @@ class ObjectManager(IncrementMixin, Manager):
 
             objects = Object.please.list('instance-name', 'class-name').filter(henryk__gte='hello')
         """
+
+        query = self._build_query(query_data=kwargs)
+        self.query['query'] = json.dumps(query)
+        self.method = 'GET'
+        self.endpoint = 'list'
+        return self
+
+    def _build_query(self, query_data, **kwargs):
         query = {}
+        self.properties.update(**kwargs)
         model = self.model.get_subclass_model(**self.properties)
 
-        for field_name, value in six.iteritems(kwargs):
+        for field_name, value in six.iteritems(query_data):
             lookup = 'eq'
             model_name = None
 
@@ -974,11 +987,7 @@ class ObjectManager(IncrementMixin, Manager):
                 related_field_name=field_name,
                 related_field_lookup=lookup,
             )
-
-        self.query['query'] = json.dumps(query)
-        self.method = 'GET'
-        self.endpoint = 'list'
-        return self
+        return query
 
     def _get_lookup_attributes(self, field_name):
         try:
@@ -990,6 +999,7 @@ class ObjectManager(IncrementMixin, Manager):
         return model_name, field_name, lookup
 
     def _validate_lookup(self, model, model_name, field_name, lookup, field):
+
         if not model_name and field_name not in model._meta.field_names:
             allowed = ', '.join(model._meta.field_names)
             raise SyncanoValueError('Invalid field name "{0}" allowed are {1}.'.format(field_name, allowed))

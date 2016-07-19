@@ -75,3 +75,7 @@ class SyncanoDoesNotExist(SyncanoException):
 
 class RevisionMismatchException(SyncanoRequestError):
     """Revision do not match with expected one"""
+
+
+class UserNotFound(SyncanoRequestError):
+    """Special error to handle user not found case."""

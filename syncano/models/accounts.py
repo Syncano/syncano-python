@@ -1,4 +1,4 @@
-
+from syncano.exceptions import SyncanoRequestError, SyncanoValueError, UserNotFound
 
 from . import fields
 from .base import Model
@@ -37,7 +37,7 @@ class Admin(Model):
                 'path': '/admins/{id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/admins/',
             }
         }
@@ -76,7 +76,7 @@ class Profile(DataObjectMixin, Object):
                 'path': '/objects/{id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/objects/',
             }
         }
@@ -100,7 +100,8 @@ class User(Model):
     password = fields.StringField(read_only=False, required=True)
     user_key = fields.StringField(read_only=True, required=False)
 
-    profile = fields.ModelField('Profile', read_only=False, default={})
+    profile = fields.ModelField('Profile', read_only=False, default={},
+                                just_pk=False, is_data_object_mixin=True)
 
     links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
@@ -117,29 +118,64 @@ class User(Model):
                 'methods': ['post'],
                 'path': '/users/{id}/reset_key/',
             },
+            'auth': {
+                'methods': ['post'],
+                'path': '/user/auth/',
+            },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/users/',
             },
             'groups': {
-                'methods': ['get', 'post'],
+                'methods': ['get', 'post', 'delete'],
                 'path': '/users/{id}/groups/',
             }
         }
 
     def reset_key(self):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('reset_key', properties)
+        http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('reset_key', properties, http_method)
         connection = self._get_connection()
-        return connection.request('POST', endpoint)
+        return connection.request(http_method, endpoint)
+
+    def auth(self, username=None, password=None):
+        properties = self.get_endpoint_data()
+        http_method = 'POST'
+        endpoint = self._meta.resolve_endpoint('auth', properties, http_method)
+        connection = self._get_connection()
+
+        if not (username and password):
+            raise SyncanoValueError('You need provide username and password.')
+
+        data = {
+            'username': username,
+            'password': password
+        }
+
+        return connection.request(http_method, endpoint, data=data)
 
     def _user_groups_method(self, group_id=None, method='GET'):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('groups', properties)
-        if group_id is not None:
+        endpoint = self._meta.resolve_endpoint('groups', properties, method)
+
+        if group_id is not None and method != 'POST':
             endpoint += '{}/'.format(group_id)
         connection = self._get_connection()
-        return connection.request(method, endpoint)
+
+        data = {}
+        if method == 'POST':
+            data = {'group': group_id}
+
+        response = connection.request(method, endpoint, data=data)
+
+        if method == 'DELETE':  # no response here;
+            return
+
+        if 'objects' in response:
+            return [Group(**group_response['group']) for group_response in response['objects']]
+
+        return Group(**response['group'])
 
     def add_to_group(self, group_id):
         return self._user_groups_method(group_id, method='POST')
@@ -180,7 +216,7 @@ class Group(Model):
                 'path': '/groups/{id}/',
             },
             'list': {
-                'methods': ['get'],
+                'methods': ['get', 'post'],
                 'path': '/groups/',
             },
             'users': {
@@ -191,11 +227,29 @@ class Group(Model):
 
     def _group_users_method(self, user_id=None, method='GET'):
         properties = self.get_endpoint_data()
-        endpoint = self._meta.resolve_endpoint('users', properties)
-        if user_id is not None:
+        endpoint = self._meta.resolve_endpoint('users', properties, method)
+        if user_id is not None and method != 'POST':
             endpoint += '{}/'.format(user_id)
         connection = self._get_connection()
-        return connection.request(method, endpoint)
+
+        data = {}
+        if method == 'POST':
+            data = {'user': user_id}
+
+        try:
+            response = connection.request(method, endpoint, data=data)
+        except SyncanoRequestError as e:
+            if e.status_code == 404:
+                raise UserNotFound(e.status_code, 'User not found.')
+            raise
+
+        if method == 'DELETE':
+            return
+
+        if 'objects' in response:
+            return [User(**user_response['user']) for user_response in response['objects']]
+
+        return User(**response['user'])
 
     def list_users(self):
         return self._group_users_method()

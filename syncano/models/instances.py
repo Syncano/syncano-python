@@ -1,4 +1,7 @@
+import json
 
+import six
+from syncano.exceptions import SyncanoValueError
 
 from . import fields
 from .base import Model
@@ -51,6 +54,7 @@ class Instance(RenameMixin, Model):
     # snippets and data fields;
     scripts = fields.RelatedManagerField('Script')
     script_endpoints = fields.RelatedManagerField('ScriptEndpoint')
+    data_endpoints = fields.RelatedManagerField('DataEndpoint')
     templates = fields.RelatedManagerField('ResponseTemplate')
 
     triggers = fields.RelatedManagerField('Trigger')
@@ -73,8 +77,36 @@ class Instance(RenameMixin, Model):
             'list': {
                 'methods': ['post', 'get'],
                 'path': '/v1.1/instances/',
+            },
+            'config': {
+                'methods': ['put', 'get'],
+                'path': '/v1.1/instances/{name}/snippets/config/',
             }
         }
+
+    def get_config(self):
+        properties = self.get_endpoint_data()
+        http_method = 'GET'
+        endpoint = self._meta.resolve_endpoint('config', properties, http_method)
+        connection = self._get_connection()
+        return connection.request(http_method, endpoint)['config']
+
+    def set_config(self, config):
+        if isinstance(config, six.string_types):
+            try:
+                config = json.loads(config)
+            except (ValueError, TypeError):
+                raise SyncanoValueError('Config string is not a parsable JSON.')
+
+        if not isinstance(config, dict):
+            raise SyncanoValueError('Retrieved Config is not a valid dict object.')
+
+        properties = self.get_endpoint_data()
+        http_method = 'PUT'
+        endpoint = self._meta.resolve_endpoint('config', properties, http_method)
+        data = {'config': config}
+        connection = self._get_connection()
+        connection.request(http_method, endpoint, data=data)
 
 
 class ApiKey(Model):

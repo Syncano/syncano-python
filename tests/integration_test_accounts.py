@@ -67,3 +67,8 @@ class LoginTest(IntegrationTest):
                          user_key=self.USER_KEY,
                          instance_name=self.INSTANCE_NAME)
         self.check_connection(con)
+
+    def test_user_auth(self):
+        self.assertTrue(
+            self.connection.User().auth(username=self.USER_NAME, password=self.USER_PASSWORD)
+        )

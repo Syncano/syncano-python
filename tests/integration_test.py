@@ -7,7 +7,7 @@ from uuid import uuid4
 
 import syncano
 from syncano.exceptions import SyncanoRequestError, SyncanoValueError
-from syncano.models import ApiKey, Class, Instance, Model, Object, Script, ScriptEndpoint, registry
+from syncano.models import ApiKey, Class, DataEndpoint, Instance, Model, Object, Script, ScriptEndpoint, registry
 
 
 class IntegrationTest(unittest.TestCase):
@@ -43,7 +43,7 @@ class InstanceMixin(object):
         super(InstanceMixin, cls).setUpClass()
 
         cls.instance = cls.connection.Instance.please.create(
-            name='i%s' % cls.generate_hash()[:10],
+            name='testpythonlib%s' % cls.generate_hash()[:10],
             description='IntegrationTest %s' % datetime.now(),
         )
 
@@ -231,6 +231,7 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
                 {'type': 'float', 'name': 'cost'},
                 {'type': 'boolean', 'name': 'available'},
                 {'type': 'datetime', 'name': 'published_at'},
+                {'type': 'array', 'name': 'array'},
                 {'type': 'file', 'name': 'cover'},
                 {'type': 'reference', 'name': 'author',
                  'order_index': True, 'filter_index': True, 'target': cls.author.name},
@@ -267,7 +268,11 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
             name='test', description='test', quantity=10, cost=10.5,
             published_at=datetime.now(), author=author, available=True)
 
+        book_direct = Object(class_name=self.book.name, quantity=15, cost=7.5)
+        book_direct.save()
+
         book.delete()
+        book_direct.delete()
         author.delete()
 
     def test_update(self):
@@ -364,6 +369,60 @@ class ObjectIntegrationTest(InstanceMixin, IntegrationTest):
         )
 
         self.assertEqual(decremented_book.cost, 8.4)
+
+    def test_add_array(self):
+        book = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.book.name,
+            name='test', description='test', quantity=10, cost=10.5,
+            published_at=datetime.now(), available=True, array=[10])
+
+        book = Object.please.add(
+            'array',
+            [11],
+            class_name=self.book.name,
+            id=book.id
+        )
+
+        self.assertEqual(book.array, [10, 11])
+
+    def test_remove_array(self):
+        book = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.book.name,
+            name='test', description='test', quantity=10, cost=10.5,
+            published_at=datetime.now(), available=True, array=[10])
+
+        book = Object.please.remove(
+            'array',
+            [10],
+            class_name=self.book.name,
+            id=book.id
+        )
+
+        self.assertEqual(book.array, [])
+
+    def test_addunique_array(self):
+        book = self.model.please.create(
+            instance_name=self.instance.name, class_name=self.book.name,
+            name='test', description='test', quantity=10, cost=10.5,
+            published_at=datetime.now(), available=True, array=[10])
+
+        book = Object.please.add_unique(
+            'array',
+            [10],
+            class_name=self.book.name,
+            id=book.id
+        )
+
+        self.assertEqual(book.array, [10])
+
+        book = Object.please.add_unique(
+            'array',
+            [11],
+            class_name=self.book.name,
+            id=book.id
+        )
+
+        self.assertEqual(book.array, [10, 11])
 
 
 class ScriptIntegrationTest(InstanceMixin, IntegrationTest):
@@ -535,3 +594,70 @@ class ApiKeyIntegrationTest(InstanceMixin, IntegrationTest):
         self.assertTrue(reloaded_api_key.allow_user_create, True)
         self.assertTrue(reloaded_api_key.ignore_acl, True)
         self.assertTrue(reloaded_api_key.allow_anonymous_read, True)
+
+
+class DataEndpointIntegrationTest(InstanceMixin, IntegrationTest):
+    @classmethod
+    def setUpClass(cls):
+        super(DataEndpointIntegrationTest, cls).setUpClass()
+        cls.klass = cls.instance.classes.create(
+            name='sample_klass',
+            schema=[
+                {'name': 'test1', 'type': 'string', 'filter_index': True},
+                {'name': 'test2', 'type': 'string', 'filter_index': True},
+                {'name': 'test3', 'type': 'integer', 'filter_index': True},
+            ])
+
+        cls.data_object = cls.klass.objects.create(
+            class_name=cls.klass.name,
+            test1='atest',
+            test2='321',
+            test3=50
+        )
+
+        cls.data_object = cls.klass.objects.create(
+            class_name=cls.klass.name,
+            test1='btest',
+            test2='432',
+            test3=45
+        )
+
+        cls.data_object = cls.klass.objects.create(
+            class_name=cls.klass.name,
+            test1='ctest',
+            test2='543',
+            test3=35
+        )
+
+        cls.data_endpoint = cls.instance.data_endpoints.create(
+            name='test_data_endpoint',
+            description='test description',
+            class_name=cls.klass.name,
+            query={'test3': {'_gt': 35}}
+        )
+
+    def test_mapping_class_name_lib_creation(self):
+        data_endpoint = DataEndpoint(
+            name='yet_another_data_endpoint',
+            class_name=self.klass.name,
+        )
+        data_endpoint.save()
+        self.assertEqual(data_endpoint.class_name, 'sample_klass')
+
+    def test_mapping_class_name_lib_read(self):
+        data_endpoint = self.instance.data_endpoints.get(name='test_data_endpoint')
+        self.assertEqual(data_endpoint.class_name, 'sample_klass')
+
+    def test_data_endpoint_filtering(self):
+        data_endpoint = self.instance.data_endpoints.get(name='test_data_endpoint')
+        objects = [object for object in data_endpoint.get()]
+        self.assertEqual(len(objects), 2)
+
+        objects = [object for object in data_endpoint.get(test1__eq='atest')]
+        self.assertEqual(len(objects), 1)
+
+    def test_backward_compatibility_name(self):
+        from syncano.models import EndpointData
+
+        data_endpoint = EndpointData.please.get(name='test_data_endpoint')
+        self.assertEqual(data_endpoint.class_name, 'sample_klass')
