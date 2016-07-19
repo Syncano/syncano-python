@@ -582,7 +582,7 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Script
 <dl class="class">
 <dt id="syncano.models.manager.ObjectManager">
 <em class="property">class </em><tt class="descname">ObjectManager</tt><a class="reference internal" href="../_modules/syncano/models/manager.html#ObjectManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.manager.ObjectManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">syncano.models.manager_mixins.IncrementMixin</span></tt>, <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.manager.Manager</span></tt></a></p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">syncano.models.manager_mixins.IncrementMixin</span></tt>, <tt class="xref py py-class docutils literal"><span class="pre">syncano.models.manager_mixins.ArrayOperationsMixin</span></tt>, <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.manager.Manager</span></tt></a></p>
 <p>Custom <a class="reference internal" href="#syncano.models.manager.Manager" title="syncano.models.manager.Manager"><tt class="xref py py-class docutils literal"><span class="pre">Manager</span></tt></a>
 class for <tt class="xref py py-class docutils literal"><span class="pre">Object</span></tt> model.</p>
 <dl class="attribute">
@@ -592,7 +592,7 @@ class for <tt class="xref py py-class docutils literal"><span class="pre">Object
 
 <dl class="attribute">
 <dt id="syncano.models.manager.ObjectManager.ALLOWED_LOOKUPS">
-<tt class="descname">ALLOWED_LOOKUPS</tt><em class="property"> = ['gt', 'gte', 'lt', 'lte', 'eq', 'neq', 'exists', 'in', 'startswith', 'near', 'is', 'contains']</em><a class="headerlink" href="#syncano.models.manager.ObjectManager.ALLOWED_LOOKUPS" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">ALLOWED_LOOKUPS</tt><em class="property"> = ['gt', 'gte', 'lt', 'lte', 'eq', 'neq', 'exists', 'in', 'near', 'is', 'contains', 'startswith', 'endswith', 'contains', 'istartswith', 'iendswith', 'icontains', 'ieq', 'near']</em><a class="headerlink" href="#syncano.models.manager.ObjectManager.ALLOWED_LOOKUPS" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

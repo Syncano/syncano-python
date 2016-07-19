@@ -132,8 +132,8 @@
   <div class="section" id="module-syncano.models.data_views">
 <span id="syncano-models-data-views"></span><h1>syncano.models.data_views<a class="headerlink" href="#module-syncano.models.data_views" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="syncano.models.data_views.EndpointData">
-<em class="property">class </em><tt class="descname">EndpointData</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/data_views.html#EndpointData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.data_views.EndpointData" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint">
+<em class="property">class </em><tt class="descname">DataEndpoint</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/data_views.html#DataEndpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.data_views.DataEndpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -155,89 +155,89 @@
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="syncano.models.data_views.EndpointData.PERMISSIONS_CHOICES">
-<tt class="descname">PERMISSIONS_CHOICES</tt><em class="property"> = ({'display_name': 'None', 'value': 'none'}, {'display_name': 'Read', 'value': 'read'}, {'display_name': 'Write', 'value': 'write'}, {'display_name': 'Full', 'value': 'full'})</em><a class="headerlink" href="#syncano.models.data_views.EndpointData.PERMISSIONS_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.PERMISSIONS_CHOICES">
+<tt class="descname">PERMISSIONS_CHOICES</tt><em class="property"> = ({'display_name': 'None', 'value': 'none'}, {'display_name': 'Read', 'value': 'read'}, {'display_name': 'Write', 'value': 'write'}, {'display_name': 'Full', 'value': 'full'})</em><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.PERMISSIONS_CHOICES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.data_views.EndpointData.name">
-<tt class="descname">name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.EndpointData.name" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.name">
+<tt class="descname">name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.data_views.EndpointData.description">
-<tt class="descname">description</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.EndpointData.description" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.description">
+<tt class="descname">description</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.description" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.data_views.EndpointData.query">
-<tt class="descname">query</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.EndpointData.query" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.query">
+<tt class="descname">query</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.query" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.data_views.EndpointData.class_name">
-<tt class="descname">class_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.EndpointData.class_name" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.class_name">
+<tt class="descname">class_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.class_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.data_views.EndpointData.excluded_fields">
-<tt class="descname">excluded_fields</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.EndpointData.excluded_fields" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.excluded_fields">
+<tt class="descname">excluded_fields</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.excluded_fields" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.data_views.EndpointData.expand">
-<tt class="descname">expand</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.EndpointData.expand" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.expand">
+<tt class="descname">expand</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.expand" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.data_views.EndpointData.order_by">
-<tt class="descname">order_by</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.EndpointData.order_by" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.order_by">
+<tt class="descname">order_by</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.order_by" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.data_views.EndpointData.page_size">
-<tt class="descname">page_size</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.EndpointData.page_size" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.page_size">
+<tt class="descname">page_size</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.page_size" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.data_views.EndpointData.links">
-<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.EndpointData.links" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.links" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.data_views.EndpointData.rename">
-<tt class="descname">rename</tt><big>(</big><em>new_name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/data_views.html#EndpointData.rename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.data_views.EndpointData.rename" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.rename">
+<tt class="descname">rename</tt><big>(</big><em>new_name</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/data_views.html#DataEndpoint.rename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.rename" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.data_views.EndpointData.clear_cache">
-<tt class="descname">clear_cache</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/data_views.html#EndpointData.clear_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.data_views.EndpointData.clear_cache" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.clear_cache">
+<tt class="descname">clear_cache</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/data_views.html#DataEndpoint.clear_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.clear_cache" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.data_views.EndpointData.get">
-<tt class="descname">get</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/data_views.html#EndpointData.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.data_views.EndpointData.get" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.get">
+<tt class="descname">get</tt><big>(</big><em>cache_key=None</em>, <em>response_template=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/data_views.html#DataEndpoint.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.get" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.data_views.EndpointData.DoesNotExist">
-<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.data_views.EndpointData.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">EndpointDataDoesNotExist</span></tt></p>
+<dt id="syncano.models.data_views.DataEndpoint.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">DataEndpointDoesNotExist</span></tt></p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.data_views.EndpointData.instance_name">
-<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.EndpointData.instance_name" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.instance_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.data_views.EndpointData.pk">
-<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.EndpointData.pk" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.pk" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
-<dt id="syncano.models.data_views.EndpointData.please">
-<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.data_views.EndpointData.please" title="Permalink to this definition">¶</a></dt>
+<dt id="syncano.models.data_views.DataEndpoint.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.data_views.DataEndpoint.please" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

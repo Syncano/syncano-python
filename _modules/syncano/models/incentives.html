@@ -226,14 +226,15 @@
             <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span><span class="s1">&#39;Method allowed only on existing model.&#39;</span><span class="p">)</span>
 
         <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_data</span><span class="p">()</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">http_method</span> <span class="o">=</span> <span class="s1">&#39;POST&#39;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">http_method</span><span class="p">)</span>
         <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">(</span><span class="o">**</span><span class="n">payload</span><span class="p">)</span>
         <span class="n">request</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s1">&#39;payload&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
             <span class="p">}</span>
         <span class="p">}</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">request</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">http_method</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">request</span><span class="p">)</span>
         <span class="n">response</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;instance_name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_name</span><span class="p">,</span> <span class="s1">&#39;script_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>
         <span class="k">return</span> <span class="n">ScriptTrace</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)</span>
 
@@ -380,7 +381,7 @@
             <span class="p">}</span>
         <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">payload</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cache_key</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">payload</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <div class="viewcode-block" id="ScriptEndpoint.run"><a class="viewcode-back" href="../../../refs/syncano.models.incentives.html#syncano.models.incentives.ScriptEndpoint.run">[docs]</a><span class="sd">        Usage::</span>
 
@@ -394,10 +395,19 @@
             <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span><span class="s1">&#39;Method allowed only on existing model.&#39;</span><span class="p">)</span>
 
         <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_data</span><span class="p">()</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">http_method</span> <span class="o">=</span> <span class="s1">&#39;POST&#39;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;run&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">http_method</span><span class="p">)</span>
         <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">(</span><span class="o">**</span><span class="n">payload</span><span class="p">)</span>
 
-        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">payload</span><span class="p">})</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">cache_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cache_key&#39;</span><span class="p">:</span> <span class="n">cache_key</span><span class="p">}</span>
+
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">payload</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">params</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">})</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">http_method</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;result&#39;</span> <span class="ow">in</span> <span class="n">response</span> <span class="ow">and</span> <span class="s1">&#39;stdout&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">]:</span>
             <span class="n">response</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;instance_name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">instance_name</span><span class="p">,</span>
@@ -414,10 +424,11 @@
 <span class="sd">            &gt;&gt;&gt; se.reset_link()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_data</span><span class="p">()</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;reset&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">http_method</span> <span class="o">=</span> <span class="s1">&#39;POST&#39;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;reset&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">http_method</span><span class="p">)</span>
         <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
 
-        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">http_method</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">public_link</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;public_link&#39;</span><span class="p">]</span>
 
 
@@ -463,10 +474,11 @@
     <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="n">context</span> <span class="o">=</span> <span class="n">context</span> <span class="ow">or</span> <span class="p">{}</span>
 <div class="viewcode-block" id="ResponseTemplate.render"><a class="viewcode-back" href="../../../refs/syncano.models.incentives.html#syncano.models.incentives.ResponseTemplate.render">[docs]</a>        <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_data</span><span class="p">()</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;render&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">http_method</span> <span class="o">=</span> <span class="s1">&#39;POST&#39;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;render&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">http_method</span><span class="p">)</span>
 
         <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;context&#39;</span><span class="p">:</span> <span class="n">context</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">http_method</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;context&#39;</span><span class="p">:</span> <span class="n">context</span><span class="p">})</span>
 
     <span class="k">def</span> <span class="nf">rename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_name</span><span class="p">):</span>
         <span class="n">rename_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">rename</span></div>

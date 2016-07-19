@@ -243,12 +243,12 @@
   <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.ALT_LOGIN_PARAMS">ALT_LOGIN_PARAMS (Connection attribute)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.billing.html#syncano.models.billing.Coupon.amount_off">amount_off (Coupon attribute)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.instances.html#syncano.models.instances.ApiKey.api_key">api_key (ApiKey attribute)</a>
   </dt>
@@ -287,6 +287,10 @@
 
       
   <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.Manager.as_batch">as_batch() (Manager method)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.accounts.html#syncano.models.accounts.User.auth">auth() (User method)</a>
   </dt>
 
       
@@ -418,7 +422,7 @@
   </dt>
 
       
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.class_name">class_name (EndpointData attribute)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.class_name">class_name (DataEndpoint attribute)</a>
   </dt>
 
       <dd><dl>
@@ -444,7 +448,7 @@
   </dt>
 
       
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.clear_cache">clear_cache() (EndpointData method)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.clear_cache">clear_cache() (DataEndpoint method)</a>
   </dt>
 
       
@@ -678,6 +682,14 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="refs/syncano.models.instances.html#syncano.models.instances.Instance.data_endpoints">data_endpoints (Instance attribute)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint">DataEndpoint (class in syncano.models.data_views)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.classes.html#syncano.models.classes.DataObjectMixin">DataObjectMixin (class in syncano.models.classes)</a>
   </dt>
 
@@ -721,7 +733,7 @@
   </dt>
 
         
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.description">(EndpointData attribute)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.description">(DataEndpoint attribute)</a>
   </dt>
 
         
@@ -741,12 +753,12 @@
   <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.Manager.detail">detail() (Manager method)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.push_notification.html#syncano.models.push_notification.GCMConfig.development_api_key">development_api_key (GCMConfig attribute)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.push_notification.html#syncano.models.push_notification.APNSConfig.development_bundle_identifier">development_bundle_identifier (APNSConfig attribute)</a>
   </dt>
@@ -823,11 +835,11 @@
   </dt>
 
         
-  <dt><a href="refs/syncano.models.billing.html#syncano.models.billing.Discount.DoesNotExist">(Discount attribute)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.DoesNotExist">(DataEndpoint attribute)</a>
   </dt>
 
         
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.DoesNotExist">(EndpointData attribute)</a>
+  <dt><a href="refs/syncano.models.billing.html#syncano.models.billing.Discount.DoesNotExist">(Discount attribute)</a>
   </dt>
 
         
@@ -962,10 +974,6 @@
   </dt>
 
       
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData">EndpointData (class in syncano.models.data_views)</a>
-  </dt>
-
-      
   <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.EndpointField">EndpointField (class in syncano.models.fields)</a>
   </dt>
 
@@ -980,7 +988,7 @@
   </dt>
 
       
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.excluded_fields">excluded_fields (EndpointData attribute)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.excluded_fields">excluded_fields (DataEndpoint attribute)</a>
   </dt>
 
       
@@ -1002,7 +1010,7 @@
 
       </dl></dd>
       
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.expand">expand (EndpointData attribute)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.expand">expand (DataEndpoint attribute)</a>
   </dt>
 
       
@@ -1019,6 +1027,24 @@
   <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.Field">Field (class in syncano.models.fields)</a>
   </dt>
 
+      
+  <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.Field.field_lookups">field_lookups (Field attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.GeoPointField.field_lookups">(GeoPointField attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.RelationField.field_lookups">(RelationField attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.StringField.field_lookups">(StringField attribute)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="refs/syncano.exceptions.html#syncano.exceptions.SyncanoFieldError.field_name">field_name (SyncanoFieldError attribute)</a>
   </dt>
@@ -1100,7 +1126,7 @@
   </dt>
 
       
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.get">get() (EndpointData method)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.get">get() (DataEndpoint method)</a>
   </dt>
 
       <dd><dl>
@@ -1130,6 +1156,10 @@
   </dt>
 
       
+  <dt><a href="refs/syncano.models.instances.html#syncano.models.instances.Instance.get_config">get_config() (Instance method)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.options.html#syncano.models.options.Options.get_endpoint">get_endpoint() (Options method)</a>
   </dt>
 
@@ -1153,12 +1183,12 @@
   <dt><a href="refs/syncano.models.options.html#syncano.models.options.Options.get_endpoint_query_params">get_endpoint_query_params() (Options method)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.options.html#syncano.models.options.Options.get_field">get_field() (Options method)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.registry.html#syncano.models.registry.Registry.get_model_by_name">get_model_by_name() (Registry method)</a>
   </dt>
@@ -1431,7 +1461,7 @@
   </dt>
 
         
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.instance_name">(EndpointData attribute)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.instance_name">(DataEndpoint attribute)</a>
   </dt>
 
         
@@ -1523,12 +1553,12 @@
   <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.IntegerField">IntegerField (class in syncano.models.fields)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.incentives.html#syncano.models.incentives.Schedule.interval_sec">interval_sec (Schedule attribute)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.instances.html#syncano.models.instances.Instance.invitations">invitations (Instance attribute)</a>
   </dt>
@@ -1553,6 +1583,10 @@
 
       
   <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.is_authenticated">is_authenticated() (Connection method)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.options.html#syncano.models.options.Options.is_http_method_available">is_http_method_available() (Options method)</a>
   </dt>
 
       
@@ -1697,6 +1731,10 @@
   </dt>
 
         
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.links">(DataEndpoint attribute)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.push_notification.html#syncano.models.push_notification.DeviceBase.links">(DeviceBase attribute)</a>
   </dt>
 
@@ -1709,12 +1747,6 @@
   <dt><a href="refs/syncano.models.billing.html#syncano.models.billing.Discount.links">links (Discount attribute)</a>
   </dt>
 
-      <dd><dl>
-        
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.links">(EndpointData attribute)</a>
-  </dt>
-
-      </dl></dd>
       
   <dt><a href="refs/syncano.models.push_notification.html#syncano.models.push_notification.GCMDevice.LINKS">LINKS (GCMDevice attribute)</a>
   </dt>
@@ -1903,7 +1935,7 @@
   </dt>
 
         
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.name">(EndpointData attribute)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.name">(DataEndpoint attribute)</a>
   </dt>
 
         
@@ -1978,7 +2010,7 @@
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.order_by">order_by (EndpointData attribute)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.order_by">order_by (DataEndpoint attribute)</a>
   </dt>
 
       
@@ -2048,7 +2080,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.page_size">page_size (EndpointData attribute)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.page_size">page_size (DataEndpoint attribute)</a>
   </dt>
 
       
@@ -2099,7 +2131,7 @@
   </dt>
 
         
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.PERMISSIONS_CHOICES">(EndpointData attribute)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.PERMISSIONS_CHOICES">(DataEndpoint attribute)</a>
   </dt>
 
         
@@ -2149,11 +2181,11 @@
   </dt>
 
         
-  <dt><a href="refs/syncano.models.billing.html#syncano.models.billing.Discount.pk">(Discount attribute)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.pk">(DataEndpoint attribute)</a>
   </dt>
 
         
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.pk">(EndpointData attribute)</a>
+  <dt><a href="refs/syncano.models.billing.html#syncano.models.billing.Discount.pk">(Discount attribute)</a>
   </dt>
 
         
@@ -2275,11 +2307,11 @@
   </dt>
 
         
-  <dt><a href="refs/syncano.models.billing.html#syncano.models.billing.Discount.please">(Discount attribute)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.please">(DataEndpoint attribute)</a>
   </dt>
 
         
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.please">(EndpointData attribute)</a>
+  <dt><a href="refs/syncano.models.billing.html#syncano.models.billing.Discount.please">(Discount attribute)</a>
   </dt>
 
         
@@ -2458,7 +2490,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.query">query (EndpointData attribute)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.query">query (DataEndpoint attribute)</a>
   </dt>
 
   </dl></td>
@@ -2582,7 +2614,7 @@
   </dt>
 
       
-  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.EndpointData.rename">rename() (EndpointData method)</a>
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.rename">rename() (DataEndpoint method)</a>
   </dt>
 
       <dd><dl>
@@ -2894,6 +2926,10 @@
   </dt>
 
       
+  <dt><a href="refs/syncano.models.instances.html#syncano.models.instances.Instance.set_config">set_config() (Instance method)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.registry.html#syncano.models.registry.Registry.set_default_connection">set_default_connection() (Registry method)</a>
   </dt>
 
@@ -2941,12 +2977,12 @@
   <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.SOCIAL_AUTH_SUFFIX">SOCIAL_AUTH_SUFFIX (Connection attribute)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.SOCIAL_LOGIN_PARAMS">SOCIAL_LOGIN_PARAMS (Connection attribute)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.incentives.html#syncano.models.incentives.Script.source">source (Script attribute)</a>
   </dt>
@@ -3435,12 +3471,12 @@
   <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.USER_ALT_LOGIN_PARAMS">USER_ALT_LOGIN_PARAMS (Connection attribute)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.USER_AUTH_SUFFIX">USER_AUTH_SUFFIX (Connection attribute)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.accounts.html#syncano.models.accounts.Group.user_details">user_details() (Group method)</a>
   </dt>
@@ -3459,6 +3495,10 @@
 
       
   <dt><a href="refs/syncano.models.accounts.html#syncano.models.accounts.User.username">username (User attribute)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.exceptions.html#syncano.exceptions.UserNotFound">UserNotFound</a>
   </dt>
 
       

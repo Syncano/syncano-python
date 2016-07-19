@@ -131,7 +131,7 @@
 
 <span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">from</span> <span class="nn">syncano.connection</span> <span class="kn">import</span> <span class="n">ConnectionMixin</span>
-<span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoValueError</span>
+<span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoValidationError</span><span class="p">,</span> <span class="n">SyncanoValueError</span>
 <span class="kn">from</span> <span class="nn">syncano.models.registry</span> <span class="kn">import</span> <span class="n">registry</span>
 <span class="kn">from</span> <span class="nn">syncano.utils</span> <span class="kn">import</span> <span class="n">camelcase_to_underscore</span>
 
@@ -261,14 +261,22 @@
         <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">endpoint</span><span class="p">[</span><span class="s1">&#39;methods&#39;</span><span class="p">]</span>
 </div>
-<div class="viewcode-block" id="Options.resolve_endpoint"><a class="viewcode-back" href="../../../refs/syncano.models.options.html#syncano.models.options.Options.resolve_endpoint">[docs]</a>    <span class="k">def</span> <span class="nf">resolve_endpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">properties</span><span class="p">):</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<div class="viewcode-block" id="Options.resolve_endpoint"><a class="viewcode-back" href="../../../refs/syncano.models.options.html#syncano.models.options.Options.resolve_endpoint">[docs]</a>    <span class="k">def</span> <span class="nf">resolve_endpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint_name</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">http_method</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">http_method</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_http_method_available</span><span class="p">(</span><span class="n">http_method</span><span class="p">,</span> <span class="n">endpoint_name</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span>
+                <span class="s1">&#39;HTTP method {0} not allowed for endpoint &quot;{1}&quot;.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">http_method</span><span class="p">,</span> <span class="n">endpoint_name</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint</span><span class="p">(</span><span class="n">endpoint_name</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">endpoint</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Request property &quot;{0}&quot; is required.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">endpoint_name</span> <span class="ow">in</span> <span class="n">endpoint</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">endpoint_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Request property &quot;{0}&quot; is required.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">endpoint_name</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">endpoint</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">properties</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Options.is_http_method_available"><a class="viewcode-back" href="../../../refs/syncano.models.options.html#syncano.models.options.Options.is_http_method_available">[docs]</a>    <span class="k">def</span> <span class="nf">is_http_method_available</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">http_method_name</span><span class="p">,</span> <span class="n">endpoint_name</span><span class="p">):</span>
+        <span class="n">available_methods</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_methods</span><span class="p">(</span><span class="n">endpoint_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">http_method_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">available_methods</span>
 </div>
 <div class="viewcode-block" id="Options.get_endpoint_query_params"><a class="viewcode-back" href="../../../refs/syncano.models.options.html#syncano.models.options.Options.get_endpoint_query_params">[docs]</a>    <span class="k">def</span> <span class="nf">get_endpoint_query_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
         <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_properties</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>

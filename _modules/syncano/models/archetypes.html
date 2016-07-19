@@ -260,7 +260,7 @@
             <span class="k">if</span> <span class="s1">&#39;put&#39;</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
                 <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;PUT&#39;</span>
 
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="n">endpoint_name</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="n">endpoint_name</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
         <span class="k">if</span> <span class="s1">&#39;expected_revision&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;expected_revision&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;expected_revision&#39;</span><span class="p">]})</span>
         <span class="n">request</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">}</span>
@@ -297,9 +297,10 @@
             <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span><span class="s1">&#39;Method allowed only on existing model.&#39;</span><span class="p">)</span>
 
         <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_data</span><span class="p">()</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;detail&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">http_method</span> <span class="o">=</span> <span class="s1">&#39;DELETE&#39;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;detail&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">http_method</span><span class="p">)</span>
         <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">http_method</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s1">&#39;Instance&#39;</span><span class="p">:</span>  <span class="c1"># avoid circular import;</span>
             <span class="n">registry</span><span class="o">.</span><span class="n">clear_used_instance</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span> <span class="o">=</span> <span class="p">{}</span>
@@ -311,9 +312,10 @@
             <span class="k">raise</span> <span class="n">SyncanoValidationError</span><span class="p">(</span><span class="s1">&#39;Method allowed only on existing model.&#39;</span><span class="p">)</span>
 
         <span class="n">properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoint_data</span><span class="p">()</span>
-        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;detail&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">)</span>
+        <span class="n">http_method</span> <span class="o">=</span> <span class="s1">&#39;GET&#39;</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span><span class="s1">&#39;detail&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">http_method</span><span class="p">)</span>
         <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">http_method</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -351,10 +353,19 @@
 <span class="sd">        :type data: dict</span>
 <span class="sd">        :param data: Raw data</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
             <span class="n">field_name</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span>
 
-            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">mapping</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">:</span>
+            <span class="c1"># some explanation needed here:</span>
+            <span class="c1"># When data comes from Syncano Platform the &#39;class&#39; field is there</span>
+            <span class="c1"># so to map correctly the &#39;class&#39; value to the &#39;class_name&#39; field</span>
+            <span class="c1"># the mapping is required.</span>
+            <span class="c1"># But. When DataEndpoint (and probably others models with mapping) is created from</span>
+            <span class="c1"># syncano LIB directly: DataEndpoint(class_name=&#39;some_class&#39;)</span>
+            <span class="c1"># the data dict has only &#39;class_name&#39; key - not the &#39;class&#39;,</span>
+            <span class="c1"># later the transition between class_name and class is made in to_native on model;</span>
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">mapping</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">mapping</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_new</span><span class="p">():</span>
                 <span class="n">field_name</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">mapping</span>
 
             <span class="k">if</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>

@@ -133,7 +133,7 @@
 <span class="kn">from</span> <span class="nn">syncano.connection</span> <span class="kn">import</span> <span class="n">ConnectionMixin</span>
 <span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoRequestError</span><span class="p">,</span> <span class="n">SyncanoValidationError</span><span class="p">,</span> <span class="n">SyncanoValueError</span>
 <span class="kn">from</span> <span class="nn">syncano.models.bulk</span> <span class="kn">import</span> <span class="n">ModelBulkCreate</span><span class="p">,</span> <span class="n">ObjectBulkCreate</span>
-<span class="kn">from</span> <span class="nn">syncano.models.manager_mixins</span> <span class="kn">import</span> <span class="n">IncrementMixin</span><span class="p">,</span> <span class="n">clone</span>
+<span class="kn">from</span> <span class="nn">syncano.models.manager_mixins</span> <span class="kn">import</span> <span class="n">ArrayOperationsMixin</span><span class="p">,</span> <span class="n">IncrementMixin</span><span class="p">,</span> <span class="n">clone</span>
 
 <span class="kn">from</span> <span class="nn">.registry</span> <span class="kn">import</span> <span class="n">registry</span>
 
@@ -1002,7 +1002,7 @@
         <span class="k">return</span> <span class="n">registry</span><span class="o">.</span><span class="n">ScriptEndpointTrace</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="ObjectManager"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager">[docs]</a><span class="k">class</span> <span class="nc">ObjectManager</span><span class="p">(</span><span class="n">IncrementMixin</span><span class="p">,</span> <span class="n">Manager</span><span class="p">):</span>
+<div class="viewcode-block" id="ObjectManager"><a class="viewcode-back" href="../../../refs/syncano.models.manager.html#syncano.models.manager.ObjectManager">[docs]</a><span class="k">class</span> <span class="nc">ObjectManager</span><span class="p">(</span><span class="n">IncrementMixin</span><span class="p">,</span> <span class="n">ArrayOperationsMixin</span><span class="p">,</span> <span class="n">Manager</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom :class:`~syncano.models.manager.Manager`</span>
 <span class="sd">    class for :class:`~syncano.models.base.Object` model.</span>
@@ -1010,8 +1010,12 @@
     <span class="n">LOOKUP_SEPARATOR</span> <span class="o">=</span> <span class="s1">&#39;__&#39;</span>
     <span class="n">ALLOWED_LOOKUPS</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s1">&#39;gt&#39;</span><span class="p">,</span> <span class="s1">&#39;gte&#39;</span><span class="p">,</span> <span class="s1">&#39;lt&#39;</span><span class="p">,</span> <span class="s1">&#39;lte&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;eq&#39;</span><span class="p">,</span> <span class="s1">&#39;neq&#39;</span><span class="p">,</span> <span class="s1">&#39;exists&#39;</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="s1">&#39;startswith&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;eq&#39;</span><span class="p">,</span> <span class="s1">&#39;neq&#39;</span><span class="p">,</span> <span class="s1">&#39;exists&#39;</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span>
         <span class="s1">&#39;near&#39;</span><span class="p">,</span> <span class="s1">&#39;is&#39;</span><span class="p">,</span> <span class="s1">&#39;contains&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;startswith&#39;</span><span class="p">,</span> <span class="s1">&#39;endswith&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;contains&#39;</span><span class="p">,</span> <span class="s1">&#39;istartswith&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;iendswith&#39;</span><span class="p">,</span> <span class="s1">&#39;icontains&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ieq&#39;</span><span class="p">,</span> <span class="s1">&#39;near&#39;</span><span class="p">,</span>
     <span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1077,10 +1081,19 @@
 
 <span class="sd">            objects = Object.please.list(&#39;instance-name&#39;, &#39;class-name&#39;).filter(henryk__gte=&#39;hello&#39;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_query</span><span class="p">(</span><span class="n">query_data</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;GET&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s1">&#39;list&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+    <span class="k">def</span> <span class="nf">_build_query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">query</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_subclass_model</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="n">query_data</span><span class="p">):</span>
             <span class="n">lookup</span> <span class="o">=</span> <span class="s1">&#39;eq&#39;</span>
             <span class="n">model_name</span> <span class="o">=</span> <span class="bp">None</span>
 
@@ -1102,12 +1115,8 @@
                 <span class="n">related_field_name</span><span class="o">=</span><span class="n">field_name</span><span class="p">,</span>
                 <span class="n">related_field_lookup</span><span class="o">=</span><span class="n">lookup</span><span class="p">,</span>
             <span class="p">)</span>
+        <span class="k">return</span> <span class="n">query</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;GET&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">endpoint</span> <span class="o">=</span> <span class="s1">&#39;list&#39;</span>
-        <span class="k">return</span> <span class="bp">self</span>
-</div>
     <span class="k">def</span> <span class="nf">_get_lookup_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">model_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span> <span class="o">=</span> <span class="n">field_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">LOOKUP_SEPARATOR</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
@@ -1118,6 +1127,7 @@
         <span class="k">return</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span>
 
     <span class="k">def</span> <span class="nf">_validate_lookup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="n">model_name</span> <span class="ow">and</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">field_names</span><span class="p">:</span>
             <span class="n">allowed</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">field_names</span><span class="p">)</span>
             <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Invalid field name &quot;{0}&quot; allowed are {1}.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">allowed</span><span class="p">))</span>
