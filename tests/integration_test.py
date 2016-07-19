@@ -659,5 +659,5 @@ class DataEndpointIntegrationTest(InstanceMixin, IntegrationTest):
     def test_backward_compatibility_name(self):
         from syncano.models import EndpointData
 
-        data_endpoint = EndpointData.objects.get(name='test_data_endpoint')
+        data_endpoint = EndpointData.please.get(name='test_data_endpoint')
         self.assertEqual(data_endpoint.class_name, 'sample_klass')
