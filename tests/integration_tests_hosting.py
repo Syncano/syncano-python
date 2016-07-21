@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
+import uuid
+
+from tests.integration_test import InstanceMixin, IntegrationTest
+
 try:
     # python2
     from StringIO import StringIO
 except ImportError:
     # python3
     from io import StringIO
-
-from tests.integration_test import InstanceMixin, IntegrationTest
 
 
 class HostingIntegrationTests(InstanceMixin, IntegrationTest):
@@ -15,7 +17,7 @@ class HostingIntegrationTests(InstanceMixin, IntegrationTest):
         self.hosting = self.instance.hostings.create(
             label='test12',
             description='desc',
-            domains=['test.test.io']
+            domains=['test.test{}.io'.format(uuid.uuid4().hex[:5])]
         )
 
     def test_create_file(self):
