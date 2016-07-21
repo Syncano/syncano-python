@@ -29,4 +29,4 @@ class HostingIntegrationTests(InstanceMixin, IntegrationTest):
 
         files_list = self.hosting.list_files()
 
-        self.assertIn('styles/mains.css', files_list)
+        self.assertIn('styles/main.css', files_list)

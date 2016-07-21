@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import requests
-
 from . import fields
 from .base import Instance, Model, logger
 
@@ -39,7 +37,7 @@ class Hosting(Model):
         params = connection.build_params(params={})
         headers = params['headers']
         headers.pop('content-type')
-        response = requests.post(connection.host + files_path, headers=headers,
+        response = connection.session.post(connection.host + files_path, headers=headers,
                                  data=data, files=[('file', file)])
         if response.status_code != 201:
             logger.error(response.text)
