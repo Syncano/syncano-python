@@ -7,7 +7,7 @@ from tests.integration_test import InstanceMixin, IntegrationTest
 class HostingIntegrationTests(InstanceMixin, IntegrationTest):
 
     def setUp(self):
-        self.hosting = self.instance.hostings.please.create(
+        self.hosting = self.instance.hostings.create(
             label='test12',
             description='desc',
             domains=['test.test.io']
