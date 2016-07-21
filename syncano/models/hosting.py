@@ -38,7 +38,7 @@ class Hosting(Model):
         headers = params['headers']
         headers.pop('content-type')
         response = connection.session.post(connection.host + files_path, headers=headers,
-                                 data=data, files=[('file', file)])
+                                           data=data, files=[('file', file)])
         if response.status_code != 201:
             logger.error(response.text)
             return
