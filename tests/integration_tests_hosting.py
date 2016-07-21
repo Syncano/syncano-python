@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-import StringIO
+try:
+    # python2
+    from StringIO import StringIO
+except ImportError:
+    # python3
+    from io import StringIO
 
 from tests.integration_test import InstanceMixin, IntegrationTest
 
@@ -14,7 +19,7 @@ class HostingIntegrationTests(InstanceMixin, IntegrationTest):
         )
 
     def test_create_file(self):
-        a_hosting_file = StringIO.StringIO()
+        a_hosting_file = StringIO()
         a_hosting_file.write('h1 {color: #541231;}')
         a_hosting_file.seek(0)
 
