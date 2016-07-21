@@ -12,8 +12,9 @@ class Hosting(Model):
 
     label = fields.StringField(max_length=64, primary_key=True)
     description = fields.StringField(read_only=False, required=False)
-    domains = fields.JSONField(default=[])
+    domains = fields.ListField(default=[])
 
+    id = fields.IntegerField(read_only=True)
     links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
