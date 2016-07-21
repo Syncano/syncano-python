@@ -716,6 +716,16 @@ class PushJSONField(JSONField):
         return value
 
 
+class ListField(WritableField):
+
+    def validate(self, value, model_instance):
+        if value is None:
+            return
+
+        if not isinstance(value, list):
+            raise self.ValidationError('List expected.')
+
+
 class GeoPointField(Field):
 
     field_lookups = ['near', 'exists']
