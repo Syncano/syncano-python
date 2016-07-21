@@ -11,4 +11,5 @@ from .traces import *  # NOQA
 from .push_notification import *  # NOQA
 from .geo import *  # NOQA
 from .backups import *  # NOQA
+from .hosting import *  # NOQA
 from .data_views import DataEndpoint as EndpointData  # NOQA
