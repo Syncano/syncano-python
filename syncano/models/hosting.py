@@ -49,3 +49,14 @@ class Hosting(Model):
         connection = self._get_connection()
         response = connection.request('GET', files_path)
         return [f['path'] for f in response['objects']]
+
+    def set_default(self):
+        default_path = self.links.default
+        connection = self._get_connection()
+
+        response = connection.make_request('POST', default_path)
+
+        if response.status_code == 200:
+            return True
+
+        return False
