@@ -55,8 +55,5 @@ class Hosting(Model):
         connection = self._get_connection()
 
         response = connection.make_request('POST', default_path)
-
-        if response.status_code == 200:
-            return True
-
-        return False
+        self.to_python(response)
+        return self

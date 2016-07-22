@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import uuid
 
-from syncano.models import Hosting
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 try:
@@ -33,7 +32,5 @@ class HostingIntegrationTests(InstanceMixin, IntegrationTest):
         self.assertIn('styles/main.css', files_list)
 
     def test_set_default(self):
-        self.hosting.set_default()
-
-        hosting = Hosting.please.get(id=self.hosting.id)
+        hosting = self.hosting.set_default()
         self.assertIn('default', hosting.domains)
