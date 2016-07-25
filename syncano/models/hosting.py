@@ -51,7 +51,7 @@ class Hosting(Model):
         return [f['path'] for f in response['objects']]
 
     def set_default(self):
-        default_path = self.links.default
+        default_path = self.links.set_default
         connection = self._get_connection()
 
         response = connection.make_request('POST', default_path)
