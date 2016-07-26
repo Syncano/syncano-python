@@ -19,6 +19,7 @@ class PollThread(Thread):
         self.timeout = kwargs.pop('timeout', None) or 60 * 5
         self.last_id = kwargs.pop('last_id', None)
         self.room = kwargs.pop('room', None)
+        self.template = kwargs.pop('template', None)
         super(PollThread, self).__init__(*args, **kwargs)
 
         logger.debug('%s created.', self)
@@ -32,8 +33,12 @@ class PollThread(Thread):
     def request(self):
         kwargs = {
             'timeout': self.timeout,
-            'params': {'last_id': self.last_id, 'room': self.room}
+            'params': {'last_id': self.last_id, 'room': self.room},
         }
+        if self.template:
+            kwargs['headers'] = {
+                'X-TEMPLATE-RESPONSE': self.template
+            }
         return self.connection.request('GET', self.endpoint, **kwargs)
 
     def run(self):
@@ -51,10 +56,15 @@ class PollThread(Thread):
                     self.error(e)
                 return
             else:
-                logger.debug('%s Message "%s"', self, response['id'])
-                self.last_id = response['id']
-                if not self.callback(Message(**response)):
+                if isinstance(response, six.string_types):
+                    logger.debug('%s Message "%s"', self, response)
+                    self.callback(response)
                     self.stop()
+                else:
+                    logger.debug('%s Message "%s"', self, response['id'])
+                    self.last_id = response['id']
+                    if not self.callback(Message(**response)):
+                        self.stop()
 
     def stop(self):
         self.abort = True
@@ -136,13 +146,13 @@ class Channel(Model):
             },
         }
 
-    def poll(self, room=None, last_id=None, callback=None, error=None, timeout=None):
+    def poll(self, room=None, last_id=None, callback=None, error=None, timeout=None, template=None):
         properties = self.get_endpoint_data()
         endpoint = self._meta.resolve_endpoint('poll', properties, http_method='GET')
         connection = self._get_connection()
 
         thread = PollThread(connection, endpoint, callback, error, timeout=timeout,
-                            last_id=last_id, room=room, name='poll_%s' % self.name)
+                            last_id=last_id, room=room, name='poll_%s' % self.name, template=template)
         thread.start()
         return thread.stop
 
