@@ -61,6 +61,7 @@ class Instance(RenameMixin, Model):
     schedules = fields.RelatedManagerField('Schedule')
     classes = fields.RelatedManagerField('Class')
     invitations = fields.RelatedManagerField('InstanceInvitation')
+    hostings = fields.RelatedManagerField('Hosting')
 
     # push notifications fields;
     gcm_devices = fields.RelatedManagerField('GCMDevice')
