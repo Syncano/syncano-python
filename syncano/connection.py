@@ -1,10 +1,9 @@
 import json
+import time
 from copy import deepcopy
 
 import requests
 import six
-import time
-
 import syncano
 from syncano.exceptions import RevisionMismatchException, SyncanoRequestError, SyncanoValueError
 
