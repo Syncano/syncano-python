@@ -3,6 +3,8 @@ from copy import deepcopy
 
 import requests
 import six
+import time
+
 import syncano
 from syncano.exceptions import RevisionMismatchException, SyncanoRequestError, SyncanoValueError
 
@@ -267,6 +269,12 @@ class Connection(object):
 
         url = self.build_url(path)
         response = method(url, **params)
+
+        while response.status_code == 429:  # throttling;
+            retry_after = response.headers.get('retry-after', 1)
+            time.sleep(float(retry_after))
+            response = method(url, **params)
+
         content = self.get_response_content(url, response)
 
         if files:
