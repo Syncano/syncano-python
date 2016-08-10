@@ -473,7 +473,7 @@ class LinksField(Field):
         return LinksWrapper(value, self.IGNORED_LINKS)
 
     def to_native(self, value):
-        return value
+        return value.to_native()
 
 
 class ModelField(Field):
