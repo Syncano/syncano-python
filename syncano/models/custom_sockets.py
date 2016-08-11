@@ -15,6 +15,8 @@ class CustomSocket(EndpointMetadataMixin, DependencyMetadataMixin, Model):
     :ivar endpoints: :class:`~syncano.models.fields.JSONField`
     :ivar dependencies: :class:`~syncano.models.fields.JSONField`
     :ivar metadata: :class:`~syncano.models.fields.JSONField`
+    :ivar status: :class:`~syncano.models.fields.StringField`
+    :ivar status_info: :class:`~syncano.models.fields.StringField`
     :ivar links: :class:`~syncano.models.fields.LinksField`
     """
 
