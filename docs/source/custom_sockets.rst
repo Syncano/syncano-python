@@ -4,11 +4,11 @@
 Custom Sockets in Syncano
 =========================
 
-``Syncano`` gives its users an ability to create custom sockets. It means, that users can define 
-a very specific endpoints in their Syncano application, and use them as other Syncano 
-modules (Classes, Scripts, etc), using standard API calls.
-Currently, custom sockets allow only one dependency - Scripts. It means that on the backend side,
-each API call executes a Script and result of the execution, is returned as a result of the
+``Syncano`` gives its users an ability to create Custom Sockets. What it means is that users can define 
+a very specific endpoints in their Syncano application, and use them exactly like they would any other Syncano 
+module (Classes, Scripts, etc), using standard API calls.
+Currently, Custom Sockets allow only one dependency - Scripts. It means that under the hood,
+each API call executes a Script, and result of this execution is returned as a result of the
 API call.
 
 Creating a custom socket
