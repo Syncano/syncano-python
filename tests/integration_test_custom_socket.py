@@ -84,11 +84,11 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
             ScriptCall(name='script_default', methods=['GET'])
         )
 
-        self.custom_socket.add_endpoint(Endpoint)
-        self.custom_socket.update()
+        socket_to_update.add_endpoint(new_endpoint)
+        socket_to_update.update()
         time.sleep(2)  # wait for custom socket setup;
-        self.custom_socket.reload()
-        self.assertIn('my_endpoint_new_default', self.custom_socket.endpoints)
+        socket_to_update.reload()
+        self.assertIn('my_endpoint_new_default', socket_to_update.endpoints)
 
     def assert_custom_socket(self, suffix, dependency_method):
         custom_socket = self._create_custom_socket(suffix, dependency_method=dependency_method)

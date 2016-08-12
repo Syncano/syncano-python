@@ -28,7 +28,7 @@ class Backup(Model):
     size = fields.IntegerField(read_only=True)
     status = fields.StringField(read_only=True)
     status_info = fields.StringField(read_only=True)
-    author = fields.ModelField('Admin')
+    author = fields.ModelField('Admin', read_only=True)
     details = fields.JSONField(read_only=True)
 
     updated_at = fields.DateTimeField(read_only=True, required=False)
