@@ -80,7 +80,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
 
     def assert_custom_socket(self, suffix, dependency_method):
         custom_socket = self._create_custom_socket(suffix, dependency_method=dependency_method)
-        self.assertTrue(custom_socket.id)
+        self.assertTrue(custom_socket.name)
 
     @classmethod
     def _create_custom_socket(cls, suffix, dependency_method):
@@ -91,10 +91,6 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
 
         custom_socket.publish()
         return custom_socket
-
-    @classmethod
-    def _initialize_socket(cls, suffix):
-        return CustomSocket(name='my_custom_socket_{}'.format(suffix))
 
     @classmethod
     def _define_endpoints(cls, suffix, custom_socket):

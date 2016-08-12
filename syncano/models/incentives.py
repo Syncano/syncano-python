@@ -222,7 +222,7 @@ class ScriptEndpoint(Model):
     """
 
     name = fields.SlugField(max_length=50, primary_key=True)
-    script = fields.ModelField('Script', label='script id')
+    script = fields.ModelField('Script', just_pk=True)
     public = fields.BooleanField(required=False, default=False)
     public_link = fields.ChoiceField(required=False, read_only=True)
     links = fields.LinksField()
