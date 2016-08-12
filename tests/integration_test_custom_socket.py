@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
 import time
 
-from syncano.models import CustomSocket, Endpoint, RuntimeChoices, Script, ScriptCall, ScriptDependency, ScriptEndpoint
+from syncano.models import (
+    CustomSocket,
+    Endpoint,
+    RuntimeChoices,
+    Script,
+    ScriptCall,
+    ScriptDependency,
+    ScriptEndpoint,
+    SocketEndpoint
+)
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 
@@ -23,7 +32,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         self.assert_custom_socket('existing_script_publishing', self._define_dependencies_existing_script)
 
     def test_dependencies_existing_script_endpoint(self):
-        self.assert_custom_socket('existing_script_endpoint_publishing',
+        self.assert_custom_socket('existing_script_e_publishing',
                                   self._define_dependencies_existing_script_endpoint)
 
     def test_creating_raw_data(self):
@@ -48,14 +57,14 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
 
     def test_custom_socket_run(self):
         results = self.custom_socket.run('GET', 'my_endpoint_default')
-        self.assertEqual(results['stdout'], 'script_default')
+        self.assertEqual(results.result['stdout'], 'script_default')
 
     def test_custom_socket_recheck(self):
         custom_socket = self.custom_socket.recheck()
-        self.assertTrue(custom_socket.id)
+        self.assertTrue(custom_socket.name)
 
     def test_fetching_all_endpoints(self):
-        all_endpoints = ScriptEndpoint.get_all_endpoints()
+        all_endpoints = SocketEndpoint.get_all_endpoints()
         self.assertTrue(isinstance(all_endpoints, list))
         self.assertTrue(len(all_endpoints) >= 1)
         self.assertTrue(all_endpoints[0].name)
@@ -64,17 +73,18 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         script_endpoint = ScriptEndpoint.please.first()
         result = script_endpoint.run('GET')
         suffix = script_endpoint.name.split('_')[-1]
-        self.assertTrue(result['stdout'].endswith(suffix))
+        self.assertTrue(result.result['stdout'].endswith(suffix))
 
     def test_custom_socket_update(self):
         socket_to_update = self._create_custom_socket('to_update', self._define_dependencies_new_script_endpoint)
-        socket_to_update.remove_endpoint(endpoint_name='my_endpoint_to_update')
+        socket_to_update.remove_endpoint(endpoint_name='my_endpoint_default')
 
         new_endpoint = Endpoint(name='my_endpoint_new_to_update')
         new_endpoint.add_call(
             ScriptCall(name='script_default', methods=['GET'])
         )
 
+        self.custom_socket.add_endpoint(Endpoint)
         self.custom_socket.update()
         time.sleep(2)  # wait for custom socket setup;
         self.custom_socket.reload()
