@@ -7,8 +7,10 @@ from tests.integration_test import InstanceMixin, IntegrationTest
 
 class CustomSocketTest(InstanceMixin, IntegrationTest):
 
-    def setUp(self):
-        self.custom_socket = self._create_custom_socket('default', self._define_dependencies_new_script_endpoint)
+    @classmethod
+    def setUpClass(cls):
+        super(CustomSocketTest, cls).setUpClass()
+        cls.custom_socket = cls._create_custom_socket('default', cls._define_dependencies_new_script_endpoint)
 
     def test_publish_custom_socket(self):
         # this test new ScriptEndpoint dependency create;
@@ -42,7 +44,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
             ]
         )
 
-        self.assertTrue(custom_socket.id)
+        self.assertTrue(custom_socket.name)
 
     def test_custom_socket_run(self):
         results = self.custom_socket.run('GET', 'my_endpoint_default')

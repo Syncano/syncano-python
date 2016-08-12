@@ -478,6 +478,8 @@ class LinksField(Field):
 
 class ModelField(Field):
 
+    read_only = False
+
     def __init__(self, rel, *args, **kwargs):
         self.rel = rel
         self.just_pk = kwargs.pop('just_pk', True)
@@ -508,7 +510,7 @@ class ModelField(Field):
             if not isinstance(value, (self.rel, dict)) and not self.is_data_object_mixin:
                 raise self.ValidationError('Value needs to be a {0} instance.'.format(self.rel.__name__))
 
-        if (self.required and isinstance(value, self.rel))or \
+        if (self.required and isinstance(value, self.rel)) or \
            (self.is_data_object_mixin and hasattr(value, 'validate')):
             value.validate()
 
