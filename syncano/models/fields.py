@@ -523,6 +523,10 @@ class ModelField(Field):
         if isinstance(value, dict):
             return self.rel(**value)
 
+        # try to fetch object;
+        if isinstance(value, int):
+            return self.rel.please.get(id=value)
+
         raise self.ValidationError("'{0}' has unsupported format.".format(value))
 
     def to_native(self, value):

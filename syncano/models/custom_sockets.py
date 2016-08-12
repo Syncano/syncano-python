@@ -128,14 +128,22 @@ class SocketEndpoint(Model):
         connection = self._get_connection()
         if not self._validate_method(method):
             raise SyncanoValueError('Method: {} not specified in calls for this custom socket.'.format(method))
-
-        if method in ['GET', 'DELETE']:
+        method = method.lower()
+        if method in ['get', 'delete']:
             response = connection.request(method, endpoint_path)
-        elif method in ['POST', 'PUT', 'PATCH']:
+        elif method in ['post', 'put', 'patch']:
             response = connection.request(method, endpoint_path, data=data)
         else:
             raise SyncanoValueError('Method: {} not supported.'.format(method))
         return response
+
+    @classmethod
+    def get_all_endpoints(cls):
+        connection = cls._meta.connection
+        all_endpoints_path = Instance._meta.resolve_endpoint('endpoints',
+                                                             {'name': cls.please.properties.get('instance_name')})
+        response = connection.request('GET', all_endpoints_path)
+        return [cls(**endpoint) for endpoint in response['objects']]
 
     def _validate_method(self, method):
 

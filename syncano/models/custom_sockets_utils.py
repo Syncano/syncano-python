@@ -2,17 +2,17 @@
 import six
 from syncano.exceptions import SyncanoValueError
 
-from .incentives import Script
+from .incentives import Script, ScriptEndpoint
 
 
-class CallTypeE(object):
+class CallType(object):
     """
     The type of the call object used in the custom socket;
     """
     SCRIPT = 'script'
 
 
-class DependencyTypeE(object):
+class DependencyType(object):
     """
     The type of the dependency object used in the custom socket;
     """
@@ -56,7 +56,7 @@ class ScriptCall(BaseCall):
         * ['GET']
         * ['*'] - which will do a call on every request method;
     """
-    call_type = CallTypeE.SCRIPT
+    call_type = CallType.SCRIPT
 
 
 class Endpoint(object):
@@ -99,20 +99,22 @@ class BaseDependency(object):
 
     fields = []
     dependency_type = None
-    field_mapping = {}
-
-    def __init__(self, dependency_object):
-        self.dependency_object = dependency_object
 
     def to_dependency_data(self):
         if self.dependency_type is None:
             raise SyncanoValueError('dependency_type not set.')
         dependency_data = {'type': self.dependency_type}
-        dependency_data.update({field_name: getattr(
-            self.dependency_object,
-            self.field_mapping.get(field_name, field_name)
-        ) for field_name in self.fields})
+        dependency_data.update(self.get_dependency_data())
         return dependency_data
+
+    def get_name(self):
+        raise NotImplementedError()
+
+    def get_dependency_data(self):
+        raise NotImplementedError()
+
+    def create_from_raw_data(self, raw_data):
+        raise NotImplementedError()
 
 
 class ScriptDependency(BaseDependency):
@@ -123,17 +125,49 @@ class ScriptDependency(BaseDependency):
         {
             'type': 'script',
             'runtime_name': '<runtime name defined in RuntimeChoices>',
+            'source': '<source>',
+            'name': '<name>'
         }
     """
-    dependency_type = DependencyTypeE.SCRIPT
+
+    dependency_type = DependencyType.SCRIPT
     fields = [
         'runtime_name',
-        'name',
         'source'
     ]
 
-    field_mapping = {'name': 'label'}
-    id_name = 'label'
+    def __init__(self, name=None, script=None, script_endpoint=None):
+        if name and script and script_endpoint:
+            raise SyncanoValueError("Usage: ScriptDependency(name='<name>', script=Script(...)) or "
+                                    "ScriptDependency(ScriptEndpoint(...))")
+        if (name and not script) or (not name and script):
+            raise SyncanoValueError("Usage: ScriptDependency(name='<name>', script=Script(...))")
+
+        if script and not isinstance(script, Script):
+            raise SyncanoValueError("Expected Script type object.")
+
+        if script_endpoint and not isinstance(script_endpoint, ScriptEndpoint):
+            raise SyncanoValueError("Expected ScriptEndpoint type object.")
+
+        if not script_endpoint:
+            self.dependency_object = ScriptEndpoint(name=name, script=script)
+        else:
+            self.dependency_object = script_endpoint
+
+    def get_name(self):
+        return {'name': self.dependency_object.name}
+
+    def get_dependency_data(self):
+        dependency_data = self.get_name()
+        dependency_data.update({
+            field_name: getattr(self.dependency_object.script, field_name) for field_name in self.fields
+        })
+        return dependency_data
+
+    @classmethod
+    def create_from_raw_data(cls, raw_data):
+        return cls(**{'script_endpoint': ScriptEndpoint(name=raw_data['name'], script=Script(
+            source=raw_data['source'], runtime_name=raw_data['runtime_name']))})
 
 
 class EndpointMetadataMixin(object):
@@ -161,7 +195,7 @@ class EndpointMetadataMixin(object):
 
     @classmethod
     def _get_call_class(cls, call_type):
-        if call_type == CallTypeE.SCRIPT:
+        if call_type == CallType.SCRIPT:
             return ScriptCall
 
     def add_endpoint(self, endpoint):
@@ -194,19 +228,13 @@ class DependencyMetadataMixin(object):
 
     def update_dependencies(self):
         for raw_depedency in self.dependencies:
-            depedency_class, object_class = self._get_depedency_klass(raw_depedency['type'])
-
-            self.add_dependency(depedency_class(
-                object_class(**{
-                    depedency_class.field_mapping.get(field_name, field_name): raw_depedency.get(field_name)
-                    for field_name in depedency_class.fields
-                })
-            ))
+            depedency_class = self._get_depedency_klass(raw_depedency['type'])
+            self.add_dependency(depedency_class.create_from_raw_data(raw_depedency))
 
     @classmethod
     def _get_depedency_klass(cls, depedency_type):
-        if depedency_type == DependencyTypeE.SCRIPT:
-            return ScriptDependency, Script
+        if depedency_type == DependencyType.SCRIPT:
+            return ScriptDependency
 
     def add_dependency(self, depedency):
         self._dependencies.append(depedency)
