@@ -28,15 +28,23 @@ To create a custom socket follow these steps::
     my_endpoint.add_call(ScriptCall(name='custom_script'), methods=['GET'])
     my_endpoint.add_call(ScriptCall(name='another_custom_script'), methods=['POST'])
 
-    # Explanation of the above lines:
-    # Defined endpoint will be visible under `my_endpoint` name:
-    # On this syncano API endpoint the above endpoint will be called (after custom socket creation)
-    # <host>://<api_version>/instances/<instance_name>/endpoints/sockets/my_endpoint/
-    # On this syncano API endpoint the details of the defined endpoint will be returned
+    # What happened here:
+    # - We defined a new endpoint, that will be visible under `my_endpoint` name.
+    # - You will be able to call this endpoint (execute attached `call`), 
+    # by sending a reuqest, using any defined method to following API route:
+    # <host>://<api_version>/instances/<instance_name>/endpoints/sockets/my_endpoint/ 
+    # - To get details on that endpoint, you need to send a GET request to following API route:
     # <host>://<api_version>/instances/<instance_name>/sockets/my_custom_socket/endpoints/my_endpoint/
-    # For the above endpoint - the two calls are defined, one uses GET method - the custom_script will be executed
-    # there, second uses the POST method and then the another_custom_script will be called;
-    # Currently only script are available for calls;
+    #
+    # Following example above - we defined two calls on our endpoint. 
+    # First one means that using GET method will call the `custom_script` script,
+    # and second one means that using POST method will call the `another_custom_script` script.
+    # At the moment, only scripts are available as endpoint calls.
+    #
+    # As a general rule - to get endpoints details (but not call them), use following API route:
+    # <host>://<api_version>/instances/<instance_name>/sockets/my_custom_socket/endpoints/<endpoint>/
+    # and to run your endpoints (e.g. execute Script connected to them(, use following API route:
+    # <host>://<api_version>/instances/<instance_name>/endpoints/sockets/<endpoint>/
 
     # 3. After creation of the endpoint, add it to your custom_socket.
     custom_socket.add_endpoint(my_endpoint)
@@ -136,11 +144,16 @@ To get all endpoints that are defined in all custom sockets::
 
     socket_endpoint_list = SocketEndpoint.get_all_endpoints()
 
-Above code will return a list with SocketEndpoint objects. To run such endpoint, use::
+Above code will return a list with SocketEndpoint objects. To run an endpoint, 
+choose one endpoint first, e.g.:
 
-    socket_endpoint_list.run(method='GET')
+    endpoint = socket_endpoint_list[0]
+
+and now run it::
+
+    endpoint.run(method='GET')
     # or:
-    socket_endpoint_list.run(method='POST', data={'custom_data': 1})
+    endpoint.run(method='POST', data={'custom_data': 1})
 
 Custom sockets endpoints
 ------------------------
