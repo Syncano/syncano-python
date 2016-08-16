@@ -51,7 +51,7 @@ class ScriptEndpointCacheTest(InstanceMixin, IntegrationTest):
 
         cls.script_endpoint = cls.instance.script_endpoints.create(
             name='test_script_endpoint',
-            script=cls.script
+            script=cls.script.id
         )
 
     def test_cache_request(self):

@@ -548,7 +548,7 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
     def test_create(self):
         script_endpoint = self.model.please.create(
             instance_name=self.instance.name,
-            script=self.script,
+            script=self.script.id,
             name='wh%s' % self.generate_hash()[:10],
         )
 
@@ -557,7 +557,7 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
     def test_script_run(self):
         script_endpoint = self.model.please.create(
             instance_name=self.instance.name,
-            script=self.script,
+            script=self.script.id,
             name='wh%s' % self.generate_hash()[:10],
         )
 
@@ -569,7 +569,7 @@ set_response(HttpResponse(status_code=200, content='{"one": 1}', content_type='a
     def test_custom_script_run(self):
         script_endpoint = self.model.please.create(
             instance_name=self.instance.name,
-            script=self.custom_script,
+            script=self.custom_script.id,
             name='wh%s' % self.generate_hash()[:10],
         )
 
