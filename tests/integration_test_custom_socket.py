@@ -20,6 +20,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
     def setUpClass(cls):
         super(CustomSocketTest, cls).setUpClass()
         cls.custom_socket = cls._create_custom_socket('default', cls._define_dependencies_new_script_endpoint)
+        cls._assert_custom_socket(cls.custom_socket)
 
     def test_publish_custom_socket(self):
         # this test new ScriptEndpoint dependency create;
@@ -70,7 +71,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         self.assertTrue(all_endpoints[0].name)
 
     def test_endpoint_run(self):
-        script_endpoint = SocketEndpoint.please.first()
+        script_endpoint = SocketEndpoint.get_all_endpoints()[0]
         result = script_endpoint.run()
         suffix = script_endpoint.name.split('_')[-1]
         self.assertTrue(result.result['stdout'].endswith(suffix))
@@ -92,7 +93,13 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
 
     def assert_custom_socket(self, suffix, dependency_method):
         custom_socket = self._create_custom_socket(suffix, dependency_method=dependency_method)
-        self.assertTrue(custom_socket.name)
+        self._assert_custom_socket(custom_socket)
+
+    @classmethod
+    def _assert_custom_socket(cls, custom_socket):
+        cls.assertTrue(custom_socket.name)
+        cls.assertTrue(custom_socket.created_at)
+        cls.assertTrue(custom_socket.updated_at)
 
     @classmethod
     def _create_custom_socket(cls, suffix, dependency_method):

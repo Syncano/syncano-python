@@ -53,26 +53,26 @@ To create a custom socket follow these steps::
     # 4.1 Using a new script - define a new source code.
     custom_socket.add_dependency(
         ScriptDependency(
-            name='custom_script'
-            script=Script(
+            Script(
                 runtime_name=RuntimeChoices.PYTHON_V5_0,
                 source='print("custom_script")'
-            )
+            ),
+            name='custom_script'
         )
     )
     # 4.2 Using an existing script.
     another_custom_script = Script.please.get(id=2)
     custom_socket.add_dependency(
         ScriptDependency(
+            another_custom_script,
             name='another_custom_script',
-            script=another_custom_script
         )
     )
 
     # 4.3 Using an existing ScriptEndpoint.
     script_endpoint = ScriptEndpoint.please.get(name='script_endpoint_name')
     custom_socket.add_dependency(
-        script_endpoint=script_endpoint
+        script_endpoint
     )
 
     # 5. Publish custom_socket.
@@ -186,11 +186,11 @@ Currently the only supported dependency is a Script.
 
     custom_socket.add_dependency(
         ScriptDependency(
-            name='custom_script'
-            script=Script(
+            Script(
                 runtime_name=RuntimeChoices.PYTHON_V5_0,
                 source='print("custom_script")'
-            )
+            ),
+            name='custom_script'
         )
     )
 
@@ -202,8 +202,8 @@ Currently the only supported dependency is a Script.
     another_custom_script = Script.please.get(id=2)
     custom_socket.add_dependency(
         ScriptDependency(
-            name='another_custom_script',
-            script=another_custom_script
+            another_custom_script,
+            name='another_custom_script'
         )
     )
 
@@ -213,7 +213,15 @@ Currently the only supported dependency is a Script.
 
     script_endpoint = ScriptEndpoint.please.get(name='script_endpoint_name')
     custom_socket.add_dependency(
-        script_endpoint=script_endpoint
+        script_endpoint
+    )
+
+You can overwrite the name in the following way::
+
+    script_endpoint = ScriptEndpoint.please.get(name='script_endpoint_name')
+    custom_socket.add_dependency(
+        script_endpoint,
+        name='custom_name'
     )
 
 Custom socket recheck

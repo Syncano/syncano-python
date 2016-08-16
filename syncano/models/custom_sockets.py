@@ -26,6 +26,8 @@ class CustomSocket(EndpointMetadataMixin, DependencyMetadataMixin, Model):
     metadata = fields.JSONField(read_only=True, required=False)
     status = fields.StringField(read_only=True, required=False)
     status_info = fields.StringField(read_only=True, required=False)
+    created_at = fields.DateTimeField(read_only=True, required=False)
+    updated_at = fields.DateTimeField(read_only=True, required=False)
     links = fields.LinksField()
 
     class Meta:
@@ -52,7 +54,7 @@ class CustomSocket(EndpointMetadataMixin, DependencyMetadataMixin, Model):
 
     def run(self, endpoint_name, method='GET', data=None):
         endpoint = self._find_endpoint(endpoint_name)
-        return endpoint.run(method, data=data or {})
+        return endpoint.run(method=method, data=data or {})
 
     def _find_endpoint(self, endpoint_name):
         endpoints = self.get_endpoints()
