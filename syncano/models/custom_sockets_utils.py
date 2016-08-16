@@ -99,6 +99,7 @@ class BaseDependency(object):
 
     fields = []
     dependency_type = None
+    name = None
 
     def to_dependency_data(self):
         if self.dependency_type is None:
@@ -136,38 +137,41 @@ class ScriptDependency(BaseDependency):
         'source'
     ]
 
-    def __init__(self, name=None, script=None, script_endpoint=None):
-        if name and script and script_endpoint:
-            raise SyncanoValueError("Usage: ScriptDependency(name='<name>', script=Script(...)) or "
-                                    "ScriptDependency(ScriptEndpoint(...))")
-        if (name and not script) or (not name and script):
-            raise SyncanoValueError("Usage: ScriptDependency(name='<name>', script=Script(...))")
+    def __init__(self, script_or_script_endpoint, name=None):
+        if not isinstance(script_or_script_endpoint, (Script, ScriptEndpoint)):
+            raise SyncanoValueError('Script or ScriptEndpoint expected')
 
-        if script and not isinstance(script, Script):
-            raise SyncanoValueError("Expected Script type object.")
+        if isinstance(script_or_script_endpoint, Script) and not name:
+            raise SyncanoValueError('Name should be provided')
 
-        if script_endpoint and not isinstance(script_endpoint, ScriptEndpoint):
-            raise SyncanoValueError("Expected ScriptEndpoint type object.")
-
-        if not script_endpoint:
-            self.dependency_object = ScriptEndpoint(name=name, script=script)
-        else:
-            self.dependency_object = script_endpoint
+        self.dependency_object = script_or_script_endpoint
+        self.name = name
 
     def get_name(self):
+        if self.name is not None:
+            return {'name': self.name}
         return {'name': self.dependency_object.name}
 
     def get_dependency_data(self):
+
+        if isinstance(self.dependency_object, ScriptEndpoint):
+            script = Script.please.get(id=self.dependency_object.script,
+                                       instance_name=self.dependency_object.instance_name)
+        else:
+            script = self.dependency_object
+
         dependency_data = self.get_name()
         dependency_data.update({
-            field_name: getattr(self.dependency_object.script, field_name) for field_name in self.fields
+            field_name: getattr(script, field_name) for field_name in self.fields
         })
         return dependency_data
 
     @classmethod
     def create_from_raw_data(cls, raw_data):
-        return cls(**{'script_endpoint': ScriptEndpoint(name=raw_data['name'], script=Script(
-            source=raw_data['source'], runtime_name=raw_data['runtime_name']))})
+        return cls(**{
+            'script_or_script_endpoint': Script(source=raw_data['source'], runtime_name=raw_data['runtime_name']),
+            'name': raw_data['name'],
+        })
 
 
 class EndpointMetadataMixin(object):

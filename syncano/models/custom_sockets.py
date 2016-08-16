@@ -50,7 +50,7 @@ class CustomSocket(EndpointMetadataMixin, DependencyMetadataMixin, Model):
             endpoints.append(SocketEndpoint(**endpoint))
         return endpoints
 
-    def run(self, method, endpoint_name, data=None):
+    def run(self, endpoint_name, method='GET', data=None):
         endpoint = self._find_endpoint(endpoint_name)
         return endpoint.run(method, data=data or {})
 

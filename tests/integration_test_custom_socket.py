@@ -117,15 +117,14 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
 
     @classmethod
     def _define_dependencies_new_script_endpoint(cls, suffix, custom_socket):
+        script = cls.__create_script(suffix)
+        script_endpoint = ScriptEndpoint(
+            name='script_endpoint_{}'.format(suffix),
+            script=script.id
+        )
         custom_socket.add_dependency(
             ScriptDependency(
-                script_endpoint=ScriptEndpoint(
-                    name='script_endpoint_{}'.format(suffix),
-                    script=Script(
-                        source='print({})'.format(suffix),
-                        runtime_name=RuntimeChoices.PYTHON_V5_0
-                    )
-                )
+                script_endpoint
             )
         )
 
@@ -133,11 +132,11 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
     def _define_dependencies_new_script(cls, suffix, custom_socket):
         custom_socket.add_dependency(
             ScriptDependency(
-                name='script_endpoint_{}'.format(suffix),
-                script=Script(
+                Script(
                     source='print({})'.format(suffix),
                     runtime_name=RuntimeChoices.PYTHON_V5_0
-                )
+                ),
+                name='script_endpoint_{}'.format(suffix),
             )
         )
 
@@ -147,8 +146,8 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         cls._create_script(suffix)
         custom_socket.add_dependency(
             ScriptDependency(
+                Script.please.first(),
                 name='script_endpoint_{}'.format(suffix),
-                script=Script.please.first()
             )
         )
 
@@ -161,7 +160,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         )
         custom_socket.add_dependency(
             ScriptDependency(
-                script_endpoint=ScriptEndpoint.please.first()
+                ScriptEndpoint.please.first()
             )
         )
 
