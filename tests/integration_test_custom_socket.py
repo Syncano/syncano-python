@@ -35,7 +35,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
             name='my_custom_socket_123',
             endpoints={
                 "my_custom_endpoint_123": {
-                    "calls": [{"type": "script", "name": "script_123", "methods": ["POST"]}]
+                    "calls": [{"type": "script", "name": "script_123", "methods": ["GET", "POST"]}]
                 }
             },
             dependencies=[
@@ -55,7 +55,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         custom_socket = self._create_custom_socket(suffix, self._define_dependencies_new_script_endpoint)
         self._assert_custom_socket(custom_socket)
         results = custom_socket.run('my_endpoint_{}'.format(suffix))
-        self.assertEqual(results.result['stdout'], 'script_{}'.format(suffix))
+        self.assertEqual(results['result']['stdout'], suffix)
 
     def test_custom_socket_recheck(self):
         suffix = 'recheck'
@@ -73,8 +73,8 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
     def test_endpoint_run(self):
         script_endpoint = SocketEndpoint.get_all_endpoints()[0]
         result = script_endpoint.run()
-        suffix = script_endpoint.name.split('_')[-1]
-        self.assertTrue(result.result['stdout'].endswith(suffix))
+        self.assertIsInstance(result, dict)
+        self.assertTrue(result['result']['stdout'])
 
     def test_custom_socket_update(self):
         socket_to_update = self._create_custom_socket('to_update', self._define_dependencies_new_script_endpoint)
@@ -96,6 +96,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         self._assert_custom_socket(custom_socket)
 
     def _assert_custom_socket(self, custom_socket):
+        self._wait_till_socket_process(custom_socket)
         self.assertTrue(custom_socket.name)
         self.assertTrue(custom_socket.created_at)
         self.assertTrue(custom_socket.updated_at)
@@ -115,7 +116,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         endpoint = Endpoint(name='my_endpoint_{}'.format(suffix))
         endpoint.add_call(
             ScriptCall(
-                name='script_{}'.format(suffix),
+                name='script_endpoint_{}'.format(suffix),
                 methods=['GET', 'POST']
             )
         )
@@ -139,7 +140,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         custom_socket.add_dependency(
             ScriptDependency(
                 Script(
-                    source='print({})'.format(suffix),
+                    source='print("{}")'.format(suffix),
                     runtime_name=RuntimeChoices.PYTHON_V5_0
                 ),
                 name='script_endpoint_{}'.format(suffix),
@@ -175,5 +176,10 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         return Script.please.create(
             label='script_{}'.format(suffix),
             runtime_name=RuntimeChoices.PYTHON_V5_0,
-            source='print({})'.format(suffix)
+            source='print("{}")'.format(suffix)
         )
+
+    @classmethod
+    def _wait_till_socket_process(cls, custom_socket):
+        while custom_socket.status == 'checking':
+            custom_socket.reload()

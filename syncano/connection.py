@@ -273,7 +273,6 @@ class Connection(object):
             retry_after = response.headers.get('retry-after', 1)
             time.sleep(float(retry_after))
             response = method(url, **params)
-
         content = self.get_response_content(url, response)
 
         if files:
