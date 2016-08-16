@@ -16,12 +16,6 @@ from tests.integration_test import InstanceMixin, IntegrationTest
 
 class CustomSocketTest(InstanceMixin, IntegrationTest):
 
-    @classmethod
-    def setUpClass(cls):
-        super(CustomSocketTest, cls).setUpClass()
-        cls.custom_socket = cls._create_custom_socket('default', cls._define_dependencies_new_script_endpoint)
-        cls._assert_custom_socket(cls.custom_socket)
-
     def test_publish_custom_socket(self):
         # this test new ScriptEndpoint dependency create;
         self.assert_custom_socket('publishing', self._define_dependencies_new_script_endpoint)
@@ -57,12 +51,18 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         self.assertTrue(custom_socket.name)
 
     def test_custom_socket_run(self):
-        results = self.custom_socket.run('my_endpoint_default')
-        self.assertEqual(results.result['stdout'], 'script_default')
+        suffix = 'default'
+        custom_socket = self._create_custom_socket(suffix)
+        self._assert_custom_socket(custom_socket)
+        results = custom_socket.run('my_endpoint_{}'.format(suffix))
+        self.assertEqual(results.result['stdout'], 'script_{}'.format(suffix))
 
     def test_custom_socket_recheck(self):
-        custom_socket = self.custom_socket.recheck()
-        self.assertTrue(custom_socket.name)
+        suffix = 'recheck'
+        custom_socket = self._create_custom_socket(suffix)
+        self._assert_custom_socket(custom_socket)
+        custom_socket = custom_socket.recheck()
+        self._assert_custom_socket(custom_socket)
 
     def test_fetching_all_endpoints(self):
         all_endpoints = SocketEndpoint.get_all_endpoints()
