@@ -56,7 +56,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         self.assertTrue(custom_socket.name)
 
     def test_custom_socket_run(self):
-        results = self.custom_socket.run('GET', 'my_endpoint_default')
+        results = self.custom_socket.run('my_endpoint_default')
         self.assertEqual(results.result['stdout'], 'script_default')
 
     def test_custom_socket_recheck(self):
@@ -70,14 +70,14 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         self.assertTrue(all_endpoints[0].name)
 
     def test_endpoint_run(self):
-        script_endpoint = ScriptEndpoint.please.first()
-        result = script_endpoint.run('GET')
+        script_endpoint = SocketEndpoint.please.first()
+        result = script_endpoint.run()
         suffix = script_endpoint.name.split('_')[-1]
         self.assertTrue(result.result['stdout'].endswith(suffix))
 
     def test_custom_socket_update(self):
         socket_to_update = self._create_custom_socket('to_update', self._define_dependencies_new_script_endpoint)
-        socket_to_update.remove_endpoint(endpoint_name='my_endpoint_default')
+        socket_to_update.remove_endpoint(endpoint_name='my_endpoint_to_update')
 
         new_endpoint = Endpoint(name='my_endpoint_new_to_update')
         new_endpoint.add_call(
@@ -88,7 +88,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         socket_to_update.update()
         time.sleep(2)  # wait for custom socket setup;
         socket_to_update.reload()
-        self.assertIn('my_endpoint_new_default', socket_to_update.endpoints)
+        self.assertIn('my_endpoint_new_to_update', socket_to_update.endpoints)
 
     def assert_custom_socket(self, suffix, dependency_method):
         custom_socket = self._create_custom_socket(suffix, dependency_method=dependency_method)
@@ -156,7 +156,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         script = cls._create_script(suffix)
         ScriptEndpoint.please.create(
             name='script_endpoint_{}'.format(suffix),
-            script=script
+            script=script.id
         )
         custom_socket.add_dependency(
             ScriptDependency(
