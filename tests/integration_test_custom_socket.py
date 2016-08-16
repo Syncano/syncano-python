@@ -52,14 +52,14 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
 
     def test_custom_socket_run(self):
         suffix = 'default'
-        custom_socket = self._create_custom_socket(suffix)
+        custom_socket = self._create_custom_socket(suffix, self._define_dependencies_new_script_endpoint)
         self._assert_custom_socket(custom_socket)
         results = custom_socket.run('my_endpoint_{}'.format(suffix))
         self.assertEqual(results.result['stdout'], 'script_{}'.format(suffix))
 
     def test_custom_socket_recheck(self):
         suffix = 'recheck'
-        custom_socket = self._create_custom_socket(suffix)
+        custom_socket = self._create_custom_socket(suffix, self._define_dependencies_new_script_endpoint)
         self._assert_custom_socket(custom_socket)
         custom_socket = custom_socket.recheck()
         self._assert_custom_socket(custom_socket)
@@ -95,11 +95,10 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         custom_socket = self._create_custom_socket(suffix, dependency_method=dependency_method)
         self._assert_custom_socket(custom_socket)
 
-    @classmethod
-    def _assert_custom_socket(cls, custom_socket):
-        cls.assertTrue(custom_socket.name)
-        cls.assertTrue(custom_socket.created_at)
-        cls.assertTrue(custom_socket.updated_at)
+    def _assert_custom_socket(self, custom_socket):
+        self.assertTrue(custom_socket.name)
+        self.assertTrue(custom_socket.created_at)
+        self.assertTrue(custom_socket.updated_at)
 
     @classmethod
     def _create_custom_socket(cls, suffix, dependency_method):
