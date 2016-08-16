@@ -50,9 +50,9 @@ class CustomSocket(EndpointMetadataMixin, DependencyMetadataMixin, Model):
             endpoints.append(SocketEndpoint(**endpoint))
         return endpoints
 
-    def run(self, method, endpoint_name, data={}):
+    def run(self, method, endpoint_name, data=None):
         endpoint = self._find_endpoint(endpoint_name)
-        return endpoint.run(method, data=data)
+        return endpoint.run(method, data=data or {})
 
     def _find_endpoint(self, endpoint_name):
         endpoints = self.get_endpoints()
@@ -123,7 +123,7 @@ class SocketEndpoint(Model):
             }
         }
 
-    def run(self, method='GET', data={}):
+    def run(self, method='GET', data=None):
         endpoint_path = self.links.endpoint
         connection = self._get_connection()
         if not self._validate_method(method):
@@ -132,7 +132,7 @@ class SocketEndpoint(Model):
         if method in ['get', 'delete']:
             response = connection.request(method, endpoint_path)
         elif method in ['post', 'put', 'patch']:
-            response = connection.request(method, endpoint_path, data=data)
+            response = connection.request(method, endpoint_path, data=data or {})
         else:
             raise SyncanoValueError('Method: {} not supported.'.format(method))
         return response
