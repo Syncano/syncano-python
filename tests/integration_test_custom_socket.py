@@ -117,7 +117,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
 
     @classmethod
     def _define_dependencies_new_script_endpoint(cls, suffix, custom_socket):
-        script = cls.__create_script(suffix)
+        script = cls._create_script(suffix)
         script_endpoint = ScriptEndpoint(
             name='script_endpoint_{}'.format(suffix),
             script=script.id

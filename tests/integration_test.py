@@ -478,7 +478,7 @@ class ScriptIntegrationTest(InstanceMixin, IntegrationTest):
         )
 
         trace = script.run()
-        while trace.status == 'pending':
+        while trace.status == ['pending', 'processing']:
             sleep(1)
             trace.reload()
 

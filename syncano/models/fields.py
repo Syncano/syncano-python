@@ -478,8 +478,6 @@ class LinksField(Field):
 
 class ModelField(Field):
 
-    read_only = False
-
     def __init__(self, rel, *args, **kwargs):
         self.rel = rel
         self.just_pk = kwargs.pop('just_pk', True)
