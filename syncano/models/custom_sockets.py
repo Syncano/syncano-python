@@ -140,10 +140,12 @@ class SocketEndpoint(Model):
         return response
 
     @classmethod
-    def get_all_endpoints(cls):
+    def get_all_endpoints(cls, instance_name=None):
         connection = cls._meta.connection
-        all_endpoints_path = Instance._meta.resolve_endpoint('endpoints',
-                                                             {'name': cls.please.properties.get('instance_name')})
+        all_endpoints_path = Instance._meta.resolve_endpoint(
+            'endpoints',
+            {'name': cls.please.properties.get('instance_name') or instance_name}
+        )
         response = connection.request('GET', all_endpoints_path)
         return [cls(**endpoint) for endpoint in response['objects']]
 
