@@ -16,18 +16,18 @@ from tests.integration_test import InstanceMixin, IntegrationTest
 
 class CustomSocketTest(InstanceMixin, IntegrationTest):
 
-    def test_publish_custom_socket(self):
+    def test_install_custom_socket(self):
         # this test new ScriptEndpoint dependency create;
-        self.assert_custom_socket('publishing', self._define_dependencies_new_script_endpoint)
+        self.assert_custom_socket('installing', self._define_dependencies_new_script_endpoint)
 
     def test_dependencies_new_script(self):
-        self.assert_custom_socket('new_script_publishing', self._define_dependencies_new_script)
+        self.assert_custom_socket('new_script_installing', self._define_dependencies_new_script)
 
     def test_dependencies_existing_script(self):
-        self.assert_custom_socket('existing_script_publishing', self._define_dependencies_existing_script)
+        self.assert_custom_socket('existing_script_installing', self._define_dependencies_existing_script)
 
     def test_dependencies_existing_script_endpoint(self):
-        self.assert_custom_socket('existing_script_e_publishing',
+        self.assert_custom_socket('existing_script_e_installing',
                                   self._define_dependencies_existing_script_endpoint)
 
     def test_creating_raw_data(self):
@@ -108,7 +108,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         cls._define_endpoints(suffix, custom_socket)
         dependency_method(suffix, custom_socket)
 
-        custom_socket.publish()
+        custom_socket.install()
         return custom_socket
 
     @classmethod

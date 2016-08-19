@@ -75,8 +75,8 @@ To create a custom socket follow these steps::
         script_endpoint
     )
 
-    # 5. Publish custom_socket.
-    custom_socket.publish()  # this will make an API call and create a script;
+    # 5. Install custom_socket.
+    custom_socket.install()  # this will make an API call and create a script;
 
 Sometimes, it's needed to set up the environment for the custom socket.
 It's possible to check the custom socket status::

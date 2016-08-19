@@ -23,7 +23,7 @@ class CustomSocket(EndpointMetadataMixin, DependencyMetadataMixin, Model):
     name = fields.StringField(max_length=64, primary_key=True)
     endpoints = fields.JSONField()
     dependencies = fields.JSONField()
-    metadata = fields.JSONField(read_only=True, required=False)
+    metadata = fields.JSONField(required=False)
     status = fields.StringField(read_only=True, required=False)
     status_info = fields.StringField(read_only=True, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)
@@ -63,9 +63,9 @@ class CustomSocket(EndpointMetadataMixin, DependencyMetadataMixin, Model):
                 return endpoint
         raise SyncanoValueError('Endpoint {} not found.'.format(endpoint_name))
 
-    def publish(self):
+    def install(self):
         if not self.is_new():
-            raise SyncanoValueError('Can not publish already defined custom socket.')
+            raise SyncanoValueError('Can not install already defined custom socket.')
 
         created_socket = self.__class__.please.create(
             name=self.name,
@@ -79,7 +79,7 @@ class CustomSocket(EndpointMetadataMixin, DependencyMetadataMixin, Model):
 
     def update(self):
         if self.is_new():
-            raise SyncanoValueError('Publish socket first.')
+            raise SyncanoValueError('Install socket first.')
 
         update_socket = self.__class__.please.update(
             name=self.name,
