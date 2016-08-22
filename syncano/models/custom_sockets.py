@@ -59,7 +59,7 @@ class CustomSocket(EndpointMetadataMixin, DependencyMetadataMixin, Model):
     def _find_endpoint(self, endpoint_name):
         endpoints = self.get_endpoints()
         for endpoint in endpoints:
-            if endpoint_name == endpoint.name:
+            if '{}/{}'.format(self.name, endpoint_name) == endpoint.name:
                 return endpoint
         raise SyncanoValueError('Endpoint {} not found.'.format(endpoint_name))
 
@@ -127,14 +127,15 @@ class SocketEndpoint(Model):
 
     def run(self, method='GET', data=None):
         endpoint_path = self.links.self
+        _, endpoint_name = self.name.split('/', 1)
         connection = self._get_connection()
         if not self._validate_method(method):
             raise SyncanoValueError('Method: {} not specified in calls for this custom socket.'.format(method))
         method = method.lower()
         if method in ['get', 'delete']:
-            response = connection.request(method, endpoint_path)
+            response = connection.request(method, "{}/{}".format(endpoint_path, endpoint_name))
         elif method in ['post', 'put', 'patch']:
-            response = connection.request(method, endpoint_path, data=data or {})
+            response = connection.request(method, "{}/{}".format(endpoint_path, endpoint_name), data=data or {})
         else:
             raise SyncanoValueError('Method: {} not supported.'.format(method))
         return response
@@ -150,10 +151,6 @@ class SocketEndpoint(Model):
         return [cls(**endpoint) for endpoint in response['objects']]
 
     def _validate_method(self, method):
-
-        methods = []
-        for call in self.calls:
-            methods.extend(call['methods'])
-        if '*' in methods or method in methods:
+        if '*' in self.allowed_methods or method in self.allowed_methods:
             return True
         return False
