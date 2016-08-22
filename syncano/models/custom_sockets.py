@@ -109,7 +109,7 @@ class SocketEndpoint(Model):
     :ivar links: :class:`~syncano.models.fields.LinksField`
     """
     name = fields.StringField(max_length=64, primary_key=True)
-    calls = fields.JSONField()
+    allowed_methods = fields.JSONField()
     links = fields.LinksField()
 
     class Meta:
@@ -126,7 +126,7 @@ class SocketEndpoint(Model):
         }
 
     def run(self, method='GET', data=None):
-        endpoint_path = self.links.endpoint
+        endpoint_path = self.links.self
         connection = self._get_connection()
         if not self._validate_method(method):
             raise SyncanoValueError('Method: {} not specified in calls for this custom socket.'.format(method))
