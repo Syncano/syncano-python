@@ -237,6 +237,17 @@ You can also re-check a Socket. This mean that all dependencies will be checked 
 (e.g. some were deleted by mistake), they will be created again. If the endpoints and dependencies do not meet
 the criteria - an error will be returned in the status field.
 
+Custom Socket - install from url
+--------------------------------
+
+To install a socket from url use::
+
+    CustomSocket(name='new_socket_name').install_from_url(url='https://...')
+
+If instance name was not provided in connection arguments, do::
+
+    CustomSocket(name='new_socket_name').install_from_url(url='https://...', instance_name='instance_name')
+    
 Custom Socket - raw format
 --------------------------
 
