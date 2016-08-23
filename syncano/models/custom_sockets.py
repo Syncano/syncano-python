@@ -21,6 +21,7 @@ class CustomSocket(EndpointMetadataMixin, DependencyMetadataMixin, Model):
     """
 
     name = fields.StringField(max_length=64, primary_key=True)
+    description = fields.StringField(required=False)
     endpoints = fields.JSONField()
     dependencies = fields.JSONField()
     metadata = fields.JSONField(required=False)
@@ -56,6 +57,16 @@ class CustomSocket(EndpointMetadataMixin, DependencyMetadataMixin, Model):
             if '{}/{}'.format(self.name, endpoint_name) == endpoint.name:
                 return endpoint
         raise SyncanoValueError('Endpoint {} not found.'.format(endpoint_name))
+
+    def install_from_url(self, url, instance_name=None):
+        instance_name = self.__class__.please.properties.get('instance_name') or instance_name
+        instance = Instance.please.get(name=instance_name)
+
+        install_path = instance.links.sockets_install
+        connection = self._get_connection()
+        response = connection.request('POST', install_path, data={'name': self.name, 'install_url': url})
+
+        return response
 
     def install(self):
         if not self.is_new():
