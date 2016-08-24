@@ -1,6 +1,19 @@
 Syncano
 =======
 
+Build Status
+------------
+
+**Master**
+
+.. image:: https://circleci.com/gh/Syncano/syncano-python/tree/master.svg?style=svg&circle-token=738c379fd91cc16b82758e6be89d0c21926655e0
+    :target: https://circleci.com/gh/Syncano/syncano-python/tree/master
+
+**Develop**
+
+.. image:: https://circleci.com/gh/Syncano/syncano-python/tree/develop.svg?style=svg&circle-token=738c379fd91cc16b82758e6be89d0c21926655e0
+    :target: https://circleci.com/gh/Syncano/syncano-python/tree/develop
+
 Python QuickStart Guide
 -----------------------
 
