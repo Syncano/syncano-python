@@ -127,3 +127,6 @@ class DataEndpoint(Model):
                 'Invalid response_template. Must be template\'s name or ResponseTemplate object.'
             )
         return name
+
+    def add_object(self, **kwargs):
+        return Object(instance_name=self.instance_name, class_name=self.class_name, **kwargs).save()

@@ -45,7 +45,7 @@ class Script(Model):
 
             >>> Script.please.run('instance-name', 1234)
             >>> Script.please.run('instance-name', 1234, payload={'variable_one': 1, 'variable_two': 2})
-            >>> Script.please.run('instance-name', 1234, payload="{\"variable_one\": 1, \"variable_two\": 2}")
+            >>> Script.please.run('instance-name', 1234, payload='{"variable_one": 1, "variable_two": 2}')
 
         or via instance::
 
@@ -54,7 +54,7 @@ class Script(Model):
             >>> s.run(variable_one=1, variable_two=2)
     """
 
-    label = fields.StringField(max_length=80)
+    label = fields.StringField(max_length=80, required=False)
     description = fields.StringField(required=False)
     source = fields.StringField()
     runtime_name = fields.StringField()

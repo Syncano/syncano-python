@@ -82,6 +82,10 @@ class Instance(RenameMixin, Model):
             'config': {
                 'methods': ['put', 'get'],
                 'path': '/v1.1/instances/{name}/snippets/config/',
+            },
+            'endpoints': {
+                'methods': ['get'],
+                'path': '/v1.1/instances/{name}/endpoints/sockets/'
             }
         }
 

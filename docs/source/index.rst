@@ -19,6 +19,7 @@ Contents:
 
    getting_started
    interacting
+   custom_sockets
    refs/syncano
 
 

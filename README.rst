@@ -1,24 +1,26 @@
 Syncano
 =======
 
+Build Status
+------------
+
+**Master**
+
+.. image:: https://circleci.com/gh/Syncano/syncano-python/tree/master.svg?style=svg&circle-token=738c379fd91cc16b82758e6be89d0c21926655e0
+    :target: https://circleci.com/gh/Syncano/syncano-python/tree/master
+
+**Develop**
+
+.. image:: https://circleci.com/gh/Syncano/syncano-python/tree/develop.svg?style=svg&circle-token=738c379fd91cc16b82758e6be89d0c21926655e0
+    :target: https://circleci.com/gh/Syncano/syncano-python/tree/develop
+
 Python QuickStart Guide
 -----------------------
 
-You can find quick start on installing and using Syncano's Python library in our [documentation](http://docs.syncano.com/docs/python).
+You can find quick start on installing and using Syncano's Python library in our `documentation <http://docs.syncano.io/docs/python>`_.
 
-For more detailed information on how to use Syncano and its features - our [Developer Manual](http://docs.syncano.com/docs/getting-started-with-syncano) should be very helpful.
+For more detailed information on how to use Syncano and its features - our `Developer Manual <http://docs.syncano.io/docs/getting-started-with-syncano>`_ should be very helpful.
 
 In case you need help working with the library - email us at libraries@syncano.com - we will be happy to help!
 
-You can also find library reference hosted on GitHub pages [here](http://syncano.github.io/syncano-python/).
-
-Backwards incompatible changes
-------------------------------
-
-Version 4.x and 5.x is designed for new release of Syncano platform and
-is **not compatible** with any previous releases.
-
-Code from `0.6.x` release is avalable on [stable/0.6.x](https://github.com/Syncano/syncano-python/tree/stable/0.6.x) branch
-and it can be installed directly from pip via:
-
-``pip install syncano==0.6.2 --pre``
+You can also find library reference hosted on GitHub pages `here <http://syncano.github.io/syncano-python/>`_.
