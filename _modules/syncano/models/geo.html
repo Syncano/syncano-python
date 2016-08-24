@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>syncano.models.billing &mdash; Syncano 4.0.0 documentation</title>
+  <title>syncano.models.geo &mdash; Syncano 4.0.0 documentation</title>
   
 
   
@@ -129,7 +129,7 @@
       
           <li><a href="../../syncano.html">syncano</a> &raquo;</li>
       
-    <li>syncano.models.billing</li>
+    <li>syncano.models.geo</li>
       <li class="wy-breadcrumbs-aside">
         
       </li>
@@ -138,78 +138,45 @@
 </div>
           <div role="main">
             
-  <h1>Source code for syncano.models.billing</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fields</span>
-<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Model</span>
+  <h1>Source code for syncano.models.geo</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoValueError</span>
 
 
-<span class="k">class</span> <span class="nc">Coupon</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Coupon"><a class="viewcode-back" href="../../../refs/syncano.models.billing.html#syncano.models.billing.Coupon">[docs]</a><span class="sd">    OO wrapper around coupons `link &lt;TODO&gt;`_.</span>
+<div class="viewcode-block" id="GeoPoint"><a class="viewcode-back" href="../../../refs/syncano.models.geo.html#syncano.models.geo.GeoPoint">[docs]</a><span class="k">class</span> <span class="nc">GeoPoint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-<span class="sd">    :ivar name: :class:`~syncano.models.fields.StringField`</span>
-<span class="sd">    :ivar redeem_by: :class:`~syncano.models.fields.DateField`</span>
-<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
-<span class="sd">    :ivar percent_off: :class:`~syncano.models.fields.IntegerField`</span>
-<span class="sd">    :ivar amount_off: :class:`~syncano.models.fields.FloatField`</span>
-<span class="sd">    :ivar currency: :class:`~syncano.models.fields.ChoiceField`</span>
-<span class="sd">    :ivar duration: :class:`~syncano.models.fields.IntegerField`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="o">=</span> <span class="n">latitude</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="o">=</span> <span class="n">longitude</span>
 
-    <span class="n">CURRENCY_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;usd&#39;</span><span class="p">},</span>
-    <span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;GeoPoint(latitude={}, longitude={})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitude</span><span class="p">)</span>
 
-    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">redeem_by</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
-    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">LinksField</span><span class="p">()</span>
-    <span class="n">percent_off</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">amount_off</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">currency</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">CURRENCY_CHOICES</span><span class="p">)</span>
-    <span class="n">duration</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="viewcode-block" id="GeoPoint.to_native"><a class="viewcode-back" href="../../../refs/syncano.models.geo.html#syncano.models.geo.GeoPoint.to_native">[docs]</a>    <span class="k">def</span> <span class="nf">to_native</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">geo_struct_dump</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;latitude&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="s1">&#39;longitude&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitude</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">geo_struct_dump</span>
 
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;delete&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/v1.1/billing/coupons/{name}/&#39;</span><span class="p">,</span>
-            <span class="p">},</span>
-            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/v1.1/billing/coupons/&#39;</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+</div></div>
+<div class="viewcode-block" id="Distance"><a class="viewcode-back" href="../../../refs/syncano.models.geo.html#syncano.models.geo.Distance">[docs]</a><span class="k">class</span> <span class="nc">Distance</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
+    <span class="n">KILOMETERS</span> <span class="o">=</span> <span class="s1">&#39;_in_kilometers&#39;</span>
+    <span class="n">MILES</span> <span class="o">=</span> <span class="s1">&#39;_in_miles&#39;</span>
 
-<span class="k">class</span> <span class="nc">Discount</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span></div>
-<div class="viewcode-block" id="Discount"><a class="viewcode-back" href="../../../refs/syncano.models.billing.html#syncano.models.billing.Discount">[docs]</a><span class="sd">    OO wrapper around discounts `link &lt;TODO&gt;`_.</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kilometers</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">miles</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kilometers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">miles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;`kilometers` and `miles` can not be set at the same time.&#39;</span><span class="p">)</span>
 
-<span class="sd">    :ivar instance: :class:`~syncano.models.fields.ModelField`</span>
-<span class="sd">    :ivar coupon: :class:`~syncano.models.fields.ModelField`</span>
-<span class="sd">    :ivar start: :class:`~syncano.models.fields.DateField`</span>
-<span class="sd">    :ivar end: :class:`~syncano.models.fields.DateField`</span>
-<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">kilometers</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">miles</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;`kilometers` or `miles` attribute should be specified.&#39;</span><span class="p">)</span>
 
-    <span class="n">instance</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ModelField</span><span class="p">(</span><span class="s1">&#39;Instance&#39;</span><span class="p">)</span>
-    <span class="n">coupon</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ModelField</span><span class="p">(</span><span class="s1">&#39;Coupon&#39;</span><span class="p">)</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">end</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">LinksField</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="n">kilometers</span> <span class="ow">or</span> <span class="n">miles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">KILOMETERS</span> <span class="k">if</span> <span class="n">kilometers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">MILES</span>
 
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/v1.1/billing/discounts/{id}/&#39;</span><span class="p">,</span>
-            <span class="p">},</span>
-            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/v1.1/billing/discounts/&#39;</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-</pre></div></div>
+<div class="viewcode-block" id="Distance.to_native"><a class="viewcode-back" href="../../../refs/syncano.models.geo.html#syncano.models.geo.Distance.to_native">[docs]</a>    <span class="k">def</span> <span class="nf">to_native</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;distance{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance</span>
+        <span class="p">}</span></div></div>
+</pre></div>
 
           </div>
           <footer>

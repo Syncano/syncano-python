@@ -83,6 +83,19 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#environmental-variables">Environmental variables</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_sockets.html">Custom Sockets in Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#creating-a-custom-socket">Creating a custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#updating-the-custom-socket">Updating the custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#running-custom-socket">Running custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#read-all-endpoints-in-a-custom-socket">Read all endpoints in a custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#read-all-endpoints">Read all endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-sockets-endpoints">Custom Sockets endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-socket-dependency">Custom Socket dependency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-socket-recheck">Custom Socket recheck</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-socket-install-from-url">Custom Socket - install from url</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-socket-raw-format">Custom Socket - raw format</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../refs/syncano.html">Syncano references</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#submodules">Submodules</a></li>
@@ -601,7 +614,7 @@
         <span class="k">return</span> <span class="n">LinksWrapper</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">IGNORED_LINKS</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="LinksField.to_native"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.LinksField.to_native">[docs]</a>    <span class="k">def</span> <span class="nf">to_native</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">to_native</span><span class="p">()</span>
 
 </div></div>
 <div class="viewcode-block" id="ModelField"><a class="viewcode-back" href="../../../refs/syncano.models.fields.html#syncano.models.fields.ModelField">[docs]</a><span class="k">class</span> <span class="nc">ModelField</span><span class="p">(</span><span class="n">Field</span><span class="p">):</span>
@@ -636,7 +649,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rel</span><span class="p">,</span> <span class="nb">dict</span><span class="p">))</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_data_object_mixin</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s1">&#39;Value needs to be a {0} instance.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rel</span><span class="o">.</span><span class="n">__name__</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">required</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel</span><span class="p">))</span><span class="ow">or</span> \
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">required</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel</span><span class="p">))</span> <span class="ow">or</span> \
            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_data_object_mixin</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;validate&#39;</span><span class="p">)):</span>
             <span class="n">value</span><span class="o">.</span><span class="n">validate</span><span class="p">()</span>
 </div>

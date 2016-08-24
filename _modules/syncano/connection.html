@@ -83,6 +83,19 @@
 <li class="toctree-l2"><a class="reference internal" href="../../interacting.html#environmental-variables">Environmental variables</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../custom_sockets.html">Custom Sockets in Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../custom_sockets.html#creating-a-custom-socket">Creating a custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../custom_sockets.html#updating-the-custom-socket">Updating the custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../custom_sockets.html#running-custom-socket">Running custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../custom_sockets.html#read-all-endpoints-in-a-custom-socket">Read all endpoints in a custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../custom_sockets.html#read-all-endpoints">Read all endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../custom_sockets.html#custom-sockets-endpoints">Custom Sockets endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../custom_sockets.html#custom-socket-dependency">Custom Socket dependency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../custom_sockets.html#custom-socket-recheck">Custom Socket recheck</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../custom_sockets.html#custom-socket-install-from-url">Custom Socket - install from url</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../custom_sockets.html#custom-socket-raw-format">Custom Socket - raw format</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../refs/syncano.html">Syncano references</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../refs/syncano.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../refs/syncano.html#submodules">Submodules</a></li>
@@ -127,6 +140,7 @@
             
   <h1>Source code for syncano.connection</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 
 <span class="kn">import</span> <span class="nn">requests</span>
@@ -395,6 +409,11 @@
 
         <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_url</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">429</span><span class="p">:</span>  <span class="c1"># throttling;</span>
+            <span class="n">retry_after</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;retry-after&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">retry_after</span><span class="p">))</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
         <span class="n">content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_response_content</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">files</span><span class="p">:</span>

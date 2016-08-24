@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>syncano.models.billing &mdash; Syncano 4.0.0 documentation</title>
+  <title>syncano.models.hosting &mdash; Syncano 4.0.0 documentation</title>
   
 
   
@@ -129,7 +129,7 @@
       
           <li><a href="../../syncano.html">syncano</a> &raquo;</li>
       
-    <li>syncano.models.billing</li>
+    <li>syncano.models.hosting</li>
       <li class="wy-breadcrumbs-aside">
         
       </li>
@@ -138,78 +138,67 @@
 </div>
           <div role="main">
             
-  <h1>Source code for syncano.models.billing</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fields</span>
-<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Model</span>
+  <h1>Source code for syncano.models.hosting</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Instance</span><span class="p">,</span> <span class="n">Model</span><span class="p">,</span> <span class="n">logger</span>
 
 
-<span class="k">class</span> <span class="nc">Coupon</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Hosting"><a class="viewcode-back" href="../../../refs/syncano.models.hosting.html#syncano.models.hosting.Hosting">[docs]</a><span class="k">class</span> <span class="nc">Hosting</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<div class="viewcode-block" id="Coupon"><a class="viewcode-back" href="../../../refs/syncano.models.billing.html#syncano.models.billing.Coupon">[docs]</a><span class="sd">    OO wrapper around coupons `link &lt;TODO&gt;`_.</span>
-
-<span class="sd">    :ivar name: :class:`~syncano.models.fields.StringField`</span>
-<span class="sd">    :ivar redeem_by: :class:`~syncano.models.fields.DateField`</span>
-<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
-<span class="sd">    :ivar percent_off: :class:`~syncano.models.fields.IntegerField`</span>
-<span class="sd">    :ivar amount_off: :class:`~syncano.models.fields.FloatField`</span>
-<span class="sd">    :ivar currency: :class:`~syncano.models.fields.ChoiceField`</span>
-<span class="sd">    :ivar duration: :class:`~syncano.models.fields.IntegerField`</span>
+<span class="sd">        OO wrapper around hosting.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">CURRENCY_CHOICES</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="p">{</span><span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="s1">&#39;USD&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;usd&#39;</span><span class="p">},</span>
-    <span class="p">)</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">domains</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ListField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="p">[])</span>
 
-    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">redeem_by</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
     <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">LinksField</span><span class="p">()</span>
-    <span class="n">percent_off</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">amount_off</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">currency</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">CURRENCY_CHOICES</span><span class="p">)</span>
-    <span class="n">duration</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
     <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
         <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;delete&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/v1.1/billing/coupons/{name}/&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;delete&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;put&#39;</span><span class="p">,</span> <span class="s1">&#39;patch&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/hosting/{id}/&#39;</span><span class="p">,</span>
             <span class="p">},</span>
             <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/v1.1/billing/coupons/&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/hosting/&#39;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span>
 
+<div class="viewcode-block" id="Hosting.upload_file"><a class="viewcode-back" href="../../../refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.upload_file">[docs]</a>    <span class="k">def</span> <span class="nf">upload_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
+        <span class="n">files_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">files</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="n">path</span><span class="p">}</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">build_params</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{})</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;headers&#39;</span><span class="p">]</span>
+        <span class="n">headers</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;content-type&#39;</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">host</span> <span class="o">+</span> <span class="n">files_path</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+                                           <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">201</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">return</span> <span class="n">response</span>
+</div>
+<div class="viewcode-block" id="Hosting.list_files"><a class="viewcode-back" href="../../../refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.list_files">[docs]</a>    <span class="k">def</span> <span class="nf">list_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">files_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">files</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="n">files_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;objects&#39;</span><span class="p">]]</span>
+</div>
+<div class="viewcode-block" id="Hosting.set_default"><a class="viewcode-back" href="../../../refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.set_default">[docs]</a>    <span class="k">def</span> <span class="nf">set_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">default_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">set_default</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
 
-<span class="k">class</span> <span class="nc">Discount</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span></div>
-<div class="viewcode-block" id="Discount"><a class="viewcode-back" href="../../../refs/syncano.models.billing.html#syncano.models.billing.Discount">[docs]</a><span class="sd">    OO wrapper around discounts `link &lt;TODO&gt;`_.</span>
-
-<span class="sd">    :ivar instance: :class:`~syncano.models.fields.ModelField`</span>
-<span class="sd">    :ivar coupon: :class:`~syncano.models.fields.ModelField`</span>
-<span class="sd">    :ivar start: :class:`~syncano.models.fields.DateField`</span>
-<span class="sd">    :ivar end: :class:`~syncano.models.fields.DateField`</span>
-<span class="sd">    :ivar links: :class:`~syncano.models.fields.HyperlinkedField`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">instance</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ModelField</span><span class="p">(</span><span class="s1">&#39;Instance&#39;</span><span class="p">)</span>
-    <span class="n">coupon</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">ModelField</span><span class="p">(</span><span class="s1">&#39;Coupon&#39;</span><span class="p">)</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">end</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">LinksField</span><span class="p">()</span>
-
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/v1.1/billing/discounts/{id}/&#39;</span><span class="p">,</span>
-            <span class="p">},</span>
-            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
-                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/v1.1/billing/discounts/&#39;</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-</pre></div></div>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">default_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div></div>
+</pre></div>
 
           </div>
           <footer>

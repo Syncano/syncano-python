@@ -1,0 +1,453 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>syncano.models.custom_sockets_utils &mdash; Syncano 4.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 4.0.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="syncano" href="../../syncano.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../../index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_sockets.html">Custom Sockets in Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#creating-a-custom-socket">Creating a custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#updating-the-custom-socket">Updating the custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#running-custom-socket">Running custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#read-all-endpoints-in-a-custom-socket">Read all endpoints in a custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#read-all-endpoints">Read all endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-sockets-endpoints">Custom Sockets endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-socket-dependency">Custom Socket dependency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-socket-recheck">Custom Socket recheck</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-socket-install-from-url">Custom Socket - install from url</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-socket-raw-format">Custom Socket - raw format</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../refs/syncano.html">Syncano references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../syncano.html">syncano</a> &raquo;</li>
+      
+    <li>syncano.models.custom_sockets_utils</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for syncano.models.custom_sockets_utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoValueError</span>
+
+<span class="kn">from</span> <span class="nn">.incentives</span> <span class="kn">import</span> <span class="n">Script</span><span class="p">,</span> <span class="n">ScriptEndpoint</span>
+
+
+<div class="viewcode-block" id="CallType"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.CallType">[docs]</a><span class="k">class</span> <span class="nc">CallType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The type of the call object used in the custom socket;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">SCRIPT</span> <span class="o">=</span> <span class="s1">&#39;script&#39;</span>
+
+</div>
+<div class="viewcode-block" id="DependencyType"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyType">[docs]</a><span class="k">class</span> <span class="nc">DependencyType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The type of the dependency object used in the custom socket;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">SCRIPT</span> <span class="o">=</span> <span class="s1">&#39;script&#39;</span>
+
+</div>
+<div class="viewcode-block" id="BaseCall"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseCall">[docs]</a><span class="k">class</span> <span class="nc">BaseCall</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for call object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">call_type</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">methods</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">methods</span> <span class="o">=</span> <span class="n">methods</span>
+
+<div class="viewcode-block" id="BaseCall.to_dict"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseCall.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_type</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;call_type not set.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_type</span><span class="p">,</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">methods</span>
+        <span class="p">}</span>
+
+</div></div>
+<div class="viewcode-block" id="ScriptCall"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptCall">[docs]</a><span class="k">class</span> <span class="nc">ScriptCall</span><span class="p">(</span><span class="n">BaseCall</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Script call object.</span>
+
+<span class="sd">    The JSON format is as follows (to_dict in the base class)::</span>
+
+<span class="sd">        {</span>
+<span class="sd">            &#39;type&#39;: &#39;script&#39;,</span>
+<span class="sd">            &#39;name&#39;: &#39;&lt;script_label&gt;,</span>
+<span class="sd">            &#39;methods&#39;: [&lt;method_list&gt;],</span>
+<span class="sd">        }</span>
+
+<span class="sd">    methods can be as follows:</span>
+<span class="sd">        * [&#39;GET&#39;]</span>
+<span class="sd">        * [&#39;*&#39;] - which will do a call on every request method;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">call_type</span> <span class="o">=</span> <span class="n">CallType</span><span class="o">.</span><span class="n">SCRIPT</span>
+
+</div>
+<div class="viewcode-block" id="Endpoint"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.Endpoint">[docs]</a><span class="k">class</span> <span class="nc">Endpoint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The object which stores metadata about endpoints in custom socket;</span>
+
+<span class="sd">    The JSON format is as follows::</span>
+
+<span class="sd">        {</span>
+<span class="sd">            &#39;&lt;endpoint_name&gt;&#39;: {</span>
+<span class="sd">                &#39;calls&#39;: [</span>
+<span class="sd">                    &lt;list of JSON format of Calls objects&gt;</span>
+<span class="sd">                ]</span>
+<span class="sd">            }</span>
+<span class="sd">        }</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calls</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="Endpoint.add_call"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.Endpoint.add_call">[docs]</a>    <span class="k">def</span> <span class="nf">add_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">call</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">call</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Endpoint.to_endpoint_data"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.Endpoint.to_endpoint_data">[docs]</a>    <span class="k">def</span> <span class="nf">to_endpoint_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;calls&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">call</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">calls</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+</div></div>
+<div class="viewcode-block" id="BaseDependency"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency">[docs]</a><span class="k">class</span> <span class="nc">BaseDependency</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base dependency object;</span>
+
+<span class="sd">    On the base of the fields attribute - the JSON format of the dependency is returned.</span>
+<span class="sd">    The fields are taken from the dependency object - which can be Script (supported now).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dependency_type</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="bp">None</span>
+
+<div class="viewcode-block" id="BaseDependency.to_dependency_data"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency.to_dependency_data">[docs]</a>    <span class="k">def</span> <span class="nf">to_dependency_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_type</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;dependency_type not set.&#39;</span><span class="p">)</span>
+        <span class="n">dependency_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_type</span><span class="p">}</span>
+        <span class="n">dependency_data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_dependency_data</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">dependency_data</span>
+</div>
+<div class="viewcode-block" id="BaseDependency.get_name"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="BaseDependency.get_dependency_data"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency.get_dependency_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_dependency_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="BaseDependency.create_from_raw_data"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency.create_from_raw_data">[docs]</a>    <span class="k">def</span> <span class="nf">create_from_raw_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_data</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+</div></div>
+<div class="viewcode-block" id="ScriptDependency"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptDependency">[docs]</a><span class="k">class</span> <span class="nc">ScriptDependency</span><span class="p">(</span><span class="n">BaseDependency</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Script dependency object;</span>
+
+<span class="sd">    The JSON format is as follows::</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;type&#39;: &#39;script&#39;,</span>
+<span class="sd">            &#39;runtime_name&#39;: &#39;&lt;runtime name defined in RuntimeChoices&gt;&#39;,</span>
+<span class="sd">            &#39;source&#39;: &#39;&lt;source&gt;&#39;,</span>
+<span class="sd">            &#39;name&#39;: &#39;&lt;name&gt;&#39;</span>
+<span class="sd">        }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dependency_type</span> <span class="o">=</span> <span class="n">DependencyType</span><span class="o">.</span><span class="n">SCRIPT</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;runtime_name&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;source&#39;</span>
+    <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">script_or_script_endpoint</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">script_or_script_endpoint</span><span class="p">,</span> <span class="p">(</span><span class="n">Script</span><span class="p">,</span> <span class="n">ScriptEndpoint</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Script or ScriptEndpoint expected.&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">script_or_script_endpoint</span><span class="p">,</span> <span class="n">Script</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Name should be provided.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dependency_object</span> <span class="o">=</span> <span class="n">script_or_script_endpoint</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+<div class="viewcode-block" id="ScriptDependency.get_name"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptDependency.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_object</span><span class="o">.</span><span class="n">name</span><span class="p">}</span>
+</div>
+<div class="viewcode-block" id="ScriptDependency.get_dependency_data"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptDependency.get_dependency_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_dependency_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dependency_object</span><span class="p">,</span> <span class="n">ScriptEndpoint</span><span class="p">):</span>
+            <span class="n">script</span> <span class="o">=</span> <span class="n">Script</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dependency_object</span><span class="o">.</span><span class="n">script</span><span class="p">,</span>
+                                       <span class="n">instance_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dependency_object</span><span class="o">.</span><span class="n">instance_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">script</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_object</span>
+
+        <span class="n">dependency_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span>
+        <span class="n">dependency_data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="n">field_name</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">script</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span> <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span>
+        <span class="p">})</span>
+        <span class="k">return</span> <span class="n">dependency_data</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ScriptDependency.create_from_raw_data"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptDependency.create_from_raw_data">[docs]</a>    <span class="k">def</span> <span class="nf">create_from_raw_data</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">raw_data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="o">**</span><span class="p">{</span>
+            <span class="s1">&#39;script_or_script_endpoint&#39;</span><span class="p">:</span> <span class="n">Script</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">raw_data</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">],</span> <span class="n">runtime_name</span><span class="o">=</span><span class="n">raw_data</span><span class="p">[</span><span class="s1">&#39;runtime_name&#39;</span><span class="p">]),</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">raw_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+        <span class="p">})</span>
+
+</div></div>
+<div class="viewcode-block" id="EndpointMetadataMixin"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.EndpointMetadataMixin">[docs]</a><span class="k">class</span> <span class="nc">EndpointMetadataMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A mixin which allows to collect Endpoints objects and transform them to the appropriate JSON format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_endpoints</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">EndpointMetadataMixin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">endpoints</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_endpoints</span><span class="p">()</span>
+
+<div class="viewcode-block" id="EndpointMetadataMixin.update_endpoints"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.EndpointMetadataMixin.update_endpoints">[docs]</a>    <span class="k">def</span> <span class="nf">update_endpoints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">raw_endpoint_name</span><span class="p">,</span> <span class="n">raw_endpoint</span> <span class="ow">in</span> <span class="n">six</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoints</span><span class="p">):</span>
+            <span class="n">endpoint</span> <span class="o">=</span> <span class="n">Endpoint</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">raw_endpoint_name</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">call</span> <span class="ow">in</span> <span class="n">raw_endpoint</span><span class="p">[</span><span class="s1">&#39;calls&#39;</span><span class="p">]:</span>
+                <span class="n">call_class</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_call_class</span><span class="p">(</span><span class="n">call</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+                <span class="n">call_instance</span> <span class="o">=</span> <span class="n">call_class</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">call</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">methods</span><span class="o">=</span><span class="n">call</span><span class="p">[</span><span class="s1">&#39;methods&#39;</span><span class="p">])</span>
+                <span class="n">endpoint</span><span class="o">.</span><span class="n">add_call</span><span class="p">(</span><span class="n">call_instance</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+</div>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_call_class</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">call_type</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">call_type</span> <span class="o">==</span> <span class="n">CallType</span><span class="o">.</span><span class="n">SCRIPT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ScriptCall</span>
+
+<div class="viewcode-block" id="EndpointMetadataMixin.add_endpoint"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.EndpointMetadataMixin.add_endpoint">[docs]</a>    <span class="k">def</span> <span class="nf">add_endpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_endpoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">endpoint</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="EndpointMetadataMixin.remove_endpoint"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.EndpointMetadataMixin.remove_endpoint">[docs]</a>    <span class="k">def</span> <span class="nf">remove_endpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint_name</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">endpoint</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_endpoints</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">endpoint</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">endpoint_name</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_endpoints</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+                <span class="k">break</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="EndpointMetadataMixin.endpoints_data"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.EndpointMetadataMixin.endpoints_data">[docs]</a>    <span class="k">def</span> <span class="nf">endpoints_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">endpoint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_endpoints</span><span class="p">:</span>
+            <span class="n">endpoints</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">endpoint</span><span class="o">.</span><span class="n">to_endpoint_data</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">endpoints</span>
+
+</div></div>
+<div class="viewcode-block" id="DependencyMetadataMixin"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyMetadataMixin">[docs]</a><span class="k">class</span> <span class="nc">DependencyMetadataMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A mixin which allows to collect Dependencies objects and transform them to the appropriate JSON format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dependencies</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DependencyMetadataMixin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependencies</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_dependencies</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DependencyMetadataMixin.update_dependencies"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyMetadataMixin.update_dependencies">[docs]</a>    <span class="k">def</span> <span class="nf">update_dependencies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">raw_depedency</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependencies</span><span class="p">:</span>
+            <span class="n">depedency_class</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_depedency_klass</span><span class="p">(</span><span class="n">raw_depedency</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span><span class="n">depedency_class</span><span class="o">.</span><span class="n">create_from_raw_data</span><span class="p">(</span><span class="n">raw_depedency</span><span class="p">))</span>
+</div>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_depedency_klass</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">depedency_type</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">depedency_type</span> <span class="o">==</span> <span class="n">DependencyType</span><span class="o">.</span><span class="n">SCRIPT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ScriptDependency</span>
+
+<div class="viewcode-block" id="DependencyMetadataMixin.add_dependency"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyMetadataMixin.add_dependency">[docs]</a>    <span class="k">def</span> <span class="nf">add_dependency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depedency</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dependencies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">depedency</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DependencyMetadataMixin.remove_dependency"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyMetadataMixin.remove_dependency">[docs]</a>    <span class="k">def</span> <span class="nf">remove_dependency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dependency_name</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">dependency</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dependencies</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">dependency_name</span> <span class="o">==</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">dependency</span><span class="o">.</span><span class="n">dependency_object</span><span class="p">,</span> <span class="n">dependency</span><span class="o">.</span><span class="n">id_name</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dependencies</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+                <span class="k">break</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="DependencyMetadataMixin.dependencies_data"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyMetadataMixin.dependencies_data">[docs]</a>    <span class="k">def</span> <span class="nf">dependencies_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">dependency</span><span class="o">.</span><span class="n">to_dependency_data</span><span class="p">()</span> <span class="k">for</span> <span class="n">dependency</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dependencies</span><span class="p">]</span></div></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'4.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

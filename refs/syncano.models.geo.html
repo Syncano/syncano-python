@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview: module code &mdash; Syncano 4.0.0 documentation</title>
+  <title>syncano.models.geo &mdash; Syncano 4.0.0 documentation</title>
   
 
   
@@ -95,10 +95,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../custom_sockets.html#custom-socket-raw-format">Custom Socket - raw format</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../refs/syncano.html">Syncano references</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../refs/syncano.html#subpackages">Subpackages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../refs/syncano.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../refs/syncano.html#module-syncano">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="syncano.html">Syncano references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#module-syncano">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -124,8 +124,10 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>Overview: module code</li>
+    <li>syncano.models.geo</li>
       <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/refs/syncano.models.geo.txt" rel="nofollow"> View page source</a>
         
       </li>
   </ul>
@@ -133,31 +135,42 @@
 </div>
           <div role="main">
             
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="syncano.html">syncano</a></li>
-<ul><li><a href="syncano/connection.html">syncano.connection</a></li>
-<li><a href="syncano/exceptions.html">syncano.exceptions</a></li>
-<li><a href="syncano/models/accounts.html">syncano.models.accounts</a></li>
-<li><a href="syncano/models/archetypes.html">syncano.models.archetypes</a></li>
-<li><a href="syncano/models/billing.html">syncano.models.billing</a></li>
-<li><a href="syncano/models/channels.html">syncano.models.channels</a></li>
-<li><a href="syncano/models/classes.html">syncano.models.classes</a></li>
-<li><a href="syncano/models/custom_response.html">syncano.models.custom_response</a></li>
-<li><a href="syncano/models/custom_sockets.html">syncano.models.custom_sockets</a></li>
-<li><a href="syncano/models/custom_sockets_utils.html">syncano.models.custom_sockets_utils</a></li>
-<li><a href="syncano/models/data_views.html">syncano.models.data_views</a></li>
-<li><a href="syncano/models/fields.html">syncano.models.fields</a></li>
-<li><a href="syncano/models/geo.html">syncano.models.geo</a></li>
-<li><a href="syncano/models/hosting.html">syncano.models.hosting</a></li>
-<li><a href="syncano/models/incentives.html">syncano.models.incentives</a></li>
-<li><a href="syncano/models/instances.html">syncano.models.instances</a></li>
-<li><a href="syncano/models/manager.html">syncano.models.manager</a></li>
-<li><a href="syncano/models/options.html">syncano.models.options</a></li>
-<li><a href="syncano/models/push_notification.html">syncano.models.push_notification</a></li>
-<li><a href="syncano/models/registry.html">syncano.models.registry</a></li>
-<li><a href="syncano/models/traces.html">syncano.models.traces</a></li>
-<li><a href="syncano/utils.html">syncano.utils</a></li>
-</ul></ul>
+  <div class="section" id="module-syncano.models.geo">
+<span id="syncano-models-geo"></span><h1>syncano.models.geo<a class="headerlink" href="#module-syncano.models.geo" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="syncano.models.geo.GeoPoint">
+<em class="property">class </em><tt class="descname">GeoPoint</tt><big>(</big><em>latitude</em>, <em>longitude</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/geo.html#GeoPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.geo.GeoPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="method">
+<dt id="syncano.models.geo.GeoPoint.to_native">
+<tt class="descname">to_native</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/geo.html#GeoPoint.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.geo.GeoPoint.to_native" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.geo.Distance">
+<em class="property">class </em><tt class="descname">Distance</tt><big>(</big><em>kilometers=None</em>, <em>miles=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/geo.html#Distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.geo.Distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="attribute">
+<dt id="syncano.models.geo.Distance.KILOMETERS">
+<tt class="descname">KILOMETERS</tt><em class="property"> = '_in_kilometers'</em><a class="headerlink" href="#syncano.models.geo.Distance.KILOMETERS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.geo.Distance.MILES">
+<tt class="descname">MILES</tt><em class="property"> = '_in_miles'</em><a class="headerlink" href="#syncano.models.geo.Distance.MILES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.geo.Distance.to_native">
+<tt class="descname">to_native</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/geo.html#Distance.to_native"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.geo.Distance.to_native" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
 
           </div>
           <footer>

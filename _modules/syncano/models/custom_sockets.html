@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>syncano.models.custom_sockets &mdash; Syncano 4.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 4.0.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="syncano" href="../../syncano.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../../../index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../custom_sockets.html">Custom Sockets in Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#creating-a-custom-socket">Creating a custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#updating-the-custom-socket">Updating the custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#running-custom-socket">Running custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#read-all-endpoints-in-a-custom-socket">Read all endpoints in a custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#read-all-endpoints">Read all endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-sockets-endpoints">Custom Sockets endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-socket-dependency">Custom Socket dependency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-socket-recheck">Custom Socket recheck</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-socket-install-from-url">Custom Socket - install from url</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../custom_sockets.html#custom-socket-raw-format">Custom Socket - raw format</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../refs/syncano.html">Syncano references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../refs/syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../syncano.html">syncano</a> &raquo;</li>
+      
+    <li>syncano.models.custom_sockets</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <h1>Source code for syncano.models.custom_sockets</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoValueError</span>
+<span class="kn">from</span> <span class="nn">syncano.models.custom_sockets_utils</span> <span class="kn">import</span> <span class="n">DependencyMetadataMixin</span><span class="p">,</span> <span class="n">EndpointMetadataMixin</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Instance</span><span class="p">,</span> <span class="n">Model</span>
+
+
+<div class="viewcode-block" id="CustomSocket"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket">[docs]</a><span class="k">class</span> <span class="nc">CustomSocket</span><span class="p">(</span><span class="n">EndpointMetadataMixin</span><span class="p">,</span> <span class="n">DependencyMetadataMixin</span><span class="p">,</span> <span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around instance custom sockets.</span>
+<span class="sd">    Look at the custom socket documentation for more details.</span>
+
+<span class="sd">    :ivar name: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar endpoints: :class:`~syncano.models.fields.JSONField`</span>
+<span class="sd">    :ivar dependencies: :class:`~syncano.models.fields.JSONField`</span>
+<span class="sd">    :ivar metadata: :class:`~syncano.models.fields.JSONField`</span>
+<span class="sd">    :ivar status: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar status_info: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.LinksField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">endpoints</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">()</span>
+    <span class="n">dependencies</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">()</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">status_info</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">updated_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">read_only</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">LinksField</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Instance</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;put&#39;</span><span class="p">,</span> <span class="s1">&#39;patch&#39;</span><span class="p">,</span> <span class="s1">&#39;delete&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/sockets/{name}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/sockets/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="CustomSocket.get_endpoints"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.get_endpoints">[docs]</a>    <span class="k">def</span> <span class="nf">get_endpoints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SocketEndpoint</span><span class="o">.</span><span class="n">get_all_endpoints</span><span class="p">(</span><span class="n">instance_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">instance_name</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="CustomSocket.run"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint_name</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_endpoint</span><span class="p">(</span><span class="n">endpoint_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">endpoint</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span> <span class="ow">or</span> <span class="p">{})</span>
+</div>
+    <span class="k">def</span> <span class="nf">_find_endpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endpoint_name</span><span class="p">):</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_endpoints</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">endpoint</span> <span class="ow">in</span> <span class="n">endpoints</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;{}/{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">endpoint_name</span><span class="p">)</span> <span class="o">==</span> <span class="n">endpoint</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">endpoint</span>
+        <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Endpoint {} not found.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">endpoint_name</span><span class="p">))</span>
+
+<div class="viewcode-block" id="CustomSocket.install_from_url"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.install_from_url">[docs]</a>    <span class="k">def</span> <span class="nf">install_from_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">instance_name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">instance_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;instance_name&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">instance_name</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">instance_name</span><span class="p">)</span>
+
+        <span class="n">install_path</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">sockets_install</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">install_path</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;install_url&#39;</span><span class="p">:</span> <span class="n">url</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">response</span>
+</div>
+<div class="viewcode-block" id="CustomSocket.install"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.install">[docs]</a>    <span class="k">def</span> <span class="nf">install</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_new</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Custom socket already installed.&#39;</span><span class="p">)</span>
+
+        <span class="n">created_socket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">endpoints</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoints_data</span><span class="p">,</span>
+            <span class="n">dependencies</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dependencies_data</span>
+        <span class="p">)</span>
+
+        <span class="n">created_socket</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="s1">&#39;links&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">created_socket</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="s1">&#39;links&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">links_dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">created_socket</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="CustomSocket.update"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_new</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Install socket first.&#39;</span><span class="p">)</span>
+
+        <span class="n">update_socket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">endpoints</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">endpoints_data</span><span class="p">,</span>
+            <span class="n">dependencies</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dependencies_data</span>
+        <span class="p">)</span>
+
+        <span class="n">update_socket</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="s1">&#39;links&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">update_socket</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="s1">&#39;links&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">links_dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">update_socket</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+<div class="viewcode-block" id="CustomSocket.recheck"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.recheck">[docs]</a>    <span class="k">def</span> <span class="nf">recheck</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">recheck_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">recheck</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
+        <span class="n">rechecked_socket</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">recheck_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">rechecked_socket</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+</div></div>
+<div class="viewcode-block" id="SocketEndpoint"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.SocketEndpoint">[docs]</a><span class="k">class</span> <span class="nc">SocketEndpoint</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    OO wrapper around endpoints defined in CustomSocket instance.</span>
+<span class="sd">    Look at the custom socket documentation for more details.</span>
+
+<span class="sd">    :ivar name: :class:`~syncano.models.fields.StringField`</span>
+<span class="sd">    :ivar calls: :class:`~syncano.models.fields.JSONField`</span>
+<span class="sd">    :ivar links: :class:`~syncano.models.fields.LinksField`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">allowed_methods</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">JSONField</span><span class="p">()</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">LinksField</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">CustomSocket</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/endpoints/{name}/&#39;</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/endpoints/&#39;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="SocketEndpoint.run"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.SocketEndpoint.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">endpoint_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">self</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_method</span><span class="p">(</span><span class="n">method</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Method: {} not specified in calls for this custom socket.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;delete&#39;</span><span class="p">]:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">endpoint_path</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;put&#39;</span><span class="p">,</span> <span class="s1">&#39;patch&#39;</span><span class="p">]:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">endpoint_path</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span> <span class="ow">or</span> <span class="p">{})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SyncanoValueError</span><span class="p">(</span><span class="s1">&#39;Method: {} not supported.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">response</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="SocketEndpoint.get_all_endpoints"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.SocketEndpoint.get_all_endpoints">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_endpoints</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">instance_name</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">connection</span>
+        <span class="n">all_endpoints_path</span> <span class="o">=</span> <span class="n">Instance</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">resolve_endpoint</span><span class="p">(</span>
+            <span class="s1">&#39;endpoints&#39;</span><span class="p">,</span>
+            <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">cls</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;instance_name&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">instance_name</span><span class="p">}</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="n">all_endpoints_path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">cls</span><span class="p">(</span><span class="o">**</span><span class="n">endpoint</span><span class="p">)</span> <span class="k">for</span> <span class="n">endpoint</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;objects&#39;</span><span class="p">]]</span>
+</div>
+    <span class="k">def</span> <span class="nf">_validate_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;*&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">allowed_methods</span> <span class="ow">or</span> <span class="n">method</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">allowed_methods</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'4.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

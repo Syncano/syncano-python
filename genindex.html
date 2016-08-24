@@ -83,6 +83,19 @@
 <li class="toctree-l2"><a class="reference internal" href="interacting.html#environmental-variables">Environmental variables</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="custom_sockets.html">Custom Sockets in Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="custom_sockets.html#creating-a-custom-socket">Creating a custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_sockets.html#updating-the-custom-socket">Updating the custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_sockets.html#running-custom-socket">Running custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_sockets.html#read-all-endpoints-in-a-custom-socket">Read all endpoints in a custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_sockets.html#read-all-endpoints">Read all endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_sockets.html#custom-sockets-endpoints">Custom Sockets endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_sockets.html#custom-socket-dependency">Custom Socket dependency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_sockets.html#custom-socket-recheck">Custom Socket recheck</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_sockets.html#custom-socket-install-from-url">Custom Socket - install from url</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_sockets.html#custom-socket-raw-format">Custom Socket - raw format</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="refs/syncano.html">Syncano references</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="refs/syncano.html#subpackages">Subpackages</a></li>
 <li class="toctree-l2"><a class="reference internal" href="refs/syncano.html#submodules">Submodules</a></li>
@@ -186,7 +199,23 @@
 
       </dl></dd>
       
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.Endpoint.add_call">add_call() (Endpoint method)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyMetadataMixin.add_dependency">add_dependency() (DependencyMetadataMixin method)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.EndpointMetadataMixin.add_endpoint">add_endpoint() (EndpointMetadataMixin method)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.options.html#syncano.models.options.Options.add_field">add_field() (Options method)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.add_object">add_object() (DataEndpoint method)</a>
   </dt>
 
       
@@ -239,6 +268,12 @@
   <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.ALLOWED_LOOKUPS">ALLOWED_LOOKUPS (ObjectManager attribute)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.SocketEndpoint.allowed_methods">allowed_methods (SocketEndpoint attribute)</a>
+  </dt>
+
       
   <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.ALT_LOGIN_PARAMS">ALT_LOGIN_PARAMS (Connection attribute)</a>
   </dt>
@@ -247,8 +282,6 @@
   <dt><a href="refs/syncano.models.billing.html#syncano.models.billing.Coupon.amount_off">amount_off (Coupon attribute)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.instances.html#syncano.models.instances.ApiKey.api_key">api_key (ApiKey attribute)</a>
   </dt>
@@ -324,6 +357,14 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseCall">BaseCall (class in syncano.models.custom_sockets_utils)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency">BaseDependency (class in syncano.models.custom_sockets_utils)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.Manager.batch">batch() (Manager method)</a>
   </dt>
 
@@ -343,12 +384,12 @@
   <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.BooleanField">BooleanField (class in syncano.models.fields)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.archetypes.html#syncano.models.archetypes.ModelMetaclass.build_doc">build_doc() (ModelMetaclass method)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.build_params">build_params() (Connection method)</a>
   </dt>
@@ -381,6 +422,20 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseCall.call_type">call_type (BaseCall attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptCall.call_type">(ScriptCall attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.CallType">CallType (class in syncano.models.custom_sockets_utils)</a>
+  </dt>
+
       
   <dt><a href="refs/syncano.utils.html#syncano.utils.camelcase_to_underscore">camelcase_to_underscore() (in module syncano.utils)</a>
   </dt>
@@ -570,6 +625,16 @@
   </dt>
 
       
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency.create_from_raw_data">create_from_raw_data() (BaseDependency method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptDependency.create_from_raw_data">(syncano.models.custom_sockets_utils.ScriptDependency class method)</a>
+  </dt>
+
+      </dl></dd>
+      
   <dt><a href="refs/syncano.models.classes.html#syncano.models.classes.Object.create_subclass">create_subclass() (syncano.models.classes.Object class method)</a>
   </dt>
 
@@ -587,6 +652,10 @@
   </dt>
 
         
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.created_at">(CustomSocket attribute)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.push_notification.html#syncano.models.push_notification.DeviceBase.created_at">(DeviceBase attribute)</a>
   </dt>
 
@@ -600,6 +669,10 @@
 
         
   <dt><a href="refs/syncano.models.accounts.html#syncano.models.accounts.Group.created_at">(Group attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.created_at">(Hosting attribute)</a>
   </dt>
 
         
@@ -668,11 +741,19 @@
   </dt>
 
       
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.SocketEndpoint.custom_socket_name">custom_socket_name (SocketEndpoint attribute)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.custom_response.html#syncano.models.custom_response.CustomResponseHandler">CustomResponseHandler (class in syncano.models.custom_response)</a>
   </dt>
 
       
   <dt><a href="refs/syncano.models.custom_response.html#syncano.models.custom_response.CustomResponseMixin">CustomResponseMixin (class in syncano.models.custom_response)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket">CustomSocket (class in syncano.models.custom_sockets)</a>
   </dt>
 
   </dl></td>
@@ -724,12 +805,42 @@
   </dt>
 
       
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.dependencies">dependencies (CustomSocket attribute)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyMetadataMixin.dependencies_data">dependencies_data (DependencyMetadataMixin attribute)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency.dependency_type">dependency_type (BaseDependency attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptDependency.dependency_type">(ScriptDependency attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyMetadataMixin">DependencyMetadataMixin (class in syncano.models.custom_sockets_utils)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyType">DependencyType (class in syncano.models.custom_sockets_utils)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.instances.html#syncano.models.instances.ApiKey.description">description (ApiKey attribute)</a>
   </dt>
 
       <dd><dl>
         
   <dt><a href="refs/syncano.models.classes.html#syncano.models.classes.Class.description">(Class attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.description">(CustomSocket attribute)</a>
   </dt>
 
         
@@ -741,6 +852,10 @@
   </dt>
 
         
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.description">(Hosting attribute)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.instances.html#syncano.models.instances.Instance.description">(Instance attribute)</a>
   </dt>
 
@@ -749,12 +864,12 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.Manager.detail">detail() (Manager method)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.push_notification.html#syncano.models.push_notification.GCMConfig.development_api_key">development_api_key (GCMConfig attribute)</a>
   </dt>
@@ -802,6 +917,10 @@
   </dt>
 
       
+  <dt><a href="refs/syncano.models.geo.html#syncano.models.geo.Distance">Distance (class in syncano.models.geo)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.accounts.html#syncano.models.accounts.Admin.DoesNotExist">DoesNotExist (Admin attribute)</a>
   </dt>
 
@@ -835,6 +954,10 @@
   </dt>
 
         
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.DoesNotExist">(CustomSocket attribute)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.DoesNotExist">(DataEndpoint attribute)</a>
   </dt>
 
@@ -856,6 +979,10 @@
 
         
   <dt><a href="refs/syncano.models.accounts.html#syncano.models.accounts.Group.DoesNotExist">(Group attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.DoesNotExist">(Hosting attribute)</a>
   </dt>
 
         
@@ -911,6 +1038,10 @@
   </dt>
 
         
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.SocketEndpoint.DoesNotExist">(SocketEndpoint attribute)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.incentives.html#syncano.models.incentives.Trigger.DoesNotExist">(Trigger attribute)</a>
   </dt>
 
@@ -923,6 +1054,10 @@
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.domains">domains (Hosting attribute)</a>
+  </dt>
+
       
   <dt><a href="refs/syncano.models.billing.html#syncano.models.billing.Coupon.duration">duration (Coupon attribute)</a>
   </dt>
@@ -974,15 +1109,31 @@
   </dt>
 
       
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.Endpoint">Endpoint (class in syncano.models.custom_sockets_utils)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.EndpointField">EndpointField (class in syncano.models.fields)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.EndpointMetadataMixin">EndpointMetadataMixin (class in syncano.models.custom_sockets_utils)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.endpoints">endpoints (CustomSocket attribute)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.EndpointMetadataMixin.endpoints_data">endpoints_data (EndpointMetadataMixin attribute)</a>
   </dt>
 
       
   <dt><a href="refs/syncano.models.custom_response.html#syncano.models.custom_response.CustomResponseMixin.error">error (CustomResponseMixin attribute)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.exclude">exclude() (ObjectManager method)</a>
   </dt>
@@ -1050,6 +1201,16 @@
   </dt>
 
       
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency.fields">fields (BaseDependency attribute)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptDependency.fields">(ScriptDependency attribute)</a>
+  </dt>
+
+      </dl></dd>
+      
   <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.ObjectManager.fields">fields() (ObjectManager method)</a>
   </dt>
 
@@ -1057,6 +1218,8 @@
   <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.FileField">FileField (class in syncano.models.fields)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.Manager.filter">filter() (Manager method)</a>
   </dt>
@@ -1067,8 +1230,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.Manager.first">first() (Manager method)</a>
   </dt>
@@ -1122,6 +1283,10 @@
   </dt>
 
       
+  <dt><a href="refs/syncano.models.geo.html#syncano.models.geo.GeoPoint">GeoPoint (class in syncano.models.geo)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.GeoPointField">GeoPointField (class in syncano.models.fields)</a>
   </dt>
 
@@ -1137,6 +1302,10 @@
       </dl></dd>
       
   <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.get_account_info">get_account_info() (Connection method)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.SocketEndpoint.get_all_endpoints">get_all_endpoints() (syncano.models.custom_sockets.SocketEndpoint class method)</a>
   </dt>
 
       
@@ -1159,6 +1328,16 @@
   <dt><a href="refs/syncano.models.instances.html#syncano.models.instances.Instance.get_config">get_config() (Instance method)</a>
   </dt>
 
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency.get_dependency_data">get_dependency_data() (BaseDependency method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptDependency.get_dependency_data">(ScriptDependency method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="refs/syncano.models.options.html#syncano.models.options.Options.get_endpoint">get_endpoint() (Options method)</a>
   </dt>
@@ -1186,6 +1365,10 @@
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.get_endpoints">get_endpoints() (CustomSocket method)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.options.html#syncano.models.options.Options.get_field">get_field() (Options method)</a>
   </dt>
 
@@ -1201,6 +1384,16 @@
   <dt><a href="refs/syncano.models.registry.html#syncano.models.registry.Registry.get_model_patterns">get_model_patterns() (Registry method)</a>
   </dt>
 
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency.get_name">get_name() (BaseDependency method)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptDependency.get_name">(ScriptDependency method)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.Manager.get_or_create">get_or_create() (Manager method)</a>
   </dt>
@@ -1316,6 +1509,10 @@
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting">Hosting (class in syncano.models.hosting)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.instances.html#syncano.models.instances.Instance.hostings">hostings (Instance attribute)</a>
   </dt>
 
@@ -1356,6 +1553,10 @@
 
         
   <dt><a href="refs/syncano.models.accounts.html#syncano.models.accounts.Group.id">(Group attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.id">(Hosting attribute)</a>
   </dt>
 
         
@@ -1428,6 +1629,14 @@
   </dt>
 
       
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.install">install() (CustomSocket method)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.install_from_url">install_from_url() (CustomSocket method)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.instances.html#syncano.models.instances.Instance">Instance (class in syncano.models.instances)</a>
   </dt>
 
@@ -1465,6 +1674,10 @@
   </dt>
 
         
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.instance_name">(CustomSocket attribute)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.instance_name">(DataEndpoint attribute)</a>
   </dt>
 
@@ -1482,6 +1695,10 @@
 
         
   <dt><a href="refs/syncano.models.accounts.html#syncano.models.accounts.Group.instance_name">(Group attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.instance_name">(Hosting attribute)</a>
   </dt>
 
         
@@ -1533,6 +1750,10 @@
   </dt>
 
         
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.SocketEndpoint.instance_name">(SocketEndpoint attribute)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.incentives.html#syncano.models.incentives.Trigger.instance_name">(Trigger attribute)</a>
   </dt>
 
@@ -1557,12 +1778,12 @@
   <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.IntegerField">IntegerField (class in syncano.models.fields)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.incentives.html#syncano.models.incentives.Schedule.interval_sec">interval_sec (Schedule attribute)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.instances.html#syncano.models.instances.Instance.invitations">invitations (Instance attribute)</a>
   </dt>
@@ -1654,6 +1875,12 @@
   </dt>
 
   </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="refs/syncano.models.geo.html#syncano.models.geo.Distance.KILOMETERS">KILOMETERS (Distance attribute)</a>
+  </dt>
+
+  </dl></td>
 </tr></table>
 
 <h2 id="L">L</h2>
@@ -1674,6 +1901,10 @@
 
         
   <dt><a href="refs/syncano.models.accounts.html#syncano.models.accounts.Group.label">(Group attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.label">(Hosting attribute)</a>
   </dt>
 
         
@@ -1735,6 +1966,10 @@
   </dt>
 
         
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.links">(CustomSocket attribute)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.links">(DataEndpoint attribute)</a>
   </dt>
 
@@ -1762,6 +1997,10 @@
       <dd><dl>
         
   <dt><a href="refs/syncano.models.accounts.html#syncano.models.accounts.Group.links">(Group attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.links">(Hosting attribute)</a>
   </dt>
 
         
@@ -1809,16 +2048,20 @@
   </dt>
 
         
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.SocketEndpoint.links">(SocketEndpoint attribute)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.incentives.html#syncano.models.incentives.Trigger.links">(Trigger attribute)</a>
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.traces.html#syncano.models.traces.TriggerTrace.LINKS">LINKS (TriggerTrace attribute)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.traces.html#syncano.models.traces.TriggerTrace.links">links (TriggerTrace attribute)</a>
   </dt>
@@ -1839,6 +2082,10 @@
 
       
   <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.Manager.list">list() (Manager method)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.list_files">list_files() (Hosting method)</a>
   </dt>
 
       
@@ -1903,6 +2150,10 @@
 
       <dd><dl>
         
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.metadata">(CustomSocket attribute)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.instances.html#syncano.models.instances.Instance.metadata">(Instance attribute)</a>
   </dt>
 
@@ -1911,6 +2162,10 @@
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="refs/syncano.models.geo.html#syncano.models.geo.Distance.MILES">MILES (Distance attribute)</a>
+  </dt>
+
       
   <dt><a href="refs/syncano.models.archetypes.html#syncano.models.archetypes.Model">Model (class in syncano.models.archetypes)</a>
   </dt>
@@ -1930,16 +2185,24 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="refs/syncano.models.channels.html#syncano.models.channels.Channel.name">name (Channel attribute)</a>
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency.name">name (BaseDependency attribute)</a>
   </dt>
 
       <dd><dl>
+        
+  <dt><a href="refs/syncano.models.channels.html#syncano.models.channels.Channel.name">(Channel attribute)</a>
+  </dt>
+
         
   <dt><a href="refs/syncano.models.classes.html#syncano.models.classes.Class.name">(Class attribute)</a>
   </dt>
 
         
   <dt><a href="refs/syncano.models.billing.html#syncano.models.billing.Coupon.name">(Coupon attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.name">(CustomSocket attribute)</a>
   </dt>
 
         
@@ -1956,6 +2219,10 @@
 
         
   <dt><a href="refs/syncano.models.incentives.html#syncano.models.incentives.ScriptEndpoint.name">(ScriptEndpoint attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.SocketEndpoint.name">(SocketEndpoint attribute)</a>
   </dt>
 
       </dl></dd>
@@ -2189,6 +2456,10 @@
   </dt>
 
         
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.pk">(CustomSocket attribute)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.pk">(DataEndpoint attribute)</a>
   </dt>
 
@@ -2210,6 +2481,10 @@
 
         
   <dt><a href="refs/syncano.models.accounts.html#syncano.models.accounts.Group.pk">(Group attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.pk">(Hosting attribute)</a>
   </dt>
 
         
@@ -2265,6 +2540,10 @@
   </dt>
 
         
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.SocketEndpoint.pk">(SocketEndpoint attribute)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.incentives.html#syncano.models.incentives.Trigger.pk">(Trigger attribute)</a>
   </dt>
 
@@ -2315,6 +2594,10 @@
   </dt>
 
         
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.please">(CustomSocket attribute)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.data_views.html#syncano.models.data_views.DataEndpoint.please">(DataEndpoint attribute)</a>
   </dt>
 
@@ -2336,6 +2619,10 @@
 
         
   <dt><a href="refs/syncano.models.accounts.html#syncano.models.accounts.Group.please">(Group attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.please">(Hosting attribute)</a>
   </dt>
 
         
@@ -2388,6 +2675,10 @@
 
         
   <dt><a href="refs/syncano.models.traces.html#syncano.models.traces.ScriptTrace.please">(ScriptTrace attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.SocketEndpoint.please">(SocketEndpoint attribute)</a>
   </dt>
 
         
@@ -2550,6 +2841,10 @@
 
       </dl></dd>
       
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.recheck">recheck() (CustomSocket method)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.billing.html#syncano.models.billing.Coupon.redeem_by">redeem_by (Coupon attribute)</a>
   </dt>
 
@@ -2606,6 +2901,14 @@
   </dt>
 
       
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyMetadataMixin.remove_dependency">remove_dependency() (DependencyMetadataMixin method)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.EndpointMetadataMixin.remove_endpoint">remove_endpoint() (EndpointMetadataMixin method)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.SchemaManager.remove_filter_index">remove_filter_index() (SchemaManager method)</a>
   </dt>
 
@@ -2631,12 +2934,12 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.incentives.html#syncano.models.incentives.ResponseTemplate.render">render() (ResponseTemplate method)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.request">request() (Connection method)</a>
   </dt>
@@ -2774,10 +3077,14 @@
   </dt>
 
       
-  <dt><a href="refs/syncano.models.channels.html#syncano.models.channels.PollThread.run">run() (PollThread method)</a>
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.run">run() (CustomSocket method)</a>
   </dt>
 
       <dd><dl>
+        
+  <dt><a href="refs/syncano.models.channels.html#syncano.models.channels.PollThread.run">(PollThread method)</a>
+  </dt>
+
         
   <dt><a href="refs/syncano.models.incentives.html#syncano.models.incentives.Script.run">(Script method)</a>
   </dt>
@@ -2792,6 +3099,10 @@
 
         
   <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.ScriptManager.run">(ScriptManager method)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.SocketEndpoint.run">(SocketEndpoint method)</a>
   </dt>
 
       </dl></dd>
@@ -2862,7 +3173,15 @@
   </dt>
 
       
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.CallType.SCRIPT">SCRIPT (CallType attribute)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.incentives.html#syncano.models.incentives.Script">Script (class in syncano.models.incentives)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyType.SCRIPT">SCRIPT (DependencyType attribute)</a>
   </dt>
 
       
@@ -2889,6 +3208,14 @@
 
       
   <dt><a href="refs/syncano.models.traces.html#syncano.models.traces.ScriptTrace.script_id">script_id (ScriptTrace attribute)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptCall">ScriptCall (class in syncano.models.custom_sockets_utils)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptDependency">ScriptDependency (class in syncano.models.custom_sockets_utils)</a>
   </dt>
 
       
@@ -2935,6 +3262,10 @@
 
       
   <dt><a href="refs/syncano.models.instances.html#syncano.models.instances.Instance.set_config">set_config() (Instance method)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.set_default">set_default() (Hosting method)</a>
   </dt>
 
       
@@ -2985,10 +3316,14 @@
   <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.SOCIAL_AUTH_SUFFIX">SOCIAL_AUTH_SUFFIX (Connection attribute)</a>
   </dt>
 
+      
+  <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.SOCIAL_LOGIN_PARAMS">SOCIAL_LOGIN_PARAMS (Connection attribute)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.SOCIAL_LOGIN_PARAMS">SOCIAL_LOGIN_PARAMS (Connection attribute)</a>
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.SocketEndpoint">SocketEndpoint (class in syncano.models.custom_sockets)</a>
   </dt>
 
       
@@ -3010,6 +3345,10 @@
       <dd><dl>
         
   <dt><a href="refs/syncano.models.classes.html#syncano.models.classes.Class.status">(Class attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.status">(CustomSocket attribute)</a>
   </dt>
 
         
@@ -3057,6 +3396,10 @@
       </dl></dd>
       
   <dt><a href="refs/syncano.models.custom_response.html#syncano.models.custom_response.CustomResponseMixin.status_code">status_code (CustomResponseMixin attribute)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.status_info">status_info (CustomSocket attribute)</a>
   </dt>
 
       
@@ -3112,11 +3455,27 @@
   </dt>
 
       
+  <dt><a href="refs/syncano.models.custom_sockets.html#module-syncano.models.custom_sockets">syncano.models.custom_sockets (module)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#module-syncano.models.custom_sockets_utils">syncano.models.custom_sockets_utils (module)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.data_views.html#module-syncano.models.data_views">syncano.models.data_views (module)</a>
   </dt>
 
       
   <dt><a href="refs/syncano.models.fields.html#module-syncano.models.fields">syncano.models.fields (module)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.geo.html#module-syncano.models.geo">syncano.models.geo (module)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.hosting.html#module-syncano.models.hosting">syncano.models.hosting (module)</a>
   </dt>
 
       
@@ -3194,6 +3553,18 @@
   </dt>
 
       
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency.to_dependency_data">to_dependency_data() (BaseDependency method)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseCall.to_dict">to_dict() (BaseCall method)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.Endpoint.to_endpoint_data">to_endpoint_data() (Endpoint method)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.DateField.to_native">to_native() (DateField method)</a>
   </dt>
 
@@ -3203,11 +3574,19 @@
   </dt>
 
         
+  <dt><a href="refs/syncano.models.geo.html#syncano.models.geo.Distance.to_native">(Distance method)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.Field.to_native">(Field method)</a>
   </dt>
 
         
   <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.FileField.to_native">(FileField method)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.geo.html#syncano.models.geo.GeoPoint.to_native">(GeoPoint method)</a>
   </dt>
 
         
@@ -3309,6 +3688,8 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.fields.html#syncano.models.fields.Field.to_query">to_query() (Field method)</a>
   </dt>
@@ -3341,8 +3722,6 @@
   </dt>
 
       </dl></dd>
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.incentives.html#syncano.models.incentives.Trigger">Trigger (class in syncano.models.incentives)</a>
   </dt>
@@ -3378,15 +3757,27 @@
   </dt>
 
       
-  <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.Manager.update">update() (Manager method)</a>
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.update">update() (CustomSocket method)</a>
   </dt>
 
       <dd><dl>
+        
+  <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.Manager.update">(Manager method)</a>
+  </dt>
+
         
   <dt><a href="refs/syncano.models.registry.html#syncano.models.registry.Registry.update">(Registry method)</a>
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyMetadataMixin.update_dependencies">update_dependencies() (DependencyMetadataMixin method)</a>
+  </dt>
+
+      
+  <dt><a href="refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.EndpointMetadataMixin.update_endpoints">update_endpoints() (EndpointMetadataMixin method)</a>
+  </dt>
+
       
   <dt><a href="refs/syncano.models.manager.html#syncano.models.manager.Manager.update_or_create">update_or_create() (Manager method)</a>
   </dt>
@@ -3405,6 +3796,10 @@
   </dt>
 
         
+  <dt><a href="refs/syncano.models.custom_sockets.html#syncano.models.custom_sockets.CustomSocket.updated_at">(CustomSocket attribute)</a>
+  </dt>
+
+        
   <dt><a href="refs/syncano.models.push_notification.html#syncano.models.push_notification.DeviceBase.updated_at">(DeviceBase attribute)</a>
   </dt>
 
@@ -3418,6 +3813,10 @@
 
         
   <dt><a href="refs/syncano.models.accounts.html#syncano.models.accounts.Group.updated_at">(Group attribute)</a>
+  </dt>
+
+        
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.updated_at">(Hosting attribute)</a>
   </dt>
 
         
@@ -3458,6 +3857,10 @@
 
       </dl></dd>
       
+  <dt><a href="refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.upload_file">upload_file() (Hosting method)</a>
+  </dt>
+
+      
   <dt><a href="refs/syncano.models.push_notification.html#syncano.models.push_notification.APNSDevice.user">user (APNSDevice attribute)</a>
   </dt>
 
@@ -3475,6 +3878,8 @@
   </dt>
 
       </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.USER_ALT_LOGIN_PARAMS">USER_ALT_LOGIN_PARAMS (Connection attribute)</a>
   </dt>
@@ -3483,8 +3888,6 @@
   <dt><a href="refs/syncano.connection.html#syncano.connection.Connection.USER_AUTH_SUFFIX">USER_AUTH_SUFFIX (Connection attribute)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="refs/syncano.models.accounts.html#syncano.models.accounts.Group.user_details">user_details() (Group method)</a>
   </dt>

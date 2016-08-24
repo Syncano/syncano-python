@@ -1,0 +1,396 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>syncano.models.custom_sockets &mdash; Syncano 4.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 4.0.0 documentation" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../custom_sockets.html">Custom Sockets in Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../custom_sockets.html#creating-a-custom-socket">Creating a custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../custom_sockets.html#updating-the-custom-socket">Updating the custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../custom_sockets.html#running-custom-socket">Running custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../custom_sockets.html#read-all-endpoints-in-a-custom-socket">Read all endpoints in a custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../custom_sockets.html#read-all-endpoints">Read all endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../custom_sockets.html#custom-sockets-endpoints">Custom Sockets endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../custom_sockets.html#custom-socket-dependency">Custom Socket dependency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../custom_sockets.html#custom-socket-recheck">Custom Socket recheck</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../custom_sockets.html#custom-socket-install-from-url">Custom Socket - install from url</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../custom_sockets.html#custom-socket-raw-format">Custom Socket - raw format</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="syncano.html">Syncano references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>syncano.models.custom_sockets</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/refs/syncano.models.custom_sockets.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="module-syncano.models.custom_sockets">
+<span id="syncano-models-custom-sockets"></span><h1>syncano.models.custom_sockets<a class="headerlink" href="#module-syncano.models.custom_sockets" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="syncano.models.custom_sockets.CustomSocket">
+<em class="property">class </em><tt class="descname">CustomSocket</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets.html#CustomSocket"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.EndpointMetadataMixin" title="syncano.models.custom_sockets_utils.EndpointMetadataMixin"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.custom_sockets_utils.EndpointMetadataMixin</span></tt></a>, <a class="reference internal" href="syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyMetadataMixin" title="syncano.models.custom_sockets_utils.DependencyMetadataMixin"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.custom_sockets_utils.DependencyMetadataMixin</span></tt></a>, <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>OO wrapper around instance custom sockets.
+Look at the custom socket documentation for more details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>endpoints</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.JSONField" title="syncano.models.fields.JSONField"><tt class="xref py py-class docutils literal"><span class="pre">JSONField</span></tt></a></li>
+<li><strong>dependencies</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.JSONField" title="syncano.models.fields.JSONField"><tt class="xref py py-class docutils literal"><span class="pre">JSONField</span></tt></a></li>
+<li><strong>metadata</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.JSONField" title="syncano.models.fields.JSONField"><tt class="xref py py-class docutils literal"><span class="pre">JSONField</span></tt></a></li>
+<li><strong>status</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>status_info</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>links</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.LinksField" title="syncano.models.fields.LinksField"><tt class="xref py py-class docutils literal"><span class="pre">LinksField</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.CustomSocket.name">
+<tt class="descname">name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.CustomSocket.description">
+<tt class="descname">description</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.CustomSocket.endpoints">
+<tt class="descname">endpoints</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.endpoints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.CustomSocket.dependencies">
+<tt class="descname">dependencies</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.dependencies" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.CustomSocket.metadata">
+<tt class="descname">metadata</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.metadata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.CustomSocket.status">
+<tt class="descname">status</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.CustomSocket.status_info">
+<tt class="descname">status_info</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.status_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.CustomSocket.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.CustomSocket.updated_at">
+<tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.CustomSocket.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.custom_sockets.CustomSocket.get_endpoints">
+<tt class="descname">get_endpoints</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets.html#CustomSocket.get_endpoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.get_endpoints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.custom_sockets.CustomSocket.run">
+<tt class="descname">run</tt><big>(</big><em>endpoint_name</em>, <em>method='GET'</em>, <em>data=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets.html#CustomSocket.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.custom_sockets.CustomSocket.install_from_url">
+<tt class="descname">install_from_url</tt><big>(</big><em>url</em>, <em>instance_name=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets.html#CustomSocket.install_from_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.install_from_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.custom_sockets.CustomSocket.install">
+<tt class="descname">install</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets.html#CustomSocket.install"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.install" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.custom_sockets.CustomSocket.update">
+<tt class="descname">update</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets.html#CustomSocket.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.custom_sockets.CustomSocket.recheck">
+<tt class="descname">recheck</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets.html#CustomSocket.recheck"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.recheck" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.CustomSocket.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">CustomSocketDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.CustomSocket.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.CustomSocket.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.CustomSocket.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.custom_sockets.CustomSocket.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.custom_sockets.SocketEndpoint">
+<em class="property">class </em><tt class="descname">SocketEndpoint</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets.html#SocketEndpoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets.SocketEndpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>OO wrapper around endpoints defined in CustomSocket instance.
+Look at the custom socket documentation for more details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.StringField" title="syncano.models.fields.StringField"><tt class="xref py py-class docutils literal"><span class="pre">StringField</span></tt></a></li>
+<li><strong>calls</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.JSONField" title="syncano.models.fields.JSONField"><tt class="xref py py-class docutils literal"><span class="pre">JSONField</span></tt></a></li>
+<li><strong>links</strong> &#8211; <a class="reference internal" href="syncano.models.fields.html#syncano.models.fields.LinksField" title="syncano.models.fields.LinksField"><tt class="xref py py-class docutils literal"><span class="pre">LinksField</span></tt></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.SocketEndpoint.name">
+<tt class="descname">name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.SocketEndpoint.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.SocketEndpoint.allowed_methods">
+<tt class="descname">allowed_methods</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.SocketEndpoint.allowed_methods" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.SocketEndpoint.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.SocketEndpoint.links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.custom_sockets.SocketEndpoint.run">
+<tt class="descname">run</tt><big>(</big><em>method='GET'</em>, <em>data=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets.html#SocketEndpoint.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets.SocketEndpoint.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="syncano.models.custom_sockets.SocketEndpoint.get_all_endpoints">
+<em class="property">classmethod </em><tt class="descname">get_all_endpoints</tt><big>(</big><em>instance_name=None</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets.html#SocketEndpoint.get_all_endpoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets.SocketEndpoint.get_all_endpoints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.SocketEndpoint.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.custom_sockets.SocketEndpoint.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">SocketEndpointDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.SocketEndpoint.custom_socket_name">
+<tt class="descname">custom_socket_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.SocketEndpoint.custom_socket_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.SocketEndpoint.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.SocketEndpoint.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.SocketEndpoint.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.custom_sockets.SocketEndpoint.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets.SocketEndpoint.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.custom_sockets.SocketEndpoint.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'4.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

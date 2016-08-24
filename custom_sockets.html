@@ -1,0 +1,464 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Custom Sockets in Syncano &mdash; Syncano 4.0.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Syncano 4.0.0 documentation" href="index.html"/>
+        <link rel="next" title="Syncano references" href="refs/syncano.html"/>
+        <link rel="prev" title="Interacting with Syncano" href="interacting.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="index.html" class="fa fa-home"> Syncano</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+        
+            <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#installing-syncano">Installing Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#using-virtual-environments">Using Virtual Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#making-connections">Making Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#troubleshooting-connections">Troubleshooting Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#interacting-with-syncano">Interacting with Syncano</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="interacting.html">Interacting with Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#creating-a-connection">Creating a Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#accessing-models">Accessing models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#creating-objects">Creating objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#saving-changes-to-objects">Saving changes to objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#retrieving-objects">Retrieving objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#retrieving-all-objects">Retrieving all objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#manager-is-lazy">Manager is lazy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#retrieving-a-single-object">Retrieving a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#removing-a-single-object">Removing a single object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#limiting-returned-objects">Limiting returned objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#lookups-that-span-relationships">Lookups that span relationships</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#backward-relations">Backward relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#falling-back-to-raw-json">Falling back to raw JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interacting.html#environmental-variables">Environmental variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Custom Sockets in Syncano</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-custom-socket">Creating a custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#updating-the-custom-socket">Updating the custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-custom-socket">Running custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#read-all-endpoints-in-a-custom-socket">Read all endpoints in a custom Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#read-all-endpoints">Read all endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-sockets-endpoints">Custom Sockets endpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-socket-dependency">Custom Socket dependency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-socket-recheck">Custom Socket recheck</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-socket-install-from-url">Custom Socket - install from url</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-socket-raw-format">Custom Socket - raw format</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="refs/syncano.html">Syncano references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="refs/syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="refs/syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="refs/syncano.html#module-syncano">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Syncano</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Custom Sockets in Syncano</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/custom_sockets.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            
+  <div class="section" id="custom-sockets-in-syncano">
+<span id="custom-sockets"></span><h1>Custom Sockets in Syncano<a class="headerlink" href="#custom-sockets-in-syncano" title="Permalink to this headline">¶</a></h1>
+<p><tt class="docutils literal"><span class="pre">Syncano</span></tt> gives its users the ability to create Custom Sockets. What this means is that users can define very specific
+endpoints in their Syncano application, and use them exactly like they would any other Syncano
+module (Classes, Scripts, etc), using standard API calls.
+Currently, Custom Sockets allow only one dependency - Scripts. Under the hood,
+each API call executes a Script, and the result of this execution is returned as a result of the
+API call.</p>
+<div class="section" id="creating-a-custom-socket">
+<h2>Creating a custom Socket<a class="headerlink" href="#creating-a-custom-socket" title="Permalink to this headline">¶</a></h2>
+<p>To create a custom Socket follow these steps:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">syncano</span>
+<span class="kn">from</span> <span class="nn">syncano.models</span> <span class="kn">import</span> <span class="n">CustomSocket</span><span class="p">,</span> <span class="n">Endpoint</span><span class="p">,</span> <span class="n">ScriptCall</span><span class="p">,</span> <span class="n">ScriptDependency</span><span class="p">,</span> <span class="n">RuntimeChoices</span>
+<span class="kn">from</span> <span class="nn">syncano.connection</span> <span class="kn">import</span> <span class="n">Connection</span>
+
+<span class="c1"># 1. Initialize a custom Socket.</span>
+<span class="n">custom_socket</span> <span class="o">=</span> <span class="n">CustomSocket</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_custom_socket&#39;</span><span class="p">)</span>  <span class="c1"># this will create an object in place (do API call)</span>
+
+<span class="c1"># 2. Define endpoints.</span>
+<span class="n">my_endpoint</span> <span class="o">=</span> <span class="n">Endpoint</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_endpoint&#39;</span><span class="p">)</span>  <span class="c1"># no API call here</span>
+<span class="n">my_endpoint</span><span class="o">.</span><span class="n">add_call</span><span class="p">(</span><span class="n">ScriptCall</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;custom_script&#39;</span><span class="p">),</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="n">my_endpoint</span><span class="o">.</span><span class="n">add_call</span><span class="p">(</span><span class="n">ScriptCall</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;another_custom_script&#39;</span><span class="p">),</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+
+<span class="c1"># What happened here:</span>
+<span class="c1"># - We defined a new endpoint that will be visible under the name `my_endpoint`</span>
+<span class="c1"># - You will be able to call this endpoint (execute attached `call`),</span>
+<span class="c1"># by sending a request, using any defined method to the following API route:</span>
+<span class="c1"># &lt;host&gt;://&lt;api_version&gt;/instances/&lt;instance_name&gt;/endpoints/sockets/my_endpoint/</span>
+<span class="c1"># - To get details for that endpoint, you need to send a GET request to following API route:</span>
+<span class="c1"># &lt;host&gt;://&lt;api_version&gt;/instances/&lt;instance_name&gt;/sockets/my_custom_socket/endpoints/my_endpoint/</span>
+<span class="c1">#</span>
+<span class="c1"># Following the example above - we defined two calls on our endpoint with the `add_call` method</span>
+<span class="c1"># The first one means that using a GET method will call the `custom_script` Script,</span>
+<span class="c1"># and second one means that using a POST method will call the `another_custom_script` Script.</span>
+<span class="c1"># At the moment, only Scripts are available as endpoint calls.</span>
+<span class="c1">#</span>
+<span class="c1"># As a general rule - to get endpoint details (but not call them), use following API route:</span>
+<span class="c1"># &lt;host&gt;://&lt;api_version&gt;/instances/&lt;instance_name&gt;/sockets/my_custom_socket/endpoints/&lt;endpoint&gt;/</span>
+<span class="c1"># and to run your endpoints (e.g. execute Script connected to them), use following API route:</span>
+<span class="c1"># &lt;host&gt;://&lt;api_version&gt;/instances/&lt;instance_name&gt;/endpoints/sockets/&lt;endpoint&gt;/</span>
+
+<span class="c1"># 3. After creation of the endpoint, add it to your custom_socket.</span>
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="n">my_endpoint</span><span class="p">)</span>
+
+<span class="c1"># 4. Define dependency.</span>
+<span class="c1"># 4.1 Using a new Script - define a new source code.</span>
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span>
+    <span class="n">ScriptDependency</span><span class="p">(</span>
+        <span class="n">Script</span><span class="p">(</span>
+            <span class="n">runtime_name</span><span class="o">=</span><span class="n">RuntimeChoices</span><span class="o">.</span><span class="n">PYTHON_V5_0</span><span class="p">,</span>
+            <span class="n">source</span><span class="o">=</span><span class="s1">&#39;print(&quot;custom_script&quot;)&#39;</span>
+        <span class="p">),</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;custom_script&#39;</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="c1"># 4.2 Using an existing Script.</span>
+<span class="n">another_custom_script</span> <span class="o">=</span> <span class="n">Script</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span>
+    <span class="n">ScriptDependency</span><span class="p">(</span>
+        <span class="n">another_custom_script</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;another_custom_script&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># 4.3 Using an existing ScriptEndpoint.</span>
+<span class="n">script_endpoint</span> <span class="o">=</span> <span class="n">ScriptEndpoint</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;script_endpoint_name&#39;</span><span class="p">)</span>
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span>
+    <span class="n">script_endpoint</span>
+<span class="p">)</span>
+
+<span class="c1"># 5. Install custom_socket.</span>
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">install</span><span class="p">()</span>  <span class="c1"># this will make an API call and create a script;</span>
+</pre></div>
+</div>
+<p>It may take some time to set up the Socket, so you can check the status.
+It&#8217;s possible to check the custom Socket status:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Reload will refresh object using Syncano API.</span>
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">reload</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">custom_socket</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
+<span class="c1"># and</span>
+<span class="k">print</span><span class="p">(</span><span class="n">custom_socket</span><span class="o">.</span><span class="n">status_info</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="updating-the-custom-socket">
+<h2>Updating the custom Socket<a class="headerlink" href="#updating-the-custom-socket" title="Permalink to this headline">¶</a></h2>
+<p>To update custom Socket, use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">custom_socket</span> <span class="o">=</span> <span class="n">CustomSocket</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_custom_socket&#39;</span><span class="p">)</span>
+
+<span class="c1"># to remove endpoint/dependency</span>
+
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">remove_endpoint</span><span class="p">(</span><span class="n">endpoint_name</span><span class="o">=</span><span class="s1">&#39;my_endpoint&#39;</span><span class="p">)</span>
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">remove_dependency</span><span class="p">(</span><span class="n">dependency_name</span><span class="o">=</span><span class="s1">&#39;custom_script&#39;</span><span class="p">)</span>
+
+<span class="c1"># or to add a new endpoint/dependency:</span>
+
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="n">new_endpoint</span><span class="p">)</span>  <span class="c1"># see above code for endpoint examples;</span>
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span><span class="n">new_dependency</span><span class="p">)</span>  <span class="c1"># see above code for dependency examples;</span>
+
+<span class="c1"># save changes on Syncano</span>
+
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-custom-socket">
+<h2>Running custom Socket<a class="headerlink" href="#running-custom-socket" title="Permalink to this headline">¶</a></h2>
+<p>To run a custom Socket use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># this will run `my_endpoint` - and call `custom_script` using GET method;</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">custom_socket</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="n">endpoint_name</span><span class="o">=</span><span class="s1">&#39;my_endpoint&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="read-all-endpoints-in-a-custom-socket">
+<h2>Read all endpoints in a custom Socket<a class="headerlink" href="#read-all-endpoints-in-a-custom-socket" title="Permalink to this headline">¶</a></h2>
+<p>To get the all defined endpoints in a custom Socket run:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">endpoints</span> <span class="o">=</span> <span class="n">custom_socket</span><span class="o">.</span><span class="n">get_endpoints</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">endpoint</span> <span class="ow">in</span> <span class="n">endpoints</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">endpoint</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">endpoint</span><span class="o">.</span><span class="n">calls</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To run a particular endpoint:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">endpoint</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;GET&#39;</span><span class="p">)</span>
+<span class="c1"># or:</span>
+<span class="n">endpoint</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;test_name&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>Data will be passed to the API call in the request body.</p>
+</div>
+<div class="section" id="read-all-endpoints">
+<h2>Read all endpoints<a class="headerlink" href="#read-all-endpoints" title="Permalink to this headline">¶</a></h2>
+<p>To get all endpoints that are defined in all custom Sockets:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">socket_endpoint_list</span> <span class="o">=</span> <span class="n">SocketEndpoint</span><span class="o">.</span><span class="n">get_all_endpoints</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Above code will return a list with SocketEndpoint objects. To run an endpoint,
+choose one endpoint first, e.g.:</p>
+<blockquote>
+<div>endpoint = socket_endpoint_list[0]</div></blockquote>
+<p>and now run it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">endpoint</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;GET&#39;</span><span class="p">)</span>
+<span class="c1"># or:</span>
+<span class="n">endpoint</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;custom_data&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-sockets-endpoints">
+<h2>Custom Sockets endpoints<a class="headerlink" href="#custom-sockets-endpoints" title="Permalink to this headline">¶</a></h2>
+<p>Each custom socket requires defining at least one endpoint. This endpoint is defined by name and
+a list of calls. Each call is defined by its name and a list of methods. <cite>name</cite> is used as an
+identification for the dependency, eg. if <cite>name</cite> is equal to &#8216;my_script&#8217; - the ScriptEndpoint with name &#8216;my_script&#8217;
+will be used (if it exists and Script source and passed runtime match) &#8211; otherwise a new one will be created.
+There&#8217;s a special wildcard method: <cite>methods=[&#8216;*&#8217;]</cite> - this allows you to execute the provided custom Socket
+with any request method (GET, POST, PATCH, etc.).</p>
+<p>To add an endpoint to a chosen custom_socket use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">my_endpoint</span> <span class="o">=</span> <span class="n">Endpoint</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_endpoint&#39;</span><span class="p">)</span>  <span class="c1"># no API call here</span>
+<span class="n">my_endpoint</span><span class="o">.</span><span class="n">add_call</span><span class="p">(</span><span class="n">ScriptCall</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;custom_script&#39;</span><span class="p">),</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+<span class="n">my_endpoint</span><span class="o">.</span><span class="n">add_call</span><span class="p">(</span><span class="n">ScriptCall</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;another_custom_script&#39;</span><span class="p">),</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="n">my_endpoint</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-socket-dependency">
+<h2>Custom Socket dependency<a class="headerlink" href="#custom-socket-dependency" title="Permalink to this headline">¶</a></h2>
+<p>Each custom socket has a dependency &#8211; meta information for an endpoint: which resource
+should be used to return the API call results. These dependencies are bound to the endpoints call object.
+Currently the only supported dependency is a Script.</p>
+<p><strong>Using new Script</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">custom_socket</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span>
+    <span class="n">ScriptDependency</span><span class="p">(</span>
+        <span class="n">Script</span><span class="p">(</span>
+            <span class="n">runtime_name</span><span class="o">=</span><span class="n">RuntimeChoices</span><span class="o">.</span><span class="n">PYTHON_V5_0</span><span class="p">,</span>
+            <span class="n">source</span><span class="o">=</span><span class="s1">&#39;print(&quot;custom_script&quot;)&#39;</span>
+        <span class="p">),</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;custom_script&#39;</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Using defined Script</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">another_custom_script</span> <span class="o">=</span> <span class="n">Script</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span>
+    <span class="n">ScriptDependency</span><span class="p">(</span>
+        <span class="n">another_custom_script</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;another_custom_script&#39;</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Using defined Script endpoint</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">script_endpoint</span> <span class="o">=</span> <span class="n">ScriptEndpoint</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;script_endpoint_name&#39;</span><span class="p">)</span>
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span>
+    <span class="n">script_endpoint</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>You can overwrite the Script name in the following way:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">script_endpoint</span> <span class="o">=</span> <span class="n">ScriptEndpoint</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;script_endpoint_name&#39;</span><span class="p">)</span>
+<span class="n">custom_socket</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span>
+    <span class="n">script_endpoint</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;custom_name&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-socket-recheck">
+<h2>Custom Socket recheck<a class="headerlink" href="#custom-socket-recheck" title="Permalink to this headline">¶</a></h2>
+<p>The creation of a Socket can fail - this can happen, for example, when an endpoint name is already taken by another
+custom Socket. To check the creation status use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">custom_socket</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">custom_socket</span><span class="o">.</span><span class="n">status_info</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can also re-check a Socket. This mean that all dependencies will be checked - if some of them are missing
+(e.g. some were deleted by mistake), they will be created again. If the endpoints and dependencies do not meet
+the criteria - an error will be returned in the status field.</p>
+</div>
+<div class="section" id="custom-socket-install-from-url">
+<h2>Custom Socket - install from url<a class="headerlink" href="#custom-socket-install-from-url" title="Permalink to this headline">¶</a></h2>
+<p>To install a socket from url use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">CustomSocket</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;new_socket_name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">install_from_url</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://...&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If instance name was not provided in connection arguments, do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">CustomSocket</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;new_socket_name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">install_from_url</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;https://...&#39;</span><span class="p">,</span> <span class="n">instance_name</span><span class="o">=</span><span class="s1">&#39;instance_name&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="custom-socket-raw-format">
+<h2>Custom Socket - raw format<a class="headerlink" href="#custom-socket-raw-format" title="Permalink to this headline">¶</a></h2>
+<p>If you prefer raw JSON format for creating Sockets, the Python library allows you to do so:::</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">CustomSocket</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_custom_socket_3&#39;</span><span class="p">,</span>
+    <span class="n">endpoints</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;my_endpoint_3&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;calls&quot;</span><span class="p">:</span>
+                <span class="p">[</span>
+                    <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;script&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;my_script_3&quot;</span><span class="p">,</span> <span class="s2">&quot;methods&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">]}</span>
+                <span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;script&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;runtime_name&quot;</span><span class="p">:</span> <span class="s2">&quot;python_library_v5.0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;my_script_3&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;print(3)&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The disadvantage of this method is that the internal structure of the JSON file must be known by the developer.</p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="refs/syncano.html" class="btn btn-neutral float-right" title="Syncano references"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="interacting.html" class="btn btn-neutral" title="Interacting with Syncano"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright Syncano Inc.
+    </p>
+  </div>
+
+  <a href="https://github.com/snide/sphinx_rtd_theme">Sphinx theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'4.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

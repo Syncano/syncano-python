@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview: module code &mdash; Syncano 4.0.0 documentation</title>
+  <title>syncano.models.hosting &mdash; Syncano 4.0.0 documentation</title>
   
 
   
@@ -95,10 +95,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../custom_sockets.html#custom-socket-raw-format">Custom Socket - raw format</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../refs/syncano.html">Syncano references</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../refs/syncano.html#subpackages">Subpackages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../refs/syncano.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../refs/syncano.html#module-syncano">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="syncano.html">Syncano references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="syncano.html#module-syncano">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -124,8 +124,10 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../index.html">Docs</a> &raquo;</li>
       
-    <li>Overview: module code</li>
+    <li>syncano.models.hosting</li>
       <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/refs/syncano.models.hosting.txt" rel="nofollow"> View page source</a>
         
       </li>
   </ul>
@@ -133,31 +135,88 @@
 </div>
           <div role="main">
             
-  <h1>All modules for which code is available</h1>
-<ul><li><a href="syncano.html">syncano</a></li>
-<ul><li><a href="syncano/connection.html">syncano.connection</a></li>
-<li><a href="syncano/exceptions.html">syncano.exceptions</a></li>
-<li><a href="syncano/models/accounts.html">syncano.models.accounts</a></li>
-<li><a href="syncano/models/archetypes.html">syncano.models.archetypes</a></li>
-<li><a href="syncano/models/billing.html">syncano.models.billing</a></li>
-<li><a href="syncano/models/channels.html">syncano.models.channels</a></li>
-<li><a href="syncano/models/classes.html">syncano.models.classes</a></li>
-<li><a href="syncano/models/custom_response.html">syncano.models.custom_response</a></li>
-<li><a href="syncano/models/custom_sockets.html">syncano.models.custom_sockets</a></li>
-<li><a href="syncano/models/custom_sockets_utils.html">syncano.models.custom_sockets_utils</a></li>
-<li><a href="syncano/models/data_views.html">syncano.models.data_views</a></li>
-<li><a href="syncano/models/fields.html">syncano.models.fields</a></li>
-<li><a href="syncano/models/geo.html">syncano.models.geo</a></li>
-<li><a href="syncano/models/hosting.html">syncano.models.hosting</a></li>
-<li><a href="syncano/models/incentives.html">syncano.models.incentives</a></li>
-<li><a href="syncano/models/instances.html">syncano.models.instances</a></li>
-<li><a href="syncano/models/manager.html">syncano.models.manager</a></li>
-<li><a href="syncano/models/options.html">syncano.models.options</a></li>
-<li><a href="syncano/models/push_notification.html">syncano.models.push_notification</a></li>
-<li><a href="syncano/models/registry.html">syncano.models.registry</a></li>
-<li><a href="syncano/models/traces.html">syncano.models.traces</a></li>
-<li><a href="syncano/utils.html">syncano.utils</a></li>
-</ul></ul>
+  <div class="section" id="module-syncano.models.hosting">
+<span id="syncano-models-hosting"></span><h1>syncano.models.hosting<a class="headerlink" href="#module-syncano.models.hosting" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="syncano.models.hosting.Hosting">
+<em class="property">class </em><tt class="descname">Hosting</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/hosting.html#Hosting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.hosting.Hosting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>OO wrapper around hosting.</p>
+<dl class="attribute">
+<dt id="syncano.models.hosting.Hosting.label">
+<tt class="descname">label</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.Hosting.label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.Hosting.description">
+<tt class="descname">description</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.Hosting.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.Hosting.domains">
+<tt class="descname">domains</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.Hosting.domains" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.Hosting.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.Hosting.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.Hosting.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.Hosting.links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.Hosting.created_at">
+<tt class="descname">created_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.Hosting.created_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.Hosting.updated_at">
+<tt class="descname">updated_at</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.Hosting.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.hosting.Hosting.upload_file">
+<tt class="descname">upload_file</tt><big>(</big><em>path</em>, <em>file</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/hosting.html#Hosting.upload_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.hosting.Hosting.upload_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.hosting.Hosting.list_files">
+<tt class="descname">list_files</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/hosting.html#Hosting.list_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.hosting.Hosting.list_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.hosting.Hosting.set_default">
+<tt class="descname">set_default</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/hosting.html#Hosting.set_default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.hosting.Hosting.set_default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.Hosting.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.hosting.Hosting.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">HostingDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.Hosting.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.Hosting.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.Hosting.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.Hosting.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.Hosting.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.hosting.Hosting.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
 
           </div>
           <footer>
