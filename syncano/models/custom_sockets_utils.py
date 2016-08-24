@@ -66,7 +66,7 @@ class Endpoint(object):
     The JSON format is as follows::
 
         {
-            '<endpoint_name>: {
+            '<endpoint_name>': {
                 'calls': [
                     <list of JSON format of Calls objects>
                 ]
@@ -139,10 +139,10 @@ class ScriptDependency(BaseDependency):
 
     def __init__(self, script_or_script_endpoint, name=None):
         if not isinstance(script_or_script_endpoint, (Script, ScriptEndpoint)):
-            raise SyncanoValueError('Script or ScriptEndpoint expected')
+            raise SyncanoValueError('Script or ScriptEndpoint expected.')
 
         if isinstance(script_or_script_endpoint, Script) and not name:
-            raise SyncanoValueError('Name should be provided')
+            raise SyncanoValueError('Name should be provided.')
 
         self.dependency_object = script_or_script_endpoint
         self.name = name

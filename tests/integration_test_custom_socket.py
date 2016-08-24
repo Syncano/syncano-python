@@ -17,7 +17,7 @@ from tests.integration_test import InstanceMixin, IntegrationTest
 class CustomSocketTest(InstanceMixin, IntegrationTest):
 
     def test_install_custom_socket(self):
-        # this test new ScriptEndpoint dependency create;
+        # this tests new ScriptEndpoint dependency create;
         self.assert_custom_socket('installing', self._define_dependencies_new_script_endpoint)
 
     def test_dependencies_new_script(self):

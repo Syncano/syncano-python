@@ -70,7 +70,7 @@ class CustomSocket(EndpointMetadataMixin, DependencyMetadataMixin, Model):
 
     def install(self):
         if not self.is_new():
-            raise SyncanoValueError('Can not install already defined custom socket.')
+            raise SyncanoValueError('Custom socket already installed.')
 
         created_socket = self.__class__.please.create(
             name=self.name,

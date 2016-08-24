@@ -247,7 +247,7 @@ To install a socket from url use::
 If instance name was not provided in connection arguments, do::
 
     CustomSocket(name='new_socket_name').install_from_url(url='https://...', instance_name='instance_name')
-    
+
 Custom Socket - raw format
 --------------------------
 
