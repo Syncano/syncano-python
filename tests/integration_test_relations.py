@@ -90,3 +90,10 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
         self.assertEqual(len(list(filtered_books)), 1)
         for book in filtered_books:
             self.assertEqual(book.title, self.niezwyciezony.title)
+
+    def test_multiple_lookups(self):
+        filtered_books = self.books.objects.list().filter(authors__id__in=[self.prus.id], title__eq='Lalka')
+
+        self.assertEqual(len(list(filtered_books)), 1)
+        for book in filtered_books:
+            self.assertEqual(book.title, self.niezwyciezony.title)
