@@ -96,4 +96,4 @@ class RelationApiTest(InstanceMixin, IntegrationTest):
 
         self.assertEqual(len(list(filtered_books)), 1)
         for book in filtered_books:
-            self.assertEqual(book.title, self.niezwyciezony.title)
+            self.assertEqual(book.title, self.lalka.title)
