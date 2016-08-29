@@ -60,13 +60,16 @@ class Hosting(Model):
         """
         hosting_files = self._get_files()
         is_found = False
+
         for hosting_file in hosting_files:
             if hosting_file.path == path:
                 is_found = True
                 break
 
         if not is_found:
-            raise SyncanoRequestError('File with path {} not found.'.format(path))
+            # create if not found;
+            hosting_file = self.upload_file(path, file)
+            return hosting_file
 
         connection = self._get_connection()
         headers = self._prepare_header(connection)
