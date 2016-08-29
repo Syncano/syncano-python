@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from syncano.exceptions import SyncanoRequestError
-
 from . import fields
 from .base import Instance, Model, logger
 
