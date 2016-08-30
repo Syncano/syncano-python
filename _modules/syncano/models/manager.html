@@ -1113,9 +1113,16 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">LOOKUP_SEPARATOR</span> <span class="ow">in</span> <span class="n">field_name</span><span class="p">:</span>
                 <span class="n">model_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_lookup_attributes</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
 
-            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">field_name</span><span class="p">:</span>
-                    <span class="k">break</span>
+            <span class="c1"># if filter is made on relation field: relation__name__eq=&#39;test&#39;;</span>
+            <span class="k">if</span> <span class="n">model_name</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">model_name</span><span class="p">:</span>
+                        <span class="k">break</span>
+            <span class="c1"># if filter is made on normal field: name__eq=&#39;test&#39;;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">field_name</span><span class="p">:</span>
+                        <span class="k">break</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_validate_lookup</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">lookup</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
 

@@ -180,7 +180,20 @@
 <dl class="method">
 <dt id="syncano.models.hosting.Hosting.upload_file">
 <tt class="descname">upload_file</tt><big>(</big><em>path</em>, <em>file</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/hosting.html#Hosting.upload_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.hosting.Hosting.upload_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Upload a new file to the hosting.
+:param path: the file path;
+:param file: the file to be uploaded;
+:return: the response from the API;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.hosting.Hosting.update_file">
+<tt class="descname">update_file</tt><big>(</big><em>path</em>, <em>file</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/hosting.html#Hosting.update_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.hosting.Hosting.update_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates an existing file.
+:param path: the file path;
+:param file: the file to be uploaded;
+:return: the response from the API;</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="syncano.models.hosting.Hosting.list_files">
@@ -211,6 +224,59 @@
 <dl class="attribute">
 <dt id="syncano.models.hosting.Hosting.please">
 <tt class="descname">please</tt><a class="headerlink" href="#syncano.models.hosting.Hosting.please" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.hosting.HostingFile">
+<em class="property">class </em><tt class="descname">HostingFile</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/hosting.html#HostingFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.hosting.HostingFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="syncano.models.archetypes.html#syncano.models.archetypes.Model" title="syncano.models.archetypes.Model"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.archetypes.Model</span></tt></a></p>
+<p>OO wrapper around hosting file.</p>
+<dl class="attribute">
+<dt id="syncano.models.hosting.HostingFile.path">
+<tt class="descname">path</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.HostingFile.path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.HostingFile.file">
+<tt class="descname">file</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.HostingFile.file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.HostingFile.links">
+<tt class="descname">links</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.HostingFile.links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.HostingFile.DoesNotExist">
+<tt class="descname">DoesNotExist</tt><a class="headerlink" href="#syncano.models.hosting.HostingFile.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">HostingFileDoesNotExist</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.HostingFile.hosting_id">
+<tt class="descname">hosting_id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.HostingFile.hosting_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.HostingFile.id">
+<tt class="descname">id</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.HostingFile.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.HostingFile.instance_name">
+<tt class="descname">instance_name</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.HostingFile.instance_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.HostingFile.pk">
+<tt class="descname">pk</tt><em class="property"> = None</em><a class="headerlink" href="#syncano.models.hosting.HostingFile.pk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.hosting.HostingFile.please">
+<tt class="descname">please</tt><a class="headerlink" href="#syncano.models.hosting.HostingFile.please" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

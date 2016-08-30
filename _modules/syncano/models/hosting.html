@@ -140,6 +140,7 @@
             
   <h1>Source code for syncano.models.hosting</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">fields</span>
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Instance</span><span class="p">,</span> <span class="n">Model</span><span class="p">,</span> <span class="n">logger</span>
 
@@ -172,24 +173,54 @@
         <span class="p">}</span>
 
 <div class="viewcode-block" id="Hosting.upload_file"><a class="viewcode-back" href="../../../refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.upload_file">[docs]</a>    <span class="k">def</span> <span class="nf">upload_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Upload a new file to the hosting.</span>
+<span class="sd">        :param path: the file path;</span>
+<span class="sd">        :param file: the file to be uploaded;</span>
+<span class="sd">        :return: the response from the API;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">files_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">files</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="n">path</span><span class="p">}</span>
         <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">build_params</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{})</span>
-        <span class="n">headers</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;headers&#39;</span><span class="p">]</span>
-        <span class="n">headers</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;content-type&#39;</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">host</span> <span class="o">+</span> <span class="n">files_path</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_header</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">files_path</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
                                            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="p">)])</span>
         <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">201</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
             <span class="k">return</span>
-        <span class="k">return</span> <span class="n">response</span>
+        <span class="k">return</span> <span class="n">HostingFile</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+</div>
+<div class="viewcode-block" id="Hosting.update_file"><a class="viewcode-back" href="../../../refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.update_file">[docs]</a>    <span class="k">def</span> <span class="nf">update_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates an existing file.</span>
+<span class="sd">        :param path: the file path;</span>
+<span class="sd">        :param file: the file to be uploaded;</span>
+<span class="sd">        :return: the response from the API;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hosting_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_files</span><span class="p">()</span>
+        <span class="n">is_found</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="k">for</span> <span class="n">hosting_file</span> <span class="ow">in</span> <span class="n">hosting_files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">hosting_file</span><span class="o">.</span><span class="n">path</span> <span class="o">==</span> <span class="n">path</span><span class="p">:</span>
+                <span class="n">is_found</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_found</span><span class="p">:</span>
+            <span class="c1"># create if not found;</span>
+            <span class="n">hosting_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">file</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">hosting_file</span>
+
+        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_header</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="n">hosting_file</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">self</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+                                            <span class="n">files</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">return</span> <span class="n">HostingFile</span><span class="p">(</span><span class="o">**</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
 </div>
 <div class="viewcode-block" id="Hosting.list_files"><a class="viewcode-back" href="../../../refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.list_files">[docs]</a>    <span class="k">def</span> <span class="nf">list_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">files_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">files</span>
-        <span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection</span><span class="p">()</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="n">files_path</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s1">&#39;objects&#39;</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_files</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="Hosting.set_default"><a class="viewcode-back" href="../../../refs/syncano.models.hosting.html#syncano.models.hosting.Hosting.set_default">[docs]</a>    <span class="k">def</span> <span class="nf">set_default</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">default_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">set_default</span>
@@ -197,7 +228,39 @@
 
         <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">make_request</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="n">default_path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span>
+</div>
+    <span class="k">def</span> <span class="nf">_prepare_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">):</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">build_params</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">{})</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;headers&#39;</span><span class="p">]</span>
+        <span class="n">headers</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;content-type&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">headers</span>
+
+    <span class="k">def</span> <span class="nf">_get_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">hfile</span> <span class="k">for</span> <span class="n">hfile</span> <span class="ow">in</span> <span class="n">HostingFile</span><span class="o">.</span><span class="n">please</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">hosting_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)]</span>
+
+</div>
+<div class="viewcode-block" id="HostingFile"><a class="viewcode-back" href="../../../refs/syncano.models.hosting.html#syncano.models.hosting.HostingFile">[docs]</a><span class="k">class</span> <span class="nc">HostingFile</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        OO wrapper around hosting file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">path</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">StringField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+    <span class="nb">file</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">FileField</span><span class="p">()</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">LinksField</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Hosting</span>
+        <span class="n">endpoints</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;detail&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;delete&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;put&#39;</span><span class="p">,</span> <span class="s1">&#39;patch&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/files/{id}/&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;list&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;methods&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="s1">&#39;/files/&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
 </pre></div>
 
           </div>
