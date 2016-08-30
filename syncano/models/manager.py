@@ -972,9 +972,16 @@ class ObjectManager(IncrementMixin, ArrayOperationsMixin, Manager):
             if self.LOOKUP_SEPARATOR in field_name:
                 model_name, field_name, lookup = self._get_lookup_attributes(field_name)
 
-            for field in model._meta.fields:
-                if field.name == field_name:
-                    break
+            # if filter is made on relation field: relation__name__eq='test';
+            if model_name:
+                for field in model._meta.fields:
+                    if field.name == model_name:
+                        break
+            # if filter is made on normal field: name__eq='test';
+            else:
+                for field in model._meta.fields:
+                    if field.name == field_name:
+                        break
 
             self._validate_lookup(model, model_name, field_name, lookup, field)
 
