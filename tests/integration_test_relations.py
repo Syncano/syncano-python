@@ -3,11 +3,11 @@ from syncano.models import Class
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 
-class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
+class RelationApiTest(InstanceMixin, IntegrationTest):
 
     @classmethod
     def setUpClass(cls):
-        super(ResponseTemplateApiTest, cls).setUpClass()
+        super(RelationApiTest, cls).setUpClass()
 
         # prapare data
         cls.author = Class.please.create(name="author", schema=[
@@ -90,3 +90,10 @@ class ResponseTemplateApiTest(InstanceMixin, IntegrationTest):
         self.assertEqual(len(list(filtered_books)), 1)
         for book in filtered_books:
             self.assertEqual(book.title, self.niezwyciezony.title)
+
+    def test_multiple_lookups(self):
+        filtered_books = self.book.objects.list().filter(authors__id__in=[self.prus.id], title__eq='Lalka')
+
+        self.assertEqual(len(list(filtered_books)), 1)
+        for book in filtered_books:
+            self.assertEqual(book.title, self.lalka.title)
