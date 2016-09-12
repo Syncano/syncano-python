@@ -65,12 +65,14 @@ class Connection(object):
 
     CONTENT_TYPE = 'application/json'
 
-    AUTH_SUFFIX = 'v1/account/auth'
-    ACCOUNT_SUFFIX = 'v1/account/'
+    AUTH_SUFFIX = 'v1.1/account/auth'
+    ACCOUNT_SUFFIX = 'v1.1/account/'
     SOCIAL_AUTH_SUFFIX = AUTH_SUFFIX + '/{social_backend}/'
 
-    USER_AUTH_SUFFIX = 'v1/instances/{name}/user/auth/'
-    USER_INFO_SUFFIX = 'v1/instances/{name}/user/'
+    USER_AUTH_SUFFIX = 'v1.1/instances/{name}/user/auth/'
+    USER_INFO_SUFFIX = 'v1.1/instances/{name}/user/'
+
+    REGISTER_SUFFIX = 'v1.1/account/register/'
 
     LOGIN_PARAMS = {'email',
                     'password'}
@@ -431,6 +433,20 @@ class Connection(object):
                 value = (value.name, value, 'application/x-pkcs12', {'Expires': '0'})
                 files[key] = value
         return files
+
+    def register(self, email, password, first_name=None, last_name=None, invitation_key=None):
+        register_data = {
+            'email': email,
+            'password': password,
+        }
+        for name, value in zip(['first_name', 'last_name', 'invitation_key'],
+                               [first_name, last_name, invitation_key]):
+            if value:
+                register_data.update({name: value})
+        response = self.make_request('POST', self.REGISTER_SUFFIX, data=register_data)
+
+        self.api_key = response['account_key']
+        return self.api_key
 
 
 class ConnectionMixin(object):
