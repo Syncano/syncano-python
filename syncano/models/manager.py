@@ -777,16 +777,17 @@ class Manager(ConnectionMixin):
             raise
 
         if 'next' not in response and not self._template:
-            if 'instance_name' in self.properties:
-                self._populate_instance_name(response)
+            self._populate_instance_name(response)
             return self.serialize(response)
 
-        if 'instance_name' in self.properties:
+        if isinstance(response, list):
             for obj in response['objects']:
                 self._populate_instance_name(obj)
         return response
 
     def _populate_instance_name(self, object):
+        if 'instance_name' not in self.properties or not isinstance(object, dict):
+            return
         model_fields = ['profile']
         for field in model_fields:
             if field in object:
