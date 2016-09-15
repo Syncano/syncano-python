@@ -18,7 +18,7 @@ class ManagerDescriptor(object):
     def __init__(self, manager):
         self.manager = manager
 
-    def __get__(self, instance, owner=None):
+    def __get__(self, instance, owner=None, instance_name=None):
         if instance is not None:
             raise AttributeError("Manager isn't accessible via {0} instances.".format(owner.__name__))
         return self.manager.all()
@@ -777,9 +777,20 @@ class Manager(ConnectionMixin):
             raise
 
         if 'next' not in response and not self._template:
+            if 'instance_name' in self.properties:
+                self._populate_instance_name(response)
             return self.serialize(response)
 
+        if 'instance_name' in self.properties:
+            for obj in response['objects']:
+                self._populate_instance_name(obj)
         return response
+
+    def _populate_instance_name(self, object):
+        model_fields = ['profile']
+        for field in model_fields:
+            if field in object:
+                object[field]['instance_name'] = self.properties['instance_name']
 
     def get_allowed_method(self, *methods):
         meta = self.model._meta
