@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+
 from syncano.exceptions import UserNotFound
 from syncano.models import Group, User
+from syncano.models.registry import registry
 from tests.integration_test import InstanceMixin, IntegrationTest
 
 
@@ -59,6 +62,17 @@ class UserTest(InstanceMixin, IntegrationTest):
             label='testgroup'
         )
 
+        cls.additional_instance = cls.connection.Instance.please.create(
+            name='testpythonlib%s' % cls.generate_hash()[:10],
+            description='IntegrationTest %s' % datetime.now(),
+        )
+        registry.set_used_instance(cls.instance.name)
+
+    @classmethod
+    def tearDownClass(cls):
+        super(UserTest, cls).tearDownClass()
+        cls.additional_instance.delete()
+
     def test_if_custom_error_is_raised_on_user_group(self):
         with self.assertRaises(UserNotFound):
             self.group.user_details(user_id=221)
@@ -114,3 +128,16 @@ class UserTest(InstanceMixin, IntegrationTest):
 
         response = group.delete_user(user_id=user_test.id)
         self.assertIsNone(response)
+
+    def test_user_retrieval_with_specified_instance_name(self):
+        user = self.additional_instance.users.create(
+            username='custom_instance_user_123',
+            password='password',
+        )
+        instance_user = User.please.get(id=user.id, instance_name=self.additional_instance.name)
+        self.assertEqual(instance_user.id, user.id)
+        self.assertEqual(instance_user.username, user.username)
+        users = User.please.list(instance_name=self.additional_instance.name)
+        self.assertEqual(len(list(users)), 1)
+        self.assertEqual(instance_user.id, users[0].id)
+        self.assertEqual(instance_user.username, users[0].username)

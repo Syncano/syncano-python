@@ -780,18 +780,19 @@ class Manager(ConnectionMixin):
             self._populate_instance_name(response)
             return self.serialize(response)
 
-        if isinstance(response, list):
+        if isinstance(response, dict):
             for obj in response['objects']:
                 self._populate_instance_name(obj)
         return response
 
     def _populate_instance_name(self, object):
-        if 'instance_name' not in self.properties or not isinstance(object, dict):
+        instance_name = self.properties.get('instance_name')
+        if instance_name is None or not isinstance(object, dict):
             return
-        model_fields = ['profile']
-        for field in model_fields:
-            if field in object:
-                object[field]['instance_name'] = self.properties['instance_name']
+        for field in self.model._meta.fields:
+            if field.__class__.__name__ == 'ModelField':
+                if not isinstance(field.rel, six.string_types):
+                    object[field.name]['instance_name'] = instance_name
 
     def get_allowed_method(self, *methods):
         meta = self.model._meta
