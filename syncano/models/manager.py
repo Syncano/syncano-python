@@ -780,7 +780,7 @@ class Manager(ConnectionMixin):
             self._populate_instance_name(response)
             return self.serialize(response)
 
-        if isinstance(response, dict):
+        if isinstance(response, dict) and 'objects' in response:
             for obj in response['objects']:
                 self._populate_instance_name(obj)
         return response
