@@ -51,8 +51,8 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
                     "type": "class",
                     "name": "klass",
                     "schema": [
-                        {"name": "test_class", "type": "string"},
-                        {"name": "test_class", "type": "integer"},
+                        {"name": "fieldA", "type": "string"},
+                        {"name": "fieldB", "type": "integer"},
                     ]
                 }
             ]
