@@ -51,7 +51,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
                     "type": "class",
                     "schema": [
                         {"name": "test_class", "type": "string"},
-                        {"name": "test_class", "type": "int"},
+                        {"name": "test_class", "type": "integer"},
                     ]
                 }
             ]
@@ -150,7 +150,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
                     name="test_class_{}".format(suffix),
                     schema=[
                         {"name": "testA", "type": "string"},
-                        {"name": "testB", "type": "int"},
+                        {"name": "testB", "type": "integer"},
                     ]
                 )
             )
@@ -163,7 +163,7 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
             name="test_class_{}".format(suffix),
             schema=[
                 {"name": "testA", "type": "string"},
-                {"name": "testB", "type": "int"},
+                {"name": "testB", "type": "integer"},
             ]
         )
         klass.save()
