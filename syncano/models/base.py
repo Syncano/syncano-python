@@ -14,4 +14,4 @@ from .backups import *  # NOQA
 from .hosting import *  # NOQA
 from .data_views import DataEndpoint as EndpointData  # NOQA
 from .custom_sockets import *  # NOQA
-from .custom_sockets_utils import Endpoint, ScriptCall, ScriptDependency  # NOQA
+from .custom_sockets_utils import Endpoint, ScriptCall, ScriptDependency, ClassDependency  # NOQA

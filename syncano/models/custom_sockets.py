@@ -25,6 +25,7 @@ class CustomSocket(EndpointMetadataMixin, DependencyMetadataMixin, Model):
     endpoints = fields.JSONField()
     dependencies = fields.JSONField()
     metadata = fields.JSONField(required=False)
+    config = fields.JSONField(required=False)
     status = fields.StringField(read_only=True, required=False)
     status_info = fields.StringField(read_only=True, required=False)
     created_at = fields.DateTimeField(read_only=True, required=False)

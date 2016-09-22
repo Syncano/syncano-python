@@ -2,6 +2,8 @@
 import time
 
 from syncano.models import (
+    Class,
+    ClassDependency,
     CustomSocket,
     Endpoint,
     RuntimeChoices,
@@ -44,6 +46,13 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
                     "runtime_name": "python_library_v5.0",
                     "name": "script_123",
                     "source": "print(123)"
+                },
+                {
+                    "type": "class",
+                    "schema": [
+                        {"name": "test_class", "type": "string"},
+                        {"name": "test_class", "type": "int"},
+                    ]
                 }
             ]
         )
@@ -91,6 +100,16 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         socket_to_update.reload()
         self.assertIn('my_endpoint_new_to_update', socket_to_update.endpoints)
 
+    def test_class_dependency_new(self):
+        suffix = 'new_class'
+        custom_socket = self._create_custom_socket(suffix, self._define_dependencies_new_class)
+        self._assert_custom_socket(custom_socket)
+
+    def test_class_dependency_existing(self):
+        suffix = 'existing_class'
+        custom_socket = self._create_custom_socket(suffix, self._define_dependencies_new_class)
+        self._assert_custom_socket(custom_socket)
+
     def assert_custom_socket(self, suffix, dependency_method):
         custom_socket = self._create_custom_socket(suffix, dependency_method=dependency_method)
         self._assert_custom_socket(custom_socket)
@@ -121,6 +140,38 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
             )
         )
         custom_socket.add_endpoint(endpoint)
+
+    @classmethod
+    def _define_dependencies_new_class(cls, suffix, custom_socket):
+        cls._add_base_script(suffix, custom_socket)
+        custom_socket.add_dependency(
+            ClassDependency(
+                Class(
+                    name="test_class_{}".format(suffix),
+                    schema=[
+                        {"name": "testA", "type": "string"},
+                        {"name": "testB", "type": "int"},
+                    ]
+                )
+            )
+        )
+
+    @classmethod
+    def _define_dependencies_existing_class(cls, suffix, custom_socket):
+        cls._add_base_script(suffix, custom_socket)
+        klass = Class(
+            name="test_class_{}".format(suffix),
+            schema=[
+                {"name": "testA", "type": "string"},
+                {"name": "testB", "type": "int"},
+            ]
+        )
+        klass.save()
+        custom_socket.add_dependency(
+            ClassDependency(
+                klass
+            )
+        )
 
     @classmethod
     def _define_dependencies_new_script_endpoint(cls, suffix, custom_socket):
@@ -168,6 +219,18 @@ class CustomSocketTest(InstanceMixin, IntegrationTest):
         custom_socket.add_dependency(
             ScriptDependency(
                 ScriptEndpoint.please.first()
+            )
+        )
+
+    @classmethod
+    def _add_base_script(cls, suffix, custom_socket):
+        custom_socket.add_dependency(
+            ScriptDependency(
+                Script(
+                    source='print("{}")'.format(suffix),
+                    runtime_name=RuntimeChoices.PYTHON_V5_0
+                ),
+                name='script_endpoint_{}'.format(suffix),
             )
         )
 
