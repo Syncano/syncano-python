@@ -2,6 +2,7 @@
 import six
 from syncano.exceptions import SyncanoValueError
 
+from .classes import Class
 from .incentives import Script, ScriptEndpoint
 
 
@@ -17,6 +18,7 @@ class DependencyType(object):
     The type of the dependency object used in the custom socket;
     """
     SCRIPT = 'script'
+    CLASS = 'class'
 
 
 class BaseCall(object):
@@ -109,13 +111,18 @@ class BaseDependency(object):
         return dependency_data
 
     def get_name(self):
-        raise NotImplementedError()
+        if self.name is not None:
+            return {'name': self.name}
+        return {'name': self.dependency_object.name}
 
     def get_dependency_data(self):
         raise NotImplementedError()
 
     def create_from_raw_data(self, raw_data):
         raise NotImplementedError()
+
+    def _build_dict(self, instance):
+        return {field_name: getattr(instance, field_name) for field_name in self.fields}
 
 
 class ScriptDependency(BaseDependency):
@@ -147,11 +154,6 @@ class ScriptDependency(BaseDependency):
         self.dependency_object = script_or_script_endpoint
         self.name = name
 
-    def get_name(self):
-        if self.name is not None:
-            return {'name': self.name}
-        return {'name': self.dependency_object.name}
-
     def get_dependency_data(self):
 
         if isinstance(self.dependency_object, ScriptEndpoint):
@@ -161,9 +163,7 @@ class ScriptDependency(BaseDependency):
             script = self.dependency_object
 
         dependency_data = self.get_name()
-        dependency_data.update({
-            field_name: getattr(script, field_name) for field_name in self.fields
-        })
+        dependency_data.update(self._build_dict(script))
         return dependency_data
 
     @classmethod
@@ -172,6 +172,41 @@ class ScriptDependency(BaseDependency):
             'script_or_script_endpoint': Script(source=raw_data['source'], runtime_name=raw_data['runtime_name']),
             'name': raw_data['name'],
         })
+
+
+class ClassDependency(BaseDependency):
+    """
+    Class dependency object;
+
+    The JSON format is as follows::
+        {
+            'type': 'class',
+            'name': '<class_name>',
+            'schema': [
+                {"name": "f1", "type": "string"},
+                {"name": "f2", "type": "string"},
+                {"name": "f3", "type": "integer"}
+            ],
+        }
+    """
+    dependency_type = DependencyType.CLASS
+    fields = [
+        'name',
+        'schema'
+    ]
+
+    def __init__(self, class_instance):
+        self.dependency_object = class_instance
+        self.name = class_instance.name
+
+    def get_dependency_data(self):
+        data_dict = self._build_dict(self.dependency_object)
+        data_dict['schema'] = data_dict['schema'].schema
+        return data_dict
+
+    @classmethod
+    def create_from_raw_data(cls, raw_data):
+        return cls(**{'class_instance': Class(**raw_data)})
 
 
 class EndpointMetadataMixin(object):
@@ -239,6 +274,8 @@ class DependencyMetadataMixin(object):
     def _get_depedency_klass(cls, depedency_type):
         if depedency_type == DependencyType.SCRIPT:
             return ScriptDependency
+        elif depedency_type == DependencyType.CLASS:
+            return ClassDependency
 
     def add_dependency(self, depedency):
         self._dependencies.append(depedency)

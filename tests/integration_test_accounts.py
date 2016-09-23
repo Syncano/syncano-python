@@ -14,7 +14,7 @@ class LoginTest(IntegrationTest):
         cls.INSTANCE_NAME = os.getenv('INTEGRATION_INSTANCE_NAME')
         cls.USER_NAME = os.getenv('INTEGRATION_USER_NAME')
         cls.USER_PASSWORD = os.getenv('INTEGRATION_USER_PASSWORD')
-        cls.CLASS_NAME = cls.INSTANCE_NAME
+        cls.CLASS_NAME = "login_class_test"
 
         instance = cls.connection.Instance.please.create(name=cls.INSTANCE_NAME)
         api_key = instance.api_keys.create(allow_user_create=True,
@@ -35,7 +35,7 @@ class LoginTest(IntegrationTest):
         cls.connection = None
 
     def check_connection(self, con):
-        response = con.request('GET', '/v1.1/instances/test_login/classes/')
+        response = con.request('GET', '/v1.1/instances/{}/classes/'.format(self.INSTANCE_NAME))
 
         obj_list = response['objects']
 
