@@ -58,13 +58,18 @@ class CustomSocket(EndpointMetadataMixin, DependencyMetadataMixin, Model):
                 return endpoint
         raise SyncanoValueError('Endpoint {} not found.'.format(endpoint_name))
 
-    def install_from_url(self, url, instance_name=None):
+    def install_from_url(self, url, instance_name=None, config=None):
         instance_name = self.__class__.please.properties.get('instance_name') or instance_name
         instance = Instance.please.get(name=instance_name)
 
         install_path = instance.links.sockets_install
         connection = self._get_connection()
-        response = connection.request('POST', install_path, data={'name': self.name, 'install_url': url})
+        config = config or {}
+        response = connection.request('POST', install_path, data={
+            'name': self.name,
+            'install_url': url,
+            'config': config
+        })
 
         return response
 
