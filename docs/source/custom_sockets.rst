@@ -25,8 +25,8 @@ To create a custom Socket follow these steps::
 
     # 2. Define endpoints.
     my_endpoint = Endpoint(name='my_endpoint')  # no API call here
-    my_endpoint.add_call(ScriptCall(name='custom_script'), methods=['GET'])
-    my_endpoint.add_call(ScriptCall(name='another_custom_script'), methods=['POST'])
+    my_endpoint.add_call(ScriptCall(name='custom_script', methods=['GET']))
+    my_endpoint.add_call(ScriptCall(name='another_custom_script', methods=['POST']))
 
     # What happened here:
     # - We defined a new endpoint that will be visible under the name `my_endpoint`
@@ -222,6 +222,33 @@ You can overwrite the Script name in the following way::
     custom_socket.add_dependency(
         script_endpoint,
         name='custom_name'
+    )
+
+** Class dependency **
+
+Custom socket with this dependency will check if this class is defined - if not then will create it;
+This allows you to define which classes are used to store data for this particular custom socket.
+
+::
+
+    custom_socket.add_dependency(
+        ClassDependency(
+            Class(
+                name='class_dep_test',
+                schema=[
+                    {'name': 'test', 'type': 'string'}
+                ]
+            ),
+        )
+    )
+
+Existing class::
+
+    class_instance = Class.plase.get(name='user_profile')
+        custom_socket.add_dependency(
+        ClassDependency(
+            class_instance
+        )
     )
 
 Custom Socket recheck
