@@ -157,8 +157,8 @@ API call.</p>
 
 <span class="c1"># 2. Define endpoints.</span>
 <span class="n">my_endpoint</span> <span class="o">=</span> <span class="n">Endpoint</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;my_endpoint&#39;</span><span class="p">)</span>  <span class="c1"># no API call here</span>
-<span class="n">my_endpoint</span><span class="o">.</span><span class="n">add_call</span><span class="p">(</span><span class="n">ScriptCall</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;custom_script&#39;</span><span class="p">),</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
-<span class="n">my_endpoint</span><span class="o">.</span><span class="n">add_call</span><span class="p">(</span><span class="n">ScriptCall</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;another_custom_script&#39;</span><span class="p">),</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="n">my_endpoint</span><span class="o">.</span><span class="n">add_call</span><span class="p">(</span><span class="n">ScriptCall</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;custom_script&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">]))</span>
+<span class="n">my_endpoint</span><span class="o">.</span><span class="n">add_call</span><span class="p">(</span><span class="n">ScriptCall</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;another_custom_script&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">]))</span>
 
 <span class="c1"># What happened here:</span>
 <span class="c1"># - We defined a new endpoint that will be visible under the name `my_endpoint`</span>
@@ -342,6 +342,30 @@ Currently the only supported dependency is a Script.</p>
     <span class="n">script_endpoint</span><span class="p">,</span>
     <span class="n">name</span><span class="o">=</span><span class="s1">&#39;custom_name&#39;</span>
 <span class="p">)</span>
+</pre></div>
+</div>
+<p>** Class dependency **</p>
+<p>Custom socket with this dependency will check if this class is defined - if not then will create it;
+This allows you to define which classes are used to store data for this particular custom socket.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">custom_socket</span><span class="o">.</span><span class="n">add_dependency</span><span class="p">(</span>
+    <span class="n">ClassDependency</span><span class="p">(</span>
+        <span class="n">Class</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;class_dep_test&#39;</span><span class="p">,</span>
+            <span class="n">schema</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;string&#39;</span><span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Existing class:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>class_instance = Class.plase.get(name=&#39;user_profile&#39;)
+    custom_socket.add_dependency(
+    ClassDependency(
+        class_instance
+    )
+)
 </pre></div>
 </div>
 </div>

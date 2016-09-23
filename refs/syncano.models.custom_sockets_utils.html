@@ -159,6 +159,11 @@
 <tt class="descname">SCRIPT</tt><em class="property"> = 'script'</em><a class="headerlink" href="#syncano.models.custom_sockets_utils.DependencyType.SCRIPT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets_utils.DependencyType.CLASS">
+<tt class="descname">CLASS</tt><em class="property"> = 'class'</em><a class="headerlink" href="#syncano.models.custom_sockets_utils.DependencyType.CLASS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -305,11 +310,6 @@ The fields are taken from the dependency object - which can be Script (supported
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="syncano.models.custom_sockets_utils.ScriptDependency.get_name">
-<tt class="descname">get_name</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets_utils.html#ScriptDependency.get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets_utils.ScriptDependency.get_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="syncano.models.custom_sockets_utils.ScriptDependency.get_dependency_data">
 <tt class="descname">get_dependency_data</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets_utils.html#ScriptDependency.get_dependency_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets_utils.ScriptDependency.get_dependency_data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -317,6 +317,50 @@ The fields are taken from the dependency object - which can be Script (supported
 <dl class="classmethod">
 <dt id="syncano.models.custom_sockets_utils.ScriptDependency.create_from_raw_data">
 <em class="property">classmethod </em><tt class="descname">create_from_raw_data</tt><big>(</big><em>raw_data</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets_utils.html#ScriptDependency.create_from_raw_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets_utils.ScriptDependency.create_from_raw_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="syncano.models.custom_sockets_utils.ClassDependency">
+<em class="property">class </em><tt class="descname">ClassDependency</tt><big>(</big><em>class_instance</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets_utils.html#ClassDependency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets_utils.ClassDependency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#syncano.models.custom_sockets_utils.BaseDependency" title="syncano.models.custom_sockets_utils.BaseDependency"><tt class="xref py py-class docutils literal"><span class="pre">syncano.models.custom_sockets_utils.BaseDependency</span></tt></a></p>
+<p>Class dependency object;</p>
+<dl class="docutils">
+<dt>The JSON format is as follows::</dt>
+<dd><dl class="first docutils">
+<dt>{</dt>
+<dd><p class="first">&#8216;type&#8217;: &#8216;class&#8217;,
+&#8216;name&#8217;: &#8216;&lt;class_name&gt;&#8217;,
+&#8216;schema&#8217;: [</p>
+<blockquote>
+<div>{&#8220;name&#8221;: &#8220;f1&#8221;, &#8220;type&#8221;: &#8220;string&#8221;},
+{&#8220;name&#8221;: &#8220;f2&#8221;, &#8220;type&#8221;: &#8220;string&#8221;},
+{&#8220;name&#8221;: &#8220;f3&#8221;, &#8220;type&#8221;: &#8220;integer&#8221;}</div></blockquote>
+<p class="last">],</p>
+</dd>
+</dl>
+<p class="last">}</p>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets_utils.ClassDependency.dependency_type">
+<tt class="descname">dependency_type</tt><em class="property"> = 'class'</em><a class="headerlink" href="#syncano.models.custom_sockets_utils.ClassDependency.dependency_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="syncano.models.custom_sockets_utils.ClassDependency.fields">
+<tt class="descname">fields</tt><em class="property"> = ['name', 'schema']</em><a class="headerlink" href="#syncano.models.custom_sockets_utils.ClassDependency.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="syncano.models.custom_sockets_utils.ClassDependency.get_dependency_data">
+<tt class="descname">get_dependency_data</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets_utils.html#ClassDependency.get_dependency_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets_utils.ClassDependency.get_dependency_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="syncano.models.custom_sockets_utils.ClassDependency.create_from_raw_data">
+<em class="property">classmethod </em><tt class="descname">create_from_raw_data</tt><big>(</big><em>raw_data</em><big>)</big><a class="reference internal" href="../_modules/syncano/models/custom_sockets_utils.html#ClassDependency.create_from_raw_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#syncano.models.custom_sockets_utils.ClassDependency.create_from_raw_data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

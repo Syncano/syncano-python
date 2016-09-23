@@ -143,6 +143,7 @@
 <span class="kn">import</span> <span class="nn">six</span>
 <span class="kn">from</span> <span class="nn">syncano.exceptions</span> <span class="kn">import</span> <span class="n">SyncanoValueError</span>
 
+<span class="kn">from</span> <span class="nn">.classes</span> <span class="kn">import</span> <span class="n">Class</span>
 <span class="kn">from</span> <span class="nn">.incentives</span> <span class="kn">import</span> <span class="n">Script</span><span class="p">,</span> <span class="n">ScriptEndpoint</span>
 
 
@@ -158,6 +159,7 @@
 <span class="sd">    The type of the dependency object used in the custom socket;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">SCRIPT</span> <span class="o">=</span> <span class="s1">&#39;script&#39;</span>
+    <span class="n">CLASS</span> <span class="o">=</span> <span class="s1">&#39;class&#39;</span>
 
 </div>
 <div class="viewcode-block" id="BaseCall"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseCall">[docs]</a><span class="k">class</span> <span class="nc">BaseCall</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -250,15 +252,20 @@
         <span class="k">return</span> <span class="n">dependency_data</span>
 </div>
 <div class="viewcode-block" id="BaseDependency.get_name"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_object</span><span class="o">.</span><span class="n">name</span><span class="p">}</span>
 </div>
 <div class="viewcode-block" id="BaseDependency.get_dependency_data"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency.get_dependency_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_dependency_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </div>
 <div class="viewcode-block" id="BaseDependency.create_from_raw_data"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.BaseDependency.create_from_raw_data">[docs]</a>    <span class="k">def</span> <span class="nf">create_from_raw_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_data</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+</div>
+    <span class="k">def</span> <span class="nf">_build_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">field_name</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span> <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">}</span>
 
-</div></div>
+</div>
 <div class="viewcode-block" id="ScriptDependency"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptDependency">[docs]</a><span class="k">class</span> <span class="nc">ScriptDependency</span><span class="p">(</span><span class="n">BaseDependency</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Script dependency object;</span>
@@ -288,11 +295,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dependency_object</span> <span class="o">=</span> <span class="n">script_or_script_endpoint</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
-<div class="viewcode-block" id="ScriptDependency.get_name"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptDependency.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">}</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_object</span><span class="o">.</span><span class="n">name</span><span class="p">}</span>
-</div>
 <div class="viewcode-block" id="ScriptDependency.get_dependency_data"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ScriptDependency.get_dependency_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_dependency_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dependency_object</span><span class="p">,</span> <span class="n">ScriptEndpoint</span><span class="p">):</span>
@@ -302,9 +304,7 @@
             <span class="n">script</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dependency_object</span>
 
         <span class="n">dependency_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span>
-        <span class="n">dependency_data</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
-            <span class="n">field_name</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">script</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span> <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span>
-        <span class="p">})</span>
+        <span class="n">dependency_data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_build_dict</span><span class="p">(</span><span class="n">script</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">dependency_data</span>
 </div>
     <span class="nd">@classmethod</span>
@@ -313,6 +313,41 @@
             <span class="s1">&#39;script_or_script_endpoint&#39;</span><span class="p">:</span> <span class="n">Script</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">raw_data</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">],</span> <span class="n">runtime_name</span><span class="o">=</span><span class="n">raw_data</span><span class="p">[</span><span class="s1">&#39;runtime_name&#39;</span><span class="p">]),</span>
             <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">raw_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
         <span class="p">})</span>
+
+</div></div>
+<div class="viewcode-block" id="ClassDependency"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ClassDependency">[docs]</a><span class="k">class</span> <span class="nc">ClassDependency</span><span class="p">(</span><span class="n">BaseDependency</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class dependency object;</span>
+
+<span class="sd">    The JSON format is as follows::</span>
+<span class="sd">        {</span>
+<span class="sd">            &#39;type&#39;: &#39;class&#39;,</span>
+<span class="sd">            &#39;name&#39;: &#39;&lt;class_name&gt;&#39;,</span>
+<span class="sd">            &#39;schema&#39;: [</span>
+<span class="sd">                {&quot;name&quot;: &quot;f1&quot;, &quot;type&quot;: &quot;string&quot;},</span>
+<span class="sd">                {&quot;name&quot;: &quot;f2&quot;, &quot;type&quot;: &quot;string&quot;},</span>
+<span class="sd">                {&quot;name&quot;: &quot;f3&quot;, &quot;type&quot;: &quot;integer&quot;}</span>
+<span class="sd">            ],</span>
+<span class="sd">        }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dependency_type</span> <span class="o">=</span> <span class="n">DependencyType</span><span class="o">.</span><span class="n">CLASS</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;name&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;schema&#39;</span>
+    <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_instance</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dependency_object</span> <span class="o">=</span> <span class="n">class_instance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">class_instance</span><span class="o">.</span><span class="n">name</span>
+
+<div class="viewcode-block" id="ClassDependency.get_dependency_data"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ClassDependency.get_dependency_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_dependency_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dependency_object</span><span class="p">)</span>
+        <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;schema&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;schema&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">schema</span>
+        <span class="k">return</span> <span class="n">data_dict</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="ClassDependency.create_from_raw_data"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.ClassDependency.create_from_raw_data">[docs]</a>    <span class="k">def</span> <span class="nf">create_from_raw_data</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">raw_data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;class_instance&#39;</span><span class="p">:</span> <span class="n">Class</span><span class="p">(</span><span class="o">**</span><span class="n">raw_data</span><span class="p">)})</span>
 
 </div></div>
 <div class="viewcode-block" id="EndpointMetadataMixin"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.EndpointMetadataMixin">[docs]</a><span class="k">class</span> <span class="nc">EndpointMetadataMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -380,6 +415,8 @@
     <span class="k">def</span> <span class="nf">_get_depedency_klass</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">depedency_type</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">depedency_type</span> <span class="o">==</span> <span class="n">DependencyType</span><span class="o">.</span><span class="n">SCRIPT</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ScriptDependency</span>
+        <span class="k">elif</span> <span class="n">depedency_type</span> <span class="o">==</span> <span class="n">DependencyType</span><span class="o">.</span><span class="n">CLASS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ClassDependency</span>
 
 <div class="viewcode-block" id="DependencyMetadataMixin.add_dependency"><a class="viewcode-back" href="../../../refs/syncano.models.custom_sockets_utils.html#syncano.models.custom_sockets_utils.DependencyMetadataMixin.add_dependency">[docs]</a>    <span class="k">def</span> <span class="nf">add_dependency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depedency</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dependencies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">depedency</span><span class="p">)</span>
