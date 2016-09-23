@@ -2,7 +2,7 @@ import logging
 import os
 
 __title__ = 'Syncano Python'
-__version__ = '5.4.2'
+__version__ = '5.4.3'
 __author__ = "Daniel Kopka, Michal Kobus and Sebastian Opalczynski"
 __credits__ = ["Daniel Kopka",
                "Michal Kobus",
