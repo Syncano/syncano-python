@@ -547,6 +547,8 @@ class FileField(WritableField):
     param_name = 'files'
 
     def to_native(self, value):
+        if isinstance(value, six.string_types):
+            return None
         return {self.name: value}
 
 
