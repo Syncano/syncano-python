@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import six
 from hashlib import md5
 
 import requests
@@ -117,7 +118,9 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
 
     @classmethod
     def get_file_md5(cls, file_content):
-        return md5(file_content.encode('utf-8')).hexdigest()
+        if isinstance(file_content, six.string_types):
+            file_content = file_content.encode('utf-8')
+        return md5(file_content).hexdigest()
 
     def assert_file_md5(self, data_object):
         file_content = requests.get(data_object.test_field_file).text
