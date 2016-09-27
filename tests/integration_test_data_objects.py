@@ -32,7 +32,7 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
             schema=cls.schema
         )
         with open(cls.file_path, 'rb') as f:
-            cls.file_md5 = cls.get_file_md5(f.read())
+            cls.file_md5 = cls.get_file_md5(f)
 
     def test_creating_file_object(self):
         data_object = self._create_object_with_file()
