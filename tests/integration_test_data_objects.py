@@ -31,7 +31,7 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
             name=cls.class_name,
             schema=cls.schema
         )
-        with open(cls.file_path, 'rb') as f:
+        with open(cls.file_path, 'rt') as f:
             cls.file_md5 = cls.get_file_md5(f)
 
     def test_creating_file_object(self):
@@ -125,7 +125,7 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
         return md5(file_content).hexdigest()
 
     def assert_file_md5(self, data_object):
-        file_content = requests.get(data_object.test_field_file).text
+        file_content = requests.get(data_object.test_field_file).content
         file_md5 = self.get_file_md5(file_content)
         self.assertEqual(self.file_md5, file_md5)
 
