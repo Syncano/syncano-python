@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 from hashlib import md5
-from StringIO import StringIO
+
+try:
+    # python2
+    from StringIO import StringIO
+except ImportError:
+    # python3
+    from io import StringIO
 
 import requests
 from syncano.models import Object
@@ -101,6 +107,7 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
         create_string = 'manager create'
         with open(self.file_path, 'rb') as f:
             data_object = Object.please.create(
+                class_name=self.class_name,
                 test_field_a=create_string,
                 test_field_file=f
             )
@@ -120,7 +127,8 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
     def _create_object_with_file(self):
         with open('tests/test_files/python-logo.png', 'rb') as f:
             object = Object.please.create(
+                class_name=self.class_name,
                 test_field_a=self.initial_field_a,
-                test_field_file=f
+                test_field_file=f,
             )
         return object
