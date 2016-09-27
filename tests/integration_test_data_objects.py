@@ -8,7 +8,7 @@ from tests.integration_test import InstanceMixin, IntegrationTest
 
 try:
     # python2
-    from StringIO import StringIO
+    from cStringIO import StringIO
 except ImportError:
     # python3
     from io import StringIO
