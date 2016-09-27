@@ -118,9 +118,7 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
 
     @classmethod
     def get_file_md5(cls, file_object):
-        if isinstance(file_object, six.string_types):
-            file_content = file_object.encode('utf-8')
-        else:
+        if not isinstance(file_object, six.string_types):
             file_content = file_object.read()
         return md5(file_content).hexdigest()
 
