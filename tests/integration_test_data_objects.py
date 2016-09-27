@@ -89,7 +89,7 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
         # update also a file;
         new_update_string = 'manager with file update'
         file_content = 'manager file update'
-        new_file = StringIO()
+        new_file = StringIO(file_content)
         Object.please.update(
             id=data_object.id,
             class_name=self.class_name,
@@ -117,9 +117,11 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
         self.assert_file_md5(data_object)
 
     @classmethod
-    def get_file_md5(cls, file_content):
-        if isinstance(file_content, six.string_types):
-            file_content = file_content.encode('utf-8')
+    def get_file_md5(cls, file_object):
+        if isinstance(file_object, six.string_types):
+            file_content = file_object.encode('utf-8')
+        else:
+            file_content = file_object.read()
         return md5(file_content).hexdigest()
 
     def assert_file_md5(self, data_object):
