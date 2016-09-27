@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from hashlib import md5
 
+import requests
+from syncano.models import Object
+from tests.integration_test import InstanceMixin, IntegrationTest
+
 try:
     # python2
     from StringIO import StringIO
@@ -8,9 +12,6 @@ except ImportError:
     # python3
     from io import StringIO
 
-import requests
-from syncano.models import Object
-from tests.integration_test import InstanceMixin, IntegrationTest
 
 
 class DataObjectFileTest(InstanceMixin, IntegrationTest):
