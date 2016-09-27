@@ -13,7 +13,6 @@ except ImportError:
     from io import StringIO
 
 
-
 class DataObjectFileTest(InstanceMixin, IntegrationTest):
 
     @classmethod
