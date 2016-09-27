@@ -67,7 +67,7 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
         self.assertNotEqual(data_object.test_field_file, file_url)
 
         # check file content;
-        file_content_s3 = requests.get(data_object.test_field_file).text
+        file_content_s3 = requests.get(data_object.test_field_file).content
         self.assertEqual(file_content_s3, file_content)
 
     def test_manager_update(self):
@@ -101,7 +101,7 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
         self.assertEqual(data_object.test_field_a, new_update_string)
         # should change;
         self.assertNotEqual(data_object.test_field_file, file_url)
-        file_content_s3 = requests.get(data_object.test_field_file).text
+        file_content_s3 = requests.get(data_object.test_field_file).content
         self.assertEqual(file_content_s3, file_content)
 
     def test_manager_create(self):
