@@ -80,7 +80,7 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
             test_field_a=update_string
         )
 
-        data_object = Object.please.get(id=data_object.id)
+        data_object = Object.please.get(id=data_object.id, class_name=self.class_name)
         self.assertEqual(data_object.test_field_a, update_string)
         # shouldn't change;
         self.assertEqual(data_object.test_field_file, file_url)
@@ -96,7 +96,7 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
             test_field_file=new_file
         )
 
-        data_object = Object.please.get(id=data_object.id)
+        data_object = Object.please.get(id=data_object.id, class_name=self.class_name)
         self.assertEqual(data_object.test_field_a, new_update_string)
         # should change;
         self.assertNotEqual(data_object.test_field_file, file_url)
@@ -117,7 +117,7 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
 
     @classmethod
     def get_file_md5(cls, file_content):
-        return md5(file_content).hexdigest()
+        return md5(file_content.encode('utf-8')).hexdigest()
 
     def assert_file_md5(self, data_object):
         file_content = requests.get(data_object.test_field_file).text
