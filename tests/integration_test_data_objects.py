@@ -8,7 +8,7 @@ from tests.integration_test import InstanceMixin, IntegrationTest
 
 try:
     # python2
-    from cStringIO import StringIO
+    from StringIO import StringIO
 except ImportError:
     # python3
     from io import StringIO
@@ -138,9 +138,9 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
 
     def _create_object_with_file(self):
         with open('tests/test_files/python-logo.png', 'rb') as f:
-            object = Object.please.create(
+            data_object = Object.please.create(
                 class_name=self.class_name,
                 test_field_a=self.initial_field_a,
                 test_field_file=f,
             )
-        return object
+        return data_object

@@ -5,7 +5,7 @@ from tests.integration_test import InstanceMixin, IntegrationTest
 
 try:
     # python2
-    from cStringIO import StringIO
+    from StringIO import StringIO
 except ImportError:
     # python3
     from io import StringIO
