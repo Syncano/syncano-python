@@ -57,7 +57,7 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
         file_url = data_object.test_field_file
 
         update_string = 'updating also field a'
-        file_content = 'some example text file;'
+        file_content = 'some example text file'
         new_file = StringIO(file_content)
         data_object.test_field_file = new_file
         data_object.test_field_a = update_string
@@ -67,7 +67,7 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
         self.assertNotEqual(data_object.test_field_file, file_url)
 
         # check file content;
-        file_content_s3 = requests.get(data_object.test_field_file).content
+        file_content_s3 = self.get_s3_file(data_object.test_field_file)
         self.assertEqual(file_content_s3, file_content)
 
     def test_manager_update(self):
@@ -101,7 +101,9 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
         self.assertEqual(data_object.test_field_a, new_update_string)
         # should change;
         self.assertNotEqual(data_object.test_field_file, file_url)
-        file_content_s3 = requests.get(data_object.test_field_file).content
+
+        # check file content;
+        file_content_s3 = self.get_s3_file(data_object.test_field_file)
         self.assertEqual(file_content_s3, file_content)
 
     def test_manager_create(self):
@@ -117,15 +119,22 @@ class DataObjectFileTest(InstanceMixin, IntegrationTest):
         self.assert_file_md5(data_object)
 
     @classmethod
-    def get_file_md5(cls, file_object):
-        if not isinstance(file_object, six.string_types):
-            file_content = file_object.read()
+    def get_file_md5(cls, file_content):
+        if not isinstance(file_content, (six.string_types, six.binary_type)):
+            file_content = file_content.read()
         return md5(file_content).hexdigest()
 
     def assert_file_md5(self, data_object):
         file_content = requests.get(data_object.test_field_file).content
         file_md5 = self.get_file_md5(file_content)
         self.assertEqual(self.file_md5, file_md5)
+
+    @classmethod
+    def get_s3_file(cls, url):
+        file_content_s3 = requests.get(url).content
+        if hasattr(file_content_s3, 'decode'):
+            file_content_s3 = file_content_s3.decode('utf-8')
+        return file_content_s3
 
     def _create_object_with_file(self):
         with open('tests/test_files/python-logo.png', 'rb') as f:
