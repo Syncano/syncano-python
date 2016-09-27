@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-import six
 from hashlib import md5
 
 import requests
+import six
 from syncano.models import Object
 from tests.integration_test import InstanceMixin, IntegrationTest
 
