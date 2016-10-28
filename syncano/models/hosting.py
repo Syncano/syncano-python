@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from . import fields
-from .instances import Instance
-from .archetypes import Model
 from syncano import logger
+
+from . import fields
+from .archetypes import Model
+from .instances import Instance
 
 
 class Hosting(Model):
