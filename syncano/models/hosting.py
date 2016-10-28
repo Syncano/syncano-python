@@ -9,7 +9,9 @@ class Hosting(Model):
         OO wrapper around hosting.
     """
 
-    label = fields.StringField(max_length=64, primary_key=True)
+    name = fields.StringField(max_length=253)
+    is_default = fields.BooleanField(read_only=True)
+    is_active = fields.BooleanField(default=True)
     description = fields.StringField(read_only=False, required=False)
     domains = fields.ListField(default=[])
 

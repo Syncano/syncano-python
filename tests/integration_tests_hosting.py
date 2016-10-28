@@ -15,7 +15,7 @@ class HostingIntegrationTests(InstanceMixin, IntegrationTest):
 
     def setUp(self):
         self.hosting = self.instance.hostings.create(
-            label='test12',
+            name='test12',
             description='desc',
             domains=['test.test{}.io'.format(uuid.uuid4().hex[:5])]
         )
@@ -30,7 +30,7 @@ class HostingIntegrationTests(InstanceMixin, IntegrationTest):
 
     def test_set_default(self):
         hosting = self.hosting.set_default()
-        self.assertIn('default', hosting.domains)
+        self.assertTrue('default', hosting.is_default)
 
     def test_update_file(self):
         a_hosting_file = StringIO()
