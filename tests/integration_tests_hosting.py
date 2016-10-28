@@ -14,7 +14,7 @@ except ImportError:
 class HostingIntegrationTests(InstanceMixin, IntegrationTest):
 
     def test_create_file(self):
-        hosting = self._create_hosting('created_xyz')
+        hosting = self._create_hosting('created-xyz')
         a_hosting_file = StringIO()
         a_hosting_file.write('h1 {color: #541231;}')
         a_hosting_file.seek(0)
@@ -23,12 +23,12 @@ class HostingIntegrationTests(InstanceMixin, IntegrationTest):
         self.assertEqual(hosting_file.path, 'styles/main.css')
 
     def test_set_default(self):
-        hosting = self._create_hosting('default_xyz')
+        hosting = self._create_hosting('default-xyz')
         hosting = hosting.set_default()
         self.assertTrue('default', hosting.is_default)
 
     def test_update_file(self):
-        hosting = self._create_hosting('update_xyz')
+        hosting = self._create_hosting('update-xyz')
         a_hosting_file = StringIO()
         a_hosting_file.write('h1 {color: #541231;}')
         a_hosting_file.seek(0)
