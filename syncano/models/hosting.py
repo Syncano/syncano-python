@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from . import fields
-from .base import Instance, Model, logger
+from .base import Model
+from .instances import Instance
 
 
 class Hosting(Model):
@@ -9,11 +10,12 @@ class Hosting(Model):
         OO wrapper around hosting.
     """
 
-    label = fields.StringField(max_length=64, primary_key=True)
+    name = fields.StringField(max_length=253)
+    is_default = fields.BooleanField(read_only=True)
+    is_active = fields.BooleanField(default=True)
     description = fields.StringField(read_only=False, required=False)
     domains = fields.ListField(default=[])
 
-    id = fields.IntegerField(read_only=True)
     links = fields.LinksField()
     created_at = fields.DateTimeField(read_only=True, required=False)
     updated_at = fields.DateTimeField(read_only=True, required=False)
@@ -45,7 +47,6 @@ class Hosting(Model):
         response = connection.session.post('{}{}'.format(connection.host, files_path), headers=headers,
                                            data=data, files=[('file', file)])
         if response.status_code != 201:
-            logger.error(response.text)
             return
         return HostingFile(**response.json())
 
@@ -74,7 +75,6 @@ class Hosting(Model):
         response = connection.session.patch('{}{}'.format(connection.host, hosting_file.links.self), headers=headers,
                                             files=[('file', file)])
         if response.status_code != 200:
-            logger.error(response.text)
             return
         return HostingFile(**response.json())
 
