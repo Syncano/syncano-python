@@ -2,12 +2,13 @@ import logging
 import os
 
 __title__ = 'Syncano Python'
-__version__ = '5.4.5'
+__version__ = '5.4.6'
 __author__ = "Daniel Kopka, Michal Kobus and Sebastian Opalczynski"
 __credits__ = ["Daniel Kopka",
                "Michal Kobus",
-               "Sebastian Opalczynski"]
-__copyright__ = 'Copyright 2015 Syncano'
+               "Sebastian Opalczynski",
+               "Robert Kopaczewski"]
+__copyright__ = 'Copyright 2016 Syncano'
 __license__ = 'MIT'
 
 env_loglevel = os.getenv('SYNCANO_LOGLEVEL', 'INFO')
